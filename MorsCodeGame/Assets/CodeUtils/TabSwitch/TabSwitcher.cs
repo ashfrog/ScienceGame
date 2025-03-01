@@ -6,11 +6,12 @@ public class TabSwitcher : MonoBehaviour
     // 定义一个Button数组来存储所有的Tab按钮
     public Button[] tabButtons;
 
+    // 当前选中的Tab索引
+    public int currentTabIndex = 0;
     // 定义一个GameObject数组来存储所有的Tab页面
     public GameObject[] tabPages;
 
-    // 当前选中的Tab索引
-    private int currentTabIndex = 0;
+
 
     private void Start()
     {
@@ -18,7 +19,7 @@ public class TabSwitcher : MonoBehaviour
         for (int i = 0; i < tabButtons.Length; i++)
         {
             int index = i; // 缓存索引
-            tabButtons[i].onClick.AddListener(() => OnTabButtonClicked(index));
+            tabButtons[i].onClick.AddListener(() => SwitchTab(index));
         }
 
         // 初始化Tab页面显示状态
@@ -26,7 +27,7 @@ public class TabSwitcher : MonoBehaviour
     }
 
     // 当Tab按钮被点击时调用
-    private void OnTabButtonClicked(int index)
+    public void SwitchTab(int index)
     {
         currentTabIndex = index;
         UpdateTabPages();
