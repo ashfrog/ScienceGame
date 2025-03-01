@@ -9,15 +9,17 @@ public class MorseCodeGenerator : MonoBehaviour
 {
     public GameObject dotPrefab;
     public GameObject dashPrefab;
+    public GameObject emptyPrefab;
+
     public RectTransform spawnPoint;
     public float scrollSpeed = 100f;
     public float spawnInterval = 0.5f;
 
     public List<GameObject> morseCodeObjects = new List<GameObject>();
     private float timer;
+    private int currentMorseIndex = 0;
 
-
-    public static Dictionary<string, char> MorseToCharMap = new Dictionary<string, char>
+    static Dictionary<string, char> MorseToCharMap = new Dictionary<string, char>
     {
         { ".-", 'A' }, { "-...", 'B' }, { "-.-.", 'C' }, { "-..", 'D' },
         { ".", 'E' }, { "..-.", 'F' }, { "--.", 'G' }, { "....", 'H' },
@@ -31,7 +33,7 @@ public class MorseCodeGenerator : MonoBehaviour
         { "---..", '8' }, { "----.", '9' }
     };
 
-    public static Dictionary<char, string> CharMapToMorse = new Dictionary<char, string>
+    static Dictionary<char, string> CharMapToMorse = new Dictionary<char, string>
     {
         { 'A', ".-" }, { 'B', "-..." }, { 'C', "-.-." }, { 'D', "-.." },
         { 'E', "." }, { 'F', "..-." }, { 'G', "--." }, { 'H', "...." },
@@ -44,6 +46,8 @@ public class MorseCodeGenerator : MonoBehaviour
         { '4', "....-" }, { '5', "....." }, { '6', "-...." }, { '7', "--..." },
         { '8', "---.." }, { '9', "----." }
     };
+
+    string morseCode = ".... . .-.. .-.. --- .-- --- .-. .-.. -..";
 
     void Start()
     {
@@ -64,10 +68,36 @@ public class MorseCodeGenerator : MonoBehaviour
 
     void SpawnMorseCode()
     {
-        GameObject prefab = Random.Range(0, 2) == 0 ? dotPrefab : dashPrefab;
-        GameObject morseCodeObject = Instantiate(prefab, spawnPoint.position, Quaternion.identity, transform);
-        morseCodeObject.transform.SetParent(spawnPoint, false);
-        morseCodeObjects.Add(morseCodeObject);
+        if (currentMorseIndex < morseCode.Length)
+        {
+            char currentChar = morseCode[currentMorseIndex];
+            GameObject prefab;
+            switch (currentChar)
+            {
+                case '.':
+                    {
+                        prefab = dotPrefab;
+                    }
+                    break;
+
+                case '-':
+                    {
+                        prefab = dashPrefab;
+                    }
+                    break;
+                default:
+                    {
+                        prefab = emptyPrefab;
+                    }
+                    break;
+            }
+
+            GameObject morseCodeObject = Instantiate(prefab);
+            morseCodeObject.transform.SetParent(spawnPoint, false);
+            morseCodeObject.GetComponent<RectTransform>().anchoredPosition = spawnPoint.anchoredPosition;
+            morseCodeObjects.Add(morseCodeObject);
+            currentMorseIndex++;
+        }
     }
 
     void ScrollMorseCode()
