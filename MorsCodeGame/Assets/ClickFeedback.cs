@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 点击命中反馈
+/// </summary>
 public class ClickFeedback : MonoBehaviour
 {
     public float perfectTimeRange = 0.1f; // Perfect 判定时间范围 
@@ -14,7 +17,7 @@ public class ClickFeedback : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
             float currentTime = Time.time;
             float timeDifference = Mathf.Abs(currentTime - targetTime);
