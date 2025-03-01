@@ -47,7 +47,9 @@ public class MorseCodeGenerator : MonoBehaviour
         { '8', "---.." }, { '9', "----." }
     };
 
-    string morseCode = ".... . .-.. .-.. --- .-- --- .-. .-.. -..";
+    string morseCode = "... --- ... --- ... --- ... --- ...";
+
+    bool startgame;
 
     void Start()
     {
@@ -56,14 +58,22 @@ public class MorseCodeGenerator : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
-            SpawnMorseCode();
-            timer = 0f;
+            startgame = true;
+        }
+        if (startgame)
+        {
+            timer += Time.deltaTime;
+            if (timer >= spawnInterval)
+            {
+                SpawnMorseCode();
+                timer = 0f;
+            }
+
+            ScrollMorseCode();
         }
 
-        ScrollMorseCode();
     }
 
     void SpawnMorseCode()
