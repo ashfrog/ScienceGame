@@ -26,6 +26,8 @@ public class MyPanel : MonoBehaviour
             //从头开始播放跳转视频
             mediaPlayerOnce.Control.Seek(0);
             mediaPlayerOnce.Play();
+            //隐藏button
+            button.gameObject.SetActive(false);
         });
 
         mediaPlayerOnce.Events.AddListener(OnMediaPlayerEvent);

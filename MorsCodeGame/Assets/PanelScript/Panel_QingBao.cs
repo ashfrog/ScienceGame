@@ -5,10 +5,26 @@ using UnityEngine.UI;
 
 public class Panel_QingBao : MonoBehaviour
 {
+
+    [SerializeField]
+    TabSwitcher tabSwitcher;
     public Button[] buttons;
+
+    public int nextTap = 3;
     void Start()
     {
-
+        if (tabSwitcher == null)
+        {
+            tabSwitcher = GetComponentInParent<TabSwitcher>();
+        }
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            Button button = buttons[i];
+            button.onClick.AddListener(() =>
+            {
+                tabSwitcher.SwitchTab(nextTap);
+            });
+        }
     }
 
     // Update is called once per frame

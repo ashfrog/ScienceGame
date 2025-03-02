@@ -605,6 +605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c147da5379d5cdb4bb6db66184597158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tabSwitcher: {fileID: 1855779508}
   buttons:
   - {fileID: 2067366052}
   - {fileID: 767723424}
@@ -614,6 +615,7 @@ MonoBehaviour:
   - {fileID: 1410282289}
   - {fileID: 843134139}
   - {fileID: 49182028}
+  nextTap: 3
 --- !u!1 &172772512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1917,7 +1919,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VideoLocation: 2
-  m_VideoPath: "\u8F6C\u573A\u89C6\u9891.mp4"
+  m_VideoPath: Sample180.mp4
   m_AutoOpen: 1
   m_AutoStart: 0
   m_Loop: 0
@@ -5329,7 +5331,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2024134800
 RectTransform:
   m_ObjectHideFlags: 0
