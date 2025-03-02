@@ -1265,6 +1265,7 @@ MonoBehaviour:
   perfectTimeRange: 0.1
   normalTimeRange: 0.2
   triggerLine: {fileID: 1961489661}
+  SpawnPointRoot: {fileID: 1729460618}
 --- !u!114 &365704916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4335,7 +4336,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1727479512}
-  - component: {fileID: 1727479511}
   - component: {fileID: 1727479510}
   - component: {fileID: 1727479513}
   - component: {fileID: 1727479514}
@@ -4359,20 +4359,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dotTimeThreshold: 0.2
---- !u!114 &1727479511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727479509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4b8a2e29e52d91499955376d18d55a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  perfectTimeRange: 0.1
-  normalTimeRange: 0.2
 --- !u!4 &1727479512
 Transform:
   m_ObjectHideFlags: 0
@@ -4802,7 +4788,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1855779506}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1805c72cc985853419c9cfe19b5c6ce5, type: 3}
   m_Name: 

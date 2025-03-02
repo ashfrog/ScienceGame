@@ -9,9 +9,11 @@ public class KeyPressDetector : MonoBehaviour
     public float normalTimeRange = 0.2f;
     public Transform triggerLine;
 
+    public Transform SpawnPointRoot;
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
             DetectKeyPress();
         }
@@ -22,7 +24,11 @@ public class KeyPressDetector : MonoBehaviour
         GameObject morseCodeObject = FindClosestMorseCodeObject();
         if (morseCodeObject != null)
         {
-            float distance = Mathf.Abs(morseCodeObject.transform.position.x - triggerLine.position.x);
+            Vector2 morseCodeObjectScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, morseCodeObject.transform.position);
+            Vector2 triggerLineScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, triggerLine.position);
+            float distance = Vector2.Distance(morseCodeObjectScreenPosition, triggerLineScreenPosition);
+            Debug.Log("Distance: " + distance);
+            Debug.Log("PerfectTimeRange: " + perfectTimeRange);
             if (distance < perfectTimeRange)
             {
                 Debug.Log("Perfect");
@@ -43,9 +49,11 @@ public class KeyPressDetector : MonoBehaviour
         GameObject closestObject = null;
         float closestDistance = float.MaxValue;
 
-        foreach (Transform child in transform)
+        foreach (Transform child in SpawnPointRoot)
         {
-            float distance = Mathf.Abs(child.position.x - triggerLine.position.x);
+            Vector2 childScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, child.position);
+            Vector2 triggerLineScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, triggerLine.position);
+            float distance = Vector2.Distance(childScreenPosition, triggerLineScreenPosition);
             if (distance < closestDistance)
             {
                 closestDistance = distance;
