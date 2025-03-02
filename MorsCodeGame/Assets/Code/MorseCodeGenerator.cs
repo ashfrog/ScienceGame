@@ -12,6 +12,7 @@ public class MorseCodeGenerator : MonoBehaviour
     public GameObject emptyPrefab;
 
     public RectTransform spawnPoint;
+    public RectTransform endPoint;
     public float scrollSpeed = 100f;
     public float spawnInterval = 0.5f;
 
@@ -54,6 +55,17 @@ public class MorseCodeGenerator : MonoBehaviour
     void Start()
     {
 
+    }
+
+    private void OnEnable()
+    {
+        //延迟1秒开始游戏
+        Invoke("StartGame", 1);
+    }
+
+    void StartGame()
+    {
+        startgame = true;
     }
 
     void Update()
@@ -116,8 +128,7 @@ public class MorseCodeGenerator : MonoBehaviour
         {
             GameObject morseCodeObject = morseCodeObjects[i];
             morseCodeObject.GetComponent<RectTransform>().anchoredPosition += Vector2.left * scrollSpeed * Time.deltaTime;
-
-            if (morseCodeObject.GetComponent<RectTransform>().anchoredPosition.x < -Screen.width / 2)
+            if (morseCodeObject.GetComponent<RectTransform>().anchoredPosition.x < endPoint.GetComponent<RectTransform>().anchoredPosition.x)
             {
                 Destroy(morseCodeObject);
                 morseCodeObjects.RemoveAt(i);
