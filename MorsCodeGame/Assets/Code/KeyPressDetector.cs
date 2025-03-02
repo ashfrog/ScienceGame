@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 ///  handle the detection of key presses when the Morse code reaches a trigger line.
 /// </summary>
 public class KeyPressDetector : MonoBehaviour
 {
-    public float perfectTimeRange = 0.1f;
-    public float normalTimeRange = 0.2f;
-    public Transform triggerLine;
+    public float perfectTimeRange = 40f;
+    public float normalTimeRange = 80f;
+    public float ignoreTimeRange = 120f;
 
-    public Transform SpawnPointRoot;
+    public RectTransform triggerLine;
+
+    public RectTransform SpawnPointRoot;
 
     void Update()
     {
@@ -21,43 +24,54 @@ public class KeyPressDetector : MonoBehaviour
 
     void DetectKeyPress()
     {
-        GameObject morseCodeObject = FindClosestMorseCodeObject();
+        RectTransform morseCodeObject = FindClosestMorseCodeObject();
         if (morseCodeObject != null)
         {
-            Vector2 morseCodeObjectScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, morseCodeObject.transform.position);
-            Vector2 triggerLineScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, triggerLine.position);
-            float distance = Vector2.Distance(morseCodeObjectScreenPosition, triggerLineScreenPosition);
+            float distance = GetDistance(morseCodeObject);
             Debug.Log("Distance: " + distance);
-            Debug.Log("PerfectTimeRange: " + perfectTimeRange);
-            if (distance < perfectTimeRange)
+            if (distance < ignoreTimeRange)
             {
-                Debug.Log("Perfect");
+
+                if (distance < perfectTimeRange)
+                {
+                    Debug.Log("Perfect");
+                    morseCodeObject.GetComponent<RawImage>().color = Color.green;
+                }
+                else if (distance < normalTimeRange)
+                {
+                    Debug.Log("Normal");
+                    morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
+                }
+                else
+                {
+                    Debug.Log("Miss");
+                    morseCodeObject.GetComponent<RawImage>().color = Color.red;
+                }
             }
-            else if (distance < normalTimeRange)
-            {
-                Debug.Log("Normal");
-            }
-            else
-            {
-                Debug.Log("Miss");
-            }
+
         }
     }
 
-    GameObject FindClosestMorseCodeObject()
+    private float GetDistance(RectTransform morseCodeObject)
     {
-        GameObject closestObject = null;
+        Vector2 morseCodeObjectScreenPosition = morseCodeObject.anchoredPosition;
+        Vector2 triggerLineScreenPosition = triggerLine.anchoredPosition;
+        float distance = Mathf.Abs(triggerLineScreenPosition.x - morseCodeObjectScreenPosition.x);
+        return distance;
+    }
+
+    RectTransform FindClosestMorseCodeObject()
+    {
+        RectTransform closestObject = null;
         float closestDistance = float.MaxValue;
 
-        foreach (Transform child in SpawnPointRoot)
+        foreach (ItemPrefab morseCodeObject in SpawnPointRoot.GetComponentsInChildren<ItemPrefab>())
         {
-            Vector2 childScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, child.position);
-            Vector2 triggerLineScreenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, triggerLine.position);
-            float distance = Vector2.Distance(childScreenPosition, triggerLineScreenPosition);
+            float distance = GetDistance(morseCodeObject.GetComponent<RectTransform>());
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestObject = child.gameObject;
+                closestObject = morseCodeObject.GetComponent<RectTransform>();
             }
         }
 

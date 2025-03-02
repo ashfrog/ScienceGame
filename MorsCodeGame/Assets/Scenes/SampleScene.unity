@@ -1262,8 +1262,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323957a7144a457468bcc772d1b49b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perfectTimeRange: 0.1
-  normalTimeRange: 0.2
+  perfectTimeRange: 20
+  normalTimeRange: 40
+  ignoreTimeRange: 80
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
 --- !u!114 &365704916
@@ -2833,6 +2834,7 @@ GameObject:
   - component: {fileID: 906321092}
   - component: {fileID: 906321094}
   - component: {fileID: 906321093}
+  - component: {fileID: 906321095}
   m_Layer: 5
   m_Name: DashPrefab
   m_TagString: Untagged
@@ -2895,6 +2897,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 906321091}
   m_CullTransparentMesh: 1
+--- !u!114 &906321095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906321091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5298e383b7887c4a9a6c8691c42d902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &947407612
 GameObject:
   m_ObjectHideFlags: 0
@@ -4008,6 +4022,7 @@ GameObject:
   - component: {fileID: 1598885033}
   - component: {fileID: 1598885035}
   - component: {fileID: 1598885034}
+  - component: {fileID: 1598885036}
   m_Layer: 5
   m_Name: DotPrefab
   m_TagString: Untagged
@@ -4070,6 +4085,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1598885032}
   m_CullTransparentMesh: 1
+--- !u!114 &1598885036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598885032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5298e383b7887c4a9a6c8691c42d902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1619241817
 GameObject:
   m_ObjectHideFlags: 0

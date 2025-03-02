@@ -157,6 +157,7 @@
     <Compile Include="Assets\ShowTouchKeyboard.cs" />
     <Compile Include="Assets\PanelScript\PanelCreateUser.cs" />
     <Compile Include="Assets\PanelScript\Panel_QingBao.cs" />
+    <Compile Include="Assets\ItemPrefab.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
