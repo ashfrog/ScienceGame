@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoInfo.cs" />
+    <Compile Include="Assets\PanelScript\PanelRank.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Internal\AudioOutputManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
@@ -66,6 +67,8 @@
     <Compile Include="Assets\AVProVideo\Scripts\Internal\OSXMediaPlayer.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoDisplayUGUI.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\ChangeVideoExample.cs" />
+    <Compile Include="Assets\RandItem.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\CRC.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\ChangeStereoMode.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\SphereDemo.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\Support\NGUI\ApplyToTextureWidgetNGUI.cs" />
@@ -76,19 +79,23 @@
     <Compile Include="Assets\MorseCodeInput.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Internal\IniConfig.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\LoadFromBufferInChunks.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\DataTypeEnum.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\AutoRotate.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\NativeMediaOpen.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Plugins\SkipUnityLogo.cs" />
     <Compile Include="Assets\ItemPrefab.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\AudioOutput.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\ToggleButtonGroup.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
+    <Compile Include="Assets\Demo\MouseTouchInputManager.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\PlaybackSync.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\DisplayBackground.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoControl.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\OrderTypeEnum.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Internal\BaseMediaPlayer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
@@ -98,12 +105,15 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Internal\ConfigManager.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\DebugOverlay.cs" />
+    <Compile Include="Assets\TouchSocketTcp\AdvertisementKiosk.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\LoadFromBuffer.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\FHTcpClient.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Internal\WebGLMediaPlayer.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Internal\HLSStream.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\MediaPlayer.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\StreamParser.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHTcpService.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\SimpleController.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\ApplyToMesh.cs" />
@@ -118,6 +128,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\AVProVideo\Demos\Scripts\DemoInfo.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\ConvertUtil.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\ToggleButtonWithImage.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\AudioChannelMixer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -127,13 +138,18 @@
     <Compile Include="Assets\AVProVideo\Scripts\Internal\Resampler.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Internal\AndroidMediaPlayer.cs" />
     <Compile Include="Assets\PanelScript\MyPanel.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Loom.cs" />
     <Compile Include="Assets\Code\KeyPressDetector.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\StrTcpClient.cs" />
     <Compile Include="Assets\TelegraphSound.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\MyFixedHeaderCustomDataHandlingAdapter.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\PanelScript\PanelCreateUser.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\SubtitlesUGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHClientController.cs" />
+    <Compile Include="Assets\MouseRoteReceiver.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\CubemapCube.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
@@ -158,20 +174,6 @@
     <Compile Include="Assets\PanelScript\Panel_QingBao.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoEvent.cs" />
-    <Compile Include="Assets\RandItem.cs" />
-    <Compile Include="Assets\PanelScript\PanelRank.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\CRC.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\OrderTypeEnum.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHClientController.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\MyFixedHeaderCustomDataHandlingAdapter.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\ConvertUtil.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHTcpService.cs" />
-    <Compile Include="Assets\TouchSocketTcp\AdvertisementKiosk.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\StrTcpClient.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Plugins\SkipUnityLogo.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\FHTcpClient.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\DataTypeEnum.cs" />
-    <Compile Include="Assets\TouchSocketTcp\Loom.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -615,8 +617,8 @@
       <HintPath>Library\PackageCache\com.unity.testtools.codecoverage@1.0.1\lib\ReportGenerator\ReportGeneratorMerged.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="websocket-sharp">
@@ -627,8 +629,8 @@
       <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
+      <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
@@ -1221,6 +1223,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="EasyTextEffects.csproj">
+      <Project>{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}</Project>
+      <Name>EasyTextEffects</Name>
+    </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.Examples.csproj">
       <Project>{47DA62F8-B3E7-6722-84DF-481E7E9CEA39}</Project>
       <Name>AmazingAssets.AdvancedDissolve.Examples</Name>

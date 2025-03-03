@@ -9,11 +9,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
-    <ProjectGuid>{4737F41A-1835-C02A-C2F7-BC1A76B0FF60}</ProjectGuid>
+    <RootNamespace>EasyTextEffects</RootNamespace>
+    <ProjectGuid>{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>AmazingAssets.AdvancedDissolve</AssemblyName>
+    <AssemblyName>EasyTextEffects</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -58,18 +58,51 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Helper\AdvancedDissolveSpotLightToConeSmooth.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Controllers\AdvancedDissolvePropertiesController.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Helper\AdvancedDissolveTransformScaleToRadius.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Controllers\AdvancedDissolveController.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Controllers\AdvancedDissolveGeometricCutoutController.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Core\AdvancedDissolveKeywords.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Core\AdvancedDissolveProperties.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Core\AdvancedDissolveUtilities.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\Controllers\AdvancedDissolveKeywordsController.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\EditorDocumentation\FoldBoxAttributeDrawer.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Attributes\AttributeBase.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\Effects\Effect_Move.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\Effects\Effect_Color.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\MyCollections.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\PerVertexEffectEditor.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\TextEffect_Base.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\TimeUtil.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\EditorDocumentation\EditorDocumentation.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\MyReflection.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\Effects\Effect_Rotate.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Tools\Internal\CustomDrawerUtility.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\EditorDocumentation\ToggleDocAttributeDrawer.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\MyDebug.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Attributes\MinMaxRangeAttribute.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\EditorDocumentation\FoldBoxAttribute.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\EditorDocumentation\ToggleDocAttribute.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\MyAlgorithms.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\Effects\Effect_Composite.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Attributes\AttributeBaseDrawer.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\CompositeEffectEditor.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Attributes\ButtonMethodAttribute.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\EditorExtensions\MyHandles.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\Effects\Effect_PerVertex.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Tools\Internal\ConditionalData.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\Effects\TextEffectInstance.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Tools\WarningsPool.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\MyString.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\TextEffectStatus.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\Effects\Effect_Scale.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\MyColor.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\TextEffectEditor.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Samples\Demo\SequenceManager.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\TextEffect.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Types\MinMax.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\EditorExtensions\MySerializedProperty.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Extensions\MyCommonConstants.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Tools\Internal\ConditionalUtility.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\GlobalTextEffectEntry.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Runtime\TagEffectsPreset.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Attributes\ConditionalFieldAttribute.cs" />
+    <Compile Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\Editor\MyBoxCopy\Types\CollectionWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Amazing Assets\Advanced Dissolve\Scripts\AmazingAssets.AdvancedDissolve.asmdef" />
+    <None Include="Assets\Easy-Text-Effects-for-Unity-1.0.5\EasyTextEffects.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -954,6 +987,10 @@
     </Reference>
     <Reference Include="System.Xml.Serialization">
       <HintPath>U:\UnityEditor\2021.3.11f1c2\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.UI">

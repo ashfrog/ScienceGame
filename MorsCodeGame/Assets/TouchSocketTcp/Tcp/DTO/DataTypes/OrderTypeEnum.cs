@@ -32,6 +32,11 @@ public enum OrderTypeEnum
     Str = 20,
 
     /// <summary>
+    /// 旋转增量
+    /// </summary>
+    Rotate = 30,
+
+    /// <summary>
     /// 获取音量
     /// </summary>
     GetVolumn = 101,

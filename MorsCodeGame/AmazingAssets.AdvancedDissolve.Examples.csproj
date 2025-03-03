@@ -58,15 +58,15 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\AnimateCutout.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\CameraOrbitalMove.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\DissolveOnRaycast.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\CapsuleFromLineRenderer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\DissolveOnRaycast.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\AnimateCutout.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\AnimateGI.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\Viper.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\AnimateCutoutAndDestroy.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\Spawner.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\Viper.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\InputSystemDefine.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\Spawner.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\CameraOrbitalMove.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Example Scenes\Tutorial Scenes\Files\Scripts\AmazingAssets.AdvancedDissolve.Examples.asmdef" />
@@ -428,8 +428,16 @@
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.5.1\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.5.1\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>Assets\TouchSocketTcp\Plugins\websocket-sharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
@@ -440,24 +448,16 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="TouchSocket">
+      <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="websocket-sharp">
-      <HintPath>Assets\TouchSocketTcp\Plugins\websocket-sharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="TouchSocket">
-      <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">

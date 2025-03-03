@@ -58,41 +58,41 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveExponentalDrawer.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveColorRGBDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveUVScrollDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\VertexLitShaderGUI.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Script Editors\AdvancedDissolvePropertiesControllerEditor.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\DefaultUnlitShaderGUI.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Base\EditorGUIHelper.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveCutoutDrawer.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\StandardShaderGUI.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Utilities\AdvancedDissolveEditorUtilites.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveToggleFloatDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\SpeedTree\SpeedTree8ShaderGUI.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Utilities\AdvancedDissolveKeywordsBaker.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Manual\ManualEditor.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordCutoutVolumetricsCountDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Script Editors\AdvancedDissolveGeometricCutoutControllerEditor.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\SpeedTree\SpeedTreeMaterialInspector.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordCutoutVolumetricTypeDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordGlobalControlIDDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\OneDirectionalLightShaderGUI.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordEdgeUVDistortionSourceDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordEdgeBaseSourceDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordEdgeAdditionalColorSourceDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordStateDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\DefaultUnlitShaderGUI.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordCutoutSimpleSourceDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordCutoutSimpleMappingTypeDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\AdvancedDissolveMaterialProperties.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolvePositiveFloatDrawer.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\DefaultLitShaderGUI.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Base\AssetInfo.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Script Editors\AdvancedDissolveKeywordsControllerEditor.cs" />
-    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\StandardParticlesShaderGUI.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordsDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\DefaultLitShaderGUI.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveCutoutDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveToggleFloatDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Script Editors\AdvancedDissolveGeometricCutoutControllerEditor.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Script Editors\AdvancedDissolvePropertiesControllerEditor.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\OneDirectionalLightShaderGUI.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordEdgeBaseSourceDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\VertexLitShaderGUI.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordCutoutVolumetricTypeDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordEdgeAdditionalColorSourceDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveExponentalDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolvePositiveFloatDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Utilities\AdvancedDissolveEditorUtilites.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordCutoutVolumetricsCountDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordCutoutSimpleMappingTypeDrawer.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\UnlitShaderGUI.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Utilities\AdvancedDissolveKeywordsBaker.cs" />
     <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Manual\Manual.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Script Editors\AdvancedDissolveKeywordsControllerEditor.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\AdvancedDissolveUVScrollDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Base\EditorGUIHelper.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\SpeedTree\SpeedTreeMaterialInspector.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordStateDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\SpeedTree\SpeedTree8ShaderGUI.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\AdvancedDissolveMaterialProperties.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Material Editors\Built-in\StandardParticlesShaderGUI.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Manual\ManualEditor.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordGlobalControlIDDrawer.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Base\AssetInfo.cs" />
+    <Compile Include="Assets\Amazing Assets\Advanced Dissolve\Editor\Property Drawers\Keywords\AdvancedDissolveKeywordEdgeUVDistortionSourceDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Editor\AmazingAssets.AdvancedDissolve.Editor.asmdef" />
@@ -462,8 +462,16 @@
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.5.1\Lib\Editor\PlasticSCM\unityplastic.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.collab-proxy@2.5.1\Lib\Editor\PlasticSCM\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>Assets\TouchSocketTcp\Plugins\websocket-sharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
@@ -474,24 +482,16 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="TouchSocket">
+      <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="websocket-sharp">
-      <HintPath>Assets\TouchSocketTcp\Plugins\websocket-sharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="TouchSocket">
-      <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="nunit.framework">

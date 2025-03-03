@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class FHTcpService : MonoBehaviour
 {
-    private TcpService fh_tcpservice;
+    public TcpService fh_tcpservice;
 
     private int FHPort = 4849;
 
@@ -43,6 +43,7 @@ public class FHTcpService : MonoBehaviour
         tcpService.Connected += this.FH_service_Connected;//有客户端连接
         tcpService.Disconnected += this.FH_service_Disconnected; ;//有客户端断开连接
         tcpService.Received += this.FHService_Received;
+
 
         tcpService.Setup(new TouchSocketConfig().SetListenIPHosts(new IPHost[] { new IPHost(FHPort) })
             .SetMaxCount(10000)

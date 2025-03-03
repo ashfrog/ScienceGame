@@ -69,8 +69,8 @@ public class MorseCodeGenerator : MonoBehaviour
 
     private void OnEnable()
     {
-        //延迟1秒开始游戏
-        Invoke("StartGame", 1);
+        //延迟3秒开始游戏
+        Invoke("StartGame", 3);
     }
 
     void StartGame()
