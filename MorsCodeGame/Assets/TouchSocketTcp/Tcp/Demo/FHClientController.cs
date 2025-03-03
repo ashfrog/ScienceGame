@@ -41,7 +41,7 @@ public class FHClientController : MonoBehaviour
         fhTcpClient.FHTcpClientReceive = ReceiveData;
         fhTcpClient.Connected += ((client) =>
         {
-            exit = true;
+
         });
 
         if (offLineStatue != null)
@@ -94,10 +94,11 @@ public class FHClientController : MonoBehaviour
 
     private void OnDisable()
     {
+        exit = true;
         if (fhTcpClient != null)
         {
             fhTcpClient.Close();
         }
-        exit = true;
+
     }
 }

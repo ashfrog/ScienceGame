@@ -80,7 +80,7 @@ public class FHTcpClient
             .UsePlugin()
             .ConfigurePlugins(a =>
             {
-                a.UseReconnection(-1, false, 1000);
+                //a.UseReconnection(-1, false, 1000);
             })
             .SetBufferLength(1024 * 10)
             .ConfigureContainer(a =>
