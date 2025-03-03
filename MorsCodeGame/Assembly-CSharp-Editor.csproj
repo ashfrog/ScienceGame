@@ -1072,6 +1072,18 @@
       <Project>{240097CA-DFB2-DD50-49B9-A1AB4199D356}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="AmazingAssets.AdvancedDissolve.Examples.csproj">
+      <Project>{47DA62F8-B3E7-6722-84DF-481E7E9CEA39}</Project>
+      <Name>AmazingAssets.AdvancedDissolve.Examples</Name>
+    </ProjectReference>
+    <ProjectReference Include="AmazingAssets.AdvancedDissolve.csproj">
+      <Project>{4737F41A-1835-C02A-C2F7-BC1A76B0FF60}</Project>
+      <Name>AmazingAssets.AdvancedDissolve</Name>
+    </ProjectReference>
+    <ProjectReference Include="AmazingAssets.AdvancedDissolve.Editor.csproj">
+      <Project>{C97F788C-2B1D-25EF-D925-9A9BD0073699}</Project>
+      <Name>AmazingAssets.AdvancedDissolve.Editor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
