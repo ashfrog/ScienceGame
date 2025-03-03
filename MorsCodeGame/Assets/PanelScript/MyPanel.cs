@@ -17,6 +17,8 @@ public class MyPanel : MonoBehaviour
     Button button;
     [SerializeField]
     TabSwitcher tabSwitcher;
+    [SerializeField]
+    GameObject Panel;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +29,7 @@ public class MyPanel : MonoBehaviour
             mediaPlayerOnce.Control.Seek(0);
             mediaPlayerOnce.Play();
             //隐藏button
-            button.gameObject.SetActive(false);
+            Panel.SetActive(false);
         });
 
         mediaPlayerOnce.Events.AddListener(OnMediaPlayerEvent);
@@ -37,10 +39,14 @@ public class MyPanel : MonoBehaviour
     {
         //播放循环视频
         mediaPlayerLoop.Play();
-        //mediaPlayerLoop停止在最后一帧画面
-        mediaPlayerLoop.Control.Seek(mediaPlayerLoop.Info.GetDurationMs() - 1);
+        if (mediaPlayerLoop.Info != null) //启动的时候未加载不进入
+        {
+            //mediaPlayerLoop停止在最后一帧画面
+            mediaPlayerLoop.Control.Seek(mediaPlayerLoop.Info.GetDurationMs() - 1);
+        }
 
-        button.gameObject.SetActive(true);
+
+        Panel.SetActive(true);
         displayUGUI.CurrentMediaPlayer = mediaPlayerLoop;
     }
 

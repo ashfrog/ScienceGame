@@ -16,9 +16,12 @@ public class PanelRank : MonoBehaviour
     MediaPlayer mediaPlayerOnce;
     [SerializeField]
     GameObject Panel;
+    [SerializeField]
+    DisplayUGUI displayUGUI;
     // Start is called before the first frame update
     void Start()
     {
+        displayUGUI.gameObject.SetActive(true);
         if (tabSwitcher == null)
         {
             tabSwitcher = GetComponentInParent<TabSwitcher>();
