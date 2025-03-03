@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// handle the generation and scrolling of Morse code.
 /// </summary>
 public class MorseCodeGenerator : MonoBehaviour
 {
+    [SerializeField]
+    TabSwitcher tabSwitcher;
     public GameObject dotPrefab;
     public GameObject dashPrefab;
     public GameObject emptyPrefab;
@@ -19,6 +22,8 @@ public class MorseCodeGenerator : MonoBehaviour
     public List<GameObject> morseCodeObjects = new List<GameObject>();
     private float timer;
     private int currentMorseIndex = 0;
+
+    public Action GameOver;
 
     static Dictionary<string, char> MorseToCharMap = new Dictionary<string, char>
     {
@@ -52,9 +57,14 @@ public class MorseCodeGenerator : MonoBehaviour
 
     bool startgame;
 
+    string gameState;
+
     void Start()
     {
-
+        if (tabSwitcher == null)
+        {
+            tabSwitcher = GetComponentInParent<TabSwitcher>();
+        }
     }
 
     private void OnEnable()
@@ -65,6 +75,7 @@ public class MorseCodeGenerator : MonoBehaviour
 
     void StartGame()
     {
+        currentMorseIndex = 0;
         startgame = true;
     }
 
@@ -92,6 +103,7 @@ public class MorseCodeGenerator : MonoBehaviour
     {
         if (currentMorseIndex < morseCode.Length)
         {
+            gameState = "playing";
             char currentChar = morseCode[currentMorseIndex];
             GameObject prefab;
             switch (currentChar)
@@ -119,6 +131,18 @@ public class MorseCodeGenerator : MonoBehaviour
             morseCodeObject.GetComponent<RectTransform>().anchoredPosition = spawnPoint.anchoredPosition;
             morseCodeObjects.Add(morseCodeObject);
             currentMorseIndex++;
+        }
+        else
+        {
+            if (morseCodeObjects.Count <= 0 && "playing".EndsWith(gameState))
+            {
+                gameState = "end";
+                // 触发游戏结束事件
+                GameOver?.Invoke();
+                Debug.Log("GameOver");
+                tabSwitcher.SwitchTab(4);
+
+            }
         }
     }
 
