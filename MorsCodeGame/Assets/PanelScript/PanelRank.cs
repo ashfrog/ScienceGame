@@ -21,18 +21,19 @@ public class PanelRank : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        displayUGUI.gameObject.SetActive(true);
         if (tabSwitcher == null)
         {
             tabSwitcher = GetComponentInParent<TabSwitcher>();
         }
-        mediaPlayerOnce.Events.AddListener(OnMediaPlayerEvent);
+        //mediaPlayerOnce.Events.AddListener(OnMediaPlayerEvent);
         BtnReturn.onClick.AddListener(() =>
         {
             Panel.gameObject.SetActive(false);
             //从头开始播放跳转视频
-            mediaPlayerOnce.Control.Seek(0);
-            mediaPlayerOnce.Play();
+            //mediaPlayerOnce.Control.Seek(0);
+            //mediaPlayerOnce.Play();
+            //displayUGUI.gameObject.SetActive(true);
+            tabSwitcher.SwitchTab(0);
 
         });
         BtnPrint.onClick.AddListener(() =>
@@ -44,16 +45,17 @@ public class PanelRank : MonoBehaviour
     private void OnEnable()
     {
         Panel.gameObject.SetActive(true);
+        displayUGUI.gameObject.SetActive(false);
     }
-    private void OnMediaPlayerEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
-    {
-        if (mp == mediaPlayerOnce && et == MediaPlayerEvent.EventType.FinishedPlaying)
-        {
+    //private void OnMediaPlayerEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
+    //{
+    //    if (mp == mediaPlayerOnce && et == MediaPlayerEvent.EventType.FinishedPlaying)
+    //    {
 
-            //跳转到下一个场景
-            tabSwitcher.SwitchTab(0);
-        }
-    }
+    //        //跳转到下一个场景
+    //        tabSwitcher.SwitchTab(0);
+    //    }
+    //}
     // Update is called once per frame
     void Update()
     {

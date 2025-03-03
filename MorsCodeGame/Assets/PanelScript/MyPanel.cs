@@ -33,22 +33,21 @@ public class MyPanel : MonoBehaviour
         });
 
         mediaPlayerOnce.Events.AddListener(OnMediaPlayerEvent);
+
+        mediaPlayerLoop.Events.AddListener(OnMediaPlayerEventA);
     }
+
 
     private void OnEnable()
     {
         //播放循环视频
         mediaPlayerLoop.Play();
-        if (mediaPlayerLoop.Info != null) //启动的时候未加载不进入
-        {
-            //mediaPlayerLoop停止在最后一帧画面
-            mediaPlayerLoop.Control.Seek(mediaPlayerLoop.Info.GetDurationMs() - 1);
-        }
 
-
-        Panel.SetActive(true);
+        //Panel.SetActive(true);
         displayUGUI.CurrentMediaPlayer = mediaPlayerLoop;
     }
+
+
 
     private void OnMediaPlayerEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
     {
@@ -56,6 +55,14 @@ public class MyPanel : MonoBehaviour
         {
             //跳转到下一个场景
             tabSwitcher.SwitchTab(1);
+        }
+    }
+
+    private void OnMediaPlayerEventA(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
+    {
+        if (mp == mediaPlayerLoop && et == MediaPlayerEvent.EventType.FinishedPlaying)
+        {
+            Panel.SetActive(true);
         }
     }
 

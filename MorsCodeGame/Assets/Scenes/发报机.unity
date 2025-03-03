@@ -1522,6 +1522,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c1e1b6caadc60349a389048d10c41f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tabSwitcher: {fileID: 0}
   dotPrefab: {fileID: 1598885032}
   dashPrefab: {fileID: 906321091}
   emptyPrefab: {fileID: 172772512}
@@ -5075,7 +5076,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1351362168
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6890,7 +6891,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1763129132
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7490,14 +7491,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.13333334}
+  m_Color: {r: 1, g: 0.39104828, b: 0, a: 0.13333334}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
+  m_Texture: {fileID: 2800000, guid: 6486150a841936d43beba58c31875c40, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -7776,7 +7777,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2024134800
 RectTransform:
   m_ObjectHideFlags: 0
