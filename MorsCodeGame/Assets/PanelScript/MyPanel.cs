@@ -37,6 +37,9 @@ public class MyPanel : MonoBehaviour
     {
         //播放循环视频
         mediaPlayerLoop.Play();
+        //mediaPlayerLoop停止在最后一帧画面
+        mediaPlayerLoop.Control.Seek(mediaPlayerLoop.Info.GetDurationMs() - 1);
+
         button.gameObject.SetActive(true);
         displayUGUI.CurrentMediaPlayer = mediaPlayerLoop;
     }

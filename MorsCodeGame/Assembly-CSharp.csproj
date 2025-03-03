@@ -160,6 +160,18 @@
     <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoEvent.cs" />
     <Compile Include="Assets\RandItem.cs" />
     <Compile Include="Assets\PanelScript\PanelRank.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\CRC.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\OrderTypeEnum.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHClientController.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\MyFixedHeaderCustomDataHandlingAdapter.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\ConvertUtil.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHTcpService.cs" />
+    <Compile Include="Assets\TouchSocketTcp\AdvertisementKiosk.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\StrTcpClient.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Plugins\SkipUnityLogo.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\FHTcpClient.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\DataTypeEnum.cs" />
+    <Compile Include="Assets\TouchSocketTcp\Loom.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -189,6 +201,7 @@
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle Anim Alpha Blend.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\cginc\Core.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle AddMultiply.shader" />
+    <None Include="Assets\TouchSocketTcp\Plugins\link.xml" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-Particle-Alpha.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\UnityStandardMeta.cginc" />
     <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Lit-Transparent-Diffuse.shader" />
@@ -200,6 +213,7 @@
     <None Include="Assets\AVProVideo\Demos\Materials\UI-DefaultFont-ExtraTexture.shader" />
     <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-VR-InsideSphere.shader" />
     <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-VR-InsideSphere-Transparent.shader" />
+    <None Include="Assets\TouchSocketTcp\Plugins\websocket-sharp.dll" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle Premultiply Blend.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\UnityStandardParticleShadow.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\Standard.shader" />
@@ -238,6 +252,7 @@
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-BumpSpec-1DirectionalLight.shader" />
     <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Unlit-AndroidOES.shader" />
     <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Unlit.shader" />
+    <None Include="Assets\TouchSocketTcp\Plugins\TouchSocket.xml" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\One Directional Light\ForwardBase.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-Particle-Multiply.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\VertexLit\VertexLitCutout.shader" />
@@ -251,6 +266,7 @@
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\UnityStandardConfig.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Nature\TreeCreator\TreeCreatorLeavesFast.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\TouchSocketTcp\Plugins\TouchSocket.dll" />
     <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Unlit-Transparent.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
@@ -601,6 +617,18 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="websocket-sharp">
+      <HintPath>Assets\TouchSocketTcp\Plugins\websocket-sharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TouchSocket">
+      <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.0.2\Runtime\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Android.Types">
