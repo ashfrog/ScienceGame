@@ -18,7 +18,14 @@ public class MouseRoteReceiver : MonoBehaviour
     [SerializeField, Range(0.1f, 10f)]
     float rotationSpeed = 5f; // 控制旋转的平滑度
 
+    [SerializeField, Range(0.1f, 1f)]
     float deltaScale = 0.2f;
+
+    [SerializeField]
+    float minVerticalAngle = -90f; // 垂直旋转的最小角度（向下）
+
+    [SerializeField]
+    float maxVerticalAngle = 90f; // 垂直旋转的最大角度（向上）
 
     // 目标增量旋转值
     private Vector2 targetRotationDelta = Vector2.zero;
@@ -39,12 +46,32 @@ public class MouseRoteReceiver : MonoBehaviour
             float xAmount = Mathf.Lerp(0, targetRotationDelta.x, Time.deltaTime * rotationSpeed);
             float yAmount = Mathf.Lerp(0, targetRotationDelta.y, Time.deltaTime * rotationSpeed);
 
-            // 直接应用增量旋转
+            // 应用水平旋转（绕Y轴）
+            obj.transform.Rotate(0, -xAmount * deltaScale, 0);
+
+            // 处理垂直旋转（绕X轴），并保持在限制范围内
             if (obj.transform.parent != null)
             {
-                obj.transform.parent.Rotate(yAmount * deltaScale, 0, 0);
+                // 获取当前垂直角度（绕X轴的旋转）
+                float currentXRotation = obj.transform.parent.eulerAngles.x;
+
+                // 将角度转换到 -180 到 180 度范围，便于比较
+                if (currentXRotation > 180)
+                {
+                    currentXRotation -= 360;
+                }
+
+                // 计算新的旋转角度
+                float newXRotation = currentXRotation + yAmount * deltaScale;
+
+                // 限制在指定范围内
+                newXRotation = Mathf.Clamp(newXRotation, minVerticalAngle, maxVerticalAngle);
+
+                // 应用新的受限旋转
+                obj.transform.parent.localRotation = Quaternion.Euler(newXRotation,
+                    obj.transform.parent.localEulerAngles.y,
+                    obj.transform.parent.localEulerAngles.z);
             }
-            obj.transform.Rotate(0, -xAmount * deltaScale, 0);
 
             // 减少剩余的旋转增量
             targetRotationDelta.x -= xAmount;
