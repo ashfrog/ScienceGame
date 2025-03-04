@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using System.IO;
 
 /// <summary>
 /// handle the generation and scrolling of Morse code.
@@ -69,8 +70,11 @@ public class MorseCodeGenerator : MonoBehaviour
 
     private void OnEnable()
     {
+        String morsecodesStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "morsecode.json"));
+        List<String> morsecodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesStr);
+        morseCode = morsecodes[UnityEngine.Random.Range(0, morsecodes.Count)];
         //延迟3秒开始游戏
-        Invoke("StartGame", 3);
+        Invoke("StartGame", 1);
     }
 
     void StartGame()
