@@ -16,36 +16,46 @@ public class MouseRoteReceiver : MonoBehaviour
     GameObject obj;
 
     [SerializeField, Range(0.1f, 10f)]
-    float rotationSpeed = 5f; // 控制旋转平滑度的速度参数
+    float rotationSpeed = 5f; // 控制旋转的平滑度
 
-    [SerializeField]
-    float deltaScale = 0.1f;
+    float deltaScale = 0.2f;
 
-    // 目标旋转值
-    private Quaternion targetParentRotation;
-    private Quaternion targetObjectRotation;
+    // 目标增量旋转值
+    private Vector2 targetRotationDelta = Vector2.zero;
 
     // Start is called before the first frame update
     void Start()
     {
-        // 初始化目标旋转为当前旋转
-        targetParentRotation = obj.transform.parent.rotation;
-        targetObjectRotation = obj.transform.rotation;
-
         StartCoroutine(WaitForTcpServiceInitialization());
     }
 
     // Update is called once per frame
     void Update()
     {
-        // 在Update中平滑地旋转到目标旋转值
-        obj.transform.parent.rotation = Quaternion.Slerp(obj.transform.parent.rotation,
-                                                       targetParentRotation,
-                                                       rotationSpeed * Time.deltaTime);
+        // 只有当有旋转增量需要应用时才进行旋转
+        if (targetRotationDelta.sqrMagnitude > 0.001f)
+        {
+            // 计算本帧需要应用的旋转量
+            float xAmount = Mathf.Lerp(0, targetRotationDelta.x, Time.deltaTime * rotationSpeed);
+            float yAmount = Mathf.Lerp(0, targetRotationDelta.y, Time.deltaTime * rotationSpeed);
 
-        obj.transform.rotation = Quaternion.Slerp(obj.transform.rotation,
-                                                targetObjectRotation,
-                                                rotationSpeed * Time.deltaTime);
+            // 直接应用增量旋转
+            if (obj.transform.parent != null)
+            {
+                obj.transform.parent.Rotate(yAmount * deltaScale, 0, 0);
+            }
+            obj.transform.Rotate(0, -xAmount * deltaScale, 0);
+
+            // 减少剩余的旋转增量
+            targetRotationDelta.x -= xAmount;
+            targetRotationDelta.y -= yAmount;
+
+            // 如果旋转增量很小，则认为已完成
+            if (Mathf.Abs(targetRotationDelta.x) < 0.001f && Mathf.Abs(targetRotationDelta.y) < 0.001f)
+            {
+                targetRotationDelta = Vector2.zero;
+            }
+        }
     }
 
     private IEnumerator WaitForTcpServiceInitialization()
@@ -75,14 +85,8 @@ public class MouseRoteReceiver : MonoBehaviour
                             string[] v2s = v2.Split(',');
                             Vector2 vec2 = new Vector2(float.Parse(v2s[0]), float.Parse(v2s[1]));
 
-                            // 更新目标旋转值，而不是直接旋转物体
-                            // 为父对象创建旋转
-                            Quaternion parentDeltaRot = Quaternion.Euler(vec2.y * deltaScale, 0, 0);
-                            targetParentRotation = parentDeltaRot * targetParentRotation;
-
-                            // 为对象自身创建旋转
-                            Quaternion objectDeltaRot = Quaternion.Euler(0, -vec2.x * deltaScale, 0);
-                            targetObjectRotation = objectDeltaRot * targetObjectRotation;
+                            // 将接收到的旋转角度增量添加到目标增量中
+                            targetRotationDelta += vec2;
                         }
                         break;
                 }
