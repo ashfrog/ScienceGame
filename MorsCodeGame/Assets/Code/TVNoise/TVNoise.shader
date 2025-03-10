@@ -2,7 +2,7 @@ Shader "Custom/TVNoise"
 {
     Properties
     {
-        _MainTex ("Base Texture", 2D) = "white" {}
+        _MainTex ("Base Texture (Video Input)", 2D) = "white" {}
         _SignalStrength ("Signal Strength", Range(0.0, 1.0)) = 0.5
         _NoiseSpeed ("Noise Speed", Range(0.0, 10.0)) = 1.0
     }
@@ -42,10 +42,9 @@ Shader "Custom/TVNoise"
                 return o;
             }
 
-            // 传入 uv 和时间，生成随时间变化的伪随机值
+            // Generates pseudo-random noise based on uv/time
             float pseudoRandom2D(float2 uv, float time)
             {
-                // 使用简单哈希生成噪声值，注意增大 time 可以产生不断变化的噪声
                 return frac(sin(dot(uv + time, float2(12.9898, 78.233))) * 43758.5453);
             }
 
@@ -53,13 +52,13 @@ Shader "Custom/TVNoise"
             {
                 float time = _Time.y * _NoiseSpeed;
 
-                // 采样原图
+                // Sample the input texture (AVProVideo output)
                 fixed4 col = tex2D(_MainTex, i.uv);
 
-                // 生成噪声
+                // Generate noise
                 float noiseVal = pseudoRandom2D(i.uv, time);
 
-                // 使用信号强度控制噪声的强度，同时让噪点随机出现
+                // Blend noise based on signal strength
                 float3 noise = lerp(col.rgb, float3(noiseVal, noiseVal, noiseVal), _SignalStrength);
 
                 return fixed4(noise, 1.0);

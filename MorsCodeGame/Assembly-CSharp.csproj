@@ -175,6 +175,8 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoEvent.cs" />
     <Compile Include="Assets\Code\TVNoise\TVNoiseEffect.cs" />
+    <Compile Include="Assets\Code\TVNoise\TVNoiseWithAVPro.cs" />
+    <Compile Include="Assets\Code\TVNoise\UISnowMaskController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -277,6 +279,7 @@
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\SpeedTree\SpeedTree.shader" />
     <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-BlendFrames.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\cginc\Variables.cginc" />
+    <None Include="Assets\Code\TVNoise\UISnowMask.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle AddSmooth.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Core\VertexLM.cginc" />
