@@ -23,12 +23,4 @@ public class UISnowMaskController : Graphic
         }
     }
 
-    protected override void OnValidate()
-    {
-        base.OnValidate();
-        if (uiSnowMaskMaterial != null && canvasRenderer != null)
-        {
-            canvasRenderer.SetMaterial(uiSnowMaskMaterial, null);
-        }
-    }
 }

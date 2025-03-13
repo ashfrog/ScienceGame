@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
 using System.IO;
+using System.Collections;
+using TMPro;
 
 /// <summary>
 /// handle the generation and scrolling of Morse code.
@@ -25,6 +27,10 @@ public class MorseCodeGenerator : MonoBehaviour
     private int currentMorseIndex = 0;
 
     public Action GameOver;
+
+    public int nextTab;
+
+    public TextMeshProUGUI SecondText;
 
     static Dictionary<string, char> MorseToCharMap = new Dictionary<string, char>
     {
@@ -54,7 +60,7 @@ public class MorseCodeGenerator : MonoBehaviour
         { '8', "---.." }, { '9', "----." }
     };
 
-    string morseCode = "... --- ... --- ... --- ... --- ...";
+    public string morseCode = "... --- ... --- ... --- ... --- ...";
 
     bool startgame;
 
@@ -74,11 +80,19 @@ public class MorseCodeGenerator : MonoBehaviour
         List<String> morsecodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesStr);
         morseCode = morsecodes[UnityEngine.Random.Range(0, morsecodes.Count)];
         //延迟3秒开始游戏
-        Invoke("StartGame", 1);
+        StartCoroutine(StartGame());
     }
 
-    void StartGame()
+    IEnumerator StartGame()
     {
+        SecondText.gameObject.SetActive(true);
+        for (int i = 3; i > 0; i--)
+        {
+            SecondText.text = i.ToString();
+            yield return new WaitForSeconds(1);
+        }
+
+        SecondText.gameObject.SetActive(false);
         currentMorseIndex = 0;
         startgame = true;
     }
@@ -144,7 +158,7 @@ public class MorseCodeGenerator : MonoBehaviour
                 // 触发游戏结束事件
                 GameOver?.Invoke();
                 Debug.Log("GameOver");
-                tabSwitcher.SwitchTab(4);
+                tabSwitcher.SwitchTab(nextTab);
 
             }
         }

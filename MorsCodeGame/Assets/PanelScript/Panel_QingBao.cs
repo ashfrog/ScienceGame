@@ -10,7 +10,7 @@ public class Panel_QingBao : MonoBehaviour
     TabSwitcher tabSwitcher;
     public Button[] buttons;
 
-    public int nextTap = 3;
+    public int nextTab = 3;
     void Start()
     {
         if (tabSwitcher == null)
@@ -22,7 +22,7 @@ public class Panel_QingBao : MonoBehaviour
             Button button = buttons[i];
             button.onClick.AddListener(() =>
             {
-                tabSwitcher.SwitchTab(nextTap);
+                tabSwitcher.SwitchTab(nextTab);
             });
         }
     }

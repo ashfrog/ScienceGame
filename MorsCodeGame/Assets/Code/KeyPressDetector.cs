@@ -1,3 +1,5 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,12 +16,24 @@ public class KeyPressDetector : MonoBehaviour
 
     public RectTransform SpawnPointRoot;
 
+    [SerializeField]
+    TextMeshProUGUI scoreText;
+
+    int score;
+
+    private void OnEnable()
+    {
+        score = 0;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
             DetectKeyPress();
         }
+
+        scoreText.text = "" + score;
     }
 
     void DetectKeyPress()
@@ -35,16 +49,19 @@ public class KeyPressDetector : MonoBehaviour
                 if (distance < perfectTimeRange)
                 {
                     Debug.Log("Perfect");
+                    score++;
                     morseCodeObject.GetComponent<RawImage>().color = Color.green;
                 }
                 else if (distance < normalTimeRange)
                 {
                     Debug.Log("Normal");
+
                     morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
                 }
                 else
                 {
                     Debug.Log("Miss");
+                    score--;
                     morseCodeObject.GetComponent<RawImage>().color = Color.red;
                 }
             }

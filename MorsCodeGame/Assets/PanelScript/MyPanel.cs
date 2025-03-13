@@ -19,22 +19,27 @@ public class MyPanel : MonoBehaviour
     TabSwitcher tabSwitcher;
     [SerializeField]
     GameObject Panel;
+
+    public int nextTab;
     // Start is called before the first frame update
     void Start()
     {
+        tabSwitcher = GetComponentInParent<TabSwitcher>();
         button.onClick.AddListener(() =>
         {
-            displayUGUI.CurrentMediaPlayer = mediaPlayerOnce;
-            //从头开始播放跳转视频
-            mediaPlayerOnce.Control.Seek(0);
-            mediaPlayerOnce.Play();
+            //displayUGUI.CurrentMediaPlayer = mediaPlayerOnce;
+            ////从头开始播放跳转视频
+            //mediaPlayerOnce.Control.Seek(0);
+            //mediaPlayerOnce.Play();
+
             //隐藏button
             Panel.SetActive(false);
+            tabSwitcher.SwitchTab(nextTab);
         });
 
-        mediaPlayerOnce.Events.AddListener(OnMediaPlayerEvent);
+        //mediaPlayerOnce.Events.AddListener(OnMediaPlayerOnceEvent);
 
-        mediaPlayerLoop.Events.AddListener(OnMediaPlayerEventA);
+        mediaPlayerLoop.Events.AddListener(OnMediaPlayerLoopEvent);
     }
 
 
@@ -49,16 +54,17 @@ public class MyPanel : MonoBehaviour
 
 
 
-    private void OnMediaPlayerEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
-    {
-        if (mp == mediaPlayerOnce && et == MediaPlayerEvent.EventType.FinishedPlaying)
-        {
-            //跳转到下一个场景
-            tabSwitcher.SwitchTab(1);
-        }
-    }
+    //private void OnMediaPlayerOnceEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
+    //{
+    //    if (mp == mediaPlayerOnce && et == MediaPlayerEvent.EventType.FinishedPlaying)
+    //    {
+    //        Debug.Log("完成");
+    //        //跳转到下一个场景
+    //        tabSwitcher.SwitchTab(nextTab);
+    //    }
+    //}
 
-    private void OnMediaPlayerEventA(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
+    private void OnMediaPlayerLoopEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
     {
         if (mp == mediaPlayerLoop && et == MediaPlayerEvent.EventType.FinishedPlaying)
         {

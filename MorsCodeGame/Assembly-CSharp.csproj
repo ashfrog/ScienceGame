@@ -58,85 +58,49 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoInfo.cs" />
     <Compile Include="Assets\PanelScript\PanelRank.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\AudioOutputManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\UpdateStereoMaterial.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\OSXMediaPlayer.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoDisplayUGUI.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\ChangeVideoExample.cs" />
     <Compile Include="Assets\RandItem.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\CRC.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\ChangeStereoMode.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\SphereDemo.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\NGUI\ApplyToTextureWidgetNGUI.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\ChangeAudioTrack.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoPlayer.cs" />
     <Compile Include="Assets\MorseCodeInput.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Internal\IniConfig.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\LoadFromBufferInChunks.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\DataTypeEnum.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\AutoRotate.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\NativeMediaOpen.cs" />
     <Compile Include="Assets\TouchSocketTcp\Plugins\SkipUnityLogo.cs" />
     <Compile Include="Assets\ItemPrefab.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\AudioOutput.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\ToggleButtonGroup.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Demo\MouseTouchInputManager.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\PlaybackSync.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\DisplayBackground.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoControl.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\OrderTypeEnum.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\BaseMediaPlayer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\VCR.cs" />
     <Compile Include="Assets\Code\MorseCodeGenerator.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\WindowsMediaPlayer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Internal\ConfigManager.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\DebugOverlay.cs" />
     <Compile Include="Assets\TouchSocketTcp\AdvertisementKiosk.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\LoadFromBuffer.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\FHTcpClient.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\WebGLMediaPlayer.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\HLSStream.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\MediaPlayer.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\StreamParser.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHTcpService.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\SimpleController.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\ApplyToMesh.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
+    <Compile Include="Assets\Code\TVNoise\UISnowMaskController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\Stream.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\DisplayIMGUI.cs" />
     <Compile Include="Assets\ShowTouchKeyboard.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\DemoInfo.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\ConvertUtil.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\ToggleButtonWithImage.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\AudioChannelMixer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\Interfaces.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\StartEndPoint.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\Resampler.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\AndroidMediaPlayer.cs" />
     <Compile Include="Assets\PanelScript\MyPanel.cs" />
     <Compile Include="Assets\TouchSocketTcp\Loom.cs" />
     <Compile Include="Assets\Code\KeyPressDetector.cs" />
@@ -146,58 +110,41 @@
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\MyFixedHeaderCustomDataHandlingAdapter.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\PanelScript\PanelCreateUser.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\SubtitlesUGUI.cs" />
     <Compile Include="Assets\Demo\MouseRoteReceiver.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHClientController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\CubemapCube.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\FrameExtract.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Mapping3D.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\SettingsManager.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Demo.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\SampleApp_Multiple.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\DisplayUGUI.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\ApplyToMaterial.cs" />
     <Compile Include="Assets\KeyCodeInput.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
-    <Compile Include="Assets\AVProVideo\Demos\Scripts\Scriptlets\VideoTrigger.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Internal\NullMediaPlayer.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\PlaylistMediaPlayer.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\Internal\AVProVideoActionBase.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\TabSwitcher.cs" />
     <Compile Include="Assets\PanelScript\Panel_QingBao.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Actions\AVProVideoEvent.cs" />
-    <Compile Include="Assets\Code\TVNoise\UISnowMaskController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Nature\SoftOcclusion\TreeSoftOcclusionLeaves.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle Blend.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-VR-InsideSphere-Transparent-AndroidOES.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-UI-Default-Stereo.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Background-FullScreen.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-IMGUI-Transparent.shader" />
+    <None Include="Assets\AVProVideo\Licenses\LibSamplerate-License.txt" />
+    <None Include="Assets\AVProVideo\Licenses\Hap-License.txt" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-Particle-Add.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\AVProVideo\Demos\Materials\UI-Default-ExtraTexture.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-VR-InsideSphere-AndroidOES.shader" />
+    <None Include="Assets\AVProVideo\Licenses\Hap-3rdParty.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Nature\SoftOcclusion\TreeSoftOcclusionBark.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\UnityStandardCore.cginc" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Helper-Transition.shader" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
+    <None Include="Assets\AVProVideo\Licenses\GdclMpeg4-License.txt" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-Particle-Alpha-VertexLit.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Core\Vertex.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-UI-Default-Transparent.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Nature\SoftOcclusion\UnityBuiltin2xTreeLibrary.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\StandardSpecular.shader" />
@@ -207,26 +154,18 @@
     <None Include="Assets\TouchSocketTcp\Plugins\link.xml" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-Particle-Alpha.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\UnityStandardMeta.cginc" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Lit-Transparent-Diffuse.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-Lightmap-Unlit.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\UnityStandardCoreForward.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Unlit\Unlit.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Lit-Diffuse.shader" />
-    <None Include="Assets\AVProVideo\Demos\Materials\UI-DefaultFont-ExtraTexture.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-VR-InsideSphere.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-VR-InsideSphere-Transparent.shader" />
     <None Include="Assets\TouchSocketTcp\Plugins\websocket-sharp.dll" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle Premultiply Blend.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\UnityStandardParticleShadow.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\Standard.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Core\Shadow.cginc" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Skybox-Sphere.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\VertexLit\VertexLit.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle Add.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-VR-InsideSphere-StereoUV.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Background-FullScreenTransparent.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Nature\TreeCreator\TreeCreatorLeaves.shader" />
@@ -237,13 +176,12 @@
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle Standard Unlit.shader" />
+    <None Include="Assets\AVProVideo\Licenses\Third-Party Notices.txt" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\SpeedTree\SpeedTreeBillboard.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\SpeedTree\SpeedTree8.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Core\Limits.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-UI-AndroidOES.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\UnityStandardInput.cginc" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Skybox-Cube3x2.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Unlit\Unlit.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\cginc\Defines.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
@@ -251,10 +189,8 @@
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle Multiply.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-BumpSpec.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\SpeedTree\SpeedTreeBillboardCommon.cginc" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo.cginc" />
+    <None Include="Assets\AVProVideo\Licenses\FacebookAudio360-License.txt" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-BumpSpec-1DirectionalLight.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Unlit-AndroidOES.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Unlit.shader" />
     <None Include="Assets\TouchSocketTcp\Plugins\TouchSocket.xml" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\One Directional Light\ForwardBase.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Mobile\Mobile-Particle-Multiply.shader" />
@@ -268,13 +204,14 @@
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Nature\TreeCreator\TreeCreatorBark.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Standard\UnityStandardConfig.cginc" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Nature\TreeCreator\TreeCreatorLeavesFast.shader" />
+    <None Include="Assets\AVProVideo\Licenses\HapInAvFoundation-License.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TouchSocketTcp\Plugins\TouchSocket.dll" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-Unlit-Transparent.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\SpeedTree\SpeedTree.shader" />
-    <None Include="Assets\AVProVideo\Resources\Shaders\AVProVideo-BlendFrames.shader" />
+    <None Include="Assets\AVProVideo\Docs\Documentation.txt" />
+    <None Include="Assets\AVProVideo\Licenses\ExoPlayer-License.txt" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\cginc\Variables.cginc" />
     <None Include="Assets\Code\TVNoise\UISnowMask.shader" />
     <None Include="Assets\Amazing Assets\Advanced Dissolve\Shaders\Built-in\Particles\Particle AddSmooth.shader" />
@@ -1139,10 +1076,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Shared.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1157,10 +1090,6 @@
     </Reference>
     <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Model">
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Timeline">
@@ -1203,16 +1132,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.TestTools.CodeCoverage.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.State">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Core">
@@ -1223,19 +1144,63 @@
       <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.VisualScripting.Shared.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Timeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TestTools.CodeCoverage.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.State">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="EasyTextEffects.csproj">
-      <Project>{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}</Project>
-      <Name>EasyTextEffects</Name>
+    <ProjectReference Include="AVProVideo.Editor.csproj">
+      <Project>{2B1D069B-3730-265E-D9E4-3DE466BD03F1}</Project>
+      <Name>AVProVideo.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.Examples.csproj">
       <Project>{47DA62F8-B3E7-6722-84DF-481E7E9CEA39}</Project>
       <Name>AmazingAssets.AdvancedDissolve.Examples</Name>
     </ProjectReference>
+    <ProjectReference Include="AVProVideo.Demos.csproj">
+      <Project>{C526609B-3F4C-6976-36AF-4EC6A30A0814}</Project>
+      <Name>AVProVideo.Demos</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.UnityUI.csproj">
+      <Project>{3D62B194-245B-98CD-C7BD-9846DDB0DA79}</Project>
+      <Name>AVProVideo.Extensions.UnityUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.UnityUI.Editor.csproj">
+      <Project>{1EE796E7-1D19-D8BB-F0E6-79FD597E8C55}</Project>
+      <Name>AVProVideo.Extensions.UnityUI.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Runtime.csproj">
+      <Project>{316DB694-E79B-03F9-05A6-45B0FB5F5B07}</Project>
+      <Name>AVProVideo.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="EasyTextEffects.csproj">
+      <Project>{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}</Project>
+      <Name>EasyTextEffects</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.VisualEffectGraph.csproj">
+      <Project>{9B1AB474-CDD9-0BA3-70E0-51B3EF2D2CCB}</Project>
+      <Name>AVProVideo.Extensions.VisualEffectGraph</Name>
+    </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.csproj">
       <Project>{4737F41A-1835-C02A-C2F7-BC1A76B0FF60}</Project>
       <Name>AmazingAssets.AdvancedDissolve</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.Timeline.csproj">
+      <Project>{6464B59A-8034-8D7D-9CA2-E4EF53E11F09}</Project>
+      <Name>AVProVideo.Extensions.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.Editor.csproj">
       <Project>{C97F788C-2B1D-25EF-D925-9A9BD0073699}</Project>
