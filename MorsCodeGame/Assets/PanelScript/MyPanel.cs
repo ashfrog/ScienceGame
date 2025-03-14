@@ -75,6 +75,10 @@ public class MyPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCodeInput.keyCode))
+        {
+            Panel.SetActive(false);
+            tabSwitcher.SwitchTab(nextTab);
+        }
     }
 }

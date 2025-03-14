@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Collections;
 using TMPro;
+using EasyTextEffects;
 
 /// <summary>
 /// handle the generation and scrolling of Morse code.
@@ -64,7 +65,16 @@ public class MorseCodeGenerator : MonoBehaviour
 
     bool startgame;
 
-    string gameState;
+    public enum GameState
+    {
+        prepare,
+        starting,
+        playing,
+        end
+    }
+
+    private GameState gameState;
+
 
     void Start()
     {
@@ -76,20 +86,25 @@ public class MorseCodeGenerator : MonoBehaviour
 
     private void OnEnable()
     {
+        startgame = false;
+        gameState = GameState.prepare;
         String morsecodesStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "morsecode.json"));
         List<String> morsecodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesStr);
         morseCode = morsecodes[UnityEngine.Random.Range(0, morsecodes.Count)];
-        //延迟3秒开始游戏
-        StartCoroutine(StartGame());
+        SecondText.SetText(@"<size=70><b><link=fade>点击K键开始发报</link></b></size>");
+        SecondText.gameObject.SetActive(true);
     }
 
     IEnumerator StartGame()
     {
-        SecondText.gameObject.SetActive(true);
-        for (int i = 3; i > 0; i--)
+        gameState = GameState.starting;
+        SecondText.SetText("");
+        SecondText.gameObject.SetActive(false);
+        for (int i = 4; i > 0; i--)
         {
-            SecondText.text = i.ToString();
+            SecondText.SetText($@"<b><link=gwave+scale>{i}</link></b> ");
             yield return new WaitForSeconds(1);
+            SecondText.gameObject.SetActive(true);
         }
 
         SecondText.gameObject.SetActive(false);
@@ -99,9 +114,10 @@ public class MorseCodeGenerator : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCodeInput.keyCode))
+        if (startgame == false && Input.GetKeyDown(KeyCodeInput.keyCode) && gameState == GameState.prepare)
         {
-            startgame = true;
+            //延迟3秒开始游戏
+            StartCoroutine(StartGame());
         }
         if (startgame)
         {
@@ -121,7 +137,7 @@ public class MorseCodeGenerator : MonoBehaviour
     {
         if (currentMorseIndex < morseCode.Length)
         {
-            gameState = "playing";
+            gameState = GameState.playing;
             char currentChar = morseCode[currentMorseIndex];
             GameObject prefab;
             switch (currentChar)
@@ -152,9 +168,9 @@ public class MorseCodeGenerator : MonoBehaviour
         }
         else
         {
-            if (morseCodeObjects.Count <= 0 && "playing".EndsWith(gameState))
+            if (morseCodeObjects.Count <= 0 && gameState == GameState.playing)
             {
-                gameState = "end";
+                gameState = GameState.end;
                 // 触发游戏结束事件
                 GameOver?.Invoke();
                 Debug.Log("GameOver");

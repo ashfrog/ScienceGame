@@ -8,9 +8,14 @@ using UnityEngine.UI;
 /// </summary>
 public class KeyPressDetector : MonoBehaviour
 {
-    public float perfectTimeRange = 40f;
-    public float normalTimeRange = 80f;
-    public float ignoreTimeRange = 120f;
+    public float perfectTimeRange = 300f;
+    public float normalTimeRange = 400f;
+    public float ignoreTimeRange = 500f;
+
+    /// <summary>
+    /// 200毫秒内按下的是点按，否则是长按
+    /// </summary>
+    public float dotDathTime = 0.2f;
 
     public RectTransform triggerLine;
 
@@ -25,34 +30,41 @@ public class KeyPressDetector : MonoBehaviour
     {
         score = 0;
     }
-
+    private float pressTime;
     void Update()
     {
         if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
-            DetectKeyPress();
+            pressTime = Time.time;
+            //DetectKeyPress();
+        }
+        if (Input.GetKeyUp(KeyCodeInput.keyCode))
+        {
+            float duration = Time.time - pressTime;
+            DetectKeyPress(duration < dotDathTime);
+            Debug.Log(duration);
         }
 
         scoreText.text = "" + score;
     }
 
-    void DetectKeyPress()
+    void DetectKeyPress(bool isdot)
     {
         RectTransform morseCodeObject = FindClosestMorseCodeObject();
         if (morseCodeObject != null)
         {
             float distance = GetDistance(morseCodeObject);
-            Debug.Log("Distance: " + distance);
+            //Debug.Log("Distance: " + distance);
+            bool isDotObj = morseCodeObject.GetComponent<ItemPrefab>().isDot;
             if (distance < ignoreTimeRange)
             {
-
-                if (distance < perfectTimeRange)
+                if (distance < perfectTimeRange && isDotObj == isdot)
                 {
                     Debug.Log("Perfect");
                     score++;
                     morseCodeObject.GetComponent<RawImage>().color = Color.green;
                 }
-                else if (distance < normalTimeRange)
+                else if (distance < normalTimeRange && isDotObj == isdot)
                 {
                     Debug.Log("Normal");
 
