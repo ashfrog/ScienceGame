@@ -1931,10 +1931,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323957a7144a457468bcc772d1b49b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perfectTimeRange: 100
-  normalTimeRange: 200
-  ignoreTimeRange: 300
-  dotDathTime: 0.12
+  perfectTimeRange: 60
+  normalTimeRange: 80
+  ignoreTimeRange: 100
+  dotDathTime: 0.1
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
   scoreText: {fileID: 1410561336}
@@ -8142,7 +8142,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1727479512}
-  - component: {fileID: 1727479510}
   - component: {fileID: 1727479513}
   - component: {fileID: 1727479514}
   m_Layer: 0
@@ -8152,19 +8151,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1727479510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727479509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51f810d1c0eb90c42941eac93a9d8089, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dotTimeThreshold: 0.2
 --- !u!4 &1727479512
 Transform:
   m_ObjectHideFlags: 0
@@ -8203,7 +8189,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 4c3921af17c2e81428817a9168e2d33a, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 01a116c54b836624f8d41865d8d1af26, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -9061,7 +9047,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tabButtons: []
-  currentTabIndex: 0
+  currentTabIndex: 3
   tabPages:
   - {fileID: 2024134799}
   - {fileID: 1006807289}
@@ -9692,7 +9678,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2024134800
 RectTransform:
   m_ObjectHideFlags: 0

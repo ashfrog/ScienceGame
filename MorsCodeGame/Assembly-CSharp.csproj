@@ -65,7 +65,6 @@
     <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\CRC.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
-    <Compile Include="Assets\MorseCodeInput.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Internal\IniConfig.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\DataTypeEnum.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
