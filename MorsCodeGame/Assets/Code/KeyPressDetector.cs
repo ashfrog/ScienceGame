@@ -31,19 +31,36 @@ public class KeyPressDetector : MonoBehaviour
         score = 0;
     }
     private float pressTime;
+    bool pressed;
     void Update()
     {
         if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
+            pressed = true;
             pressTime = Time.time;
-            //DetectKeyPress();
+
         }
         if (Input.GetKeyUp(KeyCodeInput.keyCode))
         {
+            pressed = false;
             float duration = Time.time - pressTime;
-            DetectKeyPress(duration < dotDathTime);
+            if (duration <= dotDathTime)
+            {
+                DetectKeyPress(true);
+            }
+        }
+        if (pressed)
+        {
+            float duration = Time.time - pressTime;
+            if (duration > dotDathTime && duration < 0.3f && pressed)
+            {
+                DetectKeyPress(false);
+                pressed = false;
+            }
             Debug.Log(duration);
         }
+
+
 
         scoreText.text = "" + score;
     }

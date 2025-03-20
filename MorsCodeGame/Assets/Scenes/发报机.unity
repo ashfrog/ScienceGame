@@ -1096,7 +1096,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1249, y: 0}
+  m_AnchoredPosition: {x: -1197, y: 0}
   m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &230524440
@@ -1931,10 +1931,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323957a7144a457468bcc772d1b49b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perfectTimeRange: 60
-  normalTimeRange: 80
-  ignoreTimeRange: 100
-  dotDathTime: 0.1
+  perfectTimeRange: 160
+  normalTimeRange: 180
+  ignoreTimeRange: 200
+  dotDathTime: 0.12
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
   scoreText: {fileID: 1410561336}
@@ -1956,12 +1956,14 @@ MonoBehaviour:
   emptyPrefab: {fileID: 172772512}
   spawnPoint: {fileID: 1729460618}
   endPoint: {fileID: 229004729}
-  scrollSpeed: 150
-  spawnInterval: 0.4
+  scrollSpeed: 400
+  spawnInterval: 0.3
   morseCodeObjects: []
   nextTab: 4
   SecondText: {fileID: 1518556715}
-  morseCode: ... --- ... --- ... --- ... --- ...
+  morseCode: ... --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ......
+    --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ...... --- ...
+    --- ... --- ... --- ...
 --- !u!4 &365704917
 Transform:
   m_ObjectHideFlags: 0
@@ -4788,7 +4790,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 185.2, y: -552}
-  m_SizeDelta: {x: 24, y: 6}
+  m_SizeDelta: {x: 60, y: 8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &906321093
 MonoBehaviour:
@@ -4803,7 +4805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.47843137, g: 0.47843137, b: 0.47843137, a: 1}
+  m_Color: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7303,7 +7305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c91898ad9a2976f40a6fc5f7fd0957f1, type: 2}
-  m_Color: {r: 0.47843137, g: 0.47843137, b: 0.47843137, a: 1}
+  m_Color: {r: 0.7830189, g: 0.7830189, b: 0.7830189, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -8310,7 +8312,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.82500005, y: 0.5342593}
   m_AnchorMax: {x: 0.82500005, y: 0.5342593}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -34.299988, y: 0}
   m_SizeDelta: {x: 10, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1737034382
@@ -9376,7 +9378,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1031.0471, y: 7.552}
+  m_AnchoredPosition: {x: -997, y: 7.552}
   m_SizeDelta: {x: 13.016, y: 170.469}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1961489662
