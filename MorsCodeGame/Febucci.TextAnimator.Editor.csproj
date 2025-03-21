@@ -58,26 +58,26 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Properties\FloatCurvePropertyDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Components\TAnimCoreDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorSetupWindow.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Properties\EmissionCurvePropertyDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\_Core\TexturesLoader.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Components\TypewriterCoreDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Properties\ColorCurvePropertyDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorSettingsDrawer.cs" />
     <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\_Core\SharedDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorSettingsDrawer.cs" />
     <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Database\AnimationElementDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorInstallationDataDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Actions\ActionScriptableDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Database\AnimDatabaseScriptableDrawer.cs" />
     <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Database\ActionDatabaseScriptableDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\_Core\GenericSharedDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorInstallationData.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Components\TypewriterByCharacterDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Animations\AnimScriptableDrawer.cs" />
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Database\DatabaseSharedDrawer.cs" />
     <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Components\TypewriterByWordDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Properties\FloatCurvePropertyDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Database\AnimDatabaseScriptableDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorSetupWindow.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorInstallationData.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\_Core\TexturesLoader.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Properties\ColorCurvePropertyDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Actions\ActionScriptableDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\_Core\GenericSharedDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Components\TypewriterCoreDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Components\TypewriterByCharacterDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Components\TAnimCoreDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Settings\TextAnimatorInstallationDataDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Database\DatabaseSharedDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Scriptables\Animations\AnimScriptableDrawer.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Drawers\Properties\EmissionCurvePropertyDrawer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Plugins\Febucci\Text Animator\Scripts\Editor\Febucci.TextAnimator.Editor.asmdef" />

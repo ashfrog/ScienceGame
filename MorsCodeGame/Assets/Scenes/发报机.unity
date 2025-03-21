@@ -1360,11 +1360,11 @@ MonoBehaviour:
       textureDuration: 0
       loop: 0
       startMode: 0
-      progressMode: 0
-      progressTimeSeconds: 0
-      isOverrideTransition: 1
+      progressMode: 1
+      progressTimeSeconds: 5
+      isOverrideTransition: 0
       overrideTransition: 1
-      overrideTransitionDuration: 1
+      overrideTransitionDuration: 5
       overrideTransitionEasing: 0
     - name: OUTER
       sourceType: 0
@@ -1375,16 +1375,16 @@ MonoBehaviour:
       textureDuration: 0
       loop: 0
       startMode: 0
-      progressMode: 0
-      progressTimeSeconds: 0
+      progressMode: 1
+      progressTimeSeconds: 5
       isOverrideTransition: 0
       overrideTransition: 2
       overrideTransitionDuration: 0.2
       overrideTransitionEasing: 0
   _pausePreviousOnTransition: 0
   _defaultTransition: 1
-  _defaultTransitionDuration: 1
-  _defaultTransitionEasing: 1
+  _defaultTransitionDuration: 5
+  _defaultTransitionEasing: 2
   _playlistAudioVolume: 1
   _playlistAudioMuted: 0
 --- !u!1 &243023381
@@ -1931,9 +1931,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323957a7144a457468bcc772d1b49b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perfectTimeRange: 80
-  normalTimeRange: 90
-  ignoreTimeRange: 100
+  perfectTimeRange: 100
+  normalTimeRange: 110
+  ignoreTimeRange: 120
   dotDathTime: 0.15
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
@@ -1957,7 +1957,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 1729460618}
   endPoint: {fileID: 229004729}
   scrollSpeed: 300
-  spawnInterval: 0.3
+  spawnInterval: 0.35
   morseCodeObjects: []
   nextTab: 4
   SecondText: {fileID: 1518556717}
@@ -9181,7 +9181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tabButtons: []
-  currentTabIndex: 3
+  currentTabIndex: 0
   tabPages:
   - {fileID: 2024134799}
   - {fileID: 1006807289}

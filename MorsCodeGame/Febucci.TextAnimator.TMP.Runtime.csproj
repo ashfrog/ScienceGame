@@ -58,8 +58,8 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Runtime\Components\Animator\TextMeshPro\TMPTagParser.cs" />
     <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Runtime\Components\Animator\TextMeshPro\TextAnimator_TMP.cs" />
+    <Compile Include="Assets\Plugins\Febucci\Text Animator\Scripts\Runtime\Components\Animator\TextMeshPro\TMPTagParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Plugins\Febucci\Text Animator\Scripts\Runtime\Components\Animator\TextMeshPro\Febucci.TextAnimator.TMP.Runtime.asmdef" />

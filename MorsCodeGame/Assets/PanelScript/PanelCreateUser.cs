@@ -37,6 +37,14 @@ public class PanelCreateUser : MonoBehaviour
         StartCoroutine(ActivateDisplayUGUIAfterDelay(0.1f));
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCodeInput.keyCode))
+        {
+            tabSwitcher.SwitchTab(nextTab); // 直接跳转到下一个场景
+        }
+    }
+
     private IEnumerator ActivateDisplayUGUIAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
