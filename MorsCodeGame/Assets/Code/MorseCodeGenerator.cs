@@ -90,7 +90,7 @@ public class MorseCodeGenerator : MonoBehaviour
         String morsecodesStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "morsecode.json"));
         List<String> morsecodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesStr);
         morseCode = morsecodes[UnityEngine.Random.Range(0, morsecodes.Count)];
-        SecondText.SetText(@"<size=70><b><link=fade>点击K键开始发报</link></b></size>");
+        SecondText.SetText(@"<size=60><bounce>轻击电键 开始发报</bounce></size>");
         SecondText.gameObject.SetActive(true);
     }
 
@@ -102,7 +102,7 @@ public class MorseCodeGenerator : MonoBehaviour
         //SecondText.gameObject.SetActive(false);
         for (int i = 3; i > 0; i--)
         {
-            SecondText.SetText($@"<b><link=gwave+scale>{i}</link></b> ");
+            SecondText.SetText($@"<b><bounce>{i}</bounce></b> ");
             yield return new WaitForSeconds(1);
             SecondText.gameObject.SetActive(true);
         }
