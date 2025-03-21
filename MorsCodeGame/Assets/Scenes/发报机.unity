@@ -1932,9 +1932,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   perfectTimeRange: 100
-  normalTimeRange: 120
+  normalTimeRange: 125
   ignoreTimeRange: 150
-  dotDathTime: 0.12
+  dotDathTime: 0.15
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
   scoreText: {fileID: 1410561336}
