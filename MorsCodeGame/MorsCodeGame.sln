@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVProVideo.Demos", "AVProVideo.Demos.csproj", "{C526609B-3F4C-6976-36AF-4EC6A30A0814}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasyTextEffects", "EasyTextEffects.csproj", "{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{240097CA-DFB2-DD50-49B9-A1AB4199D356}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVProVideo.Runtime", "AVProVideo.Runtime.csproj", "{316DB694-E79B-03F9-05A6-45B0FB5F5B07}"
@@ -35,10 +33,6 @@ Global
 		{C526609B-3F4C-6976-36AF-4EC6A30A0814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C526609B-3F4C-6976-36AF-4EC6A30A0814}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C526609B-3F4C-6976-36AF-4EC6A30A0814}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{240097CA-DFB2-DD50-49B9-A1AB4199D356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{240097CA-DFB2-DD50-49B9-A1AB4199D356}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{240097CA-DFB2-DD50-49B9-A1AB4199D356}.Release|Any CPU.ActiveCfg = Release|Any CPU

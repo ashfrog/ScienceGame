@@ -1960,7 +1960,7 @@ MonoBehaviour:
   spawnInterval: 0.35
   morseCodeObjects: []
   nextTab: 4
-  SecondText: {fileID: 1518556715}
+  SecondText: {fileID: 1518556717}
   morseCode: ... --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ......
     --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ...... --- ...
     --- ... --- ... --- ...
@@ -6974,7 +6974,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1518556714}
   - component: {fileID: 1518556716}
-  - component: {fileID: 1518556715}
   - component: {fileID: 1518556717}
   m_Layer: 5
   m_Name: "Text\u5012\u6570"
@@ -7003,7 +7002,15 @@ RectTransform:
   m_AnchoredPosition: {x: 629.00024, y: -112.66}
   m_SizeDelta: {x: 1254.5, y: 188.857}
   m_Pivot: {x: 1, y: 1}
---- !u!114 &1518556715
+--- !u!222 &1518556716
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518556713}
+  m_CullTransparentMesh: 1
+--- !u!114 &1518556717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7050,8 +7057,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 133.6
-  m_fontSizeBase: 133.6
+  m_fontSize: 180
+  m_fontSizeBase: 180
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7092,32 +7099,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1518556716
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518556713}
-  m_CullTransparentMesh: 1
---- !u!114 &1518556717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518556713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9840f87219df84505803024c796e739d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: {fileID: 1518556715}
-  usePreset: 1
-  preset: {fileID: 11400000, guid: 4ce9908ccf7134c95bb64f24bc3ab9c9, type: 2}
-  tagEffects: []
-  globalEffects: []
-  updatesPerSecond: 30
 --- !u!1 &1541191783
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using System.Collections;
 using TMPro;
-using EasyTextEffects;
 
 /// <summary>
 /// handle the generation and scrolling of Morse code.
@@ -99,8 +98,9 @@ public class MorseCodeGenerator : MonoBehaviour
     {
         gameState = GameState.starting;
         SecondText.SetText("");
-        SecondText.gameObject.SetActive(false);
-        for (int i = 4; i > 0; i--)
+        SecondText.ForceMeshUpdate();
+        //SecondText.gameObject.SetActive(false);
+        for (int i = 3; i > 0; i--)
         {
             SecondText.SetText($@"<b><link=gwave+scale>{i}</link></b> ");
             yield return new WaitForSeconds(1);

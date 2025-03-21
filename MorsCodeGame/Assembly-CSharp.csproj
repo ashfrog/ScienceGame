@@ -1185,10 +1185,6 @@
       <Project>{316DB694-E79B-03F9-05A6-45B0FB5F5B07}</Project>
       <Name>AVProVideo.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="EasyTextEffects.csproj">
-      <Project>{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}</Project>
-      <Name>EasyTextEffects</Name>
-    </ProjectReference>
     <ProjectReference Include="AVProVideo.Extensions.VisualEffectGraph.csproj">
       <Project>{9B1AB474-CDD9-0BA3-70E0-51B3EF2D2CCB}</Project>
       <Name>AVProVideo.Extensions.VisualEffectGraph</Name>
