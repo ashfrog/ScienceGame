@@ -57,7 +57,7 @@ public class KeyPressDetector : MonoBehaviour
                 DetectKeyPress(false);
                 pressed = false;
             }
-            Debug.Log(duration);
+            //Debug.Log(duration);
         }
 
 
@@ -71,26 +71,23 @@ public class KeyPressDetector : MonoBehaviour
         if (morseCodeObject != null)
         {
             float distance = GetDistance(morseCodeObject);
-            //Debug.Log("Distance: " + distance);
+            Debug.Log("Distance: " + distance);
             bool isDotObj = morseCodeObject.GetComponent<ItemPrefab>().isDot;
             if (distance < ignoreTimeRange)
             {
                 if (distance < perfectTimeRange && isDotObj == isdot)
                 {
                     Debug.Log("Perfect");
-                    score++;
                     morseCodeObject.GetComponent<RawImage>().color = Color.green;
                 }
                 else if (distance < normalTimeRange && isDotObj == isdot)
                 {
                     Debug.Log("Normal");
-
                     morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
                 }
                 else
                 {
                     Debug.Log("Miss");
-                    score--;
                     morseCodeObject.GetComponent<RawImage>().color = Color.red;
                 }
             }

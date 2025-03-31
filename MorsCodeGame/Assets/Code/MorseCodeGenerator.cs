@@ -87,14 +87,22 @@ public class MorseCodeGenerator : MonoBehaviour
     {
         startgame = false;
         gameState = GameState.prepare;
-        String morsecodesStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "morsecode.json"));
-        List<String> morsecodes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesStr);
-        morseCode = morsecodes[UnityEngine.Random.Range(0, morsecodes.Count)];
+        String morsecodesZHStrs = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "报文.json"));
+        List<String> morsecodesZHs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesZHStrs);
+        string morseCodeZH = morsecodesZHs[UnityEngine.Random.Range(0, morsecodesZHs.Count)];
+        String codesDicStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "中文电码表.json"));
+        morseCode = ConvertZH2MorsCode(morseCodeZH, codesDicStr);
         SecondText.SetText(@"<size=60><bounce>轻击电键 开始发报</bounce></size>");
         SecondText.gameObject.SetActive(true);
+    }
 
-
-        String codesDicStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "中文电码表.json"));
+    /// <summary>
+    /// 中文电报转换为摩尔斯电报
+    /// </summary>
+    /// <param name="morseCodeStr"></param>
+    /// <returns></returns>
+    private static string ConvertZH2MorsCode(string morseCodeStr, String codesDicStr)
+    {
         Dictionary<string, string> codeDic = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(codesDicStr);
 
         //将codesDirStr key value 翻转
@@ -103,9 +111,6 @@ public class MorseCodeGenerator : MonoBehaviour
         {
             codeDicReverse[item.Value] = item.Key;
         }
-
-        string morseCodeStr = "大部队集结";
-        //将汉字转换为电码
         string CodeNo = "";
         foreach (var item in morseCodeStr)
         {
@@ -120,7 +125,7 @@ public class MorseCodeGenerator : MonoBehaviour
                 Debug.Log("中文电报编码成数字异常:" + ex.Message);
             }
         }
-        //将CodeNo转换为电码
+        //将数字电报码转换为摩尔斯码
         string morseCodeDt = "";
         foreach (var item in CodeNo)
         {
@@ -130,14 +135,18 @@ public class MorseCodeGenerator : MonoBehaviour
                 {
                     morseCodeDt += ' ';
                 }
-                morseCodeDt += CharMapToMorse[item];
-                morseCodeDt += ' ';
+                if (char.IsDigit(item))
+                {
+                    morseCodeDt += CharMapToMorse[item];
+                    morseCodeDt += ' ';
+                }
             }
             catch (Exception ex)
             {
                 Debug.Log("数字编码成摩尔斯码异常:" + ex.Message);
             }
         }
+        return morseCodeDt;
     }
 
     IEnumerator StartGame()
