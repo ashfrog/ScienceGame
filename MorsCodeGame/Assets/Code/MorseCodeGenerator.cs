@@ -92,6 +92,52 @@ public class MorseCodeGenerator : MonoBehaviour
         morseCode = morsecodes[UnityEngine.Random.Range(0, morsecodes.Count)];
         SecondText.SetText(@"<size=60><bounce>轻击电键 开始发报</bounce></size>");
         SecondText.gameObject.SetActive(true);
+
+
+        String codesDicStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "中文电码表.json"));
+        Dictionary<string, string> codeDic = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(codesDicStr);
+
+        //将codesDirStr key value 翻转
+        Dictionary<string, string> codeDicReverse = new Dictionary<string, string>();
+        foreach (var item in codeDic)
+        {
+            codeDicReverse[item.Value] = item.Key;
+        }
+
+        string morseCodeStr = "大部队集结";
+        //将汉字转换为电码
+        string CodeNo = "";
+        foreach (var item in morseCodeStr)
+        {
+            try
+            {
+                CodeNo += codeDicReverse[item.ToString()];
+                CodeNo += ' ';
+                CodeNo += ' ';
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("中文电报编码成数字异常:" + ex.Message);
+            }
+        }
+        //将CodeNo转换为电码
+        string morseCodeDt = "";
+        foreach (var item in CodeNo)
+        {
+            try
+            {
+                if (char.IsWhiteSpace(item))
+                {
+                    morseCodeDt += ' ';
+                }
+                morseCodeDt += CharMapToMorse[item];
+                morseCodeDt += ' ';
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("数字编码成摩尔斯码异常:" + ex.Message);
+            }
+        }
     }
 
     IEnumerator StartGame()

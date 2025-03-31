@@ -1931,9 +1931,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323957a7144a457468bcc772d1b49b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perfectTimeRange: 100
-  normalTimeRange: 110
-  ignoreTimeRange: 120
+  perfectTimeRange: 150
+  normalTimeRange: 180
+  ignoreTimeRange: 200
   dotDathTime: 0.15
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
@@ -1956,8 +1956,8 @@ MonoBehaviour:
   emptyPrefab: {fileID: 172772512}
   spawnPoint: {fileID: 1729460618}
   endPoint: {fileID: 229004729}
-  scrollSpeed: 300
-  spawnInterval: 0.35
+  scrollSpeed: 500
+  spawnInterval: 0.2
   morseCodeObjects: []
   nextTab: 4
   SecondText: {fileID: 1518556717}
