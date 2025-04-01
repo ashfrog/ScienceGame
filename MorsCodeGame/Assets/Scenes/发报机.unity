@@ -1482,7 +1482,7 @@ MonoBehaviour:
   _playerA: {fileID: 1331895687}
   _playerB: {fileID: 995304827}
   _playlistAutoProgress: 1
-  _autoCloseVideo: 0
+  _autoCloseVideo: 1
   _playlistLoopMode: 0
   _playlist:
     _items:
@@ -1496,7 +1496,7 @@ MonoBehaviour:
       loop: 0
       startMode: 0
       progressMode: 1
-      progressTimeSeconds: 5
+      progressTimeSeconds: 0.5
       isOverrideTransition: 0
       overrideTransition: 1
       overrideTransitionDuration: 5
@@ -1511,15 +1511,15 @@ MonoBehaviour:
       loop: 0
       startMode: 0
       progressMode: 1
-      progressTimeSeconds: 5
+      progressTimeSeconds: 0.5
       isOverrideTransition: 0
       overrideTransition: 2
       overrideTransitionDuration: 0.2
       overrideTransitionEasing: 0
   _pausePreviousOnTransition: 0
   _defaultTransition: 1
-  _defaultTransitionDuration: 5
-  _defaultTransitionEasing: 2
+  _defaultTransitionDuration: 0.5
+  _defaultTransitionEasing: 1
   _playlistAudioVolume: 1
   _playlistAudioMuted: 0
 --- !u!1 &243023381
@@ -2226,8 +2226,8 @@ MonoBehaviour:
   emptyPrefab: {fileID: 172772512}
   spawnPoint: {fileID: 1729460618}
   endPoint: {fileID: 229004729}
-  scrollSpeed: 200
-  spawnInterval: 0.4
+  scrollSpeed: 250
+  spawnInterval: 0.35
   morseCodeObjects: []
   nextTab: 4
   SecondText: {fileID: 1518556717}
@@ -5849,7 +5849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1006807290
 RectTransform:
   m_ObjectHideFlags: 0

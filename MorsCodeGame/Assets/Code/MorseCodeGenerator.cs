@@ -257,7 +257,7 @@ public class MorseCodeGenerator : MonoBehaviour
                 Debug.Log("GameOver");
                 textAnimator.Play(animationName, -1, 0f);
                 textAnimator.speed = 1;
-                Invoke(nameof(SwitchTab), 10);
+                Invoke(nameof(SwitchTab), 6);
             }
         }
     }

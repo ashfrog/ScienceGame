@@ -34,7 +34,7 @@ public class PanelCreateUser : MonoBehaviour
             }
         }
 
-        StartCoroutine(ActivateDisplayUGUIAfterDelay(0.1f));
+        StartCoroutine(ActivateDisplayUGUIAfterDelay(0.2f));
     }
 
     private void Update()
@@ -45,6 +45,7 @@ public class PanelCreateUser : MonoBehaviour
         }
     }
 
+    //防止显示上个视频最后一帧
     private IEnumerator ActivateDisplayUGUIAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
