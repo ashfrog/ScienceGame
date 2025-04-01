@@ -38,6 +38,7 @@ public class KeyPressDetector : MonoBehaviour
         {
             pressed = true;
             pressTime = Time.time;
+            DetectKeyPress(true);
 
         }
         if (Input.GetKeyUp(KeyCodeInput.keyCode))
@@ -85,12 +86,18 @@ public class KeyPressDetector : MonoBehaviour
                     Debug.Log("Normal");
                     morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
                 }
+                else if (isDotObj != isdot)
+                {
+                    Debug.Log("长短发错");
+                    morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
+                }
                 else
                 {
-                    Debug.Log("Miss");
+                    Debug.Log("其它");
                     morseCodeObject.GetComponent<RawImage>().color = Color.red;
                 }
             }
+            Debug.Log(morseCodeObject.GetComponent<ItemPrefab>().id);
 
         }
     }

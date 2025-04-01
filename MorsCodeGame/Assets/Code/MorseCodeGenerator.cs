@@ -32,6 +32,8 @@ public class MorseCodeGenerator : MonoBehaviour
 
     public TextMeshProUGUI SecondText;
 
+    public int prefabid;
+
     static Dictionary<string, char> MorseToCharMap = new Dictionary<string, char>
     {
         { ".-", 'A' }, { "-...", 'B' }, { "-.-.", 'C' }, { "-..", 'D' },
@@ -194,7 +196,7 @@ public class MorseCodeGenerator : MonoBehaviour
         {
             gameState = GameState.playing;
             char currentChar = morseCode[currentMorseIndex];
-            GameObject prefab;
+            GameObject prefab = null;
             switch (currentChar)
             {
                 case '.':
@@ -208,17 +210,15 @@ public class MorseCodeGenerator : MonoBehaviour
                         prefab = dashPrefab;
                     }
                     break;
-                default:
-                    {
-                        prefab = emptyPrefab;
-                    }
-                    break;
             }
-
-            GameObject morseCodeObject = Instantiate(prefab);
-            morseCodeObject.transform.SetParent(spawnPoint, false);
-            morseCodeObject.GetComponent<RectTransform>().anchoredPosition = spawnPoint.anchoredPosition;
-            morseCodeObjects.Add(morseCodeObject);
+            if (prefab != null)
+            {
+                GameObject morseCodeObject = Instantiate(prefab);
+                morseCodeObject.transform.SetParent(spawnPoint, false);
+                morseCodeObject.GetComponent<RectTransform>().anchoredPosition = spawnPoint.anchoredPosition;
+                morseCodeObject.GetComponent<ItemPrefab>().id = prefabid++;
+                morseCodeObjects.Add(morseCodeObject);
+            }
             currentMorseIndex++;
         }
         else

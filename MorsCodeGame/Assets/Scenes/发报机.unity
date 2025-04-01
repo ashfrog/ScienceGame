@@ -554,7 +554,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -12.182007, y: 132}
-  m_SizeDelta: {x: 1200.9, y: 52.133}
+  m_SizeDelta: {x: 1238.8, y: 52.133}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &54532305
 MonoBehaviour:
@@ -1772,7 +1772,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -12.182007, y: 79}
-  m_SizeDelta: {x: 1200.868, y: 52.133}
+  m_SizeDelta: {x: 1238.8, y: 52.133}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &273605560
 MonoBehaviour:
@@ -2201,9 +2201,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323957a7144a457468bcc772d1b49b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  perfectTimeRange: 80
-  normalTimeRange: 100
-  ignoreTimeRange: 100
+  perfectTimeRange: 180
+  normalTimeRange: 200
+  ignoreTimeRange: 200
   dotDathTime: 0.12
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
@@ -2226,11 +2226,12 @@ MonoBehaviour:
   emptyPrefab: {fileID: 172772512}
   spawnPoint: {fileID: 1729460618}
   endPoint: {fileID: 229004729}
-  scrollSpeed: 250
+  scrollSpeed: 350
   spawnInterval: 0.35
   morseCodeObjects: []
   nextTab: 4
   SecondText: {fileID: 1518556717}
+  prefabid: 0
   morseCode: ... --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ......
     --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ...... --- ...
     --- ... --- ... --- ...
@@ -4046,8 +4047,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -12.182007, y: -344}
-  m_SizeDelta: {x: 1195.9, y: 52.133}
+  m_AnchoredPosition: {x: -12.182007, y: -292}
+  m_SizeDelta: {x: 1230.239, y: 52.133}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &723305454
 MonoBehaviour:
@@ -5245,6 +5246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDot: 0
+  id: 0
 --- !u!1 &947407612
 GameObject:
   m_ObjectHideFlags: 0
@@ -6891,8 +6893,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: -395}
-  m_SizeDelta: {x: 1208.112, y: 52.133}
+  m_AnchoredPosition: {x: 0.000061035156, y: -351}
+  m_SizeDelta: {x: 1242.4, y: 52.133}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1355988560
 MonoBehaviour:
@@ -8012,6 +8014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDot: 1
+  id: 0
 --- !u!1 &1604878107
 GameObject:
   m_ObjectHideFlags: 0
