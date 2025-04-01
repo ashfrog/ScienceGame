@@ -72,33 +72,35 @@ public class KeyPressDetector : MonoBehaviour
         if (morseCodeObject != null)
         {
             float distance = GetDistance(morseCodeObject);
-            Debug.Log("Distance: " + distance);
-            bool isDotObj = morseCodeObject.GetComponent<ItemPrefab>().isDot;
+            //Debug.Log("Distance: " + distance);
+            ItemPrefab morseCode = morseCodeObject.GetComponent<ItemPrefab>();
+            bool isDotObj = morseCode.isDot;
+
             if (distance < ignoreTimeRange)
             {
                 if (distance < perfectTimeRange && isDotObj == isdot)
                 {
-                    Debug.Log("Perfect");
+                    //Debug.Log("Perfect");
                     morseCodeObject.GetComponent<RawImage>().color = Color.green;
                 }
                 else if (distance < normalTimeRange && isDotObj == isdot)
                 {
-                    Debug.Log("Normal");
+                    //Debug.Log("Normal");
                     morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
                 }
                 else if (isDotObj != isdot)
                 {
-                    Debug.Log("长短发错");
+                    //Debug.Log("长短发错");
                     morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
                 }
                 else
                 {
-                    Debug.Log("其它");
+                    //Debug.Log("其它");
                     morseCodeObject.GetComponent<RawImage>().color = Color.red;
                 }
             }
-            Debug.Log(morseCodeObject.GetComponent<ItemPrefab>().id);
-
+            morseCode.pressDotChar = isdot ? '.' : '-';
+            //Debug.Log(morseCodeObject.GetComponent<ItemPrefab>().id);
         }
     }
 

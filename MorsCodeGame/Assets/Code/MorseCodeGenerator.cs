@@ -34,6 +34,23 @@ public class MorseCodeGenerator : MonoBehaviour
 
     public int prefabid;
 
+    static Dictionary<string, string> codeDic_NoZh;
+
+    [SerializeField]
+    TextMeshProUGUI textMeshProUGUI_Nor;
+    [SerializeField]
+    TextMeshProUGUI textMeshProUGUI_Zhr;
+
+    [SerializeField]
+    TextMeshProUGUI textMeshProUGUI_No;
+    [SerializeField]
+    TextMeshProUGUI textMeshProUGUI_Zh;
+
+    [SerializeField]
+    Animator textAnimator;
+
+    public string animationName = "发报完成Ani";
+
     static Dictionary<string, char> MorseToCharMap = new Dictionary<string, char>
     {
         { ".-", 'A' }, { "-...", 'B' }, { "-.-.", 'C' }, { "-..", 'D' },
@@ -87,15 +104,23 @@ public class MorseCodeGenerator : MonoBehaviour
 
     private void OnEnable()
     {
+        textMeshProUGUI_No.text = "电报码:";
+        textMeshProUGUI_Zh.text = "传递情报:";
+        textMeshProUGUI_Nor.text = "电报码:";
+        textMeshProUGUI_Zhr.text = "原始情报:";
+        textAnimator.Play(animationName, -1, 0f);
+        textAnimator.speed = 0;
         startgame = false;
         gameState = GameState.prepare;
         String morsecodesZHStrs = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "报文.json"));
         List<String> morsecodesZHs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesZHStrs);
         string morseCodeZH = morsecodesZHs[UnityEngine.Random.Range(0, morsecodesZHs.Count)];
+        textMeshProUGUI_Zhr.text += morseCodeZH;
         String codesDicStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "中文电码表.json"));
         morseCode = ConvertZH2MorsCode(morseCodeZH, codesDicStr);
         SecondText.SetText(@"<size=60><bounce>轻击电键 开始发报</bounce></size>");
         SecondText.gameObject.SetActive(true);
+
     }
 
     /// <summary>
@@ -103,13 +128,13 @@ public class MorseCodeGenerator : MonoBehaviour
     /// </summary>
     /// <param name="morseCodeStr"></param>
     /// <returns></returns>
-    private static string ConvertZH2MorsCode(string morseCodeStr, String codesDicStr)
+    private string ConvertZH2MorsCode(string morseCodeStr, String codesDicStr)
     {
-        Dictionary<string, string> codeDic = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(codesDicStr);
+        codeDic_NoZh = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(codesDicStr);
 
         //将codesDirStr key value 翻转
         Dictionary<string, string> codeDicReverse = new Dictionary<string, string>();
-        foreach (var item in codeDic)
+        foreach (var item in codeDic_NoZh)
         {
             codeDicReverse[item.Value] = item.Key;
         }
@@ -127,6 +152,7 @@ public class MorseCodeGenerator : MonoBehaviour
                 Debug.Log("中文电报编码成数字异常:" + ex.Message);
             }
         }
+        textMeshProUGUI_Nor.text += CodeNo;
         //将数字电报码转换为摩尔斯码
         string morseCodeDt = "";
         foreach (var item in CodeNo)
@@ -229,12 +255,22 @@ public class MorseCodeGenerator : MonoBehaviour
                 // 触发游戏结束事件
                 GameOver?.Invoke();
                 Debug.Log("GameOver");
-                tabSwitcher.SwitchTab(nextTab);
-
+                textAnimator.Play(animationName, -1, 0f);
+                textAnimator.speed = 1;
+                Invoke(nameof(SwitchTab), 10);
             }
         }
     }
 
+    void SwitchTab()
+    {
+        tabSwitcher.SwitchTab(nextTab);
+    }
+
+    int morsCount;
+    int morsNoCount;
+    string morseCodes;
+    string morsNos;
     void ScrollMorseCode()
     {
         for (int i = morseCodeObjects.Count - 1; i >= 0; i--)
@@ -243,9 +279,60 @@ public class MorseCodeGenerator : MonoBehaviour
             morseCodeObject.GetComponent<RectTransform>().anchoredPosition += Vector2.left * scrollSpeed * Time.deltaTime;
             if (morseCodeObject.GetComponent<RectTransform>().anchoredPosition.x < endPoint.GetComponent<RectTransform>().anchoredPosition.x)
             {
+                ItemPrefab itemPrefab = morseCodeObject.GetComponent<ItemPrefab>();
+                ShowResultZH(itemPrefab);
+
                 Destroy(morseCodeObject);
                 morseCodeObjects.RemoveAt(i);
             }
         }
+    }
+    /// <summary>
+    /// 显示发送结果
+    /// </summary>
+    /// <param name="itemPrefab"></param>
+    private void ShowResultZH(ItemPrefab itemPrefab)
+    {
+        morsCount++;
+        morseCodes += itemPrefab.pressDotChar;
+        if (morsCount >= 5)
+        {
+            morsCount = 0;
+            Debug.Log(morseCodes);
+            string morsNo = morseCode2MorsNo(morseCodes);
+            morsNos += morsNo;
+            textMeshProUGUI_No.text += morsNo;
+            textMeshProUGUI_No.text += ' ';
+            Debug.Log("morsNo:" + morsNo);
+            morsNoCount++;
+            if (morsNoCount >= 4)
+            {
+                morsNoCount = 0;
+                Debug.Log("morsNos:" + morsNos);
+                string morseNoZH = morsNo2ZH(morsNos);
+                textMeshProUGUI_Zh.text += morseNoZH;
+                Debug.Log("morseNoZH:" + morseNoZH);
+                morsNos = "";
+            }
+            morseCodes = "";
+        }
+    }
+
+    string morseCode2MorsNo(string morseCode)
+    {
+        if (MorseToCharMap.ContainsKey(morseCode))
+        {
+            return MorseToCharMap[morseCode].ToString();
+        }
+        return "0";
+    }
+    string morsNo2ZH(String morseNo)
+    {
+        if (codeDic_NoZh.ContainsKey(morseNo))
+        {
+            return codeDic_NoZh[morseNo];
+        }
+
+        return "?";
     }
 }
