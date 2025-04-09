@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ClientItemControl : MonoBehaviour
 {
     [SerializeField]
-    FHClientController hClientController;
+    FHClientController fhClientController;
     /// <summary>
     /// 设备IPNO 就是ip的最后一个值 如果重复比如串口服务器某一路就是ip的最后一个值加端口号 
     /// </summary>
@@ -42,26 +42,28 @@ public class ClientItemControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        fhClientController = FindObjectOfType<FHClientController>();
+
         btnOn.onClick.AddListener(() =>
         {
             if (isHexCmd)
             {
-                hClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(onCmd) : onCmd);
+                fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(onCmd) : onCmd);
             }
             else
             {
-                hClientController.SendStr(deviceIPNO, orderType, onCmd);
+                fhClientController.SendStr(deviceIPNO, orderType, onCmd);
             }
         });
         btnOff.onClick.AddListener(() =>
         {
             if (isHexCmd)
             {
-                hClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(offCmd) : offCmd);
+                fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(offCmd) : offCmd);
             }
             else
             {
-                hClientController.SendStr(deviceIPNO, orderType, offCmd);
+                fhClientController.SendStr(deviceIPNO, orderType, offCmd);
             }
         });
     }
