@@ -291,13 +291,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hClientController: {fileID: 1138995911}
-  deviceIPNO: 0
+  deviceIPNO: 20
   orderType: 1
   btnOn: {fileID: 398556553}
   btnOff: {fileID: 111885292}
-  onCmd: 
-  offCmd: 
-  isHexCmd: 0
+  onCmd: AA AF
+  offCmd: AB CC
+  isHexCmd: 1
+  appendCRC16: 1
 --- !u!1 &72107990
 GameObject:
   m_ObjectHideFlags: 0

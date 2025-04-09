@@ -46,7 +46,7 @@ public class ClientItemControl : MonoBehaviour
         {
             if (isHexCmd)
             {
-                hClientController.SendHex(deviceIPNO, orderType, onCmd);
+                hClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(onCmd) : onCmd);
             }
             else
             {
@@ -57,7 +57,7 @@ public class ClientItemControl : MonoBehaviour
         {
             if (isHexCmd)
             {
-                hClientController.SendHex(deviceIPNO, orderType, offCmd);
+                hClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(offCmd) : offCmd);
             }
             else
             {

@@ -139,7 +139,7 @@ public class FHTcpClient
 
     public void SendStr(DataTypeEnum dataTypeEnum, OrderTypeEnum orderTypeEnum, string obj)
     {
-        byte[] objBuf = Encoding.GetEncoding("gb2312").GetBytes(obj);
+        byte[] objBuf = Encoding.GetEncoding("gb2312").GetBytes(obj); //tcp&udp测试工具用的gb2312
         ByteBlock block = PackInfo(dataTypeEnum, orderTypeEnum, objBuf);
         try
         {
