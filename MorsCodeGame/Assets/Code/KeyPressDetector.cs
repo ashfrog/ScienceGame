@@ -21,14 +21,11 @@ public class KeyPressDetector : MonoBehaviour
 
     public RectTransform SpawnPointRoot;
 
-    [SerializeField]
-    TextMeshProUGUI scoreText;
 
-    int score;
 
     private void OnEnable()
     {
-        score = 0;
+
     }
     private float pressTime;
     bool pressed;
@@ -63,7 +60,7 @@ public class KeyPressDetector : MonoBehaviour
 
 
 
-        scoreText.text = "" + score;
+
     }
 
     void DetectKeyPress(bool isdot)

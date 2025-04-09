@@ -105,9 +105,9 @@ public class MorseCodeGenerator : MonoBehaviour
     private void OnEnable()
     {
         textMeshProUGUI_No.text = "电报码:";
-        textMeshProUGUI_Zh.text = "传递情报:";
+        textMeshProUGUI_Zh.text = "传递电报:";
         textMeshProUGUI_Nor.text = "电报码:";
-        textMeshProUGUI_Zhr.text = "原始情报:";
+        textMeshProUGUI_Zhr.text = "情报:";
         textAnimator.Play(animationName, -1, 0f);
         textAnimator.speed = 0;
         startgame = false;
