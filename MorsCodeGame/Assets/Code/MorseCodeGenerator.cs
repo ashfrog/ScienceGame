@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Collections;
 using TMPro;
+using Febucci.UI;
 
 /// <summary>
 /// handle the generation and scrolling of Morse code.
@@ -120,7 +121,6 @@ public class MorseCodeGenerator : MonoBehaviour
         morseCode = ConvertZH2MorsCode(morseCodeZH, codesDicStr);
         SecondText.SetText(@"<size=60><bounce>轻击电键 开始发报</bounce></size>");
         SecondText.gameObject.SetActive(true);
-
     }
 
     /// <summary>

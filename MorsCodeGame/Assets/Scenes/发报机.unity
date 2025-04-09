@@ -2236,6 +2236,7 @@ MonoBehaviour:
   textMeshProUGUI_No: {fileID: 723305454}
   textMeshProUGUI_Zh: {fileID: 1355988560}
   textAnimator: {fileID: 1763129135}
+  textAnimator_TMP: {fileID: 1355988563}
   animationName: "\u53D1\u62A5\u5B8C\u6210Ani"
   morseCode: ... --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ......
     --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ...... --- ...
@@ -6876,7 +6877,7 @@ GameObject:
   - component: {fileID: 1355988561}
   - component: {fileID: 1355988560}
   - component: {fileID: 1355988563}
-  - component: {fileID: 1355988562}
+  - component: {fileID: 1355988564}
   m_Layer: 5
   m_Name: "Text\u5B9E\u9645\u53D1\u62A5\u6587\u5B57Zh"
   m_TagString: Untagged
@@ -7001,7 +7002,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1355988558}
   m_CullTransparentMesh: 1
---- !u!114 &1355988562
+--- !u!114 &1355988563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355988558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ace8ced0e81c847968cdca0aeda757, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typewriterStartsAutomatically: 0
+  animationLoop: 0
+  timeScale: 0
+  _text: "\u4F20\u9012\u60C5\u62A5"
+  useDynamicScaling: 1
+  referenceFontSize: 10
+  isResettingTimeOnNewText: 1
+  useDefaultDatabases: 1
+  databaseBehaviors: {fileID: 11400000, guid: b125ef8c4bf1a1445b78003ac8cc8fb2, type: 2}
+  databaseAppearances: {fileID: 11400000, guid: e50f85f8f8830b64aaefe064496a9c93, type: 2}
+  useDefaultStyleSheet: 1
+  styleSheet: {fileID: 0}
+  databaseActions: {fileID: 11400000, guid: f909d5ca38e19ed489dc394676217d42, type: 2}
+  defaultAppearancesTags:
+  - size
+  defaultDisappearancesTags:
+  - fade
+  defaultBehaviorsTags: []
+  defaultTagsMode: 0
+--- !u!114 &1355988564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7046,37 +7078,6 @@ MonoBehaviour:
   useTypewriterWaitForDisappearances: 1
   disappearanceWaitTime: 0.015
   disappearanceSpeedMultiplier: 1
---- !u!114 &1355988563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1355988558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8ace8ced0e81c847968cdca0aeda757, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  typewriterStartsAutomatically: 0
-  animationLoop: 0
-  timeScale: 0
-  _text: 
-  useDynamicScaling: 1
-  referenceFontSize: 10
-  isResettingTimeOnNewText: 1
-  useDefaultDatabases: 1
-  databaseBehaviors: {fileID: 0}
-  databaseAppearances: {fileID: 0}
-  useDefaultStyleSheet: 1
-  styleSheet: {fileID: 0}
-  databaseActions: {fileID: 0}
-  defaultAppearancesTags:
-  - size
-  defaultDisappearancesTags:
-  - fade
-  defaultBehaviorsTags: []
-  defaultTagsMode: 0
 --- !u!1 &1410282287
 GameObject:
   m_ObjectHideFlags: 0
@@ -9791,7 +9792,7 @@ GameObject:
   - component: {fileID: 1886143249}
   - component: {fileID: 1886143248}
   m_Layer: 5
-  m_Name: "\u53D1\u62A5\u751F\u6210\u80CC\u666F\u56FE"
+  m_Name: "\u53D1\u62A5\u751F\u6210Area"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
