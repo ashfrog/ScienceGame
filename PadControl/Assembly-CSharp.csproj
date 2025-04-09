@@ -111,6 +111,7 @@
     <Compile Include="Assets\CodeUtils\TabSwitch\ToggleButtonWithImage.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\TabSwitcher.cs" />
     <Compile Include="Assets\ClientItemControl.cs" />
+    <Compile Include="Assets\BtnClickSound.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
