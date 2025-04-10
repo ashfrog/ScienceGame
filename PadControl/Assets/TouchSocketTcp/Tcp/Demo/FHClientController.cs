@@ -90,15 +90,6 @@ public class FHClientController : MonoBehaviour
         fhTcpClient.Send(dataTypeEnum, orderTypeEnum, data);
     }
 
-    public void Send<T>(OrderTypeEnum orderTypeEnum, T data)
-    {
-        fhTcpClient.Send(DataTypeEnum.S_MainHostOld, orderTypeEnum, data);
-    }
-
-    public void Send(OrderTypeEnum orderTypeEnum)
-    {
-        fhTcpClient.Send(DataTypeEnum.S_MainHostOld, orderTypeEnum, "");
-    }
     public void SendStr(DataTypeEnum dataTypeEnum, OrderTypeEnum orderTypeEnum, string obj)
     {
         fhTcpClient.SendStr(dataTypeEnum, orderTypeEnum, obj);
