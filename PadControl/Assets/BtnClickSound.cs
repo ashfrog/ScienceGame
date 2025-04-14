@@ -18,7 +18,7 @@ public class BtnClickSound : MonoBehaviour
         audioSource.clip = clickSound;
 
         // 遍历场景中所有按钮
-        Button[] buttons = FindObjectsOfType<Button>();
+        Button[] buttons = FindObjectsOfType<Button>(true);
         foreach (Button button in buttons)
         {
             // 为按钮添加点击事件

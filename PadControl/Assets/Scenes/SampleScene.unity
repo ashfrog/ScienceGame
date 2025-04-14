@@ -323,7 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93d9b361f18b6649b02bef14a2e2299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clickSound: {fileID: 8300000, guid: 59eefb36537aac5409360e46f8f436b5, type: 3}
+  clickSound: {fileID: 8300000, guid: dc568327f9c2a9a41b37e46b06108023, type: 3}
 --- !u!1001 &68383355
 PrefabInstance:
   m_ObjectHideFlags: 0
