@@ -46,6 +46,11 @@ public class ClientItemControl : MonoBehaviour
 
         btnOn.onClick.AddListener(() =>
         {
+            if (orderType == OrderTypeEnum.PowerOnMacAddress)
+            {
+                fhClientController.Send(deviceIPNO, orderType, true);
+                return;
+            }
             if (isHexCmd)
             {
                 fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(onCmd) : onCmd);
@@ -57,6 +62,11 @@ public class ClientItemControl : MonoBehaviour
         });
         btnOff.onClick.AddListener(() =>
         {
+            if (orderType == OrderTypeEnum.PowerOnMacAddress)
+            {
+                fhClientController.Send(deviceIPNO, orderType, false);
+                return;
+            }
             if (isHexCmd)
             {
                 fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(offCmd) : offCmd);
