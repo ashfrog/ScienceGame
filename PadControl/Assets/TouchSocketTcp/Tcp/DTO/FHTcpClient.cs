@@ -39,7 +39,6 @@ public class FHTcpClient
         };//成功连接到服务器
         m_tcpClient.Disconnected += (client, e) =>
         {
-            logmsg($"断开连接，信息：{e.Message}");
             if (DisConnected != null)
             {
                 Loom.QueueOnMainThread(() => { DisConnected.Invoke(); });

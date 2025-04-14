@@ -33,6 +33,10 @@ public class FHClientController : MonoBehaviour
         {
             Debug.Log($"FHTcp {client.IP}:{client.Port} 成功连接");
         });
+        fhTcpClient.DisConnected += (() =>
+        {
+            //Debug.Log($"FHTcp 断开连接");
+        });
     }
 
     private static SemaphoreSlim semaphore = new SemaphoreSlim(1); // 限制异步线程同时进行的连接数 推荐1连接最稳定
@@ -62,14 +66,18 @@ public class FHClientController : MonoBehaviour
                     }
                 });
             }
-            // 添加1秒的延迟
-            yield return new WaitForSeconds(1);
+
 
             bool isonline = fhTcpClient != null && fhTcpClient.IsOnline();
             if (offLineStatue != null)
             {
                 offLineStatue.SetActive(!isonline);
             }
+
+            // 添加1秒的延迟
+            yield return new WaitForSeconds(1);
+
+
         }
     }
 
