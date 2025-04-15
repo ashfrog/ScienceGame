@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Threading;
+using TouchSocket.Sockets;
 using UnityEngine;
 
 public class FHClientController : MonoBehaviour
@@ -17,6 +18,9 @@ public class FHClientController : MonoBehaviour
     public string ipHost = "127.0.0.1:4849";
 
     public const string IPHOST_Key = "IPHOST";
+
+    public Action<ITcpClient> Connected;
+    public Action DisConnected;
 
     private void Update()
     {
@@ -38,11 +42,20 @@ public class FHClientController : MonoBehaviour
         fhTcpClient.Connected += ((client) =>
         {
             Debug.Log($"FHTcp {client.IP}:{client.Port} 成功连接"); //client.Port为服务器端口
+            Connected?.Invoke(client);
+            if (offLineStatue != null)
+            {
+                offLineStatue.SetActive(false);
+            }
         });
         fhTcpClient.DisConnected += (() =>
         {
             Debug.Log($"FHTcp 断开连接");
-
+            DisConnected?.Invoke();
+            if (offLineStatue != null)
+            {
+                offLineStatue.SetActive(true);
+            }
         });
     }
 
@@ -56,13 +69,6 @@ public class FHClientController : MonoBehaviour
         {
             //等待一帧
             yield return new WaitForEndOfFrame();
-
-            bool isonline = fhTcpClient != null && fhTcpClient.IsOnline();
-            if (offLineStatue != null)
-            {
-                offLineStatue.SetActive(!isonline);
-            }
-
             if (userDisconnect)
             {
                 // 如果用户手动断开连接，则不再尝试连接
