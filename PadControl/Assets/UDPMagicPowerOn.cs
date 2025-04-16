@@ -23,7 +23,7 @@ public class UDPMagicPowerOn : MonoBehaviour
 
     private void Start()
     {
-        tMP_Text_MAC.text = PlayerPrefs.GetString("MAC", "D8-43-AE-B6-F7-2C");
+        tMP_Text_MAC.text = PlayerPrefs.GetString("MAC", "");
         btnOn.onClick.AddListener(() =>
         {
             On(tMP_Text_MAC.text);
