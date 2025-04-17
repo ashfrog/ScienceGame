@@ -52,11 +52,11 @@ public class VCRControl : MonoBehaviour, IVCRControl
 
     Transform btnFileroot;
     Transform playBtnFileRoot;
-    /// <summary>
-    /// 播放传回列表prefab
-    /// </summary>
-    [SerializeField]
-    Button btnFilePrefab;
+    ///// <summary>
+    ///// 播放传回列表prefab
+    ///// </summary>
+    //[SerializeField]
+    //Button btnFilePrefab;
     /// <summary>
     /// 音量Slider
     /// </summary>
@@ -97,8 +97,8 @@ public class VCRControl : MonoBehaviour, IVCRControl
     // Start is called before the first frame update
     private void Start()
     {
-        btnFileroot = btnFilePrefab.transform.parent;//分离prefab
-        btnFilePrefab.transform.SetParent(null);
+        //btnFileroot = btnFilePrefab.transform.parent;//分离prefab
+        //btnFilePrefab.transform.SetParent(null);
 
         if (BindEvent)
         {
@@ -217,11 +217,11 @@ public class VCRControl : MonoBehaviour, IVCRControl
         {
             switch ((OrderTypeEnum)dTOInfo.OrderType)
             {
-                case OrderTypeEnum.GetUrls:
-                    List<UrlItem> urlItems = JsonConvert.DeserializeObject<List<UrlItem>>(Encoding.UTF8.GetString(dTOInfo.Body));
-                    InstantiateUrlItem(urlItems, btnFileroot, btnFilePrefab);
+                //case OrderTypeEnum.GetUrls:
+                //    List<UrlItem> urlItems = JsonConvert.DeserializeObject<List<UrlItem>>(Encoding.UTF8.GetString(dTOInfo.Body));
+                //    InstantiateUrlItem(urlItems, btnFileroot, btnFilePrefab);
 
-                    break;
+                //    break;
 
                 case OrderTypeEnum.GetFileList:
                     if (EnableRepeatRequest)
