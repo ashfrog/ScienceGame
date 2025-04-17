@@ -25,6 +25,11 @@ public enum DataTypeEnum
     S_Pad = 2,
 
     /// <summary>
+    /// 串口服务器
+    /// </summary>
+    SP_9 = 9,
+
+    /// <summary>
     /// 开关ipNo 192.168.3.10-3.17
     /// </summary>
     SW_XZTY_10 = 10, //新增投影
@@ -48,6 +53,12 @@ public enum DataTypeEnum
     Media_ZY_25 = 25, //智御
     TY_PROJECTOR_26 = 26,//  投影机
     TY_PROJECOTR_27 = 27,//投影机
+
+    Door_31 = 31, //门禁机1
+    Door_32 = 32, //门禁机2
+    Door_33 = 33, //门禁机3
+    Door_34 = 34, //门禁机4
+
 
     /// <summary>
     /// 控制端 平板播控组
