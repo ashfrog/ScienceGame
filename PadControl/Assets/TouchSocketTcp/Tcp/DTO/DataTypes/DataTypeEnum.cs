@@ -13,10 +13,16 @@ public enum DataTypeEnum
     /// mac地址 魔法包开机用
     /// </summary>
     UDP = 0,
+
     /// <summary>
     /// 中控主机标识
     /// </summary>
     S_MainHost = 1,
+
+    /// <summary>
+    /// 发送到平板
+    /// </summary>
+    S_Pad = 2,
 
     /// <summary>
     /// 开关ipNo 192.168.3.10-3.17
@@ -46,13 +52,13 @@ public enum DataTypeEnum
     /// <summary>
     /// 控制端 平板播控组
     /// </summary>
-    S_Pad = 50,
-    S_Pad1 = 51,
-    S_Pad2 = 52,
-    S_Pad3 = 53,
-    S_Pad4 = 54,
-    S_Pad5 = 55,
-    S_Pad6 = 56,
+    S_Pad50 = 50,
+    S_Pad51 = 51,
+    S_Pad52 = 52,
+    S_Pad53 = 53,
+    S_Pad54 = 54,
+    S_Pad55 = 55,
+    S_Pad56 = 56,
 
     /// <summary>
     /// 展厅区域灯光插座ipNo IP：192.168.3.9 端口：20001

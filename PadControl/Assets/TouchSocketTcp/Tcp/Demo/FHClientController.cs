@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Threading;
 using TouchSocket.Sockets;
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class FHClientController : MonoBehaviour
@@ -108,7 +108,7 @@ public class FHClientController : MonoBehaviour
             }
 
             // 添加1秒的延迟
-            yield return new WaitForSeconds(5);
+            yield return new WaitForSeconds(1);
         }
     }
 

@@ -20,7 +20,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
     DataTypeEnum dataTypeEnum;
 
     /// <summary>
-    /// 接收组类型
+    /// 接收组类型 需要区分开不同控制设备用 S_Pad50-S_Pad57等区分开 播放器需要配置相同编号50-57
     /// </summary>
     [SerializeField]
     DataTypeEnum itemDataType = DataTypeEnum.S_Pad;
@@ -165,8 +165,25 @@ public class VCRControl : MonoBehaviour, IVCRControl
             audioSource.Play();
         }
     }
+
     private void OnEnable()
     {
+        HideUrlScrollView();
+
+        StartCoroutine(InitComponent());
+    }
+
+    bool isonline = false;
+    IEnumerator InitComponent()
+    {
+
+        while (!isonline)
+        {
+            isonline = FHClientController.ins != null
+                && FHClientController.ins.fhTcpClient != null
+                && FHClientController.ins.fhTcpClient.IsOnline();
+            yield return null;
+        }
         if (EnableRepeatRequest)
         {
             InvokeRepeating(nameof(RepeatRequest), 0, 1f);
@@ -177,7 +194,6 @@ public class VCRControl : MonoBehaviour, IVCRControl
         {
             FHClientController.ins.fhTcpClient.FHTcpClientReceive += FHTcpClientReceive;
         }
-        HideUrlScrollView();
 
     }
 
@@ -255,7 +271,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
                     catch (Exception ex)
                     {
                     }
-                    if (totaltime == totaltime) //NaN情况处理
+                    if (!float.IsNaN(totaltime)) //NaN情况处理
                     {
                         TimeSpan ts = new TimeSpan(0, 0, (int)totaltime);
                         string sec = $"{ts.Hours.ToString().PadLeft(2, '0')}:{ts.Minutes.ToString().PadLeft(2, '0')}:{ts.Seconds.ToString().PadLeft(2, '0')}";
@@ -278,7 +294,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         {
 
                         }
-                        if (seek == seek)//NaN 排除
+                        if (!float.IsNaN(seek))//NaN 排除
                         {
                             seek = Mathf.Clamp(seek, 0, 1);
                             movieSlider.value = seek;
@@ -341,6 +357,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
 
     private void OnDisable()
     {
+        isonline = false;
         if (EnableRepeatRequest)
         {
             CancelInvoke(nameof(RepeatRequest));
@@ -356,9 +373,17 @@ public class VCRControl : MonoBehaviour, IVCRControl
     /// </summary>
     void RepeatRequest()
     {
-        FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetMovSeek, "获取视频进度");
-        FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetMovAllSecond, "获取视频总时长");
-        FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetCurMovieName, "获取当前播放视频名称");
+        try
+        {
+            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetMovSeek, "获取视频进度");
+            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetMovAllSecond, "获取视频总时长");
+            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetCurMovieName, "获取当前播放视频名称");
+        }
+        catch (Exception ex)
+        {
+            Debug.Log("RepeatRequest:" + ex.Message);
+        }
+
     }
     // Update is called once per frame
     void Update()
