@@ -11,6 +11,11 @@ public class TabSwitcher : MonoBehaviour
     // 定义一个GameObject数组来存储所有的Tab页面
     public GameObject[] tabPages;
 
+    /// <summary>
+    /// 是否在开始时初始化Tab页面Enable状态 让Action事件在Enable中注册
+    /// </summary>
+    public bool initTabPages;
+
 
 
     private void Start()
@@ -21,7 +26,11 @@ public class TabSwitcher : MonoBehaviour
             int index = i; // 缓存索引
             tabButtons[i].onClick.AddListener(() => SwitchTab(index));
         }
-
+        if (initTabPages)
+        {
+            // Enable所有Tab页面
+            InitTabPages();
+        }
         // 初始化Tab页面显示状态
         UpdateTabPages();
     }
@@ -39,6 +48,14 @@ public class TabSwitcher : MonoBehaviour
         for (int i = 0; i < tabPages.Length; i++)
         {
             tabPages[i].SetActive(i == currentTabIndex);
+        }
+    }
+
+    private void InitTabPages()
+    {
+        for (int i = 0; i < tabPages.Length; i++)
+        {
+            tabPages[i].SetActive(true);
         }
     }
 }
