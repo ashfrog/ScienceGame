@@ -94,13 +94,8 @@ public class FHClientController : MonoBehaviour
                 });
             }
 
-
-
-
             // 添加1秒的延迟
             yield return new WaitForSeconds(1);
-
-
         }
     }
 

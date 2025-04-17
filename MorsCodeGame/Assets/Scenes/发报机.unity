@@ -2236,7 +2236,6 @@ MonoBehaviour:
   textMeshProUGUI_No: {fileID: 723305454}
   textMeshProUGUI_Zh: {fileID: 1355988560}
   textAnimator: {fileID: 1763129135}
-  textAnimator_TMP: {fileID: 1355988563}
   animationName: "\u53D1\u62A5\u5B8C\u6210Ani"
   morseCode: ... --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ......
     --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ...... --- ...

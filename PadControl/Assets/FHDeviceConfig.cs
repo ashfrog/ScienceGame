@@ -22,6 +22,35 @@ public class FHDeviceConfig : MonoBehaviour
     [SerializeField]
     Button btn_DisConnect;
 
+    bool registered = false;
+    private void OnEnable()
+    {
+        RegisterReceiveAct();
+    }
+
+    private void RegisterReceiveAct()
+    {
+        if (registered)
+        {
+            return;
+        }
+        //等待fhClientController.fhTcpClient
+        //连接成功后再设置事件
+        fhClientController.Connected += ((client) =>
+        {
+            Debug.Log($"FHTcp {client.IP}:{client.Port} 成功连接"); //client.Port为服务器端口
+            btn_Connect.gameObject.SetActive(false);
+            btn_DisConnect.gameObject.SetActive(true);
+        });
+        fhClientController.DisConnected += (() =>
+        {
+            Debug.Log($"FHTcp 断开连接");
+            btn_Connect.gameObject.SetActive(true);
+            btn_DisConnect.gameObject.SetActive(false);
+        });
+        registered = true;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,21 +71,6 @@ public class FHDeviceConfig : MonoBehaviour
         btn_DisConnect.onClick.AddListener(() =>
         {
             fhClientController.DisConnect();
-        });
-
-        //等待fhClientController.fhTcpClient
-        //连接成功后再设置事件
-        fhClientController.Connected += ((client) =>
-        {
-            Debug.Log($"FHTcp {client.IP}:{client.Port} 成功连接"); //client.Port为服务器端口
-            btn_Connect.gameObject.SetActive(false);
-            btn_DisConnect.gameObject.SetActive(true);
-        });
-        fhClientController.DisConnected += (() =>
-        {
-            Debug.Log($"FHTcp 断开连接");
-            btn_Connect.gameObject.SetActive(true);
-            btn_DisConnect.gameObject.SetActive(false);
         });
     }
 

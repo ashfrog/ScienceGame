@@ -40,6 +40,8 @@ public enum DataTypeEnum
     Media_QC_23 = 23, //强策
     Media_HM_24 = 24, //汇盟
     Media_ZY_25 = 25, //智御
+    TY_PROJECTOR_26 = 26,//  投影机
+    TY_PROJECOTR_27 = 27,//投影机
 
     /// <summary>
     /// 控制端 平板播控组
