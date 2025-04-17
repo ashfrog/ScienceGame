@@ -2,10 +2,13 @@ using System;
 using System.Collections;
 using System.Threading;
 using TouchSocket.Sockets;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 public class FHClientController : MonoBehaviour
 {
+    public static FHClientController ins;
+
     public FHTcpClient fhTcpClient;
 
     private bool exit;
@@ -21,7 +24,14 @@ public class FHClientController : MonoBehaviour
 
     public Action<ITcpClient> Connected;
     public Action DisConnected;
-
+    private void Awake()
+    {
+        ins = this;
+        if (fhTcpClient == null)
+        {
+            fhTcpClient = new FHTcpClient();
+        }
+    }
     private void Update()
     {
     }
@@ -33,7 +43,10 @@ public class FHClientController : MonoBehaviour
         {
             ipHost = PlayerPrefs.GetString(IPHOST_Key);
         }
-        fhTcpClient = new FHTcpClient();
+        if (fhTcpClient == null)
+        {
+            fhTcpClient = new FHTcpClient();
+        }
 
         fhTcpClient.InitConfig(ipHost);
 
@@ -95,7 +108,7 @@ public class FHClientController : MonoBehaviour
             }
 
             // 添加1秒的延迟
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(5);
         }
     }
 
