@@ -5121,10 +5121,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 15
     m_Right: 15
-    m_Top: 35
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 46
+    m_Top: 15
+    m_Bottom: 15
+  m_ChildAlignment: 1
+  m_Spacing: 20
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -8634,7 +8634,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 723109187}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.5814921
+  m_Size: 0.6935467
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -12516,7 +12516,7 @@ GameObject:
   - component: {fileID: 1291277365}
   - component: {fileID: 1291277364}
   m_Layer: 5
-  m_Name: "\u706F\u5149\u603B\u5F00\u5173 (1)"
+  m_Name: "LED\u603B\u5F00\u5173"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12716,8 +12716,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.03112793}
-  m_SizeDelta: {x: 0, y: -0.062000275}
+  m_AnchoredPosition: {x: 0, y: -0.031128}
+  m_SizeDelta: {x: 0, y: -0.062012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1333640949
 MonoBehaviour:
@@ -12762,7 +12762,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
