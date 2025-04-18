@@ -27,3 +27,9 @@ MorsCodeGame/UserSettings/EditorUserSettings.asset
 /PanTiltControl/UserSettings/Layouts
 /PanTiltControl/Release
 /PadControl/UserSettings/Layouts
+/MorsCodeGame/obj
+/PadControl/Logs
+/PanTiltControl/Logs
+/PadControl/obj
+/MorsCodeGame/Logs
+/PanTiltControl/obj
