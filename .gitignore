@@ -34,3 +34,5 @@ MorsCodeGame/UserSettings/EditorUserSettings.asset
 /MorsCodeGame/Logs
 /PanTiltControl/obj
 /PadControl/Release
+*.csproj
+*.sln
