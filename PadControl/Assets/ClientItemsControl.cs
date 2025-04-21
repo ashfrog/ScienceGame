@@ -12,7 +12,7 @@ public class ClientItemsControl : MonoBehaviour
     [SerializeField]
     public DataTypeEnum deviceIPNO;
     [SerializeField]
-    public OrderTypeEnum orderType;
+    public OrderTypeEnum orderType = OrderTypeEnum.Str;
     [SerializeField]
     Button btnOn;
     [SerializeField]
@@ -142,32 +142,7 @@ public class ClientItemsControl : MonoBehaviour
             }
         }
 
-        // 收集 ClientItemControl 类型的控件的指令
-        foreach (var bindControlObj in BindControls)
-        {
-            var itemControls = bindControlObj.GetComponentsInChildren<ClientItemControl>();
-            if (itemControls != null)
-            {
-                foreach (var itemControl in itemControls)
-                {
-                    // 这里需要根据 ClientItemControl 的实现方式来收集指令
-                    // 由于我们没有看到 ClientItemControl 的代码，这里假设它提供了一个方法来获取指令
-                    // 如果没有这样的方法，可能需要修改 ClientItemControl 类
-                    if (on)
-                    {
-                        itemControl.On();
-                    }
-                    else
-                    {
-                        itemControl.Off();
-                    }
-
-                    // 在每个控件之间添加时间间隔
-                    yield return new WaitForSeconds(messageInterval);
-                }
-            }
-        }
-
+        yield return null;
         // 启动队列处理（如果尚未启动）
         if (!isProcessingQueue)
         {

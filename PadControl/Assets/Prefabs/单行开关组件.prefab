@@ -35,9 +35,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 110.0827, y: 0}
-  m_SizeDelta: {x: 179.8346, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 93.4, y: 0}
+  m_SizeDelta: {x: 462.1, y: 50}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &8082719750724735660
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u706F\u5149\u63A7\u5236"
+  m_text: "\u6295\u5F71\u673A\u5F00\u5173"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 415590bbf1f3d0f43a52a4dd65218c8f, type: 2}
   m_sharedMaterial: {fileID: 3008697025529228665, guid: 415590bbf1f3d0f43a52a4dd65218c8f, type: 2}
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 8082719750814409689}
   - component: {fileID: 8082719750814409691}
   - component: {fileID: 8082719750814409688}
-  - component: {fileID: 8082719750814409690}
+  - component: {fileID: 1352911894819501574}
   m_Layer: 5
   m_Name: "\u5355\u884C\u5F00\u5173\u7EC4\u4EF6"
   m_TagString: Untagged
@@ -192,13 +192,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8082719750814409670}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.3529412}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -215,7 +215,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8082719750814409690
+--- !u!114 &1352911894819501574
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,18 +224,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 8082719750814409670}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79fff35fbe7a97b43b12b182ee978bbe, type: 3}
+  m_Script: {fileID: 11500000, guid: cde020e397061ac44b62dca60908a165, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hClientController: {fileID: 0}
-  deviceIPNO: 20
+  fhClientController: {fileID: 0}
+  deviceIPNO: 0
   orderType: 20
   btnOn: {fileID: 8082719751158408026}
   btnOff: {fileID: 8082719750889514306}
-  onCmd: FF FF
-  offCmd: FF 02
-  isHexCmd: 1
+  onCmd:
+  - 25 31 50 4f 57 52 20 31 0d
+  offCmd:
+  - 25 31 50 4f 57 52 20 30 0d
+  isHexCmd: 0
   appendCRC16: 0
+  messageInterval: 0.1
+  BindControls: []
 --- !u!1 &8082719750889514304
 GameObject:
   m_ObjectHideFlags: 0

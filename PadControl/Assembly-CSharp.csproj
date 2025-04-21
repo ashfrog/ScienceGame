@@ -66,6 +66,7 @@
     <Compile Include="Assets\VCR\VCRControl.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
+    <Compile Include="Assets\ClientItemsControl.cs" />
     <Compile Include="Assets\ConfirmationDialog.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Internal\IniConfig.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\DataTypeEnum.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="Assets\CodeUtils\TabSwitch\ToggleButtonWithImage.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
-    <Compile Include="Assets\ClientItemControl.cs" />
     <Compile Include="Assets\TouchSocketTcp\Loom.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\StrTcpClient.cs" />
@@ -121,7 +121,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\TabSwitcher.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-    <Compile Include="Assets\ClientItemsControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
