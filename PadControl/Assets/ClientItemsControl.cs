@@ -21,17 +21,17 @@ public class ClientItemsControl : MonoBehaviour
     /// On指令
     /// </summary>
     [SerializeField]
-    List<string> onCmd;
+    public List<string> onCmd;
     /// <summary>
     /// Off指令
     /// </summary>
     [SerializeField]
-    List<string> offCmd;
+    public List<string> offCmd;
     /// <summary>
     /// 发送的CMD是16进制字符
     /// </summary>
     [SerializeField]
-    bool isHexCmd = false;
+    public bool isHexCmd = false;
     /// <summary>
     /// 补全CRC16
     /// </summary>
@@ -87,7 +87,10 @@ public class ClientItemsControl : MonoBehaviour
     /// <param name="on"></param>
     private IEnumerator ExcudeBindsWithInterval(bool on)
     {
-        // 处理 ClientItemsControl 类型的控件
+        // 收集所有需要执行的命令，按顺序执行
+        List<System.Action> allCommands = new List<System.Action>();
+
+        // 收集 ClientItemsControl 类型的控件命令
         foreach (var bindControlObj in BindControls)
         {
             var itemsControls = bindControlObj.GetComponentsInChildren<ClientItemsControl>();
@@ -95,22 +98,21 @@ public class ClientItemsControl : MonoBehaviour
             {
                 foreach (var itemsControl in itemsControls)
                 {
+                    // 使用本地变量避免闭包问题
+                    var control = itemsControl;
                     if (on)
                     {
-                        itemsControl.On();
+                        allCommands.Add(() => SendCommandOnly(control, true));
                     }
                     else
                     {
-                        itemsControl.Off();
+                        allCommands.Add(() => SendCommandOnly(control, false));
                     }
-
-                    // 添加延迟，防止连续发送
-                    yield return new WaitForSeconds(messageInterval);
                 }
             }
         }
 
-        // 处理 ClientItemControl 类型的控件
+        // 收集 ClientItemControl 类型的控件命令
         foreach (var bindControlObj in BindControls)
         {
             var itemControls = bindControlObj.GetComponentsInChildren<ClientItemControl>();
@@ -118,18 +120,56 @@ public class ClientItemsControl : MonoBehaviour
             {
                 foreach (var itemControl in itemControls)
                 {
+                    // 使用本地变量避免闭包问题
+                    var control = itemControl;
                     if (on)
                     {
-                        itemControl.On();
+                        allCommands.Add(() => control.On());
                     }
                     else
                     {
-                        itemControl.Off();
+                        allCommands.Add(() => control.Off());
                     }
-
-                    // 添加延迟，防止连续发送
-                    yield return new WaitForSeconds(messageInterval);
                 }
+            }
+        }
+
+        // 按顺序执行所有命令，并在每个命令之间添加时间间隔
+        foreach (var command in allCommands)
+        {
+            command.Invoke();
+            // 添加延迟，确保命令之间有间隔
+            yield return new WaitForSeconds(messageInterval);
+        }
+    }
+
+    /// <summary>
+    /// 只发送命令，不触发绑定控件的级联操作，防止循环调用
+    /// </summary>
+    /// <param name="control">要操作的控件</param>
+    /// <param name="on">是否为开启操作</param>
+    private void SendCommandOnly(ClientItemsControl control, bool on)
+    {
+        if (on)
+        {
+            if (control.isHexCmd)
+            {
+                control.StartCoroutine(control.SendCommandsWithInterval(control.onCmd, true));
+            }
+            else
+            {
+                control.StartCoroutine(control.SendCommandsWithInterval(control.onCmd, false));
+            }
+        }
+        else
+        {
+            if (control.isHexCmd)
+            {
+                control.StartCoroutine(control.SendCommandsWithInterval(control.offCmd, true));
+            }
+            else
+            {
+                control.StartCoroutine(control.SendCommandsWithInterval(control.offCmd, false));
             }
         }
     }
@@ -155,7 +195,7 @@ public class ClientItemsControl : MonoBehaviour
     /// <param name="commands">要发送的指令列表</param>
     /// <param name="isHex">是否为16进制指令</param>
     /// <returns></returns>
-    private IEnumerator SendCommandsWithInterval(List<string> commands, bool isHex)
+    public IEnumerator SendCommandsWithInterval(List<string> commands, bool isHex)
     {
         foreach (var cmd in commands)
         {
