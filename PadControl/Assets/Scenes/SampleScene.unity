@@ -572,6 +572,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: messageInterval
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: onCmd.Array.data[0]
       value: 0
       objectReference: {fileID: 0}
@@ -3987,7 +3991,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: messageInterval
-      value: 0
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: onCmd.Array.size
@@ -4492,6 +4496,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1578232258}
     m_Modifications:
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: messageInterval
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: onCmd.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: offCmd.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8082719750724735658, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -6251,7 +6267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: messageInterval
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.size
@@ -8336,7 +8352,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.2
 --- !u!222 &1220718622
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8534,7 +8550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: messageInterval
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.size
@@ -12814,6 +12830,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1756434453}
     m_Modifications:
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: messageInterval
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: onCmd.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: offCmd.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8082719750724735658, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -13299,7 +13327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: messageInterval
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.size
@@ -13570,7 +13598,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: deviceIPNO
-      value: 26
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: messageInterval
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: onCmd.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: offCmd.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: BindControls.Array.size
@@ -14554,7 +14594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: messageInterval
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.size
@@ -14754,6 +14794,10 @@ PrefabInstance:
       propertyPath: deviceIPNO
       value: 26
       objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: messageInterval
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 8082719750814409670, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: m_Name
       value: "\u5355\u884C\u5F00\u5173\u7EC4\u4EF6"
@@ -14862,7 +14906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fhClientController: {fileID: 0}
-  deviceIPNO: 26
+  deviceIPNO: 27
   orderType: 20
   btnOn: {fileID: 747355315}
   btnOff: {fileID: 1959193556}
@@ -14872,7 +14916,7 @@ MonoBehaviour:
   - 25 31 50 4f 57 52 20 30 0d
   isHexCmd: 1
   appendCRC16: 0
-  messageInterval: 0.1
+  messageInterval: 0.2
   BindControls: []
 --- !u!224 &2039134045 stripped
 RectTransform:
@@ -17209,7 +17253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: messageInterval
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.size

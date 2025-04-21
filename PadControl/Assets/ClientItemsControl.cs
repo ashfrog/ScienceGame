@@ -70,13 +70,23 @@ public class ClientItemsControl : MonoBehaviour
         // 将所有指令添加到全局队列
         foreach (var cmd in onCmd)
         {
-            AddCommandToQueue(cmd, isHexCmd, appendCRC16);
+            AddCommandToQueue(cmd);
         }
 
         //执行绑定的控件
         StartCoroutine(ExcudeBindsWithInterval(true));
     }
+    public void Off()
+    {
+        // 将所有指令添加到全局队列
+        foreach (var cmd in offCmd)
+        {
+            AddCommandToQueue(cmd);
+        }
 
+        //执行绑定的控件
+        StartCoroutine(ExcudeBindsWithInterval(false));
+    }
     /// <summary>
     /// 全局队列，用于存储所有需要发送的指令
     /// </summary>
@@ -98,11 +108,12 @@ public class ClientItemsControl : MonoBehaviour
         public string command;
         public bool isHex;
         public bool appendCRC16;
+        public float messageInterval;
     }
 
     /// <summary>
-    /// 执行绑定的控件 相当于把绑定的开关都依次按一遍
     /// 将所有指令统一添加到全局队列中顺序执行
+    /// 用于处理DeviceIPNO等不同的指令
     /// </summary>
     /// <param name="on"></param>
     private IEnumerator ExcudeBindsWithInterval(bool on)
@@ -133,7 +144,8 @@ public class ClientItemsControl : MonoBehaviour
                             orderType = control.orderType,
                             command = cmd,
                             isHex = control.isHexCmd,
-                            appendCRC16 = control.appendCRC16
+                            appendCRC16 = control.appendCRC16,
+                            messageInterval = control.messageInterval
                         };
 
                         globalCommandQueue.Enqueue(cmdData);
@@ -151,7 +163,7 @@ public class ClientItemsControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 处理全局指令队列
+    /// 发送全局指令队列
     /// </summary>
     private IEnumerator ProcessCommandQueue()
     {
@@ -174,16 +186,16 @@ public class ClientItemsControl : MonoBehaviour
             }
 
             // 添加延迟，确保指令之间有间隔
-            yield return new WaitForSeconds(messageInterval);
+            yield return new WaitForSeconds(cmdData.messageInterval);
         }
 
         isProcessingQueue = false;
     }
 
     /// <summary>
-    /// 添加单个指令到全局队列
+    /// 添加Cmds指令到全局队列 DeviceIPNO等相同的指令合并的cmds
     /// </summary>
-    public void AddCommandToQueue(string cmd, bool isHex, bool appendCRC16 = false)
+    public void AddCommandToQueue(string cmd)
     {
         CommandData cmdData = new CommandData
         {
@@ -191,8 +203,9 @@ public class ClientItemsControl : MonoBehaviour
             deviceID = deviceIPNO,
             orderType = orderType,
             command = cmd,
-            isHex = isHex,
-            appendCRC16 = appendCRC16
+            isHex = isHexCmd,
+            appendCRC16 = appendCRC16,
+            messageInterval = messageInterval
         };
 
         globalCommandQueue.Enqueue(cmdData);
@@ -204,39 +217,5 @@ public class ClientItemsControl : MonoBehaviour
         }
     }
 
-    public void Off()
-    {
-        // 将所有指令添加到全局队列
-        foreach (var cmd in offCmd)
-        {
-            AddCommandToQueue(cmd, isHexCmd, appendCRC16);
-        }
 
-        //执行绑定的控件
-        StartCoroutine(ExcudeBindsWithInterval(false));
-    }
-
-    /// <summary>
-    /// 带间隔地发送指令列表，防止粘包
-    /// </summary>
-    /// <param name="commands">要发送的指令列表</param>
-    /// <param name="isHex">是否为16进制指令</param>
-    /// <returns></returns>
-    public IEnumerator SendCommandsWithInterval(List<string> commands, bool isHex)
-    {
-        foreach (var cmd in commands)
-        {
-            if (isHex)
-            {
-                fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(cmd) : cmd);
-            }
-            else
-            {
-                fhClientController.SendStr(deviceIPNO, orderType, cmd);
-            }
-
-            // 添加延迟，防止粘包
-            yield return new WaitForSeconds(messageInterval);
-        }
-    }
 }
