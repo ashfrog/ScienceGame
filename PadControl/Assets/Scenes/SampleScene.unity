@@ -4091,7 +4091,7 @@ MonoBehaviour:
   offCmd: []
   isHexCmd: 0
   appendCRC16: 0
-  messageInterval: 1
+  messageInterval: 0.3
   BindControls:
   - {fileID: 8082719751581015711}
   - {fileID: 1983294900}
@@ -13652,6 +13652,8 @@ MonoBehaviour:
   - {fileID: 1630034932}
   - {fileID: 1578232257}
   - {fileID: 1756434452}
+  - {fileID: 1291277362}
+  - {fileID: 1220718619}
 --- !u!1 &1946575898
 GameObject:
   m_ObjectHideFlags: 0

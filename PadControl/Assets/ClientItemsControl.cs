@@ -77,15 +77,17 @@ public class ClientItemsControl : MonoBehaviour
         }
 
         //执行绑定的控件
-        ExcudeBinds(true);
+        StartCoroutine(ExcudeBindsWithInterval(true));
     }
 
     /// <summary>
     /// 执行绑定的控件 相当于把绑定的开关都依次按一遍
+    /// 添加时间间隔防止连续发送造成问题
     /// </summary>
     /// <param name="on"></param>
-    private void ExcudeBinds(bool on)
+    private IEnumerator ExcudeBindsWithInterval(bool on)
     {
+        // 处理 ClientItemsControl 类型的控件
         foreach (var bindControlObj in BindControls)
         {
             var itemsControls = bindControlObj.GetComponentsInChildren<ClientItemsControl>();
@@ -102,9 +104,13 @@ public class ClientItemsControl : MonoBehaviour
                         itemsControl.Off();
                     }
 
+                    // 添加延迟，防止连续发送
+                    yield return new WaitForSeconds(messageInterval);
                 }
             }
         }
+
+        // 处理 ClientItemControl 类型的控件
         foreach (var bindControlObj in BindControls)
         {
             var itemControls = bindControlObj.GetComponentsInChildren<ClientItemControl>();
@@ -120,6 +126,9 @@ public class ClientItemsControl : MonoBehaviour
                     {
                         itemControl.Off();
                     }
+
+                    // 添加延迟，防止连续发送
+                    yield return new WaitForSeconds(messageInterval);
                 }
             }
         }
@@ -135,8 +144,9 @@ public class ClientItemsControl : MonoBehaviour
         {
             StartCoroutine(SendCommandsWithInterval(offCmd, false));
         }
+
         //执行绑定的控件
-        ExcudeBinds(false);
+        StartCoroutine(ExcudeBindsWithInterval(false));
     }
 
     /// <summary>
