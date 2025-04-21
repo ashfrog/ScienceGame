@@ -8661,7 +8661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8082719750724735661, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: m_text
-      value: "\u706F\u5149\u603B\u5F00\u5173"
+      value: "LED\u603B\u5F00\u5173"
       objectReference: {fileID: 0}
     - target: {fileID: 8082719750814409670, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: m_Name
@@ -8755,7 +8755,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8082719750814409690, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
 --- !u!1 &1087058039
 GameObject:
@@ -15610,12 +15611,24 @@ MonoBehaviour:
   btnOn: {fileID: 1021593687}
   btnOff: {fileID: 1258110505}
   onCmd:
-  - 1F0600020001
+  - 1F0600030001
+  - 1F0600040001
+  - 1F0600050001
+  - 1F0600060001
+  - 1F0600070001
+  - 1F0600080001
+  - 100600040001
   offCmd:
-  - 1F0600010000
-  isHexCmd: 0
-  appendCRC16: 0
-  messageInterval: 0.1
+  - 1F0600030000
+  - 1F0600040000
+  - 1F0600050000
+  - 1F0600060000
+  - 1F0600070000
+  - 1F0600080000
+  - 100600040000
+  isHexCmd: 1
+  appendCRC16: 1
+  messageInterval: 0.5
 --- !u!1 &2064620104
 GameObject:
   m_ObjectHideFlags: 0
