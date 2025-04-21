@@ -4091,7 +4091,7 @@ MonoBehaviour:
   offCmd: []
   isHexCmd: 0
   appendCRC16: 0
-  messageInterval: 0.3
+  messageInterval: 0
   BindControls:
   - {fileID: 8082719751581015711}
   - {fileID: 1983294900}

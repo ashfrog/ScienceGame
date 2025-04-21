@@ -5,14 +5,14 @@ using UnityEngine.UI;
 public class ClientItemsControl : MonoBehaviour
 {
     [SerializeField]
-    FHClientController fhClientController;
+    public FHClientController fhClientController;
     /// <summary>
     /// 设备IPNO 就是ip的最后一个值 如果重复比如串口服务器某一路就是ip的最后一个值加端口号 
     /// </summary>
     [SerializeField]
-    DataTypeEnum deviceIPNO;
+    public DataTypeEnum deviceIPNO;
     [SerializeField]
-    OrderTypeEnum orderType;
+    public OrderTypeEnum orderType;
     [SerializeField]
     Button btnOn;
     [SerializeField]
@@ -36,7 +36,7 @@ public class ClientItemsControl : MonoBehaviour
     /// 补全CRC16
     /// </summary>
     [SerializeField]
-    bool appendCRC16;
+    public bool appendCRC16;
 
     /// <summary>
     /// 消息发送间隔时间(秒)
@@ -67,13 +67,10 @@ public class ClientItemsControl : MonoBehaviour
 
     public void On()
     {
-        if (isHexCmd)
+        // 将所有指令添加到全局队列
+        foreach (var cmd in onCmd)
         {
-            StartCoroutine(SendCommandsWithInterval(onCmd, true));
-        }
-        else
-        {
-            StartCoroutine(SendCommandsWithInterval(onCmd, false));
+            AddCommandToQueue(cmd, isHexCmd, appendCRC16);
         }
 
         //执行绑定的控件
@@ -81,16 +78,38 @@ public class ClientItemsControl : MonoBehaviour
     }
 
     /// <summary>
+    /// 全局队列，用于存储所有需要发送的指令
+    /// </summary>
+    private static Queue<CommandData> globalCommandQueue = new Queue<CommandData>();
+
+    /// <summary>
+    /// 指示是否正在处理全局队列
+    /// </summary>
+    private static bool isProcessingQueue = false;
+
+    /// <summary>
+    /// 指令数据结构
+    /// </summary>
+    private struct CommandData
+    {
+        public FHClientController controller;
+        public DataTypeEnum deviceID;
+        public OrderTypeEnum orderType;
+        public string command;
+        public bool isHex;
+        public bool appendCRC16;
+    }
+
+    /// <summary>
     /// 执行绑定的控件 相当于把绑定的开关都依次按一遍
-    /// 添加时间间隔防止连续发送造成问题
+    /// 将所有指令统一添加到全局队列中顺序执行
     /// </summary>
     /// <param name="on"></param>
     private IEnumerator ExcudeBindsWithInterval(bool on)
     {
-        // 收集所有需要执行的命令，按顺序执行
-        List<System.Action> allCommands = new List<System.Action>();
+        // 收集所有控件的所有指令，添加到全局队列
 
-        // 收集 ClientItemsControl 类型的控件命令
+        // 收集 ClientItemsControl 类型的控件的指令
         foreach (var bindControlObj in BindControls)
         {
             var itemsControls = bindControlObj.GetComponentsInChildren<ClientItemsControl>();
@@ -100,19 +119,30 @@ public class ClientItemsControl : MonoBehaviour
                 {
                     // 使用本地变量避免闭包问题
                     var control = itemsControl;
-                    if (on)
+
+                    // 获取该控件需要发送的指令列表
+                    List<string> cmdList = on ? control.onCmd : control.offCmd;
+
+                    // 将所有指令添加到全局队列
+                    foreach (var cmd in cmdList)
                     {
-                        allCommands.Add(() => SendCommandOnly(control, true));
-                    }
-                    else
-                    {
-                        allCommands.Add(() => SendCommandOnly(control, false));
+                        CommandData cmdData = new CommandData
+                        {
+                            controller = control.fhClientController,
+                            deviceID = control.deviceIPNO,
+                            orderType = control.orderType,
+                            command = cmd,
+                            isHex = control.isHexCmd,
+                            appendCRC16 = control.appendCRC16
+                        };
+
+                        globalCommandQueue.Enqueue(cmdData);
                     }
                 }
             }
         }
 
-        // 收集 ClientItemControl 类型的控件命令
+        // 收集 ClientItemControl 类型的控件的指令
         foreach (var bindControlObj in BindControls)
         {
             var itemControls = bindControlObj.GetComponentsInChildren<ClientItemControl>();
@@ -120,69 +150,91 @@ public class ClientItemsControl : MonoBehaviour
             {
                 foreach (var itemControl in itemControls)
                 {
-                    // 使用本地变量避免闭包问题
-                    var control = itemControl;
+                    // 这里需要根据 ClientItemControl 的实现方式来收集指令
+                    // 由于我们没有看到 ClientItemControl 的代码，这里假设它提供了一个方法来获取指令
+                    // 如果没有这样的方法，可能需要修改 ClientItemControl 类
                     if (on)
                     {
-                        allCommands.Add(() => control.On());
+                        itemControl.On();
                     }
                     else
                     {
-                        allCommands.Add(() => control.Off());
+                        itemControl.Off();
                     }
+
+                    // 在每个控件之间添加时间间隔
+                    yield return new WaitForSeconds(messageInterval);
                 }
             }
         }
 
-        // 按顺序执行所有命令，并在每个命令之间添加时间间隔
-        foreach (var command in allCommands)
+        // 启动队列处理（如果尚未启动）
+        if (!isProcessingQueue)
         {
-            command.Invoke();
-            // 添加延迟，确保命令之间有间隔
-            yield return new WaitForSeconds(messageInterval);
+            StartCoroutine(ProcessCommandQueue());
         }
     }
 
     /// <summary>
-    /// 只发送命令，不触发绑定控件的级联操作，防止循环调用
+    /// 处理全局指令队列
     /// </summary>
-    /// <param name="control">要操作的控件</param>
-    /// <param name="on">是否为开启操作</param>
-    private void SendCommandOnly(ClientItemsControl control, bool on)
+    private IEnumerator ProcessCommandQueue()
     {
-        if (on)
+        isProcessingQueue = true;
+
+        while (globalCommandQueue.Count > 0)
         {
-            if (control.isHexCmd)
+            // 获取队列中的下一个指令
+            CommandData cmdData = globalCommandQueue.Dequeue();
+
+            // 发送指令
+            if (cmdData.isHex)
             {
-                control.StartCoroutine(control.SendCommandsWithInterval(control.onCmd, true));
+                string finalCmd = cmdData.appendCRC16 ? CRC.GetCRCHexString(cmdData.command) : cmdData.command;
+                cmdData.controller.SendHex(cmdData.deviceID, cmdData.orderType, finalCmd);
             }
             else
             {
-                control.StartCoroutine(control.SendCommandsWithInterval(control.onCmd, false));
+                cmdData.controller.SendStr(cmdData.deviceID, cmdData.orderType, cmdData.command);
             }
+
+            // 添加延迟，确保指令之间有间隔
+            yield return new WaitForSeconds(messageInterval);
         }
-        else
+
+        isProcessingQueue = false;
+    }
+
+    /// <summary>
+    /// 添加单个指令到全局队列
+    /// </summary>
+    public void AddCommandToQueue(string cmd, bool isHex, bool appendCRC16 = false)
+    {
+        CommandData cmdData = new CommandData
         {
-            if (control.isHexCmd)
-            {
-                control.StartCoroutine(control.SendCommandsWithInterval(control.offCmd, true));
-            }
-            else
-            {
-                control.StartCoroutine(control.SendCommandsWithInterval(control.offCmd, false));
-            }
+            controller = fhClientController,
+            deviceID = deviceIPNO,
+            orderType = orderType,
+            command = cmd,
+            isHex = isHex,
+            appendCRC16 = appendCRC16
+        };
+
+        globalCommandQueue.Enqueue(cmdData);
+
+        // 启动队列处理（如果尚未启动）
+        if (!isProcessingQueue)
+        {
+            StartCoroutine(ProcessCommandQueue());
         }
     }
 
     public void Off()
     {
-        if (isHexCmd)
+        // 将所有指令添加到全局队列
+        foreach (var cmd in offCmd)
         {
-            StartCoroutine(SendCommandsWithInterval(offCmd, true));
-        }
-        else
-        {
-            StartCoroutine(SendCommandsWithInterval(offCmd, false));
+            AddCommandToQueue(cmd, isHexCmd, appendCRC16);
         }
 
         //执行绑定的控件
