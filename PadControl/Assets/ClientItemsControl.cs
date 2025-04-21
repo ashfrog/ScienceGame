@@ -44,45 +44,99 @@ public class ClientItemsControl : MonoBehaviour
     [SerializeField]
     float messageInterval = 0.1f;
 
+    /// <summary>
+    /// 绑定执行ON/Off
+    /// </summary>
+    [SerializeField]
+    List<GameObject> BindControls;
+
     // Start is called before the first frame update
     void Start()
     {
         fhClientController = FindObjectOfType<FHClientController>();
         btnOn.onClick.AddListener(() =>
         {
-            if (orderType == OrderTypeEnum.PowerOnMacAddress)
-            {
-                fhClientController.Send(deviceIPNO, orderType, true);
-                return;
-            }
-
-            if (isHexCmd)
-            {
-                StartCoroutine(SendCommandsWithInterval(onCmd, true));
-            }
-            else
-            {
-                StartCoroutine(SendCommandsWithInterval(onCmd, false));
-            }
+            On();
         });
 
         btnOff.onClick.AddListener(() =>
         {
-            if (orderType == OrderTypeEnum.PowerOnMacAddress)
-            {
-                fhClientController.Send(deviceIPNO, orderType, false);
-                return;
-            }
-
-            if (isHexCmd)
-            {
-                StartCoroutine(SendCommandsWithInterval(offCmd, true));
-            }
-            else
-            {
-                StartCoroutine(SendCommandsWithInterval(offCmd, false));
-            }
+            Off();
         });
+    }
+
+    public void On()
+    {
+        if (isHexCmd)
+        {
+            StartCoroutine(SendCommandsWithInterval(onCmd, true));
+        }
+        else
+        {
+            StartCoroutine(SendCommandsWithInterval(onCmd, false));
+        }
+
+        //执行绑定的控件
+        ExcudeBinds(true);
+    }
+
+    /// <summary>
+    /// 执行绑定的控件 相当于把绑定的开关都依次按一遍
+    /// </summary>
+    /// <param name="on"></param>
+    private void ExcudeBinds(bool on)
+    {
+        foreach (var bindControlObj in BindControls)
+        {
+            var itemsControls = bindControlObj.GetComponentsInChildren<ClientItemsControl>();
+            if (itemsControls != null)
+            {
+                foreach (var itemsControl in itemsControls)
+                {
+                    if (on)
+                    {
+                        itemsControl.On();
+                    }
+                    else
+                    {
+                        itemsControl.Off();
+                    }
+
+                }
+            }
+        }
+        foreach (var bindControlObj in BindControls)
+        {
+            var itemControls = bindControlObj.GetComponentsInChildren<ClientItemControl>();
+            if (itemControls != null)
+            {
+                foreach (var itemControl in itemControls)
+                {
+                    if (on)
+                    {
+                        itemControl.On();
+                    }
+                    else
+                    {
+                        itemControl.Off();
+                    }
+                }
+            }
+        }
+    }
+
+    public void Off()
+    {
+        if (isHexCmd)
+        {
+            StartCoroutine(SendCommandsWithInterval(offCmd, true));
+        }
+        else
+        {
+            StartCoroutine(SendCommandsWithInterval(offCmd, false));
+        }
+        //执行绑定的控件
+        ExcudeBinds(false);
     }
 
     /// <summary>

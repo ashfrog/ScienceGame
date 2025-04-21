@@ -127,15 +127,18 @@ public class FHClientController : MonoBehaviour
     public void Send<T>(DataTypeEnum dataTypeEnum, OrderTypeEnum orderTypeEnum, T data)
     {
         fhTcpClient.Send(dataTypeEnum, orderTypeEnum, data);
+        Debug.Log(dataTypeEnum + " " + orderTypeEnum);
     }
 
     public void SendStr(DataTypeEnum dataTypeEnum, OrderTypeEnum orderTypeEnum, string obj)
     {
         fhTcpClient.SendStr(dataTypeEnum, orderTypeEnum, obj);
+        Debug.Log(dataTypeEnum + " " + orderTypeEnum + " " + obj);
     }
     public void SendHex(DataTypeEnum dataTypeEnum, OrderTypeEnum orderTypeEnum, string obj)
     {
         fhTcpClient.SendHexStr(dataTypeEnum, orderTypeEnum, obj);
+        Debug.Log(dataTypeEnum + " " + orderTypeEnum + " " + obj);
     }
     private void OnEnable()
     {

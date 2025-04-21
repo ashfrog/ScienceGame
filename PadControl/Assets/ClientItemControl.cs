@@ -46,35 +46,45 @@ public class ClientItemControl : MonoBehaviour
 
         btnOn.onClick.AddListener(() =>
         {
-            if (orderType == OrderTypeEnum.PowerOnMacAddress)
-            {
-                fhClientController.Send(deviceIPNO, orderType, true);
-                return;
-            }
-            if (isHexCmd)
-            {
-                fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(onCmd) : onCmd);
-            }
-            else
-            {
-                fhClientController.SendStr(deviceIPNO, orderType, onCmd);
-            }
+            On();
         });
         btnOff.onClick.AddListener(() =>
         {
-            if (orderType == OrderTypeEnum.PowerOnMacAddress)
-            {
-                fhClientController.Send(deviceIPNO, orderType, false);
-                return;
-            }
-            if (isHexCmd)
-            {
-                fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(offCmd) : offCmd);
-            }
-            else
-            {
-                fhClientController.SendStr(deviceIPNO, orderType, offCmd);
-            }
+            Off();
         });
+    }
+
+    public void Off()
+    {
+        if (orderType == OrderTypeEnum.PowerOnMacAddress)
+        {
+            fhClientController.Send(deviceIPNO, orderType, false);
+            return;
+        }
+        if (isHexCmd)
+        {
+            fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(offCmd) : offCmd);
+        }
+        else
+        {
+            fhClientController.SendStr(deviceIPNO, orderType, offCmd);
+        }
+    }
+
+    public void On()
+    {
+        if (orderType == OrderTypeEnum.PowerOnMacAddress)
+        {
+            fhClientController.Send(deviceIPNO, orderType, true);
+            return;
+        }
+        if (isHexCmd)
+        {
+            fhClientController.SendHex(deviceIPNO, orderType, appendCRC16 ? CRC.GetCRCHexString(onCmd) : onCmd);
+        }
+        else
+        {
+            fhClientController.SendStr(deviceIPNO, orderType, onCmd);
+        }
     }
 }
