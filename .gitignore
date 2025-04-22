@@ -37,3 +37,4 @@ MorsCodeGame/UserSettings/EditorUserSettings.asset
 *.csproj
 *.sln
 /PadControl/Release
+PadControl/Release/PadControl.apk
