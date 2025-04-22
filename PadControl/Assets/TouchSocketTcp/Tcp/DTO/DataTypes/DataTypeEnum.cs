@@ -63,13 +63,14 @@ public enum DataTypeEnum
     /// <summary>
     /// 控制端 平板播控组
     /// </summary>
-    S_Pad50 = 50,
-    S_Pad51 = 51,
-    S_Pad52 = 52,
-    S_Pad53 = 53,
-    S_Pad54 = 54,
-    S_Pad55 = 55,
-    S_Pad56 = 56,
+    S_Pad50 = 50, //平板投影
+    S_Pad51 = 51, //平板序厅大屏
+    S_Pad52 = 52, //平板互动投影
+    S_Pad53 = 53, //平板全息投影
+    S_Pad54 = 54, //平板逐梦
+    S_Pad55 = 55, //平板强策
+    S_Pad56 = 56, //平板汇盟
+    S_Pad57 = 57, //平板智御
 
     /// <summary>
     /// 展厅区域灯光插座ipNo IP：192.168.3.9 端口：20001
