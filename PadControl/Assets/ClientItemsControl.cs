@@ -56,12 +56,24 @@ public class ClientItemsControl : MonoBehaviour
         fhClientController = FindObjectOfType<FHClientController>();
         btnOn.onClick.AddListener(() =>
         {
-            On();
+            ConfirmationDialogExtensions.ShowConfirmationDialog(
+                "警告",
+                "开启操作确认",
+                () => On(), // 确认回调
+                null                      // 取消回调（可选）
+            );
+            //On();
         });
 
         btnOff.onClick.AddListener(() =>
         {
-            Off();
+            ConfirmationDialogExtensions.ShowConfirmationDialog(
+                "警告",
+                "关闭操作确认",
+                () => Off(), // 确认回调
+                null                      // 取消回调（可选）
+            );
+            //Off();
         });
     }
 
