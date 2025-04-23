@@ -26,7 +26,10 @@ public class FHClientController : MonoBehaviour
     public Action DisConnected;
     private void Awake()
     {
-        ins = this;
+        if (ins == null)
+        {
+            ins = this;
+        }
         if (fhTcpClient == null)
         {
             fhTcpClient = new FHTcpClient();
