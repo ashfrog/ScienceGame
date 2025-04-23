@@ -45,9 +45,9 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
                         float getVolumn = _vcr.GetVolumn();
                         tcpClient.Send(sendDataTypeEnum, OrderTypeEnum.GetVolumn, getVolumn);
                         break;
-                    case OrderTypeEnum.GetMovSeek:                   //获取当前播放进度
-                        string getSeek = _vcr.GetPlayInfo();
-                        tcpClient.Send(sendDataTypeEnum, OrderTypeEnum.GetMovSeek, getSeek);
+                    case OrderTypeEnum.GetPlayInfo:                   //获取当前播放进度
+                        string playinfo = _vcr.GetPlayInfo();
+                        tcpClient.Send(sendDataTypeEnum, OrderTypeEnum.GetPlayInfo, playinfo);
                         break;
                     case OrderTypeEnum.SetVolumn:                    //设置音量
                         setVolumn = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(info.Body));

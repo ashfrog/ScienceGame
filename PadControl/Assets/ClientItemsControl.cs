@@ -93,6 +93,11 @@ public class ClientItemsControl : MonoBehaviour
         });
     }
 
+    private void OnEnable()
+    {
+        isProcessingQueue = false;
+    }
+
     public void On()
     {
         // 将所有指令添加到全局队列

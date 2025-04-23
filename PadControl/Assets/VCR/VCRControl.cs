@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TouchSocket.Core.XREF.Newtonsoft.Json;
 using UnityEngine;
@@ -242,11 +243,13 @@ public class VCRControl : MonoBehaviour, IVCRControl
                 case OrderTypeEnum.GetFileList:
                     if (EnableRepeatRequest)
                     {
-                        List<string> playlist = JsonConvert.DeserializeObject<List<string>>(Encoding.UTF8.GetString(dTOInfo.Body));
+                        string playlistStr = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(dTOInfo.Body));
 
                         try
                         {
-                            InstantiateFileItem(playlist, playBtnFileRoot, playButtonPrefab);
+                            List<string> list = playlistStr.Split(",").ToList();
+
+                            InstantiateFileItem(list, playBtnFileRoot, playButtonPrefab);
                         }
                         catch (Exception ex)
                         {
@@ -254,6 +257,35 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         }
                     }
 
+                    break;
+                case OrderTypeEnum.GetPlayInfo:
+                    {
+                        string playinfo = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(dTOInfo.Body));
+                        //PlayInfo|9385.891,30037.33,0,2021重庆宣传片30秒.mp4
+                        string head = "PlayInfo|";
+                        //提取 9385.891,30037.33,0,2021重庆宣传片30秒.mp4 
+                        if (!string.IsNullOrEmpty(playinfo) && playinfo.StartsWith(head))
+                        {
+                            playinfo = playinfo.Substring(head.Length);
+                        }
+
+                        string[] playinfoArray = playinfo.Split(',');
+                        if (playinfoArray.Length == 4)
+                        {
+                            float curTime = float.Parse(playinfoArray[0]);
+                            float totalTime = float.Parse(playinfoArray[1]);
+                            int.TryParse(playinfoArray[2], out int index);
+                            string curName = playinfoArray[3];
+                            playingFilename.text = curName;
+
+                            if (!mvSliderDown)
+                            {
+                                movieSlider.value = curTime / totalTime;
+                            }
+                        }
+
+                        Debug.Log(playinfo);
+                    }
                     break;
                 case OrderTypeEnum.GetCurMovieName:
                     string filename = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(dTOInfo.Body));
@@ -375,9 +407,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
     {
         try
         {
-            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetMovSeek, "获取视频进度");
-            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetMovAllSecond, "获取视频总时长");
-            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetCurMovieName, "获取当前播放视频名称");
+            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetPlayInfo, "");
         }
         catch (Exception ex)
         {
