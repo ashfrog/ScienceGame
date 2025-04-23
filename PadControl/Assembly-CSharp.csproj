@@ -88,6 +88,7 @@
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\FHTcpClient.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHTcpService.cs" />
+    <Compile Include="Assets\ConfirmationDialog\ConfirmationDialogManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\VCR\SliderEvent.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\ConfirmationDialog\ConfirmationDialogCreator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\ConvertUtil.cs" />
@@ -110,6 +112,7 @@
     <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHClientController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
+    <Compile Include="Assets\ConfirmationDialog\ConfirmationDialogExample.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\SettingsManager.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Demo.cs" />
     <Compile Include="Assets\VCR\IVCRControl.cs" />
@@ -121,9 +124,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\TabSwitcher.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-    <Compile Include="Assets\ConfirmationDialog\ConfirmationDialogCreator.cs" />
-    <Compile Include="Assets\ConfirmationDialog\ConfirmationDialogExample.cs" />
-    <Compile Include="Assets\ConfirmationDialog\ConfirmationDialogManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

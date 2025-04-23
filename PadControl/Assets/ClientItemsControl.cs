@@ -50,30 +50,46 @@ public class ClientItemsControl : MonoBehaviour
     [SerializeField]
     List<GameObject> BindControls;
 
+    [SerializeField]
+    bool showConfirmDialog;
+
     // Start is called before the first frame update
     void Start()
     {
         fhClientController = FindObjectOfType<FHClientController>();
         btnOn.onClick.AddListener(() =>
         {
-            ConfirmationDialogExtensions.ShowConfirmationDialog(
-                "警告",
-                "开启操作确认",
-                () => On(), // 确认回调
-                null                      // 取消回调（可选）
-            );
-            //On();
+            Debug.Log(gameObject.name + " " + showConfirmDialog);
+            if (showConfirmDialog)
+            {
+                ConfirmationDialogExtensions.ShowConfirmationDialog(
+                    "提示",
+                    "开启操作确认",
+                    () => On(), // 确认回调
+                    null                      // 取消回调（可选）
+                );
+            }
+            else
+            {
+                On();
+            }
         });
 
         btnOff.onClick.AddListener(() =>
         {
-            ConfirmationDialogExtensions.ShowConfirmationDialog(
-                "警告",
-                "关闭操作确认",
-                () => Off(), // 确认回调
-                null                      // 取消回调（可选）
-            );
-            //Off();
+            if (showConfirmDialog)
+            {
+                ConfirmationDialogExtensions.ShowConfirmationDialog(
+                    "注意",
+                    "关闭操作确认",
+                    () => Off(), // 确认回调
+                    null                      // 取消回调（可选）
+                );
+            }
+            else
+            {
+                Off();
+            }
         });
     }
 
