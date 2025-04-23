@@ -41,3 +41,6 @@ PadControl/Release/PadControl.apk
 PadControl/Release/PadControl.apk
 *.apk
 PadControl/Release/PadControl.apk
+/MediaPlayerAVPro/Assets/AVProVideo
+/MediaPlayerAVPro/Assets/Plugins
+/MediaPlayerAVPro/ProjectSettings

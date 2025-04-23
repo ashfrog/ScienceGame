@@ -1,0 +1,11 @@
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\bin\Debug\CRC_16.exe.config
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\bin\Debug\CRC_16.exe
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\bin\Debug\CRC_16.pdb
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.Form1.resources
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.Properties.Resources.resources
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.csproj.GenerateResource.cache
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.csproj.CoreCompileInputs.cache
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.exe
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.pdb
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.csproj.AssemblyReference.cache
+D:\GitProject\master\HUL\MediaPlayerServer.git_2\小工具\CRC_16\obj\Debug\CRC_16.csproj.SuggestedBindingRedirects.cache
