@@ -91,7 +91,7 @@ public class ConfirmationDialogManager : MonoBehaviour
         }
 
         _instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
         // 初始状态为隐藏
         if (dialogPanel != null)

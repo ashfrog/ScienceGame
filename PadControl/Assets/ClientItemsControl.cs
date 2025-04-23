@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class ClientItemsControl : MonoBehaviour
 {
     [SerializeField]
@@ -59,14 +60,13 @@ public class ClientItemsControl : MonoBehaviour
         fhClientController = FindObjectOfType<FHClientController>();
         btnOn.onClick.AddListener(() =>
         {
-            Debug.Log(gameObject.name + " " + showConfirmDialog);
             if (showConfirmDialog)
             {
                 ConfirmationDialogExtensions.ShowConfirmationDialog(
                     "提示",
                     "开启操作确认",
                     () => On(), // 确认回调
-                    null                      // 取消回调（可选）
+                    null       // 取消回调（可选）
                 );
             }
             else
@@ -83,7 +83,7 @@ public class ClientItemsControl : MonoBehaviour
                     "注意",
                     "关闭操作确认",
                     () => Off(), // 确认回调
-                    null                      // 取消回调（可选）
+                    null        // 取消回调（可选）
                 );
             }
             else
@@ -91,11 +91,6 @@ public class ClientItemsControl : MonoBehaviour
                 Off();
             }
         });
-    }
-
-    private void OnEnable()
-    {
-        isProcessingQueue = false;
     }
 
     public void On()
@@ -106,9 +101,10 @@ public class ClientItemsControl : MonoBehaviour
             AddCommandToQueue(cmd);
         }
 
-        //执行绑定的控件
-        StartCoroutine(ExcudeBindsWithInterval(true));
+        // 执行绑定的控件
+        StartCoroutine(ExecuteBindsWithInterval(true));
     }
+
     public void Off()
     {
         // 将所有指令添加到全局队列
@@ -117,41 +113,18 @@ public class ClientItemsControl : MonoBehaviour
             AddCommandToQueue(cmd);
         }
 
-        //执行绑定的控件
-        StartCoroutine(ExcudeBindsWithInterval(false));
-    }
-    /// <summary>
-    /// 全局队列，用于存储所有需要发送的指令
-    /// </summary>
-    private static Queue<CommandData> globalCommandQueue = new Queue<CommandData>();
-
-    /// <summary>
-    /// 指示是否正在处理全局队列
-    /// </summary>
-    private static bool isProcessingQueue = false;
-
-    /// <summary>
-    /// 指令数据结构
-    /// </summary>
-    private struct CommandData
-    {
-        public FHClientController controller;
-        public DataTypeEnum deviceID;
-        public OrderTypeEnum orderType;
-        public string command;
-        public bool isHex;
-        public bool appendCRC16;
-        public float messageInterval;
+        // 执行绑定的控件
+        StartCoroutine(ExecuteBindsWithInterval(false));
     }
 
     /// <summary>
-    /// 将所有指令统一添加到全局队列中顺序执行
     /// 用于处理DeviceIPNO等不同的指令
     /// </summary>
-    /// <param name="on"></param>
-    private IEnumerator ExcudeBindsWithInterval(bool on)
+    /// <param name="on">是否为开启操作</param>
+    private IEnumerator ExecuteBindsWithInterval(bool on)
     {
         // 收集所有控件的所有指令，添加到全局队列
+        List<CommandQueueManager.CommandData> commandsToEnqueue = new List<CommandQueueManager.CommandData>();
 
         // 收集 ClientItemsControl 类型的控件的指令
         foreach (var bindControlObj in BindControls)
@@ -167,10 +140,10 @@ public class ClientItemsControl : MonoBehaviour
                     // 获取该控件需要发送的指令列表
                     List<string> cmdList = on ? control.onCmd : control.offCmd;
 
-                    // 将所有指令添加到全局队列
+                    // 创建命令数据并添加到待入队列表
                     foreach (var cmd in cmdList)
                     {
-                        CommandData cmdData = new CommandData
+                        CommandQueueManager.CommandData cmdData = new CommandQueueManager.CommandData
                         {
                             controller = control.fhClientController,
                             deviceID = control.deviceIPNO,
@@ -181,56 +154,24 @@ public class ClientItemsControl : MonoBehaviour
                             messageInterval = control.messageInterval
                         };
 
-                        globalCommandQueue.Enqueue(cmdData);
+                        commandsToEnqueue.Add(cmdData);
                     }
                 }
             }
         }
 
+        // 批量添加所有命令到队列管理器
+        CommandQueueManager.Instance.EnqueueCommands(commandsToEnqueue);
+
         yield return null;
-        // 启动队列处理（如果尚未启动）
-        if (!isProcessingQueue)
-        {
-            StartCoroutine(ProcessCommandQueue());
-        }
     }
 
     /// <summary>
-    /// 发送全局指令队列
-    /// </summary>
-    private IEnumerator ProcessCommandQueue()
-    {
-        isProcessingQueue = true;
-
-        while (globalCommandQueue.Count > 0)
-        {
-            // 获取队列中的下一个指令
-            CommandData cmdData = globalCommandQueue.Dequeue();
-
-            // 发送指令
-            if (cmdData.isHex)
-            {
-                string finalCmd = cmdData.appendCRC16 ? CRC.GetCRCHexString(cmdData.command) : cmdData.command;
-                cmdData.controller.SendHex(cmdData.deviceID, cmdData.orderType, finalCmd);
-            }
-            else
-            {
-                cmdData.controller.SendStr(cmdData.deviceID, cmdData.orderType, cmdData.command);
-            }
-
-            // 添加延迟，确保指令之间有间隔
-            yield return new WaitForSeconds(cmdData.messageInterval);
-        }
-
-        isProcessingQueue = false;
-    }
-
-    /// <summary>
-    /// 添加Cmds指令到全局队列 DeviceIPNO等相同的指令合并的cmds
+    /// 添加单个指令到全局队列
     /// </summary>
     public void AddCommandToQueue(string cmd)
     {
-        CommandData cmdData = new CommandData
+        CommandQueueManager.CommandData cmdData = new CommandQueueManager.CommandData
         {
             controller = fhClientController,
             deviceID = deviceIPNO,
@@ -241,14 +182,6 @@ public class ClientItemsControl : MonoBehaviour
             messageInterval = messageInterval
         };
 
-        globalCommandQueue.Enqueue(cmdData);
-
-        // 启动队列处理（如果尚未启动）
-        if (!isProcessingQueue)
-        {
-            StartCoroutine(ProcessCommandQueue());
-        }
+        CommandQueueManager.Instance.EnqueueCommand(cmdData);
     }
-
-
 }
