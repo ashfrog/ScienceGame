@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.IO;
 
 /// <summary>
 /// 全屏 置顶 防休眠 多屏幕
@@ -49,6 +50,7 @@ public class AdvertisementKiosk : MonoBehaviour
     private static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
     private delegate bool WNDENUMPROC(IntPtr hwnd, uint lParam);
+
     private static System.Collections.Hashtable processWnd = new System.Collections.Hashtable();
 
     private IntPtr GetCurrentWindowHandle()
@@ -106,10 +108,10 @@ public class AdvertisementKiosk : MonoBehaviour
         }
         return true;
     }
+
 #endif
 
-
-    void Start()
+    private void Start()
     {
         // 设置全屏
         Screen.fullScreen = true;
@@ -123,6 +125,7 @@ public class AdvertisementKiosk : MonoBehaviour
 #else
         Cursor.visible = false;
 #endif
+        Application.runInBackground = true;
         //多屏
         for (int i = 0; i < Display.displays.Length; i++)
         {
@@ -130,16 +133,21 @@ public class AdvertisementKiosk : MonoBehaviour
             //Screen.SetResolution(Display.displays[i].renderingWidth, Display.displays[i].renderingHeight, true);
         }
 
-#if UNITY_STANDALONE_WIN
-        StartCoroutine(GetWindowHandle());
-#endif
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+        if (File.Exists(Path.Combine(Application.streamingAssetsPath, "置顶.txt")))
+        {
+            StartCoroutine(GetWindowHandle());
 
-        // 启动定期检查协程
-        StartCoroutine(EnsureTopmostAndFullscreen());
+            // 启动定期检查协程
+            StartCoroutine(EnsureTopmostAndFullscreen());
+        }
+
+#endif
     }
 
 #if UNITY_STANDALONE_WIN
-    IEnumerator GetWindowHandle()
+
+    private IEnumerator GetWindowHandle()
     {
         yield return new WaitForSeconds(0.5f); // 等待短暂时间确保窗口已创建
 
@@ -153,9 +161,10 @@ public class AdvertisementKiosk : MonoBehaviour
             UnityEngine.Debug.LogError("Failed to get window handle.");
         }
     }
+
 #endif
 
-    IEnumerator EnsureTopmostAndFullscreen()
+    private IEnumerator EnsureTopmostAndFullscreen()
     {
         WaitForSeconds wait = new WaitForSeconds(checkInterval);
 
@@ -166,7 +175,7 @@ public class AdvertisementKiosk : MonoBehaviour
         }
     }
 
-    void SetTopmostAndFullscreen()
+    private void SetTopmostAndFullscreen()
     {
         if (!Screen.fullScreen)
         {
@@ -184,7 +193,7 @@ public class AdvertisementKiosk : MonoBehaviour
 #endif
     }
 
-    void OnApplicationFocus(bool hasFocus)
+    private void OnApplicationFocus(bool hasFocus)
     {
         SetTopmostAndFullscreen();
     }
