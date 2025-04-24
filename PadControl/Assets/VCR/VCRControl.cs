@@ -301,6 +301,26 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         playingFilename.text = filename;
                     }
                     break;
+                case OrderTypeEnum.LoopMode:
+                    {
+                        string loopmode = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(dTOInfo.Body));
+                        string head = "Loop|";
+                        //提取 9385.891,30037.33,0,2021重庆宣传片30秒.mp4 
+                        if (!string.IsNullOrEmpty(loopmode) && loopmode.StartsWith(head))
+                        {
+                            loopmode = loopmode.Substring(head.Length);
+                        }
+                        switch (loopmode.ToLower())
+                        {
+                            case "none":
+                                break;
+                            case "one":
+                                break;
+                            case "all":
+                                break;
+                        }
+                    }
+                    break;
                 //case OrderTypeEnum.GetMovAllSecond:
                 //    float totaltime = 10;
                 //    try
