@@ -103,6 +103,7 @@ public class LitVCR : MonoBehaviour
     public static string persistentDataPath;
 
     public float imgSeconds = 5;
+    private float curImgSec;
 
     public enum LoopMode
     {
@@ -309,13 +310,22 @@ public class LitVCR : MonoBehaviour
     public string GetPlayInfo()
     {
         string playinginfodto = "";
-        if (PlayingPlayer)
+        if (FileUtils.IsMovFile(videoPaths[videoindex]))
         {
-            float time = PlayingPlayer.Control.GetCurrentTimeMs();
-            float duration = PlayingPlayer.Info.GetDurationMs();
-            //视频播放时间ms，视频总时长ms，视频 index，文件名称
-            playinginfodto = $"PlayInfo|{time},{duration},{videoindex},{Path.GetFileName(PlayingPlayer.m_VideoPath)}";
+            if (PlayingPlayer)
+            {
+                float time = PlayingPlayer.Control.GetCurrentTimeMs();
+                float duration = PlayingPlayer.Info.GetDurationMs();
+                //视频播放时间ms，视频总时长ms，视频 index，文件名称
+                playinginfodto = $"PlayInfo|{time},{duration},{videoindex},{Path.GetFileName(PlayingPlayer.m_VideoPath)}";
+            }
         }
+        else
+        {
+            playinginfodto = $"PlayInfo|{curImgSec * 1000},{imgSeconds * 1000},{videoindex},{Path.GetFileName(videoPaths[videoindex])}";
+        }
+
+
         return playinginfodto;
     }
 
@@ -755,6 +765,7 @@ public class LitVCR : MonoBehaviour
         return newrawimage;
     }
 
+
     private System.Collections.IEnumerator asyncLoadImg(string imgfile)
     {
         rawimage = InstantiateImg(_mediaDisplay);
@@ -807,7 +818,13 @@ public class LitVCR : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(imgSeconds);
+        curImgSec = 0;
+        float deltaTime = 0.1f;
+        while (curImgSec < imgSeconds)
+        {
+            curImgSec += deltaTime;
+            yield return new WaitForSeconds(deltaTime);
+        }
 
         if (!imgstopped && LoopMode.all.ToString().Equals(GetLoopMode())) //图片不停止轮播 并 开启列表循环
         {

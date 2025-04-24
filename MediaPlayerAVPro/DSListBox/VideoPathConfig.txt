@@ -1,1 +1,1 @@
-Assets/StreamingAssets/媒体文件
+Assets\StreamingAssets\媒体文件
