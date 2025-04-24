@@ -13,6 +13,7 @@ using System;
 using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 //-----------------------------------------------------------------------------
 // Copyright 2015-2018 RenderHeads Ltd.  All rights reserverd.
@@ -367,9 +368,25 @@ public class LitVCR : MonoBehaviour
             PlayRadarMov();
         }
     }
-
+    const string playlistFile = "playlist.json";
     public string ReloadFileList()
     {
+        string playlistFilePath = Path.Combine(persistentDataPath, playlistFile);
+        if (File.Exists(playlistFilePath))
+        {
+            try
+            {
+                string arrStr = File.ReadAllText(playlistFilePath);
+                var files = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(arrStr);
+                videoPaths = files.Select(s => Path.Combine(persistentDataPath, s)).ToList();
+                return videoPaths.ToString();
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("解析文件列表playlist.json失败:" + ex.Message);
+            }
+        }
+
         videoPaths = FileUtils.GetMediaFiles(persistentDataPath);
         return videoPaths.ToString();
     }
@@ -381,7 +398,6 @@ public class LitVCR : MonoBehaviour
 
     public static string ConvertListToString(List<string> list, string separator = ",")
     {
-        // 过滤掉 null 值，并在每个元素周围添加空格
         return string.Join(separator, list.Where(item => !string.IsNullOrEmpty(item)).Select(item => Path.GetFileName(item.Trim())));
     }
 
@@ -396,39 +412,13 @@ public class LitVCR : MonoBehaviour
         //SetMask(_mediaDisplay, true);
         if (oncePlayFolder == null)
         {
-            _normalVideoFolder = videofolder;
+            persistentDataPath = videofolder;
+            ReloadFileList();
         }
 
-        bool folderhasFile = false;
-        if (!string.IsNullOrEmpty(videofolder) && Directory.Exists(videofolder))
-        {
-            List<string> vodeopaths = FileUtils.GetMediaFiles(videofolder);
+        OpenVideoByIndex(videoindex, reload);
 
-            shortFolderNames = FileUtils.ConvertFullFileNameToShortFolderName(vodeopaths);
-
-            if (vodeopaths.Count > 0)//该文件夹有视频文件则重新设置播放列表
-            {
-                if (radarPlaying)//雷达触发的视频正在播放
-                {
-                    videoindex++;
-                    videoindex %= vodeopaths.Count;
-                }
-                else
-                {
-                    if (reload)
-                    {
-                        videoindex = 0;
-                    }
-                }
-
-                videoPaths = vodeopaths;
-
-                OpenVideoByIndex(videoindex, reload);
-
-                folderhasFile = true;
-            }
-        }
-        return folderhasFile;
+        return true;
     }
 
     public void CloseVideo()
@@ -515,13 +505,15 @@ public class LitVCR : MonoBehaviour
         }
 #endif
 
-        String ImgSecondsFilePath = Path.Combine(persistentDataPath, "ImgSeconds.txt");
+        String ImgSecondsFilePath = Path.Combine(persistentDataPath, "imgSwapConfig.json");
         if (File.Exists(ImgSecondsFilePath)) //媒体文件夹下的SwitchSeconds.txt 图片轮播间隔时间
         {
             string ImgSecondsStr = File.ReadAllText(ImgSecondsFilePath);
             if (!String.IsNullOrEmpty(ImgSecondsStr))
             {
-                float.TryParse(ImgSecondsStr, out imgSeconds);
+                var jObj = JObject.Parse(ImgSecondsStr);
+                bool enable = (bool)jObj["Enable"];
+                imgSeconds = (int)jObj["Second"];
             }
         }
     }

@@ -256,7 +256,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
 
     void FHTcpClientReceive(DTOInfo dTOInfo)
     {
-        Debug.Log(dTOInfo.DataType);
+        //Debug.Log(dTOInfo.DataType);
         if (dTOInfo.DataType == (int)itemDataType)
         {
             switch ((OrderTypeEnum)dTOInfo.OrderType)
@@ -307,7 +307,10 @@ public class VCRControl : MonoBehaviour, IVCRControl
 
                             if (!mvSliderDown)
                             {
-                                movieSlider.value = curtime / totaltime;
+                                if (curtime >= 0 && totaltime > 0)
+                                {
+                                    movieSlider.value = curtime / totaltime;
+                                }
                             }
 
                             string totatimestr = time2str(totaltime);
@@ -350,46 +353,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         }
                     }
                     break;
-                //case OrderTypeEnum.GetMovAllSecond:
-                //    float totaltime = 10;
-                //    try
-                //    {
-                //        totaltime = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
-                //    }
-                //    catch (Exception ex)
-                //    {
-                //    }
-                //    if (!float.IsNaN(totaltime)) //NaN情况处理
-                //    {
-                //        TimeSpan ts = new TimeSpan(0, 0, (int)totaltime);
-                //        string sec = $"{ts.Hours.ToString().PadLeft(2, '0')}:{ts.Minutes.ToString().PadLeft(2, '0')}:{ts.Seconds.ToString().PadLeft(2, '0')}";
-                //        totalTime.text = sec;
 
-                //        TimeSpan nowts = new TimeSpan(0, 0, (int)(totaltime * movieSlider.value));
-                //        string playingsec = $"{nowts.Hours.ToString().PadLeft(2, '0')}:{nowts.Minutes.ToString().PadLeft(2, '0')}:{nowts.Seconds.ToString().PadLeft(2, '0')}";
-                //        playingTime.text = playingsec;
-                //    }
-                //    break;
-                case OrderTypeEnum.GetMovSeek:
-                    if (!mvSliderDown)
-                    {
-                        float seek = 0;
-                        try
-                        {
-                            seek = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
-                        }
-                        catch (Exception ex)
-                        {
-
-                        }
-                        if (!float.IsNaN(seek))//NaN 排除
-                        {
-                            seek = Mathf.Clamp(seek, 0, 1);
-                            movieSlider.value = seek;
-                        }
-
-                    }
-                    break;
                 case OrderTypeEnum.GetVolumn:
                     float volumn = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
                     volumnSlider.value = volumn;
