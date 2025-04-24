@@ -77,6 +77,18 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
                         string videoPath = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(info.Body));
                         _vcr.OpenVideoByFileName(videoPath);
                         break;
+                    case OrderTypeEnum.GetLoopMode:
+                        {
+                            string loopmode = _vcr.GetLoopMode();
+                            tcpClient.Send(sendDataTypeEnum, OrderTypeEnum.GetLoopMode, loopmode);
+                        }
+                        break;
+                    case OrderTypeEnum.LoopMode:
+                        {
+                            int loopmode = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                            _vcr.SetLoopMode((LitVCR.LoopMode)loopmode);
+                        }
+                        break;
                     case OrderTypeEnum.Browser:
 
                     case OrderTypeEnum.GetUrls:

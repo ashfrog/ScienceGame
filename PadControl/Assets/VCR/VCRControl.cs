@@ -97,6 +97,15 @@ public class VCRControl : MonoBehaviour, IVCRControl
     /// 单个网页
     /// </summary>
     public bool singleUrl = true;
+
+    [SerializeField]
+    TMPro.TMP_Dropdown tMP_LoopModeDropdown;
+    public enum LoopMode
+    {
+        none,
+        one,
+        all
+    }
     // Start is called before the first frame update
     private void Start()
     {
@@ -131,6 +140,21 @@ public class VCRControl : MonoBehaviour, IVCRControl
                             Debug.Log("展开:" + ex.Message);
                         }
                     }
+                }
+            });
+            tMP_LoopModeDropdown.onValueChanged.AddListener((index) =>
+            {
+                switch (index)
+                {
+                    case 0:
+                        FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.LoopMode, LoopMode.none);
+                        break;
+                    case 1:
+                        FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.LoopMode, LoopMode.one);
+                        break;
+                    case 2:
+                        FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.LoopMode, LoopMode.all);
+                        break;
                 }
             });
             volumnSlider.PointerUp.AddListener(VolumnSeek);
@@ -192,6 +216,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
             InvokeRepeating(nameof(RepeatRequest), 0, 1f);
             GetFileList();
             GetVolumn();
+            GetLoopMode();
         }
         if (FHClientController.ins != null && FHClientController.ins.fhTcpClient != null)
         {
@@ -291,7 +316,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
                             playingTime.text = cursecstr;
                         }
 
-                        Debug.Log(playinfo);
+                        //Debug.Log(playinfo);
                     }
                     break;
                 case OrderTypeEnum.GetCurMovieName:
@@ -301,7 +326,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         playingFilename.text = filename;
                     }
                     break;
-                case OrderTypeEnum.LoopMode:
+                case OrderTypeEnum.GetLoopMode:
                     {
                         string loopmode = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(dTOInfo.Body));
                         string head = "Loop|";
@@ -310,13 +335,17 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         {
                             loopmode = loopmode.Substring(head.Length);
                         }
+
                         switch (loopmode.ToLower())
                         {
                             case "none":
+                                tMP_LoopModeDropdown.SetValueWithoutNotify(0);
                                 break;
                             case "one":
+                                tMP_LoopModeDropdown.SetValueWithoutNotify(1);
                                 break;
                             case "all":
+                                tMP_LoopModeDropdown.SetValueWithoutNotify(2);
                                 break;
                         }
                     }
@@ -551,6 +580,14 @@ public class VCRControl : MonoBehaviour, IVCRControl
         if (FHClientController.ins != null)
         {
             FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetVolumn, "获取音量");
+        }
+    }
+
+    public void GetLoopMode()
+    {
+        if (FHClientController.ins != null)
+        {
+            FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.GetLoopMode, "获取循环模式");
         }
     }
 }

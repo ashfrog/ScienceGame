@@ -46,6 +46,16 @@ public enum OrderTypeEnum
     SetVolumn = 102,
 
     /// <summary>
+    /// 获取循环模式
+    /// </summary>
+    GetLoopMode = 200,
+
+    /// <summary>
+    /// 设置循环模式
+    /// </summary>
+    LoopMode = 201,
+
+    /// <summary>
     /// 获取当前播放进度
     /// </summary>
     GetMovSeek = 501,

@@ -105,8 +105,8 @@ public class LitVCR : MonoBehaviour
 
     public enum LoopMode
     {
-        one,
         none,
+        one,
         all
     }
 
