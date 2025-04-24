@@ -31,8 +31,7 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
         {
 
             //所有设备都收到相同的数据 通过DataTypeEnum区分
-            Debug.Log("哪台设备处理:" + (DataTypeEnum)info.DataType);
-            Debug.Log("指令类型:" + (OrderTypeEnum)info.OrderType);
+            Debug.Log("设备:" + (DataTypeEnum)info.DataType + " 指令:" + (OrderTypeEnum)info.OrderType);
             if (info.DataType == (int)receiveDataTypeEnum)
             {
                 switch ((OrderTypeEnum)info.OrderType)//处理指令类型
@@ -67,7 +66,7 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
                         float setSeek = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(info.Body));
                         _vcr.OnVideoSeekSlider(setSeek);
                         break;
-                    case OrderTypeEnum.PlayPrev:                     //播放下一个视频                    
+                    case OrderTypeEnum.PlayPrev:                     //播放上一个视频                    
                         _vcr.PlayPrevious();
                         break;
                     case OrderTypeEnum.PlayNext:                     //播放下一个视频                    

@@ -6,6 +6,8 @@ using System.Text;
 using TouchSocket.Core.XREF.Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Button = UnityEngine.UI.Button;
 
 public class VCRControl : MonoBehaviour, IVCRControl
 {
@@ -272,16 +274,21 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         string[] playinfoArray = playinfo.Split(',');
                         if (playinfoArray.Length == 4)
                         {
-                            float curTime = float.Parse(playinfoArray[0]);
-                            float totalTime = float.Parse(playinfoArray[1]);
+                            float curtime = float.Parse(playinfoArray[0]);
+                            float totaltime = float.Parse(playinfoArray[1]);
                             int.TryParse(playinfoArray[2], out int index);
                             string curName = playinfoArray[3];
                             playingFilename.text = curName;
 
                             if (!mvSliderDown)
                             {
-                                movieSlider.value = curTime / totalTime;
+                                movieSlider.value = curtime / totaltime;
                             }
+
+                            string totatimestr = time2str(totaltime);
+                            totalTime.text = totatimestr;
+                            string cursecstr = time2str(curtime);
+                            playingTime.text = cursecstr;
                         }
 
                         Debug.Log(playinfo);
@@ -294,26 +301,26 @@ public class VCRControl : MonoBehaviour, IVCRControl
                         playingFilename.text = filename;
                     }
                     break;
-                case OrderTypeEnum.GetMovAllSecond:
-                    float totaltime = 10;
-                    try
-                    {
-                        totaltime = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                    if (!float.IsNaN(totaltime)) //NaN情况处理
-                    {
-                        TimeSpan ts = new TimeSpan(0, 0, (int)totaltime);
-                        string sec = $"{ts.Hours.ToString().PadLeft(2, '0')}:{ts.Minutes.ToString().PadLeft(2, '0')}:{ts.Seconds.ToString().PadLeft(2, '0')}";
-                        totalTime.text = sec;
+                //case OrderTypeEnum.GetMovAllSecond:
+                //    float totaltime = 10;
+                //    try
+                //    {
+                //        totaltime = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //    }
+                //    if (!float.IsNaN(totaltime)) //NaN情况处理
+                //    {
+                //        TimeSpan ts = new TimeSpan(0, 0, (int)totaltime);
+                //        string sec = $"{ts.Hours.ToString().PadLeft(2, '0')}:{ts.Minutes.ToString().PadLeft(2, '0')}:{ts.Seconds.ToString().PadLeft(2, '0')}";
+                //        totalTime.text = sec;
 
-                        TimeSpan nowts = new TimeSpan(0, 0, (int)(totaltime * movieSlider.value));
-                        string playingsec = $"{nowts.Hours.ToString().PadLeft(2, '0')}:{nowts.Minutes.ToString().PadLeft(2, '0')}:{nowts.Seconds.ToString().PadLeft(2, '0')}";
-                        playingTime.text = playingsec;
-                    }
-                    break;
+                //        TimeSpan nowts = new TimeSpan(0, 0, (int)(totaltime * movieSlider.value));
+                //        string playingsec = $"{nowts.Hours.ToString().PadLeft(2, '0')}:{nowts.Minutes.ToString().PadLeft(2, '0')}:{nowts.Seconds.ToString().PadLeft(2, '0')}";
+                //        playingTime.text = playingsec;
+                //    }
+                //    break;
                 case OrderTypeEnum.GetMovSeek:
                     if (!mvSliderDown)
                     {
@@ -345,7 +352,12 @@ public class VCRControl : MonoBehaviour, IVCRControl
 
     }
 
-
+    private static string time2str(float totaltime)
+    {
+        TimeSpan ts = new TimeSpan(0, 0, (int)(totaltime * 0.001));
+        string sec = $"{ts.Hours.ToString().PadLeft(2, '0')}:{ts.Minutes.ToString().PadLeft(2, '0')}:{ts.Seconds.ToString().PadLeft(2, '0')}";
+        return sec;
+    }
 
     void InstantiateFileItem(List<string> items, Transform rootTransform, Button itemPrefab)
     {
@@ -413,11 +425,6 @@ public class VCRControl : MonoBehaviour, IVCRControl
         {
             Debug.Log("RepeatRequest:" + ex.Message);
         }
-
-    }
-    // Update is called once per frame
-    void Update()
-    {
 
     }
 
