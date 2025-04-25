@@ -51,8 +51,6 @@ public class LitVCR : MonoBehaviour
 
     private const string SCREENSAVER = "screensaver";//屏保key
 
-    public const string MediaFolderPathName = "MediaFolderPath.txt";
-
     /// <summary>
     /// 标题绑定文件/文件夹名
     /// </summary>
