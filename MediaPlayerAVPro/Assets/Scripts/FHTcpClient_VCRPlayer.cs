@@ -102,6 +102,17 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
                             _vcr.SetLoopMode((LitVCR.LoopMode)loopmode);
                         }
                         break;
+                    case OrderTypeEnum.SetScreenSaver:
+                        {
+                            string screenSaver = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(info.Body));
+                            _vcr.SetScreenSaver(screenSaver);
+                        }
+                        break;
+                    case OrderTypeEnum.GetScreenSaver:
+                        {
+                            tcpClient.Send(sendDataTypeEnum, OrderTypeEnum.GetScreenSaver, _vcr.GetScreenSaver());
+                        }
+                        break;
                     case OrderTypeEnum.Browser:
 
                     case OrderTypeEnum.GetUrls:

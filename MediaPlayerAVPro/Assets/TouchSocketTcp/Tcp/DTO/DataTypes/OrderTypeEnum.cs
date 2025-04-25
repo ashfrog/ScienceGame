@@ -25,6 +25,8 @@ public enum OrderTypeEnum
     EnableBrowser = 14,//设置显示网页
     GetEnableBrowser = 15,//获取显示网页开关
     GetPlayInfo = 18,//获取播放信息
+    SetScreenSaver = 19,//设置屏保
+    GetScreenSaver = 21,//获取屏保
 
     /// <summary>
     /// 由主控转发字符串

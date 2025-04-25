@@ -563,6 +563,7 @@ public class LitVCR : MonoBehaviour
             //PlayingPlayer.Stop();
         }
         imgstopped = true;
+        curImgSec = 0f;
     }
 
     /// <summary>
@@ -817,6 +818,10 @@ public class LitVCR : MonoBehaviour
         float deltaTime = 0.1f;
         while (curImgSec < imgSeconds)
         {
+            if (imgstopped)
+            {
+                break;
+            }
             curImgSec += deltaTime;
             yield return new WaitForSeconds(deltaTime);
         }
