@@ -42,10 +42,15 @@ public class FHClientController : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        if (PlayerPrefs.HasKey(IPHOST_Key))
+        //if (PlayerPrefs.HasKey(IPHOST_Key))
+        //{
+        //    ipHost = PlayerPrefs.GetString(IPHOST_Key);
+        //}
+        if (String.IsNullOrEmpty(Settings.ini.IPHost.ServerIPHost))
         {
-            ipHost = PlayerPrefs.GetString(IPHOST_Key);
+            Settings.ini.IPHost.ServerIPHost = "127.0.0.1:7790";
         }
+        ipHost = Settings.ini.IPHost.ServerIPHost;
         if (fhTcpClient == null)
         {
             fhTcpClient = new FHTcpClient();
@@ -172,7 +177,7 @@ public class FHClientController : MonoBehaviour
         this.ipHost = ipHost;
         if (fhTcpClient != null)
         {
-            PlayerPrefs.SetString(IPHOST_Key, ipHost);
+            //PlayerPrefs.SetString(IPHOST_Key, ipHost);
             fhTcpClient.InitConfig(ipHost);
 
             userDisconnect = false;

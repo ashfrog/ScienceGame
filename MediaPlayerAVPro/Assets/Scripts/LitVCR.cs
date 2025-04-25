@@ -497,23 +497,18 @@ public class LitVCR : MonoBehaviour
     {
         _loadingPlayer = _mediaPlayerB;
 
-        persistentDataPath = Application.persistentDataPath;
-
-#if UNITY_STANDALONE_WIN
-        string MediaFolderPath = Path.Combine(Path.Combine(Application.streamingAssetsPath, MediaFolderPathName));
-        if (File.Exists(MediaFolderPath))
+        if (String.IsNullOrEmpty(Settings.ini.Path.MediaPath))
         {
-            string mediaFolderPath = File.ReadAllText(MediaFolderPath);
-            if (!String.IsNullOrEmpty(mediaFolderPath) && Directory.Exists(mediaFolderPath))
-            {
-                persistentDataPath = mediaFolderPath;
-            }
-            else
-            {
-                Debug.Log($"mediaFolderPath.txt中配置的路径:{mediaFolderPath}不存在");
-            }
+            Settings.ini.Path.MediaPath = System.IO.Path.Combine(Application.streamingAssetsPath, "媒体文件");
         }
-#endif
+        if (!Directory.Exists(Settings.ini.Path.MediaPath))
+        {
+            Directory.CreateDirectory(Settings.ini.Path.MediaPath);
+        }
+
+        persistentDataPath = Settings.ini.Path.MediaPath;
+
+
 
         String ImgSecondsFilePath = Path.Combine(persistentDataPath, "imgSwapConfig.json");
         if (File.Exists(ImgSecondsFilePath)) //媒体文件夹下的SwitchSeconds.txt 图片轮播间隔时间
