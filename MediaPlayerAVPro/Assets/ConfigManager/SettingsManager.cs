@@ -27,6 +27,12 @@ public class SGraphicsSettings : BaseSettings
         set => WriteValue("FullScreen", value.ToString());
     }
 
+    public string ScreenSaver
+    {
+        get => ReadValue("ScreenSaver", "");
+        set => WriteValue("ScreenSaver", value);
+    }
+
     public (int width, int height) Resolution
     {
         get
@@ -52,6 +58,18 @@ public class GameSettings : BaseSettings
 
     public GameSettings(IniConfig config) : base(config, "Game")
     {
+    }
+
+    public float Volumn
+    {
+        get => ReadFloat("Volumn", 1f);
+        set => WriteValue("Volumn", value.ToString());
+    }
+
+    public string LoopMode
+    {
+        get => ReadValue("LoopMode", "all");
+        set => WriteValue("LoopMode", value.ToString());
     }
 
     public bool SkipVerify

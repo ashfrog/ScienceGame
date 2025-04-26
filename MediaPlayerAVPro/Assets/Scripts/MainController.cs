@@ -12,6 +12,10 @@ public class MainController : MonoBehaviour
     private void Start()
     {
         litVCR.ReloadFileList();
+        if (string.IsNullOrEmpty(Settings.ini.Graphics.ScreenSaver))
+        {
+            Settings.ini.Graphics.ScreenSaver = "屏保.jpg";
+        }
         bool showScreenSaver = litVCR.PlayScreenSaver();
         if (!showScreenSaver)
         {

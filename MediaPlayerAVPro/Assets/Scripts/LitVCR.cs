@@ -45,11 +45,11 @@ public class LitVCR : MonoBehaviour
 
     private string currentPlayingVideo = "";
 
-    private const string VOLUMN_KEY = "volumn";//音量设置key
+    //private const string VOLUMN_KEY = "volumn";//音量设置key
 
-    private const string LOOPMODE = "loopmode";//循环模式key
+    //private const string LOOPMODE = "loopmode";//循环模式key
 
-    private const string SCREENSAVER = "screensaver";//屏保key
+    //private const string SCREENSAVER = "screensaver";//屏保key
 
     /// <summary>
     /// 标题绑定文件/文件夹名
@@ -145,7 +145,8 @@ public class LitVCR : MonoBehaviour
 
     public void SetVolumn(float volumn)
     {
-        PlayerPrefs.SetFloat(VOLUMN_KEY, volumn);
+        //PlayerPrefs.SetFloat(VOLUMN_KEY, volumn);
+        Settings.ini.Game.Volumn = volumn;
         if (PlayingPlayer && PlayingPlayer.Control != null)
         {
             PlayingPlayer.Control.SetVolume(volumn);
@@ -176,7 +177,8 @@ public class LitVCR : MonoBehaviour
 
     public float GetVolumn()
     {
-        return PlayerPrefs.GetFloat(VOLUMN_KEY, 1f);
+        //return PlayerPrefs.GetFloat(VOLUMN_KEY, 1f);
+        return Settings.ini.Game.Volumn;
     }
 
     public void PlayPrevious()
@@ -570,7 +572,8 @@ public class LitVCR : MonoBehaviour
     /// <param name="loopMode"></param>
     public void SetLoopMode(LoopMode loopMode)
     {
-        PlayerPrefs.SetString(LOOPMODE, loopMode.ToString());
+        //PlayerPrefs.SetString(LOOPMODE, loopMode.ToString());
+        Settings.ini.Game.LoopMode = loopMode.ToString();
         if (PlayingPlayer != null)
         {
             PlayingPlayer.m_Loop = (loopMode == LoopMode.one);
@@ -583,7 +586,8 @@ public class LitVCR : MonoBehaviour
 
     public String GetLoopMode()
     {
-        return PlayerPrefs.GetString(LOOPMODE, LoopMode.all.ToString());
+        //return PlayerPrefs.GetString(LOOPMODE, LoopMode.all.ToString());
+        return Settings.ini.Game.LoopMode;
     }
 
     /// <summary>
@@ -592,12 +596,14 @@ public class LitVCR : MonoBehaviour
     /// <param name="filename">短文件名</param>
     public void SetScreenSaver(String filename)
     {
-        PlayerPrefs.SetString(SCREENSAVER, filename);
+        //PlayerPrefs.SetString(SCREENSAVER, filename);
+        Settings.ini.Graphics.ScreenSaver = filename;
     }
 
     public String GetScreenSaver()
     {
-        return PlayerPrefs.GetString(SCREENSAVER, "");
+        //return PlayerPrefs.GetString(SCREENSAVER, "");
+        return Settings.ini.Graphics.ScreenSaver;
     }
 
     private void OnDestroy()
@@ -698,7 +704,8 @@ public class LitVCR : MonoBehaviour
             case MediaPlayerEvent.EventType.FirstFrameReady:
                 //有画面了再显示
                 SwapPlayers();
-                SetVolumn(PlayerPrefs.GetFloat(VOLUMN_KEY, 1f));//这时候设置音量
+                //SetVolumn(PlayerPrefs.GetFloat(VOLUMN_KEY, 1f));//这时候设置音量
+                SetVolumn(Settings.ini.Game.Volumn);
                 break;
 
             case MediaPlayerEvent.EventType.FinishedPlaying:
