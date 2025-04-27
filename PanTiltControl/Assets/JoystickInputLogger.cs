@@ -20,8 +20,21 @@ public class JoystickInputLogger : MonoBehaviour
 
     float minaxis = 0.2f;
 
+    bool PressedKey0 = false;
+
     void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Joystick1Button0))
+        {
+            Debug.Log("0");
+            PressedKey0 = true;
+        }
+        if (Input.GetKeyUp(KeyCode.Joystick1Button0))
+        {
+            Debug.Log("0");
+            PressedKey0 = false;
+        }
         // 旧版输入系统读取按键
         // 这里以Joystick1Button0、Joystick1Button1等为例，可根据设备实际按键情况调整
         // 输出所有按键消息
@@ -37,33 +50,66 @@ public class JoystickInputLogger : MonoBehaviour
                 Debug.Log($"PXN-2113 Pro Joystick - {key} Released");
             }
         }
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0))
-        {
-            Debug.Log("0");
-        }
+
         if (Input.GetKeyDown(KeyCode.Joystick1Button1))
         {
-            Debug.Log("0");
+            Debug.Log("1");
         }
         if (Input.GetKeyDown(KeyCode.Joystick1Button2))
         {
-            Debug.Log("0");
+            Debug.Log("2");
+            if (PressedKey0)
+            {
+                //设置预设点
+                sp.SendHexData("FF 01 00 03 00 02 06");
+            }
+            else
+            {
+                //调用预设点
+                sp.SendHexData("FF 01 00 07 00 02 0A");
+            }
         }
         if (Input.GetKeyDown(KeyCode.Joystick1Button3))
         {
-            Debug.Log("0");
+            Debug.Log("3");
+            if (PressedKey0)
+            {
+                //设置预设点
+                sp.SendHexData("FF 01 00 03 00 03 07");
+            }
+            else
+            {
+                //调用预设点
+                sp.SendHexData("FF 01 00 07 00 03 0B");
+            }
         }
         if (Input.GetKeyDown(KeyCode.Joystick1Button4))
         {
-            Debug.Log("0");
+            Debug.Log("4");
+            if (PressedKey0)
+            {
+                //设置预设点
+                sp.SendHexData("FF 01 00 03 00 04 08");
+            }
+            else
+            {
+                //调用预设点
+                sp.SendHexData("FF 01 00 07 00 04 0C");
+            }
         }
         if (Input.GetKeyDown(KeyCode.Joystick1Button5))
         {
-            Debug.Log("0");
-        }
-        if (Input.GetKeyDown(KeyCode.Joystick1Button6))
-        {
-            Debug.Log("0");
+            Debug.Log("5");
+            if (PressedKey0)
+            {
+                //设置预设点
+                sp.SendHexData("FF 01 00 03 00 05 09");
+            }
+            else
+            {
+                //调用预设点
+                sp.SendHexData("FF 01 00 07 00 05 0D");
+            }
         }
 
         curt += Time.deltaTime;
