@@ -1,0 +1,15 @@
+1. 安装Input System包
+
+打开Package Manager（菜单: Window > Package Manager）
+在左上角确保选择"Unity Registry"
+搜索"Input System"
+点击安装按钮
+安装后Unity会提示需要重启，点击"Yes"重启编辑器
+
+2. 基本设置
+安装完成后，需要进行一些基本设置：
+
+转到 Edit > Project Settings > Player
+找到"Active Input Handling"设置
+选择"Both"（如果您想同时支持新旧系统）或"Input System Package"（如果只用新系统）
+这一步需要再次重启Unity编辑器
