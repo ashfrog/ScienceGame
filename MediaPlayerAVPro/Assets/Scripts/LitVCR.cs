@@ -147,6 +147,12 @@ public class LitVCR : MonoBehaviour
     {
         //PlayerPrefs.SetFloat(VOLUMN_KEY, volumn);
         Settings.ini.Game.Volumn = volumn;
+        LoadVolumn();
+    }
+
+    public void LoadVolumn()
+    {
+        float volumn = Settings.ini.Game.Volumn;
         if (PlayingPlayer && PlayingPlayer.Control != null)
         {
             PlayingPlayer.Control.SetVolume(volumn);
@@ -707,8 +713,8 @@ public class LitVCR : MonoBehaviour
             case MediaPlayerEvent.EventType.FirstFrameReady:
                 //有画面了再显示
                 SwapPlayers();
+                LoadVolumn();
                 //SetVolumn(PlayerPrefs.GetFloat(VOLUMN_KEY, 1f));//这时候设置音量
-                SetVolumn(Settings.ini.Game.Volumn);
                 break;
 
             case MediaPlayerEvent.EventType.FinishedPlaying:
