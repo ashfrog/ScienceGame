@@ -449,12 +449,15 @@ public class LitVCR : MonoBehaviour
         {
             if (String.IsNullOrEmpty(PlayingPlayer.m_VideoPath))
             {
-                PlayNext();
+                OpenVideoByIndex(videoindex);
             }
             else
             {
-                PlayingPlayer.Control.Play();
-                DisableImg(rawimage, _mediaDisplay);
+                if (FileUtils.IsMovFile(videoPaths[videoindex]))
+                {
+                    PlayingPlayer.Control.Play();
+                    DisableImg(rawimage, _mediaDisplay);
+                }
             }
         }
         imgstopped = false;
