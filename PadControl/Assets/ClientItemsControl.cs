@@ -58,39 +58,45 @@ public class ClientItemsControl : MonoBehaviour
     void Start()
     {
         fhClientController = FindObjectOfType<FHClientController>();
-        btnOn.onClick.AddListener(() =>
+        if (btnOn != null)
         {
-            if (showConfirmDialog)
+            btnOn.onClick.AddListener(() =>
             {
-                ConfirmationDialogExtensions.ShowConfirmationDialog(
-                    "提示",
-                    "开启操作确认",
-                    () => On(), // 确认回调
-                    null       // 取消回调（可选）
-                );
-            }
-            else
-            {
-                On();
-            }
-        });
+                if (showConfirmDialog)
+                {
+                    ConfirmationDialogExtensions.ShowConfirmationDialog(
+                        "提示",
+                        "开启操作确认",
+                        () => On(), // 确认回调
+                        null       // 取消回调（可选）
+                    );
+                }
+                else
+                {
+                    On();
+                }
+            });
+        }
 
-        btnOff.onClick.AddListener(() =>
+        if (btnOff != null)
         {
-            if (showConfirmDialog)
+            btnOff.onClick.AddListener(() =>
             {
-                ConfirmationDialogExtensions.ShowConfirmationDialog(
-                    "注意",
-                    "关闭操作确认",
-                    () => Off(), // 确认回调
-                    null        // 取消回调（可选）
-                );
-            }
-            else
-            {
-                Off();
-            }
-        });
+                if (showConfirmDialog)
+                {
+                    ConfirmationDialogExtensions.ShowConfirmationDialog(
+                        "注意",
+                        "关闭操作确认",
+                        () => Off(), // 确认回调
+                        null        // 取消回调（可选）
+                    );
+                }
+                else
+                {
+                    Off();
+                }
+            });
+        }
     }
 
     public void On()
@@ -136,6 +142,11 @@ public class ClientItemsControl : MonoBehaviour
                 {
                     // 使用本地变量避免闭包问题
                     var control = itemsControl;
+
+                    if (control.fhClientController == null)
+                    {
+                        control.fhClientController = fhClientController;
+                    }
 
                     // 获取该控件需要发送的指令列表
                     List<string> cmdList = on ? control.onCmd : control.offCmd;
