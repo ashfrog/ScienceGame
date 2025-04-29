@@ -9,6 +9,7 @@ using TouchSocket.Core.ByteManager;
 using TouchSocket.Core.Plugins;
 using TouchSocket.Core.Dependency;
 using TouchSocket.Core.Log;
+using System.Threading;
 
 public class StrTcpClient : MonoBehaviour
 {
@@ -25,11 +26,23 @@ public class StrTcpClient : MonoBehaviour
     TouchSocketConfig config = new TouchSocketConfig();
 
     public string ipHost = "127.0.0.1:4850";
+    [SerializeField]
+    FHTcpClient_VCRPlayer fHTcpClient_VCRPlayer;
 
+    bool exited = false;
+
+    private static SemaphoreSlim semaphore_2 = new SemaphoreSlim(1); // 限制异步线程同时进行的连接数 推荐1连接最稳定
     private void OnEnable()
     {
+        this.ipHost = Settings.ini.IPHost.DoorIPHost;
+        if (string.IsNullOrEmpty(ipHost))
+        {
+            Debug.Log("DoorIPHost未配置开门联动IPHost");
+            return;
+        }
+
         InitConfig(ipHost);
-        StartConnect();
+        StartCoroutine(StartConnect());
     }
 
     public StrTcpClient()
@@ -40,6 +53,7 @@ public class StrTcpClient : MonoBehaviour
         };
         m_tcpClient.Connected += (client, e) =>
         {
+            isconnected = true;
             if (Connected != null)
             {
                 Connected.Invoke(client);
@@ -48,6 +62,7 @@ public class StrTcpClient : MonoBehaviour
         };//成功连接到服务器
         m_tcpClient.Disconnected += (client, e) =>
         {
+            isconnected = false;
             Debug.Log($"断开连接，信息：{e.Message}");
             if (DisConnected != null)
             {
@@ -87,22 +102,31 @@ public class StrTcpClient : MonoBehaviour
         m_tcpClient.Setup(config);
     }
 
-    public bool StartConnect()
+    IEnumerator StartConnect()
     {
-        if (!isconnected)
+        while (!exited)
         {
-            try
+            yield return new WaitForSeconds(1);
+
+            if (m_tcpClient != null && !m_tcpClient.Online)
             {
-                m_tcpClient.Connect();
-                isconnected = true;
-            }
-            catch (Exception ex)
-            {
-                m_tcpClient.Logger.Info("中控client:" + iplog + ex.Message);
-                isconnected = false;
+                ThreadPool.QueueUserWorkItem(async state =>
+                {
+                    await semaphore_2.WaitAsync();
+                    try
+                    {
+                        if (!exited) // 检查是否已退出
+                        {
+                            m_tcpClient.Connect();
+                        }
+                    }
+                    finally
+                    {
+                        semaphore_2.Release();
+                    }
+                });
             }
         }
-        return isconnected;
     }
     public void Send(string msg)
     {
@@ -115,6 +139,7 @@ public class StrTcpClient : MonoBehaviour
     public void Close()
     {
         isconnected = false;
+        exited = true;
         this.m_tcpClient.Close();
     }
     private void OnDisable()
@@ -124,11 +149,23 @@ public class StrTcpClient : MonoBehaviour
 
     private void TcpClient_Received(TcpClient client, ByteBlock byteBlock, IRequestInfo requestInfo)
     {
-        Debug.Log($"StrTcp从服务器收到消息：{Encoding.UTF8.GetString(byteBlock.ToArray())}");//utf8解码。//无适配器情况接受字符串
-        if (StrTcpClientReceive != null)
+
+        //Debug.Log($"StrTcp从服务器收到消息：{Encoding.UTF8.GetString(byteBlock.ToArray())}");//utf8解码。//无适配器情况接受字符串
+        string hexString = BitConverter.ToString(byteBlock.ToArray()).Replace("-", "");
+        Debug.Log("StrTcp 收到Hex消息:" + hexString);
+        Loom.QueueOnMainThread(() =>
         {
-            StrTcpClientReceive.Invoke(Encoding.UTF8.GetString(byteBlock.ToArray()));
-        }
+            if ("AAAAAAAAA1".Equals(hexString))
+            {
+                Debug.Log("开门联动");
+                fHTcpClient_VCRPlayer._vcr.PlayNext();
+            }
+            if (StrTcpClientReceive != null)
+            {
+                StrTcpClientReceive.Invoke(Encoding.UTF8.GetString(byteBlock.ToArray()));
+            }
+        });
+
     }
 
     public void logmsg(string msg)

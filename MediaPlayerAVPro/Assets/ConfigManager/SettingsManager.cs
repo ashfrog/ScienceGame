@@ -121,6 +121,12 @@ public class IPSettings : BaseSettings
         set => WriteValue("ServerIPHost", value.ToString());
     }
 
+    public string DoorIPHost
+    {
+        get => ReadValue("DoorIPHost", "");
+        set => WriteValue("DoorIPHost", value.ToString());
+    }
+
     public int IPNO
     {
         get => ReadInt("IPNO", -1);
