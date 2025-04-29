@@ -45,3 +45,9 @@ PadControl/Release/PadControl.apk
 /MediaPlayerAVPro/Assets/Plugins
 /MediaPlayerAVPro/ProjectSettings
 PadControl/UserSettings/Layouts/default-2021.dwlt
+PadControl/UserSettings/Layouts/default-2021.dwlt
+PadControl/PadControl.sln
+PadControl/Assembly-CSharp.csproj
+*.csproj
+*.sln
+*.dwlt
