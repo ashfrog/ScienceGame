@@ -5807,7 +5807,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: deviceIPNO
-      value: 20003
+      value: 20001
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: appendCRC16
@@ -5827,7 +5827,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: showConfirmDialog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: onCmd.Array.data[0]
@@ -5859,7 +5859,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: offCmd.Array.data[0]
-      value: '10 06 00 03 00 00 '
+      value: 10 06 00 03 00 00
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: offCmd.Array.data[1]
@@ -6029,59 +6029,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8082719750814409689, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
   m_PrefabInstance: {fileID: 464410394}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &464410396 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8082719751158408026, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
-  m_PrefabInstance: {fileID: 464410394}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &464410397 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8082719750889514306, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
-  m_PrefabInstance: {fileID: 464410394}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &464410398 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8082719750814409670, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
-  m_PrefabInstance: {fileID: 464410394}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &464410399
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464410398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cde020e397061ac44b62dca60908a165, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fhClientController: {fileID: 0}
-  deviceIPNO: 11
-  orderType: 20
-  btnOn: {fileID: 464410396}
-  btnOff: {fileID: 464410397}
-  onCmd:
-  - '11 06 00 03 00 01 '
-  offCmd:
-  - '11 06 00 03 00 00 '
-  isHexCmd: 0
-  appendCRC16: 0
-  messageInterval: 0.1
-  BindControls: []
-  showConfirmDialog: 0
 --- !u!1001 &469643001
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14287,7 +14234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: deviceIPNO
-      value: 26
+      value: 20001
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: appendCRC16
@@ -14315,7 +14262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: offCmd.Array.data[0]
-      value: '0E 06 00 07 00 00 '
+      value: 0E 06 00 07 00 00
       objectReference: {fileID: 0}
     - target: {fileID: 8082719750724735658, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: m_SizeDelta.x
@@ -14424,59 +14371,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8082719750814409689, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
   m_PrefabInstance: {fileID: 815379921}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &815379923 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8082719751158408026, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
-  m_PrefabInstance: {fileID: 815379921}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &815379924 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8082719750889514306, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
-  m_PrefabInstance: {fileID: 815379921}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &815379925 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8082719750814409670, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
-  m_PrefabInstance: {fileID: 815379921}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &815379926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 815379925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cde020e397061ac44b62dca60908a165, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fhClientController: {fileID: 0}
-  deviceIPNO: 27
-  orderType: 20
-  btnOn: {fileID: 815379923}
-  btnOff: {fileID: 815379924}
-  onCmd:
-  - 25 31 50 4f 57 52 20 31 0d
-  offCmd:
-  - 25 31 50 4f 57 52 20 30 0d
-  isHexCmd: 1
-  appendCRC16: 0
-  messageInterval: 0.2
-  BindControls: []
-  showConfirmDialog: 0
 --- !u!1 &816577500
 GameObject:
   m_ObjectHideFlags: 0
@@ -17401,6 +17295,10 @@ PrefabInstance:
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: orderType
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+      propertyPath: deviceIPNO
+      value: 20001
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: appendCRC16
@@ -20787,15 +20685,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: onCmd.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: offCmd.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: showConfirmDialog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: onCmd.Array.data[0]
