@@ -17232,11 +17232,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5643155473490673015, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: dataTypeEnum
-      value: 28
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 5643155473490673015, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: itemDataType
-      value: 128
+      value: 129
       objectReference: {fileID: 0}
     - target: {fileID: 6692679143922828291, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.x
@@ -33608,11 +33608,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2690201939039035741, guid: cfae8285eea2e4f4fb80d8a7ed9948c6, type: 3}
       propertyPath: dataTypeEnum
-      value: 29
+      value: 28
       objectReference: {fileID: 0}
     - target: {fileID: 2690201939039035741, guid: cfae8285eea2e4f4fb80d8a7ed9948c6, type: 3}
       propertyPath: itemDataType
-      value: 129
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 2793872415503008896, guid: cfae8285eea2e4f4fb80d8a7ed9948c6, type: 3}
       propertyPath: m_AnchorMax.y
