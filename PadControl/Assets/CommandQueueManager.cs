@@ -43,6 +43,7 @@ public class CommandQueueManager : MonoBehaviour
         public bool isHex;
         public bool appendCRC16;
         public float messageInterval;
+        public bool ignoreBindInGroup;
     }
 
     /// <summary>

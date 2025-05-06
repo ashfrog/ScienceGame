@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,10 +55,17 @@ public class ClientItemsControl : MonoBehaviour
     [SerializeField]
     bool showConfirmDialog;
 
+    /// <summary>
+    /// 展项控制中排除这个控件 （统一开关中排除该开关）
+    /// </summary>
+    [SerializeField]
+    bool ignoreBindInGroup;
+
     // Start is called before the first frame update
     void Start()
     {
         fhClientController = FindObjectOfType<FHClientController>();
+        TMP_Text controlText = GetComponentInChildren<TMP_Text>();
         if (btnOn != null)
         {
             btnOn.onClick.AddListener(() =>
@@ -66,7 +74,7 @@ public class ClientItemsControl : MonoBehaviour
                 {
                     ConfirmationDialogExtensions.ShowConfirmationDialog(
                         "提示",
-                        "开启操作确认",
+                        $"开启{controlText.text}",
                         () => On(), // 确认回调
                         null       // 取消回调（可选）
                     );
@@ -85,8 +93,8 @@ public class ClientItemsControl : MonoBehaviour
                 if (showConfirmDialog)
                 {
                     ConfirmationDialogExtensions.ShowConfirmationDialog(
-                        "注意",
-                        "关闭操作确认",
+                        "提示",
+                        $"关闭{controlText.text}",
                         () => Off(), // 确认回调
                         null        // 取消回调（可选）
                     );
@@ -162,10 +170,17 @@ public class ClientItemsControl : MonoBehaviour
                             command = cmd,
                             isHex = control.isHexCmd,
                             appendCRC16 = control.appendCRC16,
-                            messageInterval = control.messageInterval
+                            messageInterval = control.messageInterval,
+                            ignoreBindInGroup = control.ignoreBindInGroup
                         };
-
-                        commandsToEnqueue.Add(cmdData);
+                        if (!control.ignoreBindInGroup)
+                        {
+                            commandsToEnqueue.Add(cmdData);
+                        }
+                        else
+                        {
+                            Debug.Log("展项控制排除开关：" + cmd);
+                        }
                     }
                 }
             }
