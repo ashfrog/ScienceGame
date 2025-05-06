@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using TMPro;
 
 /// <summary>
 /// 串口管理示例，演示在 Unity 中通过独立线程或协程来发送、接收 16 进制数据。
@@ -20,6 +21,8 @@ public class SerialPortManager : MonoBehaviour
     public Parity parity = Parity.None;
     public int dataBits = 8;
     public StopBits stopBits = StopBits.One;
+    [SerializeField]
+    TMP_Text tMP_Text_Log;
 
     // 接收数据线程
     private Thread _receiveThread;
@@ -79,10 +82,12 @@ public class SerialPortManager : MonoBehaviour
             _receiveThread.Start();
 
             Debug.Log($"[SerialPortManager] Serial port opened on {portName}");
+            tMP_Text_Log.text += $"[SerialPortManager] Serial port opened on {portName}\n";
         }
         catch (Exception e)
         {
             Debug.LogError($"[SerialPortManager] Failed to open serial port: {e.Message}");
+            tMP_Text_Log.text += $"[SerialPortManager] Failed to open serial port: {e.Message}\n";
         }
 
     }
@@ -141,6 +146,7 @@ public class SerialPortManager : MonoBehaviour
             catch (Exception e)
             {
                 Debug.LogError($"[SerialPortManager] Receive thread error: {e.Message}");
+                tMP_Text_Log.text += $"[SerialPortManager] Receive thread error: {e.Message}\n";
                 break;
             }
 
@@ -186,6 +192,7 @@ public class SerialPortManager : MonoBehaviour
         if (_serialPort == null || !_serialPort.IsOpen)
         {
             Debug.LogError("[SerialPortManager] Serial port not open.");
+            tMP_Text_Log.text += $"[SerialPortManager] Serial port not open.\n";
             return;
         }
 
@@ -206,6 +213,7 @@ public class SerialPortManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"[SerialPortManager] Send failed: {e.Message}");
+            tMP_Text_Log.text += $"[SerialPortManager] Send failed: {e.Message}\n";
         }
 
     }

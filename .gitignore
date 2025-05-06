@@ -51,3 +51,6 @@ PadControl/Assembly-CSharp.csproj
 *.csproj
 *.sln
 *.dwlt
+/PanTiltControl/Assets/TextMesh Pro
+PanTiltControl/Assets/Fonts/AlibabaPuHuiTi-3-55-Regular SDF.asset
+PanTiltControl/Assets/Fonts/AlibabaPuHuiTi-3-55-Regular SDF.asset.meta
