@@ -52,8 +52,6 @@ PadControl/Assembly-CSharp.csproj
 *.sln
 *.dwlt
 /PanTiltControl/Assets/TextMesh Pro
-PanTiltControl/Assets/Fonts/AlibabaPuHuiTi-3-55-Regular SDF.asset
-PanTiltControl/Assets/Fonts/AlibabaPuHuiTi-3-55-Regular SDF.asset.meta
 PadControl/Assets/Fonts/AlibabaPuHuiTi-3-55-Regular SDF.asset
 MediaPlayerAVPro/小工具/CRC_16/
 MediaPlayerAVPro/Assets/LeapMotion/
