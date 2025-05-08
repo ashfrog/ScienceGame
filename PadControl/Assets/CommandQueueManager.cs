@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 命令队列管理器，处理所有设备指令的全局队列
 /// </summary>
 public class CommandQueueManager : MonoBehaviour
 {
+    [SerializeField]
+    Image progressBarImg;
     // 单例实例
     private static CommandQueueManager _instance;
     public static CommandQueueManager Instance
@@ -100,7 +103,7 @@ public class CommandQueueManager : MonoBehaviour
     private IEnumerator ProcessCommandQueue()
     {
         _isProcessingQueue = true;
-
+        int totalcount = _commandQueue.Count;
         while (_commandQueue.Count > 0)
         {
             // 获取队列中的下一个指令
@@ -119,6 +122,12 @@ public class CommandQueueManager : MonoBehaviour
 
             // 添加延迟，确保指令之间有间隔
             yield return new WaitForSeconds(cmdData.messageInterval);
+
+            Debug.Log(_commandQueue.Count);
+            if (progressBarImg != null && totalcount>0)
+            {
+                progressBarImg.fillAmount = Mathf.Clamp01((float)_commandQueue.Count/totalcount);
+            }
         }
 
         _isProcessingQueue = false;
