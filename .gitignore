@@ -62,3 +62,9 @@ MediaPlayerAVPro/Assets/LeapMotion/
 /XinTongYuan_SatelliteCar/ProjectSettings
 /XinTongYuan_SatelliteCar/Logs
 *.mp4
+/XinTongYuan_SatelliteCar/.vs/XinTongYuan_SatelliteCar/CopilotIndices
+/XinTongYuan_SatelliteCar/.vs
+/XinTongYuan_SatelliteCar/Library
+/XinTongYuan_SatelliteCar/Temp
+/XinTongYuan_SatelliteCar/UserSettings
+XinTongYuan_SatelliteCar/Packages/packages-lock.json
