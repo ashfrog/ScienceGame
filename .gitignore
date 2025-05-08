@@ -56,3 +56,9 @@ PadControl/Assets/Fonts/AlibabaPuHuiTi-3-55-Regular SDF.asset
 MediaPlayerAVPro/小工具/CRC_16/
 MediaPlayerAVPro/Assets/LeapMotion/
 *.exe
+/XinTongYuan_SatelliteCar/Assets/AVProVideo
+/XinTongYuan_SatelliteCar/Assets/Plugins
+/XinTongYuan_SatelliteCar/obj
+/XinTongYuan_SatelliteCar/ProjectSettings
+/XinTongYuan_SatelliteCar/Logs
+*.mp4
