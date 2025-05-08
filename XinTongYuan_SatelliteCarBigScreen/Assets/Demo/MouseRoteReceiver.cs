@@ -1,0 +1,388 @@
+using Newtonsoft.Json;
+using RenderHeads.Media.AVProVideo;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
+using TouchSocket.Core.ByteManager;
+using TouchSocket.Sockets;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class MouseRoteReceiver : MonoBehaviour
+{
+    [SerializeField]
+    FHTcpService tcpService;
+
+    [SerializeField]
+    GameObject obj;
+
+    [SerializeField, Range(0.1f, 10f)]
+    float rotationSpeed = 5f; // 控制旋转的平滑度
+
+    [SerializeField, Range(0.1f, 1f)]
+    float deltaScale = 0.2f;
+
+    [SerializeField]
+    float minVerticalAngle = -90f; // 垂直旋转的最小角度（向下）
+
+    [SerializeField]
+    float maxVerticalAngle = 90f; // 垂直旋转的最大角度（向上）
+
+    // 目标增量旋转值
+    private Vector2 targetRotationDelta = Vector2.zero;
+
+    public GameObject Panel_level1_1_1, Panel_level1_1_2, Panel_level1_1_3, Panel_level1_2, Panel_level1_2_1, Panel_level1_2_2, panel_level1_2_3, Panel_卫星在空姿态,Panel_LoopVideo,video_car,panel_TanChuangVideo;
+    public MediaPlayer media,media_Loop,media_Car,media_TanChuang;
+    public Sprite[] sprites_Introduce;   //介绍图组
+    public Image img_Introduce;  //图片介绍组件
+    public GameObject WeiXingGuangDian;  //卫星光点
+    public GameObject[] cars;
+    public GameObject theEarth; //地球模型
+    public GameObject[] moons; //卫星轨道组
+    // Start is called before the first frame update
+    void Start()
+    {
+        StartCoroutine(WaitForTcpServiceInitialization());
+        media_Car.Events.AddListener(OnVideoEvent);
+    }
+
+    public void OnVideoEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
+    {
+        switch (et)
+        {
+
+            case MediaPlayerEvent.EventType.FinishedPlaying:
+                Panel_LoopVideo.SetActive(true);
+                video_car.SetActive(false);
+                media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
+                break;
+        }
+
+        Debug.Log("Event: " + et.ToString());
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        // 只有当有旋转增量需要应用时才进行旋转
+        if (targetRotationDelta.sqrMagnitude > 0.001f)
+        {
+            // 计算本帧需要应用的旋转量
+            float xAmount = Mathf.Lerp(0, targetRotationDelta.x, Time.deltaTime * rotationSpeed);
+            float yAmount = Mathf.Lerp(0, targetRotationDelta.y, Time.deltaTime * rotationSpeed);
+
+            // 应用水平旋转（绕Y轴）
+            obj.transform.Rotate(0, -xAmount * deltaScale, 0);
+
+            // 处理垂直旋转（绕X轴），并保持在限制范围内
+            if (obj.transform.parent != null)
+            {
+                // 获取当前垂直角度（绕X轴的旋转）
+                float currentXRotation = obj.transform.parent.eulerAngles.x;
+
+                // 将角度转换到 -180 到 180 度范围，便于比较
+                if (currentXRotation > 180)
+                {
+                    currentXRotation -= 360;
+                }
+
+                // 计算新的旋转角度
+                float newXRotation = currentXRotation + yAmount * deltaScale;
+
+                // 限制在指定范围内
+                newXRotation = Mathf.Clamp(newXRotation, minVerticalAngle, maxVerticalAngle);
+
+                // 应用新的受限旋转
+                obj.transform.parent.localRotation = Quaternion.Euler(newXRotation,
+                    obj.transform.parent.localEulerAngles.y,
+                    obj.transform.parent.localEulerAngles.z);
+            }
+
+            // 减少剩余的旋转增量
+            targetRotationDelta.x -= xAmount;
+            targetRotationDelta.y -= yAmount;
+
+            // 如果旋转增量很小，则认为已完成
+            if (Mathf.Abs(targetRotationDelta.x) < 0.001f && Mathf.Abs(targetRotationDelta.y) < 0.001f)
+            {
+                targetRotationDelta = Vector2.zero;
+            }
+        }
+    }
+
+    private IEnumerator WaitForTcpServiceInitialization()
+    {
+        // 等待tcpService初始化完成
+        yield return new WaitForSeconds(1f);
+
+        // 绑定tcpService接收消息事件
+        tcpService.fh_tcpservice.Received += this.FHService_Received;
+    }
+
+    private void FHService_Received(SocketClient client, ByteBlock byteBlock, IRequestInfo requestInfo)
+    {
+        Loom.QueueOnMainThread(() =>
+        {
+            // 处理接收到的消息
+            try
+            {
+                var info = requestInfo as DTOInfo;
+                switch ((OrderTypeEnum)info.OrderType)
+                {
+                    case OrderTypeEnum.Rotate:
+                        {
+                            string v2 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body)); //v2
+                                                                                                                   //V2 为逗号分割的字符串，第一个为x轴旋转角度增量，第二个为y轴旋转角度增量
+
+                            string[] v2s = v2.Split(',');
+                            Vector2 vec2 = new Vector2(float.Parse(v2s[0]), float.Parse(v2s[1]));
+
+                            // 将接收到的旋转角度增量添加到目标增量中
+                            targetRotationDelta += vec2;
+                        }
+                        break;
+                    case OrderTypeEnum.SetMovSeek:
+                        {
+                            string cmd = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+                            print(cmd);
+                            switch (cmd)
+                            {
+                                case "卫星":
+                                    break;
+                                case "发射展示":
+                                    PlayVideo("发射展示.mp4");
+                                    Panel_LoopVideo.SetActive(false);
+                                    break;
+                                case "发射展示返回":
+                                    Panel_level1_1_1.SetActive(false);
+                                    media.Control.Rewind();
+                                    media.Pause();
+                                    Panel_LoopVideo.SetActive(true);
+                                    media_Loop.Play();
+                                    break;
+                                case "星座展示":
+                                    for (int i = 1; i < moons.Length; i++)
+                                    {
+                                        moons[i].SetActive(false);
+                                    }
+                                    Panel_level1_1_2.SetActive(true);
+                                    obj = theEarth;
+                                    obj.transform.parent.gameObject.SetActive(true);
+                                    Panel_LoopVideo.SetActive(false);
+                                    break;
+                                case "星座展示返回":
+                                    Panel_level1_1_2.SetActive(false);
+                                    obj.transform.parent.gameObject.SetActive(false);
+                                    for (int i = 0; i < moons.Length; i++)
+                                    {
+                                        moons[i].SetActive(true);
+                                    }
+                                    Panel_LoopVideo.SetActive(true);
+                                    media_Loop.Play();
+                                    break;
+                                case "星座对比":
+                                    Panel_level1_1_3.SetActive(true);
+                                    WeiXingGuangDian.SetActive(true);
+                                    obj = theEarth;
+                                    obj.transform.parent.gameObject.SetActive(true);
+                                    Panel_LoopVideo.SetActive(false);
+                                    break;
+                                case "星座对比返回":
+                                    Panel_level1_1_3.SetActive(false);
+                                    WeiXingGuangDian.SetActive(false);
+                                    obj.transform.parent.gameObject.SetActive(false);
+                                    for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
+                                    {
+                                        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
+                                    }
+                                    Panel_LoopVideo.SetActive(true);
+                                    media_Loop.Play();
+                                    break;
+                                case "在空姿态":
+                                    Panel_level1_1_3.SetActive(false);
+                                    Panel_卫星在空姿态.SetActive(true);
+                                    WeiXingGuangDian.SetActive(false);
+                                    obj = theEarth;
+                                    break;
+                                case "在空姿态返回":
+                                    Panel_level1_1_3.SetActive(true);
+                                    Panel_卫星在空姿态.SetActive(false);
+                                    WeiXingGuangDian.SetActive(true);
+                                    break;
+                                case "汽车":
+                                    video_car.SetActive(true);
+                                    media_Car.GetComponent<MediaPlayer>().Rewind(true);
+                                    media_Car.GetComponent<MediaPlayer>().Play();
+                                    Panel_LoopVideo.SetActive(false);
+                                    break;
+                                case "汽车返回":
+                                    Panel_LoopVideo.SetActive(true);
+                                    video_car.SetActive(false);
+                                    media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏屏保.mp4");
+                                    break;
+                                case "汽车模型":
+                                    Panel_level1_2_1.SetActive(true);
+                                    Panel_level1_2_2.SetActive(false);
+                                    panel_level1_2_3.SetActive(false);
+                                    panel_TanChuangVideo.SetActive(false);
+                                    break;
+                                case "汽车模型返回":
+                                    Panel_level1_2_1.SetActive(false);
+                                    Panel_level1_2_2.SetActive(true);
+                                    for (int i = 0; i < cars.Length; i++)
+                                    {
+                                        cars[i].SetActive(false);
+                                    }
+                                    panel_TanChuangVideo.SetActive(true);
+                                    media_TanChuang.Rewind(true);
+                                    media_TanChuang.Play();
+                                    break;
+                                case "汽车街景":
+                                    Panel_level1_2_1.SetActive(false);
+                                    Panel_level1_2_2.SetActive(true);
+                                    panel_level1_2_3.SetActive(false);
+                                    video_car.SetActive(false);
+                                    Panel_LoopVideo.SetActive(false);
+                                    panel_TanChuangVideo.SetActive(true);
+                                    media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd+".mp4");
+                                    break;
+                                case "汽车街景返回":
+                                    Panel_level1_2_2.SetActive(false);
+                                    for (int i = 0; i < cars.Length; i++)
+                                    {
+                                        cars[i].SetActive(false);
+                                    }
+                                    panel_TanChuangVideo.SetActive(false);
+                                    Panel_LoopVideo.SetActive(true);
+                                    media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏屏保.mp4");
+                                    break;
+                                case "汽车内饰":
+                                    Panel_level1_2_1.SetActive(false);
+                                    Panel_level1_2_2.SetActive(false);
+                                    panel_level1_2_3.SetActive(true);
+                                    break;
+                                case "汽车内饰返回":
+                                    Panel_level1_2_2.SetActive(false);
+                                    for (int i = 0; i < cars.Length; i++)
+                                    {
+                                        cars[i].SetActive(false);
+                                    }
+                                    panel_TanChuangVideo.SetActive(false);
+                                    Panel_LoopVideo.SetActive(true);
+                                    media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
+                                    break;
+                                    break;
+                            }
+                        }
+                        break;
+                    case OrderTypeEnum.PlayMovie:
+                        media.Play();
+                        break;
+                    case OrderTypeEnum.PauseMovie:
+                        media.Pause();
+                        break;
+                    case OrderTypeEnum.LoadUrl:          //星座展示
+                        int index = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                        img_Introduce.sprite = sprites_Introduce[index];
+                        for (int i = 0; i < moons.Length; i++)
+                        {
+                            moons[i].SetActive(false);
+                        }
+                        moons[index].SetActive(true);
+                        break;
+                    case OrderTypeEnum.Reload:            //星座对比
+                        int index1 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                        for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
+                        {
+                            WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
+                        }
+                        if (index1 > 6 && index1 <= 13)
+                        {
+                            WeiXingGuangDian.transform.GetChild(1).gameObject.SetActive(true);
+                        }
+                        if (index1 > 13 && index1 <= 16)
+                        {
+                            for (int i = 0; i <= 2; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        if (index1 == 17)
+                        {
+                            for (int i = 0; i <= 3; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        if (index1 == 18)
+                        {
+                            for (int i = 0; i <= 4; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        if (index1 == 19)
+                        {
+                            for (int i = 0; i <= 5; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        if (index1 == 20)
+                        {
+                            for (int i = 0; i <= 6; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        if (index1 == 21)
+                        {
+                            for (int i = 0; i <= 7; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        if (index1 == 22)
+                        {
+                            for (int i = 0; i <= 8; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        if (index1 == 23)
+                        {
+                            for (int i = 0; i <= 9; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            }
+                        }
+                        break;
+                    case OrderTypeEnum.SetPlayMovie:
+                        int index2 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                        for (int i = 0; i < cars.Length; i++)
+                        {
+                            cars[i].SetActive(false);
+                        }
+                        obj = cars[index2].transform.GetChild(0).gameObject;
+                        cars[index2].SetActive(true);
+                        break;
+                    case OrderTypeEnum.SetPlayMovieFolder:
+                        string cmd1 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+                        media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder,cmd1+".mp4");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("ID:" + client.ID + "  " + ex.Message);
+            }
+        });
+    }
+
+    private void PlayVideo(string str)
+    {
+        Panel_level1_1_1.SetActive(true);
+        media.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, str);
+        media.Play();
+    }
+}
