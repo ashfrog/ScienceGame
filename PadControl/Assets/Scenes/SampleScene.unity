@@ -42970,7 +42970,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: BindControls.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: BindControls.Array.data[0]
@@ -42999,7 +42999,7 @@ PrefabInstance:
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: BindControls.Array.data[6]
       value: 
-      objectReference: {fileID: 1756434452}
+      objectReference: {fileID: 302701359}
     - target: {fileID: 8082719750724735658, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: m_Pivot.x
       value: 0
