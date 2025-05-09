@@ -32,8 +32,8 @@ public class MouseRoteReceiver : MonoBehaviour
     // 目标增量旋转值
     private Vector2 targetRotationDelta = Vector2.zero;
 
-    public GameObject Panel_level1_1_1, Panel_level1_1_2, Panel_level1_1_3, Panel_level1_2, Panel_level1_2_1, Panel_level1_2_2, panel_level1_2_3, Panel_卫星在空姿态,Panel_LoopVideo,video_car,panel_TanChuangVideo;
-    public MediaPlayer media,media_Loop,media_Car,media_TanChuang;
+    public GameObject Panel_level1_1_1, Panel_level1_1_2, Panel_level1_1_3, Panel_level1_2, Panel_level1_2_1, Panel_level1_2_2, panel_level1_2_3, Panel_卫星在空姿态, Panel_LoopVideo, video_car, panel_TanChuangVideo;
+    public MediaPlayer media, media_Loop, media_Car, media_TanChuang;
     public Sprite[] sprites_Introduce;   //介绍图组
     public Image img_Introduce;  //图片介绍组件
     public GameObject WeiXingGuangDian;  //卫星光点
@@ -244,7 +244,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     video_car.SetActive(false);
                                     Panel_LoopVideo.SetActive(false);
                                     panel_TanChuangVideo.SetActive(true);
-                                    media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd+".mp4");
+                                    media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd + ".mp4");
                                     break;
                                 case "汽车街景返回":
                                     Panel_level1_2_2.SetActive(false);
@@ -270,7 +270,6 @@ public class MouseRoteReceiver : MonoBehaviour
                                     panel_TanChuangVideo.SetActive(false);
                                     Panel_LoopVideo.SetActive(true);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
-                                    break;
                                     break;
                             }
                         }
@@ -368,7 +367,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         break;
                     case OrderTypeEnum.SetPlayMovieFolder:
                         string cmd1 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
-                        media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder,cmd1+".mp4");
+                        media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd1 + ".mp4");
                         break;
                 }
             }
