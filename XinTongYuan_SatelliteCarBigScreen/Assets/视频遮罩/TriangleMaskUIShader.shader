@@ -1,10 +1,7 @@
-﻿// Shader created with Shader Forge v1.38 
-// Shader Forge (c) Neat Corporation / Joachim Holmer - http://www.acegikmo.com/shaderforge/
-// Note: Manually altering this data may prevent you from opening it in Shader Forge
-/*SF_DATA;ver:1.38;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,cgin:,lico:1,lgpr:1,limd:1,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,hqlp:False,rprd:False,enco:False,rmgx:True,imps:True,rpth:0,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:1,culm:0,bsrc:3,bdst:7,dpts:2,wrdp:False,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:True,qofs:0,qpre:3,rntp:2,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,atwp:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False,fsmp:False;n:type:ShaderForge.SFN_Final,id:4013,x:32719,y:32712,varname:node_4013,prsc:2|emission-4322-RGB,alpha-4393-R;n:type:ShaderForge.SFN_Tex2d,id:4393,x:32494,y:32922,ptovrint:False,ptlb:node_1746_copy,ptin:_MainTex,varname:_MainTex,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;n:type:ShaderForge.SFN_Tex2d,id:4322,x:32454,y:32682,ptovrint:False,ptlb:node_1746_copy_copy,ptin:_MainTexA,varname:_MainTexA,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,ntxv:0,isnm:False;proporder:4393-4322;pass:END;sub:END;*/
-
-Shader "AVProVideo/Lit/custom1" {
-    Properties{
+﻿Shader "AVProVideo/Lit/custom1"
+{
+    Properties
+    {
         _MainTex("_MainTex", 2D) = "white" {}
         _FilterTex("_FilterTex", 2D) = "white" {}
         _MovTex1("_MovTex1", 2D) = "black" {}
@@ -19,91 +16,122 @@ Shader "AVProVideo/Lit/custom1" {
         _FilterTex5("_FilterTex5", 2D) = "black" {}
         [HideInInspector]_Cutoff("Alpha cutoff", Range(0,1)) = 0.5
     }
-        SubShader{
-            Tags {
-                "IgnoreProjector" = "True"
-                "Queue" = "Transparent"
-                "RenderType" = "Transparent"
-            }
-            Pass {
-                Name "FORWARD"
-                Tags {
-                    "LightMode" = "ForwardBase"
-                }
-                Blend SrcAlpha OneMinusSrcAlpha
-                ZWrite Off
 
-                CGPROGRAM
-                #pragma vertex vert
-                #pragma fragment frag
-                #define UNITY_PASS_FORWARDBASE
-                #include "UnityCG.cginc"
-                #pragma multi_compile_fwdbase
-                #pragma multi_compile_fog
-            //#pragma only_renderers d3d9 d3d11 glcore gles 
-            #pragma target 3.0
-            uniform sampler2D _MainTex; uniform float4 _MainTex_ST;
-            uniform sampler2D _FilterTex; uniform float4 _FilterTex_ST;
-            uniform sampler2D _MovTex1; uniform float4 _MovTex1_ST;
-            uniform sampler2D _FilterTex1; uniform float4 _FilterTex1_ST;
-            uniform sampler2D _MovTex2; uniform float4 _MovTex2_ST;
-            uniform sampler2D _FilterTex2; uniform float4 _FilterTex2_ST;
-            uniform sampler2D _MovTex3; uniform float4 _MovTex3_ST;
-            uniform sampler2D _FilterTex3; uniform float4 _FilterTex3_ST;
-            uniform sampler2D _MovTex4; uniform float4 _MovTex4_ST;
-            uniform sampler2D _FilterTex4; uniform float4 _FilterTex4_ST;
-            uniform sampler2D _MovTex5; uniform float4 _MovTex5_ST;
-            uniform sampler2D _FilterTex5; uniform float4 _FilterTex5_ST;
+    HLSLINCLUDE
+    #pragma target 4.5
+    #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
 
-            struct VertexInput {
-                float4 vertex : POSITION;
-                float2 texcoord0 : TEXCOORD0;
+    // Include HDRP common files
+    #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
+    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/FragInputs.hlsl"
+    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPass.cs.hlsl"
+    
+    TEXTURE2D(_MainTex);       SAMPLER(sampler_MainTex);
+    TEXTURE2D(_FilterTex);     SAMPLER(sampler_FilterTex);
+    TEXTURE2D(_MovTex1);       SAMPLER(sampler_MovTex1);
+    TEXTURE2D(_FilterTex1);    SAMPLER(sampler_FilterTex1);
+    TEXTURE2D(_MovTex2);       SAMPLER(sampler_MovTex2);
+    TEXTURE2D(_FilterTex2);    SAMPLER(sampler_FilterTex2);
+    TEXTURE2D(_MovTex3);       SAMPLER(sampler_MovTex3);
+    TEXTURE2D(_FilterTex3);    SAMPLER(sampler_FilterTex3);
+    TEXTURE2D(_MovTex4);       SAMPLER(sampler_MovTex4);
+    TEXTURE2D(_FilterTex4);    SAMPLER(sampler_FilterTex4);
+    TEXTURE2D(_MovTex5);       SAMPLER(sampler_MovTex5);
+    TEXTURE2D(_FilterTex5);    SAMPLER(sampler_FilterTex5);
+    
+    float4 _MainTex_ST;
+    float4 _FilterTex_ST;
+    float4 _MovTex1_ST;
+    float4 _FilterTex1_ST;
+    float4 _MovTex2_ST;
+    float4 _FilterTex2_ST;
+    float4 _MovTex3_ST;
+    float4 _FilterTex3_ST;
+    float4 _MovTex4_ST;
+    float4 _FilterTex4_ST;
+    float4 _MovTex5_ST;
+    float4 _FilterTex5_ST;
+    ENDHLSL
+
+    SubShader
+    {
+        Tags { "RenderPipeline" = "HDRenderPipeline" "RenderType" = "Transparent" "Queue" = "Transparent" }
+        
+        Pass
+        {
+            Name "ForwardUnlit"
+            Tags { "LightMode" = "ForwardOnly" }
+            
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+            Cull Back
+            
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment Frag
+            
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
             };
-            struct VertexOutput {
-                float4 pos : SV_POSITION;
-                float2 uv0 : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
+            
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
             };
-            VertexOutput vert(VertexInput v) {
-                VertexOutput o = (VertexOutput)0;
-                o.uv0 = v.texcoord0;
-                o.pos = UnityObjectToClipPos(v.vertex);
-                UNITY_TRANSFER_FOG(o,o.pos);
-                return o;
+            
+            Varyings Vert(Attributes input)
+            {
+                Varyings output;
+                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
+                output.uv = input.uv;
+                return output;
             }
-            float4 frag(VertexOutput i) : COLOR {
-                ////// Lighting:
-                ////// Emissive:
-
-                                float4 _MainTex_var = tex2D(_MainTex, TRANSFORM_TEX(i.uv0, _MainTex));
-                                float3 emissive = _MainTex_var.rgb;
-                                float3 finalColor = emissive;
-                                float4 _FilterTex_var = tex2D(_FilterTex, TRANSFORM_TEX(i.uv0, _FilterTex));
-                                float4 _MovTex1_var = tex2D(_MovTex1, TRANSFORM_TEX(i.uv0, _MovTex1));
-                                float4 _FilterTex1_var = tex2D(_FilterTex1, TRANSFORM_TEX(i.uv0, _FilterTex1));
-                                float4 _MovTex2_var = tex2D(_MovTex2, TRANSFORM_TEX(i.uv0, _MovTex2));
-                                float4 _FilterTex2_var = tex2D(_FilterTex2, TRANSFORM_TEX(i.uv0, _FilterTex2));
-                                float4 _MovTex3_var = tex2D(_MovTex3, TRANSFORM_TEX(i.uv0, _MovTex3));
-                                float4 _FilterTex3_var = tex2D(_FilterTex3, TRANSFORM_TEX(i.uv0, _FilterTex3));
-                                float4 _MovTex4_var = tex2D(_MovTex4, TRANSFORM_TEX(i.uv0, _MovTex4));
-                                float4 _FilterTex4_var = tex2D(_FilterTex4, TRANSFORM_TEX(i.uv0, _FilterTex4));
-                                float4 _MovTex5_var = tex2D(_MovTex5, TRANSFORM_TEX(i.uv0, _MovTex5));
-                                float4 _FilterTex5_var = tex2D(_FilterTex5, TRANSFORM_TEX(i.uv0, _FilterTex5));
-
-                                fixed4 finalRGBA = fixed4(finalColor, _FilterTex_var.r);
-                                finalRGBA = lerp(finalRGBA, _MovTex1_var, _FilterTex1_var.r);
-                                finalRGBA = lerp(finalRGBA, _MovTex2_var, _FilterTex2_var.r);
-                                finalRGBA = lerp(finalRGBA, _MovTex3_var, _FilterTex3_var.r);
-                                finalRGBA = lerp(finalRGBA, _MovTex4_var, _FilterTex4_var.r);
-                                finalRGBA = lerp(finalRGBA, _MovTex5_var, _FilterTex5_var.r);
-
-
-                                UNITY_APPLY_FOG(i.fogCoord, finalRGBA);
-                                return finalRGBA;
-                            }
-                            ENDCG
-                        }
+            
+            float4 Frag(Varyings input) : SV_Target
+            {
+                float2 mainTexUV = input.uv * _MainTex_ST.xy + _MainTex_ST.zw;
+                float2 filterTexUV = input.uv * _FilterTex_ST.xy + _FilterTex_ST.zw;
+                float2 movTex1UV = input.uv * _MovTex1_ST.xy + _MovTex1_ST.zw;
+                float2 filterTex1UV = input.uv * _FilterTex1_ST.xy + _FilterTex1_ST.zw;
+                float2 movTex2UV = input.uv * _MovTex2_ST.xy + _MovTex2_ST.zw;
+                float2 filterTex2UV = input.uv * _FilterTex2_ST.xy + _FilterTex2_ST.zw;
+                float2 movTex3UV = input.uv * _MovTex3_ST.xy + _MovTex3_ST.zw;
+                float2 filterTex3UV = input.uv * _FilterTex3_ST.xy + _FilterTex3_ST.zw;
+                float2 movTex4UV = input.uv * _MovTex4_ST.xy + _MovTex4_ST.zw;
+                float2 filterTex4UV = input.uv * _FilterTex4_ST.xy + _FilterTex4_ST.zw;
+                float2 movTex5UV = input.uv * _MovTex5_ST.xy + _MovTex5_ST.zw;
+                float2 filterTex5UV = input.uv * _FilterTex5_ST.xy + _FilterTex5_ST.zw;
+                
+                float4 mainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, mainTexUV);
+                float4 filterTex = SAMPLE_TEXTURE2D(_FilterTex, sampler_FilterTex, filterTexUV);
+                float4 movTex1 = SAMPLE_TEXTURE2D(_MovTex1, sampler_MovTex1, movTex1UV);
+                float4 filterTex1 = SAMPLE_TEXTURE2D(_FilterTex1, sampler_FilterTex1, filterTex1UV);
+                float4 movTex2 = SAMPLE_TEXTURE2D(_MovTex2, sampler_MovTex2, movTex2UV);
+                float4 filterTex2 = SAMPLE_TEXTURE2D(_FilterTex2, sampler_FilterTex2, filterTex2UV);
+                float4 movTex3 = SAMPLE_TEXTURE2D(_MovTex3, sampler_MovTex3, movTex3UV);
+                float4 filterTex3 = SAMPLE_TEXTURE2D(_FilterTex3, sampler_FilterTex3, filterTex3UV);
+                float4 movTex4 = SAMPLE_TEXTURE2D(_MovTex4, sampler_MovTex4, movTex4UV);
+                float4 filterTex4 = SAMPLE_TEXTURE2D(_FilterTex4, sampler_FilterTex4, filterTex4UV);
+                float4 movTex5 = SAMPLE_TEXTURE2D(_MovTex5, sampler_MovTex5, movTex5UV);
+                float4 filterTex5 = SAMPLE_TEXTURE2D(_FilterTex5, sampler_FilterTex5, filterTex5UV);
+                
+                // Start with main texture and base alpha
+                float4 finalColor = float4(mainTex.rgb, filterTex.r);
+                
+                // Apply each layer based on its filter texture
+                finalColor = lerp(finalColor, movTex1, filterTex1.r);
+                finalColor = lerp(finalColor, movTex2, filterTex2.r);
+                finalColor = lerp(finalColor, movTex3, filterTex3.r);
+                finalColor = lerp(finalColor, movTex4, filterTex4.r);
+                finalColor = lerp(finalColor, movTex5, filterTex5.r);
+                
+                return finalColor;
+            }
+            ENDHLSL
         }
-            FallBack "Diffuse"
-                                //CustomEditor "ShaderForgeMaterialInspector"
+    }
 }
