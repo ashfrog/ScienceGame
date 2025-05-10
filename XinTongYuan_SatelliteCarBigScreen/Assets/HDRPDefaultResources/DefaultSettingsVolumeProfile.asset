@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf384b154398e341b6b29969c078198, type: 3}
   m_Name: MotionBlur
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 1
@@ -44,7 +44,7 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   m_SampleCount:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 8
 --- !u!114 &-1016694868962581565
 MonoBehaviour:
@@ -93,8 +93,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.15
   m_SampleCount:
-    m_OverrideState: 1
-    m_Value: 12
+    m_OverrideState: 0
+    m_Value: 10
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,20 +134,20 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0
   skyIntensityMode:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   exposure:
     m_OverrideState: 1
-    m_Value: 11
+    m_Value: 5
   multiplier:
     m_OverrideState: 0
     m_Value: 1
   upperHemisphereLuxValue:
     m_OverrideState: 1
-    m_Value: 0.4660715
+    m_Value: 2.6865118
   upperHemisphereLuxColor:
     m_OverrideState: 1
-    m_Value: {x: 0.18750614, y: 0.29181972, z: 0.5}
+    m_Value: {x: 0.5, y: 0.49992573, z: 0.46117908}
   desiredLuxValue:
     m_OverrideState: 0
     m_Value: 20000
@@ -162,7 +162,7 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 8253d41e6e8b11a4cbe77a4f8f82934d, type: 3}
+    m_Value: {fileID: 8900000, guid: b80cabd374bef4841b61e9351adf2522, type: 3}
   distortionMode:
     m_OverrideState: 0
     m_Value: 0
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f077503be6ae942a1e1245dbd53ea9, type: 3}
   m_Name: Bloom
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   quality:
     m_OverrideState: 1
     m_Value: 1
@@ -276,13 +276,13 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 1
   m_Resolution:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 2
   m_HighQualityPrefiltering:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0
   m_HighQualityFiltering:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
 --- !u!114 &1932259527246508038
 MonoBehaviour:
@@ -339,7 +339,7 @@ MonoBehaviour:
     m_Value: 1
   fixedExposure:
     m_OverrideState: 1
-    m_Value: 6.5
+    m_Value: 3.94
   compensation:
     m_OverrideState: 1
     m_Value: 1
@@ -534,13 +534,13 @@ MonoBehaviour:
     m_Value: 2
   m_RayLength:
     m_OverrideState: 0
-    m_Value: 0.5
+    m_Value: 3
   m_SampleCount:
     m_OverrideState: 0
-    m_Value: 4
+    m_Value: 2
   m_Denoise:
     m_OverrideState: 0
-    m_Value: 0
+    m_Value: 1
   m_DenoiserRadius:
     m_OverrideState: 0
     m_Value: 0.5
@@ -559,13 +559,13 @@ MonoBehaviour:
   active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 3
   toeStrength:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 0.32
   toeLength:
-    m_OverrideState: 0
-    m_Value: 0.5
+    m_OverrideState: 1
+    m_Value: 1
   shoulderStrength:
     m_OverrideState: 0
     m_Value: 0
@@ -573,8 +573,8 @@ MonoBehaviour:
     m_OverrideState: 0
     m_Value: 0.5
   shoulderAngle:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   gamma:
     m_OverrideState: 0
     m_Value: 1
