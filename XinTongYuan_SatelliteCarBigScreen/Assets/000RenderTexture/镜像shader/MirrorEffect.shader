@@ -3,6 +3,8 @@ Shader "Custom/MirrorEffect"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _FlipX ("Flip Horizontal", Float) = 0
+        _FlipY ("Flip Vertical", Float) = 0
     }
     SubShader
     {
@@ -30,17 +32,33 @@ Shader "Custom/MirrorEffect"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float _FlipX;
+            float _FlipY;
 
-            v2f vert (appdata_t v)
+            v2f vert(appdata_t v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                
+                // Base UV
                 o.uv = v.uv;
-                o.uv.x = 1.0 - o.uv.x; // 水平镜像
+
+                // Horizontal flip
+                if (_FlipX > 0.5)
+                {
+                    o.uv.x = 1.0 - o.uv.x;
+                }
+
+                // Vertical flip
+                if (_FlipY > 0.5)
+                {
+                    o.uv.y = 1.0 - o.uv.y;
+                }
+
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
                 return tex2D(_MainTex, i.uv);
             }
