@@ -2,9 +2,9 @@ Shader "Custom/MirrorEffect"
 {
     Properties
     {
+        [Toggle] _FlipX ("Flip Horizontal", Float) = 0
+        [Toggle] _FlipY ("Flip Vertical", Float) = 0
         _MainTex ("Texture", 2D) = "white" {}
-        _FlipX ("Flip Horizontal", Float) = 0
-        _FlipY ("Flip Vertical", Float) = 0
     }
     SubShader
     {

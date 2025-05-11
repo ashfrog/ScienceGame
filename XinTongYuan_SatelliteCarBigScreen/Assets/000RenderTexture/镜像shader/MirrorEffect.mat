@@ -164,8 +164,8 @@ Material:
     - _EnergyConservingSpecularColor: 1
     - _FlipHorizontal: 0
     - _FlipVertical: 0
-    - _FlipX: 1
-    - _FlipY: 1
+    - _FlipX: 0
+    - _FlipY: 0
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5
     - _HeightMapParametrization: 0

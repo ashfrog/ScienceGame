@@ -2223,7 +2223,6 @@ GameObject:
   m_Component:
   - component: {fileID: 517360962}
   - component: {fileID: 517360961}
-  - component: {fileID: 517360960}
   - component: {fileID: 517360959}
   m_Layer: 0
   m_Name: "Camera1\u955C\u50CF"
@@ -2357,14 +2356,6 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
---- !u!81 &517360960
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 517360958}
-  m_Enabled: 1
 --- !u!20 &517360961
 Camera:
   m_ObjectHideFlags: 0
