@@ -24,7 +24,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: HDRPDecal
-  m_Shader: {fileID: 4800000, guid: 1d64af84bdc970c4fae0c1e06dd95b73, type: 3}
+  m_Shader: {fileID: 4800000, guid: c42a6caae4085af42bf2282275b746ed, type: 3}
   m_ValidKeywords:
   - _MATERIAL_AFFECTS_ALBEDO
   - _MATERIAL_AFFECTS_MASKMAP
@@ -42,7 +42,6 @@ Material:
   - TransparentBackface
   - RayTracingPrepass
   - MOTIONVECTORS
-  - DecalMeshForwardEmissive
   - DecalProjectorForwardEmissive
   m_SavedProperties:
     serializedVersion: 3
@@ -212,6 +211,7 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
+    - _FlipVertical: 0
     - _FlipY: 0
     - _HeightAmplitude: 0.02
     - _HeightCenter: 0.5

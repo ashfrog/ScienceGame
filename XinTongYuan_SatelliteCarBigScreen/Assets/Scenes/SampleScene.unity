@@ -3556,8 +3556,7 @@ Transform:
   m_LocalPosition: {x: -100, y: 6.51, z: -7.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1718198979}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 30.5, y: 0, z: 0}
@@ -4622,7 +4621,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1044573598
 GameObject:
@@ -6591,7 +6590,7 @@ GameObject:
   - component: {fileID: 1718198979}
   - component: {fileID: 1718198978}
   m_Layer: 0
-  m_Name: MediaPlayer (1)
+  m_Name: "MediaPlayer\u8857\u666F"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6610,7 +6609,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VideoLocation: 2
-  m_VideoPath: "\u53D1\u5C04\u5C55\u793A.mp4"
+  m_VideoPath: "4\u4EE3\u4E3B.mp4"
   m_AutoOpen: 1
   m_AutoStart: 1
   m_Loop: 1
@@ -6735,13 +6734,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718198977}
-  m_LocalRotation: {x: -0.26303118, y: -0, z: -0, w: 0.9647873}
-  m_LocalPosition: {x: 100, y: -2.0462875, z: 9.352712}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 768581981}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1732663180
 GameObject:
