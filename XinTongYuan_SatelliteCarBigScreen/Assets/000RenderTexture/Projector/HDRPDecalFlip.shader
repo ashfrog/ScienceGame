@@ -1,4 +1,4 @@
-Shader "HDRP/DecalFlip"
+Shader "HDRP/HDRPDecalFlip"
 {
     Properties
     {
@@ -46,9 +46,6 @@ Shader "HDRP/DecalFlip"
         [ToggleUI]_AffectMetal("Boolean", Float) = 1
         [ToggleUI]_AffectSmoothness("Boolean", Float) = 1
         [ToggleUI]_AffectEmission("Boolean", Float) = 0
-        
-        // 上下翻转选项
-        [ToggleUI]_FlipVertical("垂直翻转", Float) = 1
 
         // Stencil state
         [HideInInspector] _DecalStencilRef("_DecalStencilRef", Int) = 16
@@ -82,7 +79,6 @@ Shader "HDRP/DecalFlip"
     #pragma shader_feature_local_fragment _MATERIAL_AFFECTS_ALBEDO
     #pragma shader_feature_local_fragment _MATERIAL_AFFECTS_NORMAL
     #pragma shader_feature_local_fragment _MATERIAL_AFFECTS_MASKMAP
-    #pragma shader_feature_local_fragment _FLIP_VERTICAL
 
     #pragma multi_compile_instancing
 
@@ -145,45 +141,13 @@ Shader "HDRP/DecalFlip"
             #define SHADERPASS SHADERPASS_DBUFFER_PROJECTOR
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalProperties.hlsl"
-            
-            // 添加垂直翻转属性
-            float _FlipVertical;
-            
-            // 修改Decal.hlsl中的采样函数以支持垂直翻转
-            #define CUSTOM_DECAL_INCLUDE
-
-            // 这里是原始的Decal.hlsl内容，但我们将添加翻转逻辑
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/Decal.hlsl"
-            
-            // 重写GetDecalSurfaceData函数以支持垂直翻转
-            DecalSurfaceData GetDecalSurfaceData(PositionInputs posInput, float3 vtxNormal, float3 positionRWS, float4x4 normalToWorld)
-            {
-                DecalSurfaceData decalSurfaceData;
-                ZERO_INITIALIZE(DecalSurfaceData, decalSurfaceData);
-
-                float2 positionSS = posInput.positionSS;
-                float2 texCoords = positionSS * _ScreenSize.zw;
-                
-                // 在这里应用垂直翻转
-                #if defined(_FLIP_VERTICAL)
-                    texCoords.y = 1.0 - texCoords.y;
-                #endif
-                
-                // 使用修改后的纹理坐标继续原来的逻辑
-                // ...其余的GetDecalSurfaceData函数内容...
-                
-                return decalSurfaceData;
-            }
-            
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/ShaderPass/DecalSharePass.hlsl"
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalData.hlsl"
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDecal.hlsl"
 
             ENDHLSL
         }
-
-        // 以下的其他Pass也需要添加类似的垂直翻转逻辑
-        // 为简洁起见，我省略了其他Pass的修改，但实际应用时需要对每个Pass做相同的修改
 
         Pass // 1
         {
@@ -211,16 +175,7 @@ Shader "HDRP/DecalFlip"
             #define SHADERPASS SHADERPASS_FORWARD_EMISSIVE_PROJECTOR
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalProperties.hlsl"
-            
-            // 添加垂直翻转属性
-            float _FlipVertical;
-            
-            // 自定义Decal.hlsl包含
-            #define CUSTOM_DECAL_INCLUDE
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/Decal.hlsl"
-            
-            // 这里同样需要实现GetDecalSurfaceData的垂直翻转逻辑
-            
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/ShaderPass/DecalSharePass.hlsl"
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalData.hlsl"
             #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDecal.hlsl"
@@ -228,7 +183,121 @@ Shader "HDRP/DecalFlip"
             ENDHLSL
         }
 
-        // 其余Pass的修改类似，省略...
+        Pass // 2
+        {
+            Name "DBufferMesh"
+            Tags{"LightMode" = "DBufferMesh"}
+
+            Stencil
+            {
+                WriteMask [_DecalStencilWriteMask]
+                Ref [_DecalStencilRef]
+                Comp Always
+                Pass Replace
+            }
+
+            ZWrite Off
+            ZTest LEqual
+
+            // using alpha compositing https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch23.html
+            Blend 0 SrcAlpha OneMinusSrcAlpha, Zero OneMinusSrcAlpha
+            Blend 1 SrcAlpha OneMinusSrcAlpha, Zero OneMinusSrcAlpha
+            Blend 2 SrcAlpha OneMinusSrcAlpha, Zero OneMinusSrcAlpha
+            Blend 3 Zero OneMinusSrcColor
+
+            ColorMask [_DecalColorMask0]
+            ColorMask [_DecalColorMask1] 1
+            ColorMask [_DecalColorMask2] 2
+            ColorMask [_DecalColorMask3] 3
+
+            HLSLPROGRAM
+
+            #pragma multi_compile_fragment DECALS_3RT DECALS_4RT
+            #pragma multi_compile_fragment _ DECAL_SURFACE_GRADIENT
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+            // enable dithering LOD crossfade
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
+
+            #define SHADERPASS SHADERPASS_DBUFFER_MESH
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalProperties.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/Decal.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/ShaderPass/DecalSharePass.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalData.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDecal.hlsl"
+
+            ENDHLSL
+        }
+
+        Pass // 3
+        {
+            Name "DecalMeshForwardEmissive"
+            Tags{ "LightMode" = "DecalMeshForwardEmissive" }
+
+            Stencil
+            {
+                WriteMask[_DecalStencilWriteMask]
+                Ref[_DecalStencilRef]
+                Comp Always
+                Pass Replace
+            }
+            // back faces with zfail, for cases when camera is inside the decal volume
+            ZWrite Off
+            ZTest LEqual
+
+            // additive
+            Blend 0 SrcAlpha One
+
+            HLSLPROGRAM
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+            // enable dithering LOD crossfade
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
+
+            #define _MATERIAL_AFFECTS_EMISSION
+            #define SHADERPASS SHADERPASS_FORWARD_EMISSIVE_MESH
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalProperties.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/Decal.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/ShaderPass/DecalSharePass.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalData.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDecal.hlsl"
+
+            ENDHLSL
+        }
+
+        Pass // 4
+        {
+            Name "ScenePickingPass"
+            Tags { "LightMode" = "Picking" }
+
+            Cull Back
+
+            HLSLPROGRAM
+
+            #pragma only_renderers d3d11 playstation xboxone xboxseries vulkan metal switch
+
+            //enable GPU instancing support
+            #pragma instancing_options renderinglayer
+            #pragma multi_compile _ DOTS_INSTANCING_ON
+            // enable dithering LOD crossfade
+            #pragma multi_compile _ LOD_FADE_CROSSFADE
+
+            // Note: Require _SelectionID variable
+
+            // We reuse depth prepass for the scene selection, allow to handle alpha correctly as well as tessellation and vertex animation
+            #define SHADERPASS SHADERPASS_DEPTH_ONLY
+            #define SCENEPICKINGPASS
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/PickingSpaceTransforms.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/DecalProperties.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/Decal.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/Decal/ShaderPass/DecalSharePass.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/Runtime/RenderPipeline/ShaderPass/ShaderPassDecal.hlsl"
+
+            #pragma editor_sync_compilation
+
+            ENDHLSL
+        }
 
     }
 
