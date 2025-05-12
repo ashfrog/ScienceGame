@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
-    public GameObject panel_level1, panel_level1_1, panel_level1_1_1, panel_level1_1_2, panel_level1_1_3, panel_level1_1_3_1, panel_level1_2, panel_CarYear,panel_CarModel, panel_Trim;
+    public GameObject panel_level1, panel_level1_1, panel_level1_1_1, panel_level1_1_2, panel_level1_1_3, panel_level1_1_3_1, panel_level1_2, panel_CarYear, panel_CarModel, panel_Trim;
     public static Manager _ins;
     public MediaPlayer media;
     float volumeStep = 0.1f;
     public Slider slider;
-    public Image progress,img_year;
+    public Image progress, img_year;
     public SatelliteDataReader _satelliteDataReader;
     public StickyHeaderTable _stickyHeaderTable;
     public Button[] buttons;
@@ -44,7 +44,7 @@ public class Manager : MonoBehaviour
         trims[index].SetActive(true);
         panel_CarYear.SetActive(true);
 
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, "汽车街景");
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, $"汽车街景|{index + 1}");
     }
     public void OnCarModel(int index) //汽车模型
     {

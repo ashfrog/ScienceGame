@@ -143,8 +143,18 @@ public class MouseRoteReceiver : MonoBehaviour
                         break;
                     case OrderTypeEnum.SetMovSeek:
                         {
-                            string cmd = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
-                            print(cmd);
+                            string cmdstr = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+
+                            string[] cmdstrs = cmdstr.Split('|');
+
+                            string cmd = cmdstrs[0];
+
+                            string cmdparam = "";
+                            if (cmdstrs.Length > 1)
+                            {
+                                cmdparam = cmdstrs[1];
+                            }
+                            print(cmd + " " + cmdparam);
                             switch (cmd)
                             {
                                 case "卫星":
@@ -244,7 +254,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     video_car.SetActive(false);
                                     Panel_LoopVideo.SetActive(false);
                                     panel_TanChuangVideo.SetActive(true);
-                                    media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd + ".mp4");
+                                    media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd + cmdparam + ".mp4");
                                     break;
                                 case "汽车街景返回":
                                     Panel_level1_2_2.SetActive(false);
