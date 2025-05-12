@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 1.8443325, g: 1.8438975, b: 1.7023449, a: 1}
+  m_IndirectSpecularColor: {r: 14.75466, g: 14.75118, b: 13.618759, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6326,7 +6326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VideoLocation: 2
-  m_VideoPath: "\u5730\u5C4F\u5FAA\u73AF\u5730\u7403.mp4"
+  m_VideoPath: "\u6C7D\u8F66\u767E\u5E74\u8FDB\u5316\u8BBA\u5730\u5C4F.mp4"
   m_AutoOpen: 1
   m_AutoStart: 1
   m_Loop: 1
