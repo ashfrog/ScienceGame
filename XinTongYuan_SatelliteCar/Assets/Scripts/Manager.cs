@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
-    public GameObject panel_level1, panel_level1_1, panel_level1_1_1, panel_level1_1_2, panel_level1_1_3, panel_level1_1_3_1, panel_level1_2, panel_CarYear, panel_CarModel, panel_Trim;
+    //public GameObject panel_level1, panel_level1_1, panel_level1_1_1, panel_level1_1_2, panel_level1_1_3, panel_level1_1_3_1, panel_level1_2, panel_CarYear, panel_CarModel, panel_Trim;
+    public GameObject panel_CarYear, panel_CarModel, panel_Trim;
     public static Manager _ins;
     public MediaPlayer media;
     float volumeStep = 0.1f;
@@ -20,6 +21,11 @@ public class Manager : MonoBehaviour
     public Image img_car;
     public Sprite[] cars;
     public GameObject[] trims; //内饰
+
+    [SerializeField]
+    private TabSwitcher tabSwitcher;
+
+
     private void Awake()
     {
         _ins = this;
@@ -27,6 +33,9 @@ public class Manager : MonoBehaviour
     void Start()
     {
         slider.onValueChanged.AddListener(OnSliderValueChanged);
+
+        progress.fillAmount = 0.1f;
+        buttons[0].gameObject.SetActive(true);
     }
 
     // Update is called once per frame
