@@ -198,6 +198,19 @@ public class MouseRoteReceiver : MonoBehaviour
                                     Panel_LoopVideo.SetActive(false);
                                     break;
                                 case "星座对比返回":
+                                    Panel_level1_1_3.SetActive(true);
+                                    Panel_卫星在空姿态.SetActive(false);
+                                    WeiXingGuangDian.SetActive(true);
+                                    break;
+                                case "在空姿态":
+                                    Panel_level1_1_3.SetActive(false);
+                                    Panel_卫星在空姿态.SetActive(true);
+                                    WeiXingGuangDian.SetActive(false);
+                                    obj = theEarth;
+                                    break;
+                                case "在空姿态返回":
+
+
                                     Panel_level1_1_3.SetActive(false);
                                     WeiXingGuangDian.SetActive(false);
                                     obj.transform.parent.gameObject.SetActive(false);
@@ -207,17 +220,6 @@ public class MouseRoteReceiver : MonoBehaviour
                                     }
                                     Panel_LoopVideo.SetActive(true);
                                     media_Loop.Play();
-                                    break;
-                                case "在空姿态":
-                                    Panel_level1_1_3.SetActive(false);
-                                    Panel_卫星在空姿态.SetActive(true);
-                                    WeiXingGuangDian.SetActive(false);
-                                    obj = theEarth;
-                                    break;
-                                case "在空姿态返回":
-                                    Panel_level1_1_3.SetActive(true);
-                                    Panel_卫星在空姿态.SetActive(false);
-                                    WeiXingGuangDian.SetActive(true);
                                     break;
                                 case "汽车":
                                     video_car.SetActive(true);
