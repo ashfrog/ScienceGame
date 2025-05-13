@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 4
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -3512,6 +3512,7 @@ GameObject:
   - component: {fileID: 768581981}
   - component: {fileID: 768581980}
   - component: {fileID: 768581982}
+  - component: {fileID: 768581983}
   m_Layer: 0
   m_Name: Projector(Decal )
   m_TagString: Untagged
@@ -3552,13 +3553,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768581979}
-  m_LocalRotation: {x: 0, y: -0.030189572, z: 0.99954426, w: 0}
-  m_LocalPosition: {x: -100, y: 8.82, z: -8.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.99954426, y: -0, z: -0, w: -0.030189572}
+  m_LocalPosition: {x: 0, y: 0.88199997, z: 0.83000004}
+  m_LocalScale: {x: 0.100000024, y: 0.1, z: 0.09999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_Father: {fileID: 1828110270}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 3.46, y: 0, z: 180}
 --- !u!114 &768581982
 MonoBehaviour:
@@ -3567,7 +3568,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768581979}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2feedce2e2e63647b8f875ec0894a15, type: 3}
   m_Name: 
@@ -3578,6 +3579,19 @@ MonoBehaviour:
   _texturePropertyName: _BaseColorMap
   _media: {fileID: 1718198978}
   _defaultTexture: {fileID: 0}
+--- !u!114 &768581983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768581979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b0d1cf992a6514788e669096350dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applyToMaterial: {fileID: 768581982}
 --- !u!1 &784595761
 GameObject:
   m_ObjectHideFlags: 0
@@ -4673,7 +4687,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 2
+  far clip plane: 10
   field of view: 60
   orthographic: 1
   orthographic size: 8.063197
@@ -5216,6 +5230,7 @@ MonoBehaviour:
   media_Loop: {fileID: 503355161}
   media_Car: {fileID: 550234137}
   media_TanChuang: {fileID: 1710940017}
+  media_Quanxi: {fileID: 1718198978}
   sprites_Introduce:
   - {fileID: 21300000, guid: ae5201cfc676a414cb2925c43430fcea, type: 3}
   - {fileID: 21300000, guid: d63baf64f22d1504c8e4431cd2c89ba1, type: 3}
@@ -5243,6 +5258,7 @@ MonoBehaviour:
   - {fileID: 4692048004069027079}
   - {fileID: 3530007874463116795}
   - {fileID: 2276177538266586114}
+  CamTabSwitcher: {fileID: 1092004891}
 --- !u!114 &1092004890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5599,7 +5615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1338356485
 Transform:
   m_ObjectHideFlags: 0
@@ -6887,8 +6903,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VideoLocation: 2
-  m_VideoPath: "\u6C7D\u8F66\u8857\u666F0.mp4"
-  m_AutoOpen: 1
+  m_VideoPath: 
+  m_AutoOpen: 0
   m_AutoStart: 1
   m_Loop: 0
   m_Volume: 1
@@ -7172,10 +7188,10 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 2
+  far clip plane: 10
   field of view: 60
   orthographic: 1
-  orthographic size: 14.8
+  orthographic size: 14.75
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -7199,7 +7215,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1711750487}
   m_LocalRotation: {x: 0.64278764, y: -0.000000014901163, z: -0, w: 0.7660445}
-  m_LocalPosition: {x: -99.95, y: 2.880001, z: -3.1800032}
+  m_LocalPosition: {x: -99.95, y: 2.880001, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7395,13 +7411,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718198977}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalPosition: {x: -10, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_Father: {fileID: 1828110270}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1732663180
 GameObject:
