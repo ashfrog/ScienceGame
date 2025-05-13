@@ -26,7 +26,6 @@ Material:
   m_Name: HDRPDecalFlip
   m_Shader: {fileID: 4800000, guid: c42a6caae4085af42bf2282275b746ed, type: 3}
   m_ValidKeywords:
-  - _COLORMAP
   - _MATERIAL_AFFECTS_ALBEDO
   - _MATERIAL_AFFECTS_MASKMAP
   m_InvalidKeywords:
