@@ -40,35 +40,36 @@ public class MouseRoteReceiver : MonoBehaviour
     public GameObject[] cars;
     public GameObject theEarth; //地球模型
     public GameObject[] moons; //卫星轨道组
-    [SerializeField]
-    private TabSwitcher camTabSwitcher;
-
-    [SerializeField]
-    private TabSwitcher earthTabSwitcher;
-
-    private int curCarIndex;
-
     public enum CamGroup
     {
         normal = 0,
         holo = 1
     }
+    [SerializeField]
+    private TabSwitcher camTabSwitcher;
 
     public enum EarthGroup
     {
-        空物体 = 0,
-        地球和卫星点 = 1,
-        卫星展示 = 2,
-        北斗卫星A = 3,
-        北斗卫星B = 4,
-        北斗卫星C = 5,
-        GPS卫星A = 6,
-        GPS卫星B = 7,
-        伽利略卫星 = 8,
-        千帆 = 9,
-        星链 = 10,
-        一网 = 11
+        地球和卫星点,
+        卫星展示,
+        北斗卫星A,
+        北斗卫星B,
+        北斗卫星C,
+        GPS卫星A,
+        GPS卫星B,
+        伽利略卫星,
+        千帆,
+        星链,
+        一网
     }
+    [SerializeField]
+    private TabSwitcher earthTabSwitcher;
+
+    private int curCarIndex;
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -207,8 +208,9 @@ public class MouseRoteReceiver : MonoBehaviour
                                         moons[i].SetActive(false);
                                     }
                                     Panel_level1_1_2.SetActive(true);
-                                    obj = theEarth;
-                                    obj.transform.parent.gameObject.SetActive(true);
+                                    //obj = theEarth;
+                                    //obj.transform.parent.gameObject.SetActive(true);
+                                    earthTabSwitcher.SwitchTab((int)EarthGroup.地球和卫星点);
                                     Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "循环地屏2.mp4");
                                     break;
@@ -349,6 +351,11 @@ public class MouseRoteReceiver : MonoBehaviour
                             moons[i].SetActive(false);
                         }
                         moons[index].SetActive(true);
+
+                        Transform root = moons[0].transform.parent.parent;
+                        Vector3 pos = root.localPosition;
+                        pos.z = index == 4 ? 3f : 0f;
+                        root.localPosition = pos;
                         break;
                     case OrderTypeEnum.Reload:            //星座对比
                         int index1 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
