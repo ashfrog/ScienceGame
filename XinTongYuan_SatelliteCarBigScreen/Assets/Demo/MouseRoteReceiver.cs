@@ -8,6 +8,8 @@ using TouchSocket.Core.ByteManager;
 using TouchSocket.Sockets;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
+using DG.Tweening;
 
 public class MouseRoteReceiver : MonoBehaviour
 {
@@ -50,8 +52,6 @@ public class MouseRoteReceiver : MonoBehaviour
 
     public enum EarthGroup
     {
-        地球和卫星点,
-        卫星展示,
         北斗卫星A,
         北斗卫星B,
         北斗卫星C,
@@ -75,6 +75,8 @@ public class MouseRoteReceiver : MonoBehaviour
     {
         StartCoroutine(WaitForTcpServiceInitialization());
         media_Car.Events.AddListener(OnVideoEvent);
+
+        Settings.ini.Game.ZSpeed = Settings.ini.Game.ZSpeed;
     }
 
     public void OnVideoEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
@@ -208,9 +210,8 @@ public class MouseRoteReceiver : MonoBehaviour
                                         moons[i].SetActive(false);
                                     }
                                     Panel_level1_1_2.SetActive(true);
-                                    //obj = theEarth;
-                                    //obj.transform.parent.gameObject.SetActive(true);
-                                    earthTabSwitcher.SwitchTab((int)EarthGroup.地球和卫星点);
+                                    obj = theEarth;
+                                    obj.transform.parent.gameObject.SetActive(true);
                                     Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "循环地屏2.mp4");
                                     break;
@@ -232,6 +233,9 @@ public class MouseRoteReceiver : MonoBehaviour
                                     obj.transform.parent.gameObject.SetActive(true);
                                     Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
+                                    ResetZ(4);
+
+
 
                                     break;
                                 case "星座对比返回":
@@ -343,7 +347,7 @@ public class MouseRoteReceiver : MonoBehaviour
                     case OrderTypeEnum.PauseMovie:
                         media.Pause();
                         break;
-                    case OrderTypeEnum.LoadUrl:          //星座展示
+                    case OrderTypeEnum.LoadUrl:          //星座展示 选星座
                         int index = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                         img_Introduce.sprite = sprites_Introduce[index];
                         for (int i = 0; i < moons.Length; i++)
@@ -351,11 +355,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             moons[i].SetActive(false);
                         }
                         moons[index].SetActive(true);
-
-                        Transform root = moons[0].transform.parent.parent;
-                        Vector3 pos = root.localPosition;
-                        pos.z = index == 4 ? 3f : 0f;
-                        root.localPosition = pos;
+                        ResetZ(index);
                         break;
                     case OrderTypeEnum.Reload:            //星座对比
                         int index1 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
@@ -423,6 +423,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                 WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
                             }
                         }
+
                         break;
                     case OrderTypeEnum.WeiXingDot:
                         {
@@ -471,8 +472,46 @@ public class MouseRoteReceiver : MonoBehaviour
             }
         });
     }
+    /// <summary>
+    /// 卫星轨道移动位置 展示全
+    /// </summary>
+    /// <param name="index"></param>
+    private void ResetZ(int index)
+    {
+        Transform root = moons[0].transform.parent.parent;
+        float z = 0f;
+        switch (index)
+        {
+            case 0:
+                z = 0f;
+                break;
+            case 1:
+                z = -1f;
+                break;
+            case 2:
+                z = 0f;
+                break;
+            case 3:
+                z = -1f;
+                break;
+            case 4:
+                z = 3f;
+                break;
+            case 5:
+                z = 1f;
+                break;
+            case 6:
+                z = 0f;
+                break;
+            case 7:
+                z = -1f;
+                break;
+            default:
+                break;
+        }
 
-
+        root.DOLocalMoveZ(z, Settings.ini.Game.ZSpeed).SetEase(Ease.InOutSine); // 设置平滑的缓动效果
+    }
 
     private void PlayVideo(string str)
     {
