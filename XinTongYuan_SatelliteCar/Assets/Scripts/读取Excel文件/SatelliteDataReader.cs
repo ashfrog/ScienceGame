@@ -13,6 +13,7 @@ public class SatelliteDataReader : MonoBehaviour
     void Start()
     {
         //initialize(0);
+        satelliteDataRowPrefab.transform.parent = null;
     }
 
     public void initialize(int index) //index代表读取第几个表
@@ -32,10 +33,10 @@ public class SatelliteDataReader : MonoBehaviour
             {
                 if (i == 0)
                 {
-                    
+
                 }
                 DataRow row = table.Rows[i];
-                CreateDataRow(row,i);
+                CreateDataRow(row, i);
             }
         }
     }
@@ -60,9 +61,9 @@ public class SatelliteDataReader : MonoBehaviour
         }
     }
 
-    void CreateDataRow(DataRow row,int i)
+    void CreateDataRow(DataRow row, int i)
     {
-        
+
         GameObject newRow = Instantiate(satelliteDataRowPrefab, contentParent);
         newRow.transform.Find("ChineseNameText").GetComponent<Text>().text = row[0].ToString();
         newRow.transform.Find("EnglishNameText").GetComponent<Text>().text = row[1].ToString();
@@ -75,10 +76,15 @@ public class SatelliteDataReader : MonoBehaviour
         newRow.transform.Find("DesignLifeText").GetComponent<Text>().text = row[8].ToString();
         newRow.transform.Find("MassText").GetComponent<Text>().text = row[9].ToString();
         newRow.transform.Find("COSPARText").GetComponent<Text>().text = row[10].ToString();
+
+        newRow.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Debug.Log("click " + i);
+        });
         if (i % 2 != 0)
         {
             var img = newRow.GetComponent<Image>();
-            Destroy(img);
+            //Destroy(img);
         }
         if (i == 0)
         {
@@ -87,7 +93,7 @@ public class SatelliteDataReader : MonoBehaviour
             {
                 newRow.transform.GetChild(j).GetComponent<Text>().fontStyle = FontStyle.Bold;
             }
-            
+
             Manager._ins._stickyHeaderTable.headerRow = newRow;
             newRow.transform.SetParent(Manager._ins._stickyHeaderTable.scrollRect.transform.GetChild(0).transform);
         }
