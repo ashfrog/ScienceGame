@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 4
+  m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -3739,7 +3739,7 @@ GameObject:
   - component: {fileID: 836776935}
   - component: {fileID: 836776934}
   m_Layer: 5
-  m_Name: Canvas2
+  m_Name: "Canvas2_2\u5C4F\u89C6\u9891"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5231,6 +5231,7 @@ MonoBehaviour:
   media_Car: {fileID: 550234137}
   media_TanChuang: {fileID: 1710940017}
   media_Quanxi: {fileID: 1718198978}
+  mediaPlayer_2: {fileID: 1666931022}
   sprites_Introduce:
   - {fileID: 21300000, guid: ae5201cfc676a414cb2925c43430fcea, type: 3}
   - {fileID: 21300000, guid: d63baf64f22d1504c8e4431cd2c89ba1, type: 3}
@@ -6327,7 +6328,7 @@ GameObject:
   - component: {fileID: 1605498090}
   - component: {fileID: 1605498089}
   m_Layer: 0
-  m_Name: "\u5FAA\u73AF\u5C4F\u4FDD\u89C6\u9891"
+  m_Name: "1\u5C4F\u5FAA\u73AF\u5C4F\u4FDD\u89C6\u9891"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6664,7 +6665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VideoLocation: 2
-  m_VideoPath: "\u6C7D\u8F66\u767E\u5E74\u8FDB\u5316\u8BBA\u5730\u5C4F.mp4"
+  m_VideoPath: "\u5F85\u673A\u5FAA\u73AF\u5730\u5C4F.mp4"
   m_AutoOpen: 1
   m_AutoStart: 1
   m_Loop: 1
