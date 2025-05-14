@@ -37,6 +37,11 @@ public enum OrderTypeEnum
     Rotate = 30,
 
     /// <summary>
+    /// 卫星点
+    /// </summary>
+    WeiXingDot = 31,
+
+    /// <summary>
     /// 获取音量
     /// </summary>
     GetVolumn = 101,

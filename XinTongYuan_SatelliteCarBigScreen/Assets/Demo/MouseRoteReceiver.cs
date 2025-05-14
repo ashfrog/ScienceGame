@@ -41,7 +41,10 @@ public class MouseRoteReceiver : MonoBehaviour
     public GameObject theEarth; //地球模型
     public GameObject[] moons; //卫星轨道组
     [SerializeField]
-    private TabSwitcher CamTabSwitcher;
+    private TabSwitcher camTabSwitcher;
+
+    [SerializeField]
+    private TabSwitcher earthTabSwitcher;
 
     private int curCarIndex;
 
@@ -49,6 +52,22 @@ public class MouseRoteReceiver : MonoBehaviour
     {
         normal = 0,
         holo = 1
+    }
+
+    public enum EarthGroup
+    {
+        空物体 = 0,
+        地球和卫星点 = 1,
+        卫星展示 = 2,
+        北斗卫星A = 3,
+        北斗卫星B = 4,
+        北斗卫星C = 5,
+        GPS卫星A = 6,
+        GPS卫星B = 7,
+        伽利略卫星 = 8,
+        千帆 = 9,
+        星链 = 10,
+        一网 = 11
     }
     // Start is called before the first frame update
     void Start()
@@ -254,7 +273,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     Panel_level1_2_2.SetActive(false);
                                     panel_level1_2_3.SetActive(false);
                                     panel_TanChuangVideo.SetActive(false);
-                                    CamTabSwitcher.SwitchTab((int)CamGroup.normal);
+                                    camTabSwitcher.SwitchTab((int)CamGroup.normal);
                                     break;
                                 case "汽车模型返回":
                                     Panel_level1_2_1.SetActive(false);
@@ -266,11 +285,11 @@ public class MouseRoteReceiver : MonoBehaviour
                                     panel_TanChuangVideo.SetActive(true);
                                     media_TanChuang.Rewind(true);
                                     media_TanChuang.Play();
-                                    CamTabSwitcher.SwitchTab((int)CamGroup.holo);
+                                    camTabSwitcher.SwitchTab((int)CamGroup.holo);
                                     media_Quanxi.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"汽车街景{curCarIndex}.mp4");
                                     break;
                                 case "汽车街景":
-                                    CamTabSwitcher.SwitchTab((int)CamGroup.holo);
+                                    camTabSwitcher.SwitchTab((int)CamGroup.holo);
                                     Panel_level1_2_1.SetActive(false);
                                     Panel_level1_2_2.SetActive(true);
                                     panel_level1_2_3.SetActive(false);
@@ -295,7 +314,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     panel_TanChuangVideo.SetActive(false);
                                     Panel_LoopVideo.SetActive(true);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏屏保.mp4");
-                                    CamTabSwitcher.SwitchTab((int)CamGroup.normal);
+                                    camTabSwitcher.SwitchTab((int)CamGroup.normal);
                                     break;
                                 case "汽车内饰":
                                     Panel_level1_2_1.SetActive(false);
@@ -311,7 +330,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     panel_TanChuangVideo.SetActive(false);
                                     Panel_LoopVideo.SetActive(true);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
-                                    CamTabSwitcher.SwitchTab((int)CamGroup.normal);
+                                    camTabSwitcher.SwitchTab((int)CamGroup.normal);
                                     break;
                             }
                         }
@@ -398,6 +417,29 @@ public class MouseRoteReceiver : MonoBehaviour
                             }
                         }
                         break;
+                    case OrderTypeEnum.WeiXingDot:
+                        {
+                            float progressValue = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(info.Body));
+                            Debug.Log(progressValue);
+
+                            for (int i = 0; i < WeiXingGuangDian.transform.childCount; i++)
+                            {
+                                int value = Mathf.CeilToInt(progressValue * 10);
+                                Transform item = WeiXingGuangDian.transform.GetChild(i);
+                                if (item != null)
+                                {
+                                    if (value <= i)
+                                    {
+                                        item.gameObject.SetActive(false);
+                                    }
+                                    else
+                                    {
+                                        item.gameObject.SetActive(true);
+                                    }
+                                }
+                            }
+                        }
+                        break;
                     case OrderTypeEnum.SetPlayMovie://汽车模型浏览
                         int index2 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                         for (int i = 0; i < cars.Length; i++)
@@ -412,7 +454,7 @@ public class MouseRoteReceiver : MonoBehaviour
                     case OrderTypeEnum.SetPlayMovieFolder:
                         string cmd1 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
                         media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd1 + ".mp4");
-                        CamTabSwitcher.SwitchTab((int)CamGroup.normal);
+                        camTabSwitcher.SwitchTab((int)CamGroup.normal);
                         break;
                 }
             }

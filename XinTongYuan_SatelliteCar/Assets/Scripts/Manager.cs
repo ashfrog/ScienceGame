@@ -1,4 +1,5 @@
 ﻿using RenderHeads.Media.AVProVideo;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -114,7 +115,7 @@ public class Manager : MonoBehaviour
         buttons[5].gameObject.SetActive(value >= 0.88f);
         buttons[6].gameObject.SetActive(value >= 0.98f);
         buttons[7].gameObject.SetActive(value >= 0.98f);
-
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.WeiXingDot, value);
     }
     public void OnSatellite(int index) //在空姿态卫星按钮
     {
