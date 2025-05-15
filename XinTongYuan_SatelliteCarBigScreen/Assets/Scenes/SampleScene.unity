@@ -4090,7 +4090,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &876226866
 Transform:
   m_ObjectHideFlags: 0
@@ -5485,6 +5485,7 @@ MonoBehaviour:
   - {fileID: 2276177538266586114}
   camTabSwitcher: {fileID: 1092004891}
   earthTabSwitcher: {fileID: 0}
+  verticalAngleLimit: {x: -80, y: 80}
 --- !u!114 &1092004890
 MonoBehaviour:
   m_ObjectHideFlags: 0

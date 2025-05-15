@@ -103,32 +103,12 @@ public class MouseRoteReceiver : MonoBehaviour
             float xAmount = Mathf.Lerp(0, targetRotationDelta.x, Time.deltaTime * rotationSpeed);
             float yAmount = Mathf.Lerp(0, targetRotationDelta.y, Time.deltaTime * rotationSpeed);
 
-            // 应用水平旋转（绕Y轴）
-            obj.transform.Rotate(0, -xAmount * deltaScale, 0);
+            // 应用水平旋转（绕Y轴）- 由父物体控制，使用世界坐标系
+            obj.transform.parent.Rotate(0, -xAmount * deltaScale, 0, Space.World);
 
-            // 处理垂直旋转（绕X轴），并保持在限制范围内
-            if (obj.transform.parent != null)
-            {
-                // 获取当前垂直角度（绕X轴的旋转）
-                float currentXRotation = obj.transform.parent.eulerAngles.x;
-
-                // 将角度转换到 -180 到 180 度范围，便于比较
-                if (currentXRotation > 180)
-                {
-                    currentXRotation -= 360;
-                }
-
-                // 计算新的旋转角度
-                float newXRotation = currentXRotation + yAmount * deltaScale;
-
-                // 限制在指定范围内
-                newXRotation = Mathf.Clamp(newXRotation, minVerticalAngle, maxVerticalAngle);
-
-                // 应用新的受限旋转
-                obj.transform.parent.localRotation = Quaternion.Euler(newXRotation,
-                    obj.transform.parent.localEulerAngles.y,
-                    obj.transform.parent.localEulerAngles.z);
-            }
+            // 应用垂直旋转（绕X轴）- 由子物体控制，使用世界坐标系
+            // 为了正确模拟地球仪旋转，需要围绕世界坐标系中的X轴旋转
+            obj.transform.Rotate(yAmount * deltaScale, 0, 0, Space.World);
 
             // 减少剩余的旋转增量
             targetRotationDelta.x -= xAmount;
@@ -140,7 +120,6 @@ public class MouseRoteReceiver : MonoBehaviour
                 targetRotationDelta = Vector2.zero;
             }
         }
-
 
     }
 
