@@ -96,7 +96,7 @@ public class MouseRoteReceiver : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 只有当有旋转增量需要应用时才进行旋转
+        //只有当有旋转增量需要应用时才进行旋转
         if (targetRotationDelta.sqrMagnitude > 0.001f)
         {
             // 计算本帧需要应用的旋转量
@@ -140,8 +140,13 @@ public class MouseRoteReceiver : MonoBehaviour
                 targetRotationDelta = Vector2.zero;
             }
         }
+
+
     }
 
+    public Vector2 verticalAngleLimit = new Vector2(-80, 80); // 垂直旋转角度限制
+
+    private float verticalAngle = 0.0f; // 当前垂直旋转角度
     private IEnumerator WaitForTcpServiceInitialization()
     {
         // 等待tcpService初始化完成
@@ -150,7 +155,7 @@ public class MouseRoteReceiver : MonoBehaviour
         // 绑定tcpService接收消息事件
         tcpService.fh_tcpservice.Received += this.FHService_Received;
     }
-
+    Vector2 vec2;
     private void FHService_Received(SocketClient client, ByteBlock byteBlock, IRequestInfo requestInfo)
     {
         Loom.QueueOnMainThread(() =>
@@ -167,8 +172,8 @@ public class MouseRoteReceiver : MonoBehaviour
                                                                                                                    //V2 为逗号分割的字符串，第一个为x轴旋转角度增量，第二个为y轴旋转角度增量
 
                             string[] v2s = v2.Split(',');
-                            Vector2 vec2 = new Vector2(float.Parse(v2s[0]), float.Parse(v2s[1]));
-
+                            vec2 = new Vector2(float.Parse(v2s[0]), float.Parse(v2s[1]));
+                            Debug.Log(vec2);
                             // 将接收到的旋转角度增量添加到目标增量中
                             targetRotationDelta += vec2;
                         }
