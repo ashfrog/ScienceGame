@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 4
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -3749,7 +3749,7 @@ MonoBehaviour:
   m_DecalLayerMask: 1
   m_ScaleMode: 0
   m_Offset: {x: 0, y: 0, z: 0}
-  m_Size: {x: 28, y: 25, z: 75.1}
+  m_Size: {x: 28, y: 19.1, z: 100}
   m_FadeFactor: 1
   m_Version: 2
 --- !u!4 &768581981
@@ -3759,14 +3759,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768581979}
-  m_LocalRotation: {x: 0.9862857, y: 0, z: 0, w: 0.16504757}
+  m_LocalRotation: {x: 0.99565184, y: 0, z: 0, w: 0.09315257}
   m_LocalPosition: {x: 0, y: 0.9, z: 0.72}
   m_LocalScale: {x: 0.100000024, y: 0.1, z: 0.09999998}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1828110270}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 19, y: 180, z: 180}
+  m_LocalEulerAnglesHint: {x: 10.69, y: 180, z: 180}
 --- !u!114 &768581982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3812,8 +3812,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 1
   yzSpeed: 0.5
+  xzSpeed: 0.5
   decalProjector: {fileID: 768581980}
-  paneltop: {fileID: 121415770}
+  paneltop: {fileID: 1267844114}
 --- !u!1 &784595761
 GameObject:
   m_ObjectHideFlags: 0
@@ -4569,7 +4570,7 @@ PrefabInstance:
     - target: {fileID: 4758970445588001700, guid: 4f4d29166334e0940869a162c45cd5df,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.85
+      value: 0.98
       objectReference: {fileID: 0}
     - target: {fileID: 4758970445588001700, guid: 4f4d29166334e0940869a162c45cd5df,
         type: 3}
@@ -5069,9 +5070,9 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.007
     y: 0
-    width: 1
+    width: 0.993
     height: 1
   near clip plane: 0.3
   far clip plane: 100
