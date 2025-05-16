@@ -92,7 +92,7 @@ public class DecalRotationController : MonoBehaviour
 
                 // 应用新的旋转
                 blackRotationz.localPosition = (currentRotation);
-                Settings.ini.Game.Volumn = currentRotation.z;
+                Settings.ini.Game.Volumn = currentRotation.y;
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
@@ -104,7 +104,7 @@ public class DecalRotationController : MonoBehaviour
 
                 // 应用新的旋转
                 blackRotationz.localPosition = (currentRotation);
-                Settings.ini.Game.Volumn = currentRotation.z;
+                Settings.ini.Game.Volumn = currentRotation.y;
             }
         }
 
