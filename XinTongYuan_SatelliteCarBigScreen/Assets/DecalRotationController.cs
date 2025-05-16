@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.UIElements;
 
 public class DecalRotationController : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class DecalRotationController : MonoBehaviour
 
     [SerializeField]
     Transform paneltop;
+
+    [SerializeField]
+    Transform blackRotationz;
 
     private void Start()
     {
@@ -76,6 +80,31 @@ public class DecalRotationController : MonoBehaviour
                 Vector3 p = paneltop.localPosition;
                 paneltop.localPosition = new Vector3(p.x, p.y - ydelta, p.z);
                 Settings.ini.Game.PanelY = paneltop.localPosition.y;
+            }
+
+            else if (Input.GetKeyDown(KeyCode.J))
+            {
+                // 获取当前旋转
+                Vector3 currentRotation = blackRotationz.localRotation.eulerAngles;
+
+                // 修改 X 轴旋转
+                currentRotation.z += 0.01f;
+
+                // 应用新的旋转
+                blackRotationz.localRotation = Quaternion.Euler(currentRotation);
+                Settings.ini.Game.Volumn = currentRotation.z;
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
+            {
+                // 获取当前旋转
+                Vector3 currentRotation = blackRotationz.localRotation.eulerAngles;
+
+                // 修改 X 轴旋转
+                currentRotation.z -= 0.01f;
+
+                // 应用新的旋转
+                blackRotationz.localRotation = Quaternion.Euler(currentRotation);
+                Settings.ini.Game.Volumn = currentRotation.z;
             }
         }
 
