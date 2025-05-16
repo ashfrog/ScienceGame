@@ -72,6 +72,27 @@ public class GameSettings : BaseSettings
         set => WriteValue("ZSpeed", value.ToString());
     }
 
+    public float ProjectorRX
+    {
+        get => ReadFloat("ProjectorRX", 1f);
+        set => WriteValue("ProjectorRX", value.ToString());
+    }
+    public float ProjectorY
+    {
+        get => ReadFloat("ProjectorY", 1f);
+        set => WriteValue("ProjectorY", value.ToString());
+    }
+    public float ProjectorZ
+    {
+        get => ReadFloat("ProjectorZ", 1f);
+        set => WriteValue("ProjectorZ", value.ToString());
+    }
+
+    public bool debugProjector
+    {
+        get => ReadBool("debugProjector", false);
+        set => WriteValue("debugProjector", value.ToString());
+    }
     public string LoopMode
     {
         get => ReadValue("LoopMode", "all");
