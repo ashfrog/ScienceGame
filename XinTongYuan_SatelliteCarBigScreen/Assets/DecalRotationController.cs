@@ -6,12 +6,18 @@ public class DecalRotationController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 1.0f; // 每次按键旋转的角度
     [SerializeField] private float yzSpeed = 0.5f; // 每次按键旋转的角度
 
+    [SerializeField]
+    private float xzSpeed = 0.5f; // 每次按键旋转的角度
+
+    float ydelta = 0.01f;
+
     private bool debugProjector;
 
     [SerializeField]
     DecalProjector decalProjector;
 
-
+    [SerializeField]
+    Transform paneltop;
 
     private void Start()
     {
@@ -57,6 +63,19 @@ public class DecalRotationController : MonoBehaviour
             {
                 decalProjector.size = new Vector3(decalProjector.size.x, decalProjector.size.y, decalProjector.size.z - yzSpeed);
                 Settings.ini.Game.ProjectorZ = decalProjector.size.z;
+            }
+
+            else if (Input.GetKeyDown(KeyCode.W))
+            {
+                Vector3 p = paneltop.localPosition;
+                paneltop.localPosition = new Vector3(p.x, p.y + ydelta, p.z);
+                Settings.ini.Game.PanelY = paneltop.localPosition.y;
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                Vector3 p = paneltop.localPosition;
+                paneltop.localPosition = new Vector3(p.x, p.y - ydelta, p.z);
+                Settings.ini.Game.PanelY = paneltop.localPosition.y;
             }
         }
 

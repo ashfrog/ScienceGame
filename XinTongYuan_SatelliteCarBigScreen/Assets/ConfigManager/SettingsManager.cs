@@ -88,6 +88,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("ProjectorZ", value.ToString());
     }
 
+    public float PanelY
+    {
+        get => ReadFloat("PanelY", 1f);
+        set => WriteValue("PanelY", value.ToString());
+    }
+
     public bool debugProjector
     {
         get => ReadBool("debugProjector", false);

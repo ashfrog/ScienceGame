@@ -3813,6 +3813,7 @@ MonoBehaviour:
   rotationSpeed: 1
   yzSpeed: 0.5
   decalProjector: {fileID: 768581980}
+  paneltop: {fileID: 121415770}
 --- !u!1 &784595761
 GameObject:
   m_ObjectHideFlags: 0
