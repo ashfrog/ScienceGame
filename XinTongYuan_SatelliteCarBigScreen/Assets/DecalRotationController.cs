@@ -85,25 +85,25 @@ public class DecalRotationController : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.J))
             {
                 // 获取当前旋转
-                Vector3 currentRotation = blackRotationz.localRotation.eulerAngles;
+                Vector3 currentRotation = blackRotationz.localPosition;
 
                 // 修改 X 轴旋转
-                currentRotation.z += 0.01f;
+                currentRotation.y += 0.001f;
 
                 // 应用新的旋转
-                blackRotationz.localRotation = Quaternion.Euler(currentRotation);
+                blackRotationz.localPosition = (currentRotation);
                 Settings.ini.Game.Volumn = currentRotation.z;
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
                 // 获取当前旋转
-                Vector3 currentRotation = blackRotationz.localRotation.eulerAngles;
+                Vector3 currentRotation = blackRotationz.localPosition;
 
                 // 修改 X 轴旋转
-                currentRotation.z -= 0.01f;
+                currentRotation.y -= 0.001f;
 
                 // 应用新的旋转
-                blackRotationz.localRotation = Quaternion.Euler(currentRotation);
+                blackRotationz.localPosition = (currentRotation);
                 Settings.ini.Game.Volumn = currentRotation.z;
             }
         }
