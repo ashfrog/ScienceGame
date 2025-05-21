@@ -683,7 +683,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f17cdc186456a4469a139a104d2ca72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 68d046b71b2ad2b458ff9e9dd9d598a3, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -806,7 +806,9 @@ MonoBehaviour:
   radarPlaying: 0
   hideWhiteImgWhenShowImg: 0
   imgSeconds: 5
+  maskTextures: []
   RawImagePre: {fileID: 6703159863632447739, guid: abb56788a86de3240b77832051598b37, type: 3}
+  maskDisplay: {fileID: 1624271650}
 --- !u!1 &1997966179
 GameObject:
   m_ObjectHideFlags: 0

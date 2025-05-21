@@ -21,6 +21,12 @@ public class SGraphicsSettings : BaseSettings
         set => WriteValue("Quality", value);
     }
 
+    public bool EnableMask
+    {
+        get => ReadBool("EnableMask", false);
+        set => WriteValue("EnableMask", value.ToString());
+    }
+
     public bool FullScreen
     {
         get => ReadBool("FullScreen", true);

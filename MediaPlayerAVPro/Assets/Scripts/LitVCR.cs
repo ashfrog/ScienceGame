@@ -14,6 +14,11 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using Unity.VisualScripting;
+using UnityEngine.Windows;
+using File = System.IO.File;
+using Directory = System.IO.Directory;
+using Input = UnityEngine.Input;
 
 //-----------------------------------------------------------------------------
 // Copyright 2015-2018 RenderHeads Ltd.  All rights reserverd.
@@ -41,9 +46,11 @@ public class LitVCR : MonoBehaviour
 
     public string filterSectionNo;
 
-    private const string materialName = "UI/Default";
+    private const string shaderMask = "AVProVideo/Lit/custom1";
 
     private string currentPlayingVideo = "";
+
+    bool enablemask;
 
     //private const string VOLUMN_KEY = "volumn";//音量设置key
 
@@ -102,6 +109,12 @@ public class LitVCR : MonoBehaviour
 
     public float imgSeconds = 5;
     private float curImgSec;
+
+    public List<Texture> maskTextures;
+    [SerializeField]
+    private RawImage RawImagePre;
+    [SerializeField]
+    private MaskableGraphic maskDisplay;
 
     public enum LoopMode
     {
@@ -510,9 +523,9 @@ public class LitVCR : MonoBehaviour
         {
             Settings.ini.Path.MediaPath = System.IO.Path.Combine(Application.streamingAssetsPath, "媒体文件");
         }
-        if (!Directory.Exists(Settings.ini.Path.MediaPath))
+        if (!System.IO.Directory.Exists(Settings.ini.Path.MediaPath))
         {
-            Directory.CreateDirectory(Settings.ini.Path.MediaPath);
+            System.IO.Directory.CreateDirectory(Settings.ini.Path.MediaPath);
         }
 
         persistentDataPath = Settings.ini.Path.MediaPath;
@@ -520,9 +533,9 @@ public class LitVCR : MonoBehaviour
 
 
         String ImgSecondsFilePath = Path.Combine(persistentDataPath, "imgSwapConfig.json");
-        if (File.Exists(ImgSecondsFilePath)) //媒体文件夹下的SwitchSeconds.txt 图片轮播间隔时间
+        if (System.IO.File.Exists(ImgSecondsFilePath)) //媒体文件夹下的SwitchSeconds.txt 图片轮播间隔时间
         {
-            string ImgSecondsStr = File.ReadAllText(ImgSecondsFilePath);
+            string ImgSecondsStr = System.IO.File.ReadAllText(ImgSecondsFilePath);
             if (!String.IsNullOrEmpty(ImgSecondsStr))
             {
                 var jObj = JObject.Parse(ImgSecondsStr);
@@ -534,6 +547,43 @@ public class LitVCR : MonoBehaviour
 
     private void Start()
     {
+        Settings.ini.Graphics.EnableMask = Settings.ini.Graphics.EnableMask;
+        enablemask = Settings.ini.Graphics.EnableMask;
+        if (enablemask)
+        {
+            //读取StreamAssets下mask目录内的图片到maskTexture
+            string maskpath = Path.Combine(Application.streamingAssetsPath, "mask");
+            if (Directory.Exists(maskpath))
+            {
+                // 只获取图片文件（png, jpg, jpeg 可自行扩展）
+                string[] maskfiles = Directory.GetFiles(maskpath)
+                    .Where(f => f.EndsWith(".png", StringComparison.OrdinalIgnoreCase)
+                             || f.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase)
+                             || f.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(f => Path.GetFileName(f)) // 按文件名排序
+                    .ToArray();
+
+                for (int i = 0; i < maskfiles.Length; i++)
+                {
+                    if (File.Exists(maskfiles[i]))
+                    {
+                        Texture2D texture = new Texture2D(2, 2);
+                        texture.LoadImage(File.ReadAllBytes(maskfiles[i]));
+                        maskTextures.Add(texture);
+                    }
+                }
+            }
+
+            //maskDisplay.material = new Material(Shader.Find(shaderMask));//替换为可加遮罩的material00
+            maskDisplay.material = new Material(maskDisplay.material);
+            //shader 的 _FilterTex 指定一个texture
+            //if (maskTextures != null && maskTextures.Count > 0)
+            //{
+            //    maskDisplay.material.SetTexture("_FilterTex", maskTextures[0]);
+            //}
+
+        }
+
         if (PlayingPlayer)
         {
             PlayingPlayer.Events.AddListener(OnVideoEvent);
@@ -553,9 +603,9 @@ public class LitVCR : MonoBehaviour
     /// <param name="mg"></param>
     public void SetMask(MaskableGraphic mg, bool needreverse = false)
     {
-        if (materialName != mg.material.name)
+        if (shaderMask != mg.material.name)
         {
-            mg.material = new Material(Shader.Find(materialName));//替换为可加遮罩的material
+            mg.material = new Material(Shader.Find(shaderMask));//替换为可加遮罩的material
         }
     }
 
@@ -655,11 +705,36 @@ public class LitVCR : MonoBehaviour
                     LoadingPlayer.m_VideoPath = videoPaths[videoindex];
                     OpenVideoFile(videoPaths[videoindex], reload);
                 }
+                SetMask(maskDisplay, videoindex);
             }
             else
             {
                 Debug.Log("视频文件已移除:" + videoPaths[videoindex]);
                 videoPaths.RemoveAt(videoindex);
+            }
+        }
+    }
+
+    private void SetMask(MaskableGraphic grath, int videoindex)
+    {
+        if (enablemask)
+        {
+            string fileName = Path.GetFileNameWithoutExtension(videoPaths[videoindex]);
+
+            //从字符串包含"(no)" 中 取出no
+            int start = fileName.IndexOf('(');
+            int end = fileName.IndexOf(')');
+
+            string maskid = "";
+            if (start != -1 && end != -1 && end > start)
+            {
+                maskid = fileName.Substring(start + 1, end - start - 1);
+            }
+
+
+            if (int.TryParse(maskid, out int maskindex) && maskindex < maskTextures.Count)
+            {
+                grath.material.SetTexture("_FilterTex", maskTextures[maskindex]);
             }
         }
     }
@@ -753,8 +828,7 @@ public class LitVCR : MonoBehaviour
     private RawImage rawimage;
     private List<RawImage> rawimagebinds = new List<RawImage>();
 
-    [SerializeField]
-    private RawImage RawImagePre;
+
 
     private RawImage InstantiateImg(DisplayUGUI displayUGUI)
     {
@@ -779,17 +853,6 @@ public class LitVCR : MonoBehaviour
     private System.Collections.IEnumerator asyncLoadImg(string imgfile)
     {
         rawimage = InstantiateImg(_mediaDisplay);
-
-        //SetMask(rawimage);
-
-        rawimagebinds = new List<RawImage>();
-        if (_mediaDisplay_binds != null && _mediaDisplay_binds.Count > 0)
-        {
-            for (int i = 0; i < _mediaDisplay_binds.Count; i++)
-            {
-                rawimagebinds.Add(InstantiateImg(_mediaDisplay_binds[i]));
-            }
-        }
 
         bool success = false;
 
@@ -819,6 +882,9 @@ public class LitVCR : MonoBehaviour
         }
 
         ShowImg(rawimage, _mediaDisplay, bytes, false);
+
+        SetMask(rawimage, videoindex);
+
 
         if (rawimagebinds != null)
         {
@@ -908,6 +974,8 @@ public class LitVCR : MonoBehaviour
             }
         }
         SetBlack(rawimage, displayugui);
+
+
     }
 
     private void SetBlack(RawImage rawimage, DisplayUGUI displayUGUI)
