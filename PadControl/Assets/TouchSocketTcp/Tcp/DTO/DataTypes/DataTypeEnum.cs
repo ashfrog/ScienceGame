@@ -107,6 +107,10 @@ public enum DataTypeEnum
     /// 展厅区域电动门开关ipNo IP：192.168.3.9 端口：20008
     /// </summary>
     SW_DG_9_20008 = 20008,
+    /// <summary>
+    /// 投影机 点播传音
+    /// </summary>
+    TY_4_1030 = 1030
 
 }
 

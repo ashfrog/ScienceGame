@@ -159,5 +159,10 @@ public enum OrderTypeEnum
     /// 开关灯指令
     /// </summary>
     SwitchLight = 10001,
+
+    /// <summary>
+    /// 三面转屏
+    /// </summary>
+    RoteteScreen3 = 20005
 }
 

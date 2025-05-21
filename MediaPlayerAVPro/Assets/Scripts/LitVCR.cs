@@ -217,6 +217,9 @@ public class LitVCR : MonoBehaviour
 
         videoindex = ++videoindex % videoPaths.Count;
         OpenVideoByIndex(videoindex, true);
+        Settings.ini.Game.VideoIndex = videoindex;
+
+        FHClientController.ins.SendHex(DataTypeEnum.SW_RS_9_20005, OrderTypeEnum.Str, "01 05 00 01 FF 00 DD FA");
     }
 
     public void StartPlay()
@@ -444,7 +447,7 @@ public class LitVCR : MonoBehaviour
             persistentDataPath = videofolder;
             ReloadFileList();
         }
-
+        videoindex = Settings.ini.Game.VideoIndex;
         OpenVideoByIndex(videoindex, reload);
 
         return true;
@@ -683,6 +686,10 @@ public class LitVCR : MonoBehaviour
     /// <param name="videoindex"></param>
     public void OpenVideoByIndex(int videoindex, bool reload = true, bool imgstopped = false)
     {
+        if (videoindex < 0 || videoindex >= videoPaths.Count)
+        {
+            videoindex = 0;
+        }
         this.imgstopped = imgstopped;
         if (videoindex < videoPaths.Count)
         {
@@ -713,6 +720,7 @@ public class LitVCR : MonoBehaviour
                 videoPaths.RemoveAt(videoindex);
             }
         }
+
     }
 
     private void SetMask(MaskableGraphic grath, int videoindex)
@@ -810,9 +818,10 @@ public class LitVCR : MonoBehaviour
                                 break;
                             }
                         }
-                        videoindex = (++videoindex) % videoPaths.Count;
+                        //videoindex = (++videoindex) % videoPaths.Count;
 
-                        OpenVideoByIndex(videoindex);
+                        //OpenVideoByIndex(videoindex);
+                        PlayNext();
                     }
                 }
                 else if (LoopMode.one.ToString().Equals(GetLoopMode())) //正在播放的时候修为了 单个循环

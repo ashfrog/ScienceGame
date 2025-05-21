@@ -96,6 +96,10 @@ public enum DataTypeEnum
     /// </summary>
     SW_DG_9_20004 = 20004,
     /// <summary>
+    /// 3转屏转动
+    /// </summary>
+    SW_RS_9_20005 = 20005,
+    /// <summary>
     /// 展厅区域灯LED大屏开关ipNo IP：192.168.3.9 端口：20006
     /// </summary>
     SW_DG_9_20006 = 20006,

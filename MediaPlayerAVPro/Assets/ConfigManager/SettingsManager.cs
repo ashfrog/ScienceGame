@@ -78,6 +78,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("LoopMode", value.ToString());
     }
 
+    public int VideoIndex
+    {
+        get => ReadInt("VideoIndex", 0);
+        set => WriteValue("VideoIndex", value.ToString());
+    }
+
     public bool SkipVerify
     {
         get => ReadBool("SkipVerify", false);

@@ -1695,19 +1695,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3779834407844320193}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2690201939039035741}
-        m_TargetAssemblyTypeName: VCRControl, Assembly-CSharp
-        m_MethodName: PlayNext
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3779834408105302173
 GameObject:
   m_ObjectHideFlags: 0
@@ -2069,19 +2057,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3779834408857489895}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2690201939039035741}
-        m_TargetAssemblyTypeName: VCRControl, Assembly-CSharp
-        m_MethodName: Stop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3779834408905047255
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,19 +2178,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3779834408905047252}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2690201939039035741}
-        m_TargetAssemblyTypeName: VCRControl, Assembly-CSharp
-        m_MethodName: PlayPrev
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3779834409067330114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2416,19 +2380,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3779834409153135347}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2690201939039035741}
-        m_TargetAssemblyTypeName: VCRControl, Assembly-CSharp
-        m_MethodName: Play
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: <NVTEKXML><SET><Soft ButtonID="43" /></SET></NVTEKXML>
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3779834409554237276
 GameObject:
   m_ObjectHideFlags: 0
@@ -2550,19 +2502,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3779834409554237273}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2690201939039035741}
-        m_TargetAssemblyTypeName: VCRControl, Assembly-CSharp
-        m_MethodName: Pause
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3798557752868388024
 GameObject:
   m_ObjectHideFlags: 0
