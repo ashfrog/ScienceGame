@@ -215,34 +215,13 @@ public class LitVCR : MonoBehaviour
     {
         if (enablePlayNext)
         {
-            StartCoroutine(PlayNextWait());
+            SkipNextScreenSaver();
+            videoindex = ++videoindex % videoPaths.Count;
+            OpenVideoByIndex(videoindex, true);
         }
     }
 
-
     bool enablePlayNext = true;
-
-    /// <summary>
-    /// 转屏要3秒转好 转屏8秒后才能转下一次
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator PlayNextWait()
-    {
-        enablePlayNext = false;
-        _mediaDisplay.gameObject.SetActive(false);
-        FHClientController.ins.SendHex(DataTypeEnum.SW_RS_9_20005, OrderTypeEnum.Str, "01 05 00 01 FF 00 DD FA");
-        yield return new WaitForSeconds(2.8f);
-        SkipNextScreenSaver();
-        videoindex = ++videoindex % videoPaths.Count;
-        OpenVideoByIndex(videoindex, true);
-        yield return new WaitForSeconds(0.2f);
-        _mediaDisplay.gameObject.SetActive(true);
-
-        Settings.ini.Game.VideoIndex = videoindex;
-        yield return new WaitForSeconds(5f);
-
-        enablePlayNext = true;
-    }
 
     public void StartPlay()
     {
