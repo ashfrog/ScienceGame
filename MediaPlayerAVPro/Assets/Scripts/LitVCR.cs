@@ -213,13 +213,35 @@ public class LitVCR : MonoBehaviour
 
     public void PlayNext()
     {
-        SkipNextScreenSaver();
+        if (enablePlayNext)
+        {
+            StartCoroutine(PlayNextWait());
+        }
+    }
 
+
+    bool enablePlayNext = true;
+
+    /// <summary>
+    /// 转屏要3秒转好 转屏8秒后才能转下一次
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PlayNextWait()
+    {
+        enablePlayNext = false;
+        _mediaDisplay.gameObject.SetActive(false);
+        FHClientController.ins.SendHex(DataTypeEnum.SW_RS_9_20005, OrderTypeEnum.Str, "01 05 00 01 FF 00 DD FA");
+        yield return new WaitForSeconds(2.8f);
+        SkipNextScreenSaver();
         videoindex = ++videoindex % videoPaths.Count;
         OpenVideoByIndex(videoindex, true);
-        Settings.ini.Game.VideoIndex = videoindex;
+        yield return new WaitForSeconds(0.2f);
+        _mediaDisplay.gameObject.SetActive(true);
 
-        FHClientController.ins.SendHex(DataTypeEnum.SW_RS_9_20005, OrderTypeEnum.Str, "01 05 00 01 FF 00 DD FA");
+        Settings.ini.Game.VideoIndex = videoindex;
+        yield return new WaitForSeconds(5f);
+
+        enablePlayNext = true;
     }
 
     public void StartPlay()
@@ -680,6 +702,8 @@ public class LitVCR : MonoBehaviour
         }
     }
 
+    Coroutine imgCroutine;
+
     /// <summary>
     /// 根据index播放指定视频
     /// </summary>
@@ -699,8 +723,11 @@ public class LitVCR : MonoBehaviour
 
                 if (FileUtils.IsImgFile(videoPaths[videoindex])) //播放图片文件
                 {
-                    StopAllCoroutines();
-                    StartCoroutine(asyncLoadImg(videoPaths[videoindex]));
+                    if (imgCroutine != null)
+                    {
+                        StopCoroutine(imgCroutine);
+                    }
+                    imgCroutine = StartCoroutine(asyncLoadImg(videoPaths[videoindex]));
                     if (PlayingPlayer && PlayingPlayer.Control != null && !isMovPaused())
                     {
                         PlayingPlayer.Control.Pause();
@@ -708,7 +735,10 @@ public class LitVCR : MonoBehaviour
                 }
                 else if (FileUtils.IsMovFile(videoPaths[videoindex]))//播放视频文件
                 {
-                    StopAllCoroutines();
+                    if (imgCroutine != null)
+                    {
+                        StopCoroutine(imgCroutine);
+                    }
                     LoadingPlayer.m_VideoPath = videoPaths[videoindex];
                     OpenVideoFile(videoPaths[videoindex], reload);
                 }
