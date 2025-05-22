@@ -31,6 +31,12 @@ public class ToggleButtonWithImage : MonoBehaviour
             buttonImage = GetComponent<Image>();
         }
 
+
+        if (buttonImage != null)
+        {
+            buttonImage.alphaHitTestMinimumThreshold = 0.1f; // 设置透明图片点击阈值
+        }
+
         if (text == null)
         {
             text = GetComponentInChildren<TMP_Text>();

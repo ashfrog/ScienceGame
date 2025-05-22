@@ -52,6 +52,8 @@ public class MorseCodeGenerator : MonoBehaviour
 
     public string animationName = "发报完成Ani";
 
+    float waitResultTime = 6f;
+
     static Dictionary<string, char> MorseToCharMap = new Dictionary<string, char>
     {
         { ".-", 'A' }, { "-...", 'B' }, { "-.-.", 'C' }, { "-..", 'D' },
@@ -101,12 +103,18 @@ public class MorseCodeGenerator : MonoBehaviour
         {
             tabSwitcher = GetComponentInParent<TabSwitcher>();
         }
+        Settings.ini.Game.Speed = Settings.ini.Game.Speed;
+        Settings.ini.Game.Interval = Settings.ini.Game.Interval;
+        Settings.ini.Game.WaitResultTime = Settings.ini.Game.WaitResultTime;
+        scrollSpeed = Settings.ini.Game.Speed;
+        spawnInterval = Settings.ini.Game.Interval;
+        waitResultTime = Settings.ini.Game.WaitResultTime;
     }
 
     private void OnEnable()
     {
-        textMeshProUGUI_No.text = "电报码:";
-        textMeshProUGUI_Zh.text = "传递电报:";
+        textMeshProUGUI_No.text = "";
+        textMeshProUGUI_Zh.text = "";
         textMeshProUGUI_Nor.text = "电报码:";
         textMeshProUGUI_Zhr.text = "情报:";
         textAnimator.Play(animationName, -1, 0f);
@@ -257,7 +265,7 @@ public class MorseCodeGenerator : MonoBehaviour
                 Debug.Log("GameOver");
                 textAnimator.Play(animationName, -1, 0f);
                 textAnimator.speed = 1;
-                Invoke(nameof(SwitchTab), 6);
+                Invoke(nameof(SwitchTab), waitResultTime);
             }
         }
     }

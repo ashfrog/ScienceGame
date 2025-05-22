@@ -80,6 +80,34 @@ public class GameSettings : BaseSettings
         set => WriteValue("SkipVerify", value.ToString());
     }
 
+    public int Speed
+    {
+        get => ReadInt("Speed", 250);
+        set => WriteValue("Speed", value.ToString());
+    }
+
+    public float Interval
+    {
+        get => ReadFloat("Interval", 0.5f);
+        set => WriteValue("Interval", value.ToString());
+    }
+    public float WaitResultTime
+    {
+        get => ReadFloat("WaitResultTime", 6f);
+        set => WriteValue("WaitResultTime", value.ToString());
+    }
+    public float DotTime
+    {
+        get => ReadFloat("DotTime", 0.12f);
+        set => WriteValue("DotTime", value.ToString());
+    }
+
+    public bool EazyMode
+    {
+        get => ReadBool("EazyMode", true);
+        set => WriteValue("EazyMode", value.ToString());
+    }
+
     public string Difficulty
     {
         get => ReadValue("Difficulty", "Normal");

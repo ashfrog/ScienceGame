@@ -21,7 +21,15 @@ public class KeyPressDetector : MonoBehaviour
 
     public RectTransform SpawnPointRoot;
 
+    public bool easyMode;
 
+    private void Start()
+    {
+        Settings.ini.Game.EazyMode = Settings.ini.Game.EazyMode;
+        easyMode = Settings.ini.Game.EazyMode;
+        Settings.ini.Game.DotTime = Settings.ini.Game.DotTime;
+        dotDathTime = Settings.ini.Game.DotTime;
+    }
 
     private void OnEnable()
     {
@@ -35,7 +43,7 @@ public class KeyPressDetector : MonoBehaviour
         {
             pressed = true;
             pressTime = Time.time;
-            DetectKeyPress(true);
+            DetectKeyPress(true, 0f);
 
         }
         if (Input.GetKeyUp(KeyCodeInput.keyCode))
@@ -44,7 +52,7 @@ public class KeyPressDetector : MonoBehaviour
             float duration = Time.time - pressTime;
             if (duration <= dotDathTime)
             {
-                DetectKeyPress(true);
+                DetectKeyPress(true, duration);
             }
         }
         if (pressed)
@@ -52,7 +60,7 @@ public class KeyPressDetector : MonoBehaviour
             float duration = Time.time - pressTime;
             if (duration > dotDathTime && duration < 0.3f && pressed)
             {
-                DetectKeyPress(false);
+                DetectKeyPress(false, duration);
                 pressed = false;
             }
             //Debug.Log(duration);
@@ -63,7 +71,7 @@ public class KeyPressDetector : MonoBehaviour
 
     }
 
-    void DetectKeyPress(bool isdot)
+    void DetectKeyPress(bool isdot, float pressedTime = 0f)
     {
         RectTransform morseCodeObject = FindClosestMorseCodeObject();
         if (morseCodeObject != null)
@@ -87,16 +95,36 @@ public class KeyPressDetector : MonoBehaviour
                 }
                 else if (isDotObj != isdot)
                 {
-                    //Debug.Log("长短发错");
-                    morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
+                    if (isDotObj)
+                    {
+                        morseCodeObject.GetComponent<RawImage>().color = Color.red;
+                        Debug.Log("点按成长按");
+                    }
+                    else if (pressedTime > 0 && pressedTime < dotDathTime) //线段长按时间不够
+                    {
+                        morseCodeObject.GetComponent<RawImage>().color = Color.red;
+                        Debug.Log("线段按的时间不够");
+                    }
+
                 }
                 else
                 {
-                    //Debug.Log("其它");
+                    Debug.Log("其它");
                     morseCodeObject.GetComponent<RawImage>().color = Color.red;
                 }
+                if (easyMode)
+                {
+                    morseCodeObject.GetComponent<RawImage>().color = Color.green;
+                }
             }
-            morseCode.pressDotChar = isdot ? '.' : '-';
+            if (easyMode)
+            {
+                morseCode.pressDotChar = isDotObj ? '.' : '-';
+            }
+            else
+            {
+                morseCode.pressDotChar = isdot ? '.' : '-';
+            }
             //Debug.Log(morseCodeObject.GetComponent<ItemPrefab>().id);
         }
     }
