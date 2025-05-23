@@ -5429,23 +5429,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1732.0432
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 866.0216
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4220009016301446260, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7707,6 +7707,8 @@ GameObject:
   - component: {fileID: 451830574}
   - component: {fileID: 451830573}
   - component: {fileID: 451830572}
+  - component: {fileID: 451830577}
+  - component: {fileID: 451830576}
   m_Layer: 5
   m_Name: "Btn_21_\u5FAA\u8FF9"
   m_TagString: Untagged
@@ -7833,6 +7835,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451830570}
   m_CullTransparentMesh: 1
+--- !u!114 &451830576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451830570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &451830577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 451830570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &456462508
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8585,6 +8667,8 @@ GameObject:
   - component: {fileID: 472018118}
   - component: {fileID: 472018117}
   - component: {fileID: 472018116}
+  - component: {fileID: 472018121}
+  - component: {fileID: 472018120}
   m_Layer: 5
   m_Name: "Btn_23_\u9010\u68A6"
   m_TagString: Untagged
@@ -8711,6 +8795,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 472018114}
   m_CullTransparentMesh: 1
+--- !u!114 &472018120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472018114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &472018121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472018114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &473593087
 GameObject:
   m_ObjectHideFlags: 0
@@ -8724,6 +8888,8 @@ GameObject:
   - component: {fileID: 473593091}
   - component: {fileID: 473593090}
   - component: {fileID: 473593089}
+  - component: {fileID: 473593094}
+  - component: {fileID: 473593093}
   m_Layer: 5
   m_Name: "Btn_21 (1)_\u7B51\u57FA"
   m_TagString: Untagged
@@ -8850,6 +9016,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 473593087}
   m_CullTransparentMesh: 1
+--- !u!114 &473593093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 473593087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &473593094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 473593087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &486922134
 GameObject:
   m_ObjectHideFlags: 0
@@ -13912,6 +14158,8 @@ GameObject:
   - component: {fileID: 682441713}
   - component: {fileID: 682441712}
   - component: {fileID: 682441711}
+  - component: {fileID: 682441716}
+  - component: {fileID: 682441715}
   m_Layer: 5
   m_Name: "Btn_20_\u8BDE\u59CB"
   m_TagString: Untagged
@@ -14038,6 +14286,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 682441709}
   m_CullTransparentMesh: 1
+--- !u!114 &682441715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682441709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &682441716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682441709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &686529431
 GameObject:
   m_ObjectHideFlags: 0
@@ -21011,6 +21339,8 @@ GameObject:
   - component: {fileID: 971957511}
   - component: {fileID: 971957510}
   - component: {fileID: 971957509}
+  - component: {fileID: 971957514}
+  - component: {fileID: 971957513}
   m_Layer: 5
   m_Name: "Btn_26_\u5B89\u5168"
   m_TagString: Untagged
@@ -21137,6 +21467,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971957507}
   m_CullTransparentMesh: 1
+--- !u!114 &971957513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971957507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &971957514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971957507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &980073494
 GameObject:
   m_ObjectHideFlags: 0
@@ -21227,6 +21637,8 @@ GameObject:
   - component: {fileID: 984935821}
   - component: {fileID: 984935820}
   - component: {fileID: 984935819}
+  - component: {fileID: 984935824}
+  - component: {fileID: 984935823}
   m_Layer: 5
   m_Name: "Btn_24_\u5F3A\u7B56"
   m_TagString: Untagged
@@ -21353,6 +21765,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 984935817}
   m_CullTransparentMesh: 1
+--- !u!114 &984935823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984935817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &984935824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 984935817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &989966318 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6877466355538616028, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
@@ -22058,6 +22550,8 @@ GameObject:
   - component: {fileID: 1017154102}
   - component: {fileID: 1017154101}
   - component: {fileID: 1017154100}
+  - component: {fileID: 1017154105}
+  - component: {fileID: 1017154104}
   m_Layer: 5
   m_Name: "Btn_25_\u6C47\u76DF"
   m_TagString: Untagged
@@ -22184,6 +22678,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1017154098}
   m_CullTransparentMesh: 1
+--- !u!114 &1017154104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1017154098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1017154105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1017154098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1018658210
 GameObject:
   m_ObjectHideFlags: 0
@@ -26683,6 +27257,7 @@ GameObject:
   - component: {fileID: 1257556854}
   - component: {fileID: 1257556853}
   - component: {fileID: 1257556852}
+  - component: {fileID: 1257556856}
   m_Layer: 5
   m_Name: "Btn_18_\u5927\u95E8"
   m_TagString: Untagged
@@ -26708,8 +27283,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 162, y: -182}
-  m_SizeDelta: {x: 100, y: 91.7258}
+  m_AnchoredPosition: {x: 142, y: -198}
+  m_SizeDelta: {x: 193, y: 116.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1257556852
 MonoBehaviour:
@@ -26809,6 +27384,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1257556850}
   m_CullTransparentMesh: 1
+--- !u!114 &1257556856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257556850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1262399629
 GameObject:
   m_ObjectHideFlags: 0
@@ -36974,6 +37589,8 @@ GameObject:
   - component: {fileID: 1683851756}
   - component: {fileID: 1683851755}
   - component: {fileID: 1683851754}
+  - component: {fileID: 1683851759}
+  - component: {fileID: 1683851758}
   m_Layer: 5
   m_Name: "Btn_19_\u5E8F\u5385"
   m_TagString: Untagged
@@ -37100,6 +37717,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1683851752}
   m_CullTransparentMesh: 1
+--- !u!114 &1683851758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683851752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1683851759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683851752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1688863384
 GameObject:
   m_ObjectHideFlags: 0
@@ -39506,6 +40203,8 @@ GameObject:
   - component: {fileID: 1749770604}
   - component: {fileID: 1749770603}
   - component: {fileID: 1749770602}
+  - component: {fileID: 1749770607}
+  - component: {fileID: 1749770606}
   m_Layer: 5
   m_Name: "Btn_28_\u8D70\u5ECA"
   m_TagString: Untagged
@@ -39531,7 +40230,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 493.3, y: -1325.1224}
+  m_AnchoredPosition: {x: 473, y: -611}
   m_SizeDelta: {x: 100, y: 91.7258}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1749770602
@@ -39632,6 +40331,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1749770600}
   m_CullTransparentMesh: 1
+--- !u!114 &1749770606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749770600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1749770607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749770600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1751414082 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7951825642914683903, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
@@ -46129,6 +46908,8 @@ GameObject:
   - component: {fileID: 1980014414}
   - component: {fileID: 1980014413}
   - component: {fileID: 1980014412}
+  - component: {fileID: 1980014417}
+  - component: {fileID: 1980014416}
   m_Layer: 5
   m_Name: "Btn_22_\u94F8\u9B42"
   m_TagString: Untagged
@@ -46255,6 +47036,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1980014410}
   m_CullTransparentMesh: 1
+--- !u!114 &1980014416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980014410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 1.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 1, g: 1, b: 1, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1980014417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1980014410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  breathSpeed: 0.5
+  minIntensity: 0.3
+  maxIntensity: 0.8
+  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &1981337394
 PrefabInstance:
   m_ObjectHideFlags: 0

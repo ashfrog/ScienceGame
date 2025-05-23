@@ -89,3 +89,5 @@ HDRPHolo/
 /XinTongYuan_SatelliteCarBigScreen/Assets/平面/科技圈2
 /XinTongYuan_SatelliteCarBigScreen/Assets/StreamingAssets/**/*.meta
 **/Release
+/MediaPlayerAVProUtil/Assets/Plugins/Demigiant
+/PadControl/Assets/Plugins/Demigiant
