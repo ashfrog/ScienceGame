@@ -3,6 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 单选 多选 状态按钮 配合ToggleButtonGroup使用
+/// </summary>
 [RequireComponent(typeof(Button))]
 public class ToggleButtonWithImage : MonoBehaviour
 {
@@ -11,10 +14,7 @@ public class ToggleButtonWithImage : MonoBehaviour
     Color TextColor = Color.white;
     Color defaltTextColor;
 
-
-
     public bool isOn = false;
-    //public bool isSingleSelection = false;
     public bool alphaHitTestMinimumThreshold = false;
 
     private Button button;
@@ -55,11 +55,6 @@ public class ToggleButtonWithImage : MonoBehaviour
 
     private void ToggleState()
     {
-        //if (parentGroup != null && isSingleSelection)
-        //{
-        //    parentGroup.DeselectAll();
-        //}
-
         isOn = !isOn;
         UpdateButtonImage();
 
