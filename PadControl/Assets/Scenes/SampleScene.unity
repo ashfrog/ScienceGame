@@ -33359,7 +33359,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowMultipleSelection: 0
-  toggleButtons: []
 --- !u!114 &1564669813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48730,10 +48729,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowMultipleSelection: 0
-  toggleButtons:
-  - {fileID: 2144889387}
-  - {fileID: 1616995114}
-  - {fileID: 1946575903}
 --- !u!1001 &2071190815
 PrefabInstance:
   m_ObjectHideFlags: 0

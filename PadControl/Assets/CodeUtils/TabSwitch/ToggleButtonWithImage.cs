@@ -46,16 +46,32 @@ public class ToggleButtonWithImage : MonoBehaviour
         text = GetComponentInChildren<TMP_Text>();
         defaltTextColor = text.color;
 
-        button.onClick.AddListener(ToggleState);
+        button.onClick.AddListener(ToggleClick);
 
         parentGroup = GetComponentInParent<ToggleButtonGroup>();
 
         UpdateButtonImage();
     }
 
-    private void ToggleState()
+    private void ToggleClick()
     {
-        isOn = !isOn;
+        // 检查父组是否允许多选
+        if (parentGroup != null && !parentGroup.allowMultipleSelection)
+        {
+            // 单选模式：如果已经选中，则不执行任何操作
+            if (isOn)
+            {
+                return;
+            }
+            // 如果未选中，则选中当前按钮
+            isOn = true;
+        }
+        else
+        {
+            // 多选模式：正常切换状态
+            isOn = !isOn;
+        }
+
         UpdateButtonImage();
 
         if (parentGroup != null)
