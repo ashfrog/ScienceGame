@@ -16,7 +16,9 @@ public class ToggleButtonWithImage : MonoBehaviour
     Color TextColor = Color.white;
     Color defaltTextColor;
 
-    public bool isOn = false;
+    private bool isOn;
+    public bool IsOn => isOn;
+
     public bool alphaHitTestMinimumThreshold = false;
 
     private Button button;

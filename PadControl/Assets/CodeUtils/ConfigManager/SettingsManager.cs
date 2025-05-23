@@ -80,6 +80,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("SkipVerify", value.ToString());
     }
 
+    public int SectionIndex
+    {
+        get => ReadInt("SectionIndex", 0);
+        set => WriteValue("SectionIndex", value.ToString());
+    }
+
     public string Difficulty
     {
         get => ReadValue("Difficulty", "Normal");

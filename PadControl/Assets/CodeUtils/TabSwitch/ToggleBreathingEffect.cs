@@ -30,7 +30,7 @@ public class ToggleBreathingEffect : MonoBehaviour
         // 监听 isOn 变化
         toggleButton.onValueChanged.AddListener(OnToggleChanged);
         // 初始化
-        OnToggleChanged(toggleButton.isOn);
+        OnToggleChanged(toggleButton.IsOn);
     }
 
     void OnDestroy()
