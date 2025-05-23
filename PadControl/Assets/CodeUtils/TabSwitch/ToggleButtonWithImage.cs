@@ -14,7 +14,7 @@ public class ToggleButtonWithImage : MonoBehaviour
 
 
     public bool isOn = false;
-    public bool isSingleSelection = false;
+    //public bool isSingleSelection = false;
     public bool alphaHitTestMinimumThreshold = false;
 
     private Button button;
@@ -55,10 +55,10 @@ public class ToggleButtonWithImage : MonoBehaviour
 
     private void ToggleState()
     {
-        if (parentGroup != null && isSingleSelection)
-        {
-            parentGroup.DeselectAll();
-        }
+        //if (parentGroup != null && isSingleSelection)
+        //{
+        //    parentGroup.DeselectAll();
+        //}
 
         isOn = !isOn;
         UpdateButtonImage();

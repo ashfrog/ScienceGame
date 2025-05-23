@@ -736,7 +736,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 87fbf1bf30e8cc84aa4778f7d1a58c75, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 0
 --- !u!222 &25612893
 CanvasRenderer:
@@ -7751,7 +7750,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: c87acbce155639c4f8f06ad0bd0d772b, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &451830573
 MonoBehaviour:
@@ -8630,7 +8628,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 73c5424e3f9ceda4d9ba925fa62b6d62, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &472018117
 MonoBehaviour:
@@ -8770,7 +8767,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 9e12eeacd9f669648aa21d07238eed23, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &473593090
 MonoBehaviour:
@@ -13959,7 +13955,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: a261e4463f1d29140b386d60a6361070, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &682441712
 MonoBehaviour:
@@ -21059,7 +21054,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: adfde26fd8e7b124096fafdb6f804d77, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &971957510
 MonoBehaviour:
@@ -21276,7 +21270,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: f661d62c2578ed045a18fe1c6b322264, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &984935820
 MonoBehaviour:
@@ -22108,7 +22101,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 4b5c3aa612f22574ba5c2d7fd47e65e2, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &1017154101
 MonoBehaviour:
@@ -26734,7 +26726,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 2a111c0b378613a4aa0b65b11cae9b5e, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 1
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &1257556853
 MonoBehaviour:
@@ -33368,18 +33359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   allowMultipleSelection: 0
-  toggleButtons:
-  - {fileID: 1257556852}
-  - {fileID: 1683851754}
-  - {fileID: 682441711}
-  - {fileID: 451830572}
-  - {fileID: 473593089}
-  - {fileID: 1980014412}
-  - {fileID: 472018116}
-  - {fileID: 984935819}
-  - {fileID: 1017154100}
-  - {fileID: 971957509}
-  - {fileID: 1749770602}
+  toggleButtons: []
 --- !u!114 &1564669813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34706,7 +34686,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 70c408e526f3e3d49a4a1c4954914804, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 0
 --- !u!1 &1617963805
 GameObject:
@@ -37039,7 +37018,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 2a111c0b378613a4aa0b65b11cae9b5e, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &1683851755
 MonoBehaviour:
@@ -39572,7 +39550,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 2a111c0b378613a4aa0b65b11cae9b5e, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &1749770603
 MonoBehaviour:
@@ -45421,7 +45398,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 36bf1102a21d72e4da9adcbec1314c8b, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 0
 --- !u!1 &1959784998
 GameObject:
@@ -46197,7 +46173,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: bfcbc96116d7b184db8eca8712ed2148, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 1
 --- !u!114 &1980014413
 MonoBehaviour:
@@ -49575,7 +49550,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 87fbf1bf30e8cc84aa4778f7d1a58c75, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 0
 --- !u!114 &2119188031
 MonoBehaviour:
@@ -50017,7 +49991,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 87fbf1bf30e8cc84aa4778f7d1a58c75, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 0
 --- !u!222 &2132457945
 CanvasRenderer:
@@ -50613,7 +50586,6 @@ MonoBehaviour:
   onSprite: {fileID: 21300000, guid: 44fb5bad0a7d8034f95b6101e7fb4cb5, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 1
-  isSingleSelection: 1
   alphaHitTestMinimumThreshold: 0
 --- !u!224 &2228038888883922222 stripped
 RectTransform:

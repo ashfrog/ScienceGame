@@ -1,30 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//控制ToggleButtonWithImage的Group 只控制一层子物体
 public class ToggleButtonGroup : MonoBehaviour
 {
     public bool allowMultipleSelection = false;
-    public List<ToggleButtonWithImage> toggleButtons;
+    private List<ToggleButtonWithImage> toggleButtons;
 
     private void Start()
     {
-        if (toggleButtons == null)
+        if (toggleButtons == null || toggleButtons.Count == 0)
         {
-            toggleButtons = new List<ToggleButtonWithImage>(GetComponentsInChildren<ToggleButtonWithImage>());
-        }
-
-        foreach (var toggleButton in toggleButtons)
-        {
-            toggleButton.isSingleSelection = !allowMultipleSelection;
-        }
-    }
-
-    public void DeselectAll()
-    {
-        foreach (var toggleButton in toggleButtons)
-        {
-            toggleButton.isOn = false;
-            toggleButton.UpdateButtonImage();
+            toggleButtons = new List<ToggleButtonWithImage>();
+            foreach (var item in GetComponentsInChildren<ToggleButtonWithImage>())
+            {
+                if (item.transform.parent == transform)
+                {
+                    toggleButtons.Add(item);
+                }
+            }
         }
     }
 
