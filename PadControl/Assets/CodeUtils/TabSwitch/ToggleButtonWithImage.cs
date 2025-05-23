@@ -3,50 +3,50 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Button))]
 public class ToggleButtonWithImage : MonoBehaviour
 {
-    public Button button;
-    public Image buttonImage;
     public Sprite onSprite;
-    Color defaltTextColor;
     [SerializeField]
     Color TextColor = Color.white;
-    public Sprite offSprite;
+    Color defaltTextColor;
+
+
+
     public bool isOn = false;
     public bool isSingleSelection = false;
+    public bool alphaHitTestMinimumThreshold = false;
 
-    TMP_Text text;
-
+    private Button button;
+    private Image buttonImage;
+    private Sprite offSprite;
     private ToggleButtonGroup parentGroup;
+    private TMP_Text text;
+
 
     private void Start()
     {
-        if (button == null)
-        {
-            button = GetComponent<Button>();
-        }
 
-        if (buttonImage == null)
-        {
-            buttonImage = GetComponent<Image>();
-        }
-
+        button = GetComponent<Button>();
+        buttonImage = GetComponent<Image>();
 
         if (buttonImage != null)
+        {
+            if (offSprite == null && buttonImage.sprite != null)
+            {
+                offSprite = buttonImage.sprite;
+            }
+        }
+
+        if (buttonImage != null && alphaHitTestMinimumThreshold)
         {
             buttonImage.alphaHitTestMinimumThreshold = 0.1f; // 设置透明图片点击阈值
         }
 
-        if (text == null)
-        {
-            text = GetComponentInChildren<TMP_Text>();
-            defaltTextColor = text.color;
-        }
+        text = GetComponentInChildren<TMP_Text>();
+        defaltTextColor = text.color;
 
-        if (button != null)
-        {
-            button.onClick.AddListener(ToggleState);
-        }
+        button.onClick.AddListener(ToggleState);
 
         parentGroup = GetComponentInParent<ToggleButtonGroup>();
 
