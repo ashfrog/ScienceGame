@@ -737,6 +737,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 0
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!222 &25612893
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5429,23 +5432,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1732.0432
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 866.0216
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -70
       objectReference: {fileID: 0}
     - target: {fileID: 4220009016301446260, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7753,6 +7756,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &451830573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7847,7 +7853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -7887,10 +7893,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -8713,6 +8719,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &472018117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8807,7 +8816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -8847,10 +8856,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -8934,6 +8943,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &473593090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9028,7 +9040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -9068,10 +9080,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -13963,8 +13975,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 33.03}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 72.10675, y: -71.65332}
-  m_SizeDelta: {x: -144.2136, y: -143.3066}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &658656457
 MonoBehaviour:
@@ -14204,6 +14216,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &682441712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14298,7 +14313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -14338,10 +14353,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -21366,8 +21381,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 551.7, y: -660.3}
-  m_SizeDelta: {x: 384, y: 361}
+  m_AnchoredPosition: {x: 627.8, y: -729.4}
+  m_SizeDelta: {x: 228, y: 224}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &971957509
 MonoBehaviour:
@@ -21381,10 +21396,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc2c344b79b15d44ad29490c90bb527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onSprite: {fileID: 21300000, guid: adfde26fd8e7b124096fafdb6f804d77, type: 3}
+  onSprite: {fileID: 21300000, guid: 3ac5d829dad10774399f7102afd8612c, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &971957510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21449,7 +21467,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0b01ffcad7ef79f44910eb1908d9169c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 14997ac6177aebd40b0835777d69111f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -21479,7 +21497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -21519,10 +21537,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -21683,6 +21701,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &984935820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21777,7 +21798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -21817,10 +21838,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -22596,6 +22617,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1017154101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22690,7 +22714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -22730,10 +22754,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -27283,8 +27307,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 142, y: -198}
-  m_SizeDelta: {x: 193, y: 116.7}
+  m_AnchoredPosition: {x: 186, y: -179}
+  m_SizeDelta: {x: 320, y: 182}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1257556852
 MonoBehaviour:
@@ -27298,10 +27322,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc2c344b79b15d44ad29490c90bb527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onSprite: {fileID: 21300000, guid: 2a111c0b378613a4aa0b65b11cae9b5e, type: 3}
+  onSprite: {fileID: 21300000, guid: 89a1d99a6cbf720438af06d0d5d632e9, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
-  isOn: 1
+  isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1257556853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27366,7 +27393,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2a111c0b378613a4aa0b65b11cae9b5e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61b870f53442ae14d9a6a270e6dae952, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -27396,10 +27423,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -32639,17 +32666,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1441816198}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.4476031, w: 0.8942324}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1749770601}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -53.18}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -7, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1441816200
@@ -35301,6 +35328,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 0
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1617963805
 GameObject:
   m_ObjectHideFlags: 0
@@ -37635,6 +37665,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1683851755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37729,7 +37762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -37769,10 +37802,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -40230,8 +40263,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 473, y: -611}
-  m_SizeDelta: {x: 100, y: 91.7258}
+  m_AnchoredPosition: {x: 471.5, y: -607.9}
+  m_SizeDelta: {x: 224, y: 251}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1749770602
 MonoBehaviour:
@@ -40245,10 +40278,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dc2c344b79b15d44ad29490c90bb527, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onSprite: {fileID: 21300000, guid: 2a111c0b378613a4aa0b65b11cae9b5e, type: 3}
+  onSprite: {fileID: 21300000, guid: 950af7407894fbe4a814ac4cda13a043, type: 3}
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1749770603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40313,7 +40349,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2a111c0b378613a4aa0b65b11cae9b5e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 57e9feca6d80a454787a3144b71ff2c9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -40343,7 +40379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -40383,10 +40419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -46177,6 +46213,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 0
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1959784998
 GameObject:
   m_ObjectHideFlags: 0
@@ -46954,6 +46993,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 1
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1980014413
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47048,7 +47090,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 1.5
+  breathPeriod: 2
   minIntensity: 0.3
   maxIntensity: 0.8
   breathColor: {r: 1, g: 1, b: 1, a: 1}
@@ -47088,10 +47130,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9832ab5508f8015418d8cc9ca37b5641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  breathSpeed: 0.5
-  minIntensity: 0.3
-  maxIntensity: 0.8
-  breathColor: {r: 0.5, g: 0, b: 0, a: 1}
+  breathPeriod: 2
+  minIntensity: 0.8
+  maxIntensity: 1
+  breathColor: {r: 1, g: 0, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -50407,6 +50449,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 0
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2119188031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50848,6 +50893,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 0
   alphaHitTestMinimumThreshold: 0
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!222 &2132457945
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -51443,6 +51491,9 @@ MonoBehaviour:
   TextColor: {r: 1, g: 1, b: 1, a: 1}
   isOn: 1
   alphaHitTestMinimumThreshold: 0
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!224 &2228038888883922222 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2228038889082972630, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}

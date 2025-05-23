@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 /// <summary>
 /// 单选 多选 状态按钮 配合ToggleButtonGroup使用
+/// 新增 onValueChanged 事件，供外部（如呼吸灯）监听状态变化
 /// </summary>
 [RequireComponent(typeof(Button))]
 public class ToggleButtonWithImage : MonoBehaviour
@@ -23,10 +25,13 @@ public class ToggleButtonWithImage : MonoBehaviour
     private ToggleButtonGroup parentGroup;
     private TMP_Text text;
 
+    // 新增事件：供外部监听 isOn 状态变化
+    [System.Serializable]
+    public class BoolEvent : UnityEvent<bool> { }
+    public BoolEvent onValueChanged = new BoolEvent();
 
     private void Start()
     {
-
         button = GetComponent<Button>();
         buttonImage = GetComponent<Image>();
 
@@ -55,6 +60,8 @@ public class ToggleButtonWithImage : MonoBehaviour
 
     private void ToggleClick()
     {
+        bool oldIsOn = isOn;
+
         // 检查父组是否允许多选
         if (parentGroup != null && !parentGroup.allowMultipleSelection)
         {
@@ -72,6 +79,11 @@ public class ToggleButtonWithImage : MonoBehaviour
             isOn = !isOn;
         }
 
+        if (oldIsOn != isOn)
+        {
+            onValueChanged.Invoke(isOn); // 通知监听者
+        }
+
         UpdateButtonImage();
 
         if (parentGroup != null)
@@ -86,6 +98,17 @@ public class ToggleButtonWithImage : MonoBehaviour
         {
             buttonImage.sprite = isOn ? onSprite : offSprite;
             text.color = isOn ? TextColor : defaltTextColor;
+        }
+    }
+
+    // 可手动设置状态并触发事件
+    public void SetIsOn(bool value)
+    {
+        if (isOn != value)
+        {
+            isOn = value;
+            onValueChanged.Invoke(isOn);
+            UpdateButtonImage();
         }
     }
 }

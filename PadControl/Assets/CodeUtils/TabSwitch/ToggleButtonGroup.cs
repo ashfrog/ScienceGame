@@ -30,8 +30,8 @@ public class ToggleButtonGroup : MonoBehaviour
             {
                 if (toggleButton != changedButton)
                 {
-                    toggleButton.isOn = false;
-                    toggleButton.UpdateButtonImage();
+                    // 这里要用SetIsOn而不是直接设置isOn
+                    toggleButton.SetIsOn(false);
                 }
             }
         }
