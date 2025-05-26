@@ -42,9 +42,8 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
 
         tcpClient.receiveData += (info) =>
         {
-
             //所有设备都收到相同的数据 通过DataTypeEnum区分
-            Debug.Log("设备:" + (DataTypeEnum)info.DataType + " 指令:" + (OrderTypeEnum)info.OrderType);
+            //Debug.Log("设备:" + (DataTypeEnum)info.DataType + " 指令:" + (OrderTypeEnum)info.OrderType);
             if (info.DataType == (int)receiveDataTypeEnum)
             {
                 switch ((OrderTypeEnum)info.OrderType)//处理指令类型
