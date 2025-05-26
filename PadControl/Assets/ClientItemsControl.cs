@@ -17,8 +17,16 @@ public class ClientItemsControl : MonoBehaviour
     public OrderTypeEnum orderType = OrderTypeEnum.Str;
     [SerializeField]
     Button btnOn;
+
+    [SerializeField]
+    Button[] btnOnBinds;
+
     [SerializeField]
     Button btnOff;
+
+    [SerializeField]
+    Button[] btnOffBinds;
+
     /// <summary>
     /// On指令
     /// </summary>
@@ -60,6 +68,12 @@ public class ClientItemsControl : MonoBehaviour
     /// </summary>
     [SerializeField]
     bool ignoreBindInGroup;
+
+    /// <summary>
+    /// 延迟入队列 作用为控制指令执行顺序
+    /// </summary>
+    [SerializeField]
+    private float enqueDelay;
 
     // Start is called before the first frame update
     void Start()
@@ -105,28 +119,38 @@ public class ClientItemsControl : MonoBehaviour
                 }
             });
         }
+
+        if (btnOnBinds != null && btnOnBinds.Length > 0)
+        {
+            foreach (Button btnOnBind in btnOnBinds)
+            {
+                btnOnBind.onClick.AddListener(() =>
+                {
+                    On();
+                });
+            }
+        }
+
+        if (btnOffBinds != null && btnOffBinds.Length > 0)
+        {
+            foreach (Button btnOffBind in btnOffBinds)
+            {
+                btnOffBind.onClick.AddListener(() =>
+                {
+                    Off();
+                });
+            }
+        }
     }
 
     public void On()
     {
-        // 将所有指令添加到全局队列
-        foreach (var cmd in onCmd)
-        {
-            AddCommandToQueue(cmd);
-        }
-
         // 执行绑定的控件
         StartCoroutine(ExecuteBindsWithInterval(true));
     }
 
     public void Off()
     {
-        // 将所有指令添加到全局队列
-        foreach (var cmd in offCmd)
-        {
-            AddCommandToQueue(cmd);
-        }
-
         // 执行绑定的控件
         StartCoroutine(ExecuteBindsWithInterval(false));
     }
@@ -137,13 +161,34 @@ public class ClientItemsControl : MonoBehaviour
     /// <param name="on">是否为开启操作</param>
     private IEnumerator ExecuteBindsWithInterval(bool on)
     {
+        if (enqueDelay > 0)
+        {
+            yield return new WaitForSeconds(enqueDelay);
+        }
+
+        if (on)
+        {
+            // 将所有指令添加到全局队列
+            foreach (var cmd in onCmd)
+            {
+                AddCommandToQueue(cmd);
+            }
+        }
+        else
+        {
+            // 将所有指令添加到全局队列
+            foreach (var cmd in offCmd)
+            {
+                AddCommandToQueue(cmd);
+            }
+        }
         // 收集所有控件的所有指令，添加到全局队列
         List<CommandQueueManager.CommandData> commandsToEnqueue = new List<CommandQueueManager.CommandData>();
 
         // 收集 ClientItemsControl 类型的控件的指令
         foreach (var bindControlObj in BindControls)
         {
-            var itemsControls = bindControlObj.GetComponentsInChildren<ClientItemsControl>();
+            var itemsControls = bindControlObj.GetComponentsInChildren<ClientItemsControl>(true);
             if (itemsControls != null)
             {
                 foreach (var itemsControl in itemsControls)

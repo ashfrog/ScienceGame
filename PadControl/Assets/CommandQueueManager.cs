@@ -106,6 +106,11 @@ public class CommandQueueManager : MonoBehaviour
         int totalcount = _commandQueue.Count;
         while (_commandQueue.Count > 0)
         {
+            if (totalcount < +_commandQueue.Count)
+            {
+                // 更新总计数
+                totalcount = _commandQueue.Count;
+            }
             // 获取队列中的下一个指令
             CommandData cmdData = _commandQueue.Dequeue();
 
@@ -124,9 +129,9 @@ public class CommandQueueManager : MonoBehaviour
             yield return new WaitForSeconds(cmdData.messageInterval);
 
             Debug.Log(_commandQueue.Count);
-            if (progressBarImg != null && totalcount>0)
+            if (progressBarImg != null && totalcount > 0)
             {
-                progressBarImg.fillAmount = Mathf.Clamp01((float)_commandQueue.Count/totalcount);
+                progressBarImg.fillAmount = Mathf.Clamp01((float)_commandQueue.Count / totalcount);
             }
         }
 
