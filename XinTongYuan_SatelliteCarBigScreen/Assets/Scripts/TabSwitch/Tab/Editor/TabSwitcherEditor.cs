@@ -19,7 +19,7 @@ public class TabSwitcherEditor : Editor
         serializedObject.Update();
 
         // 1. 先绘制allTabTypes（可动态增删）
-        EditorGUILayout.PropertyField(allTabTypesProp, new GUIContent("全部Tab类型名（类似enum，可增删）"), true);
+        EditorGUILayout.PropertyField(allTabTypesProp, new GUIContent("自定义Tab类型名"), true);
 
         // 2. 其它字段
         EditorGUILayout.PropertyField(serializedObject.FindProperty("tabButtons"), true);

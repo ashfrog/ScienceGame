@@ -17,7 +17,7 @@ public class TabSwitcher : MonoBehaviour
     public Button[] tabButtons;
     public int currentTabIndex = 0;
 
-    [Header("全部Tab类型名（类似enum，可增删）")]
+    [Header("Tab类型名（类似enum，可增删）")]
     public List<string> allTabTypes = new List<string> { "卫星星座发射展示", "卫星星座展示", "卫星在空姿态", "内外卫星星座对比", "全景展示" };
 
     [Header("每个Tab下挂载的页面组")]
