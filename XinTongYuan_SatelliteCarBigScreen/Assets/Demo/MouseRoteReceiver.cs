@@ -98,7 +98,7 @@ public class MouseRoteReceiver : MonoBehaviour
         Debug.Log("Event: " + et.ToString());
     }
     // 定义平滑系数 (0-1之间，越小越平滑)
-    float smoothFactor = 0.01f;
+    public float smoothFactor = 0.05f;
     // Update is called once per frame
     void Update()
     {
@@ -450,7 +450,7 @@ public class MouseRoteReceiver : MonoBehaviour
     /// <param name="index"></param>
     private void ResetZ(int index)
     {
-        float z = 60;
+        float z = 50;
         switch (index)
         {
             case 0:
@@ -466,10 +466,10 @@ public class MouseRoteReceiver : MonoBehaviour
                 z = 60f;
                 break;
             case 4:
-                z = 60f;
+                z = 70f;
                 break;
             case 5:
-                z = 70f;
+                z = 60f;
                 break;
             case 6:
                 z = 60f;
