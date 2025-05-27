@@ -10,11 +10,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 using DG.Tweening;
+using Lean.Common;
 
 public class MouseRoteReceiver : MonoBehaviour
 {
     [SerializeField]
     FHTcpService tcpService;
+
+    [SerializeField]
+    LeanPitchYaw leanPitchYaw;
 
     [SerializeField]
     GameObject obj;
@@ -93,39 +97,23 @@ public class MouseRoteReceiver : MonoBehaviour
 
         Debug.Log("Event: " + et.ToString());
     }
+    // 定义平滑系数 (0-1之间，越小越平滑)
+    float smoothFactor = 0.01f;
     // Update is called once per frame
     void Update()
     {
         //只有当有旋转增量需要应用时才进行旋转
         if (targetRotationDelta.sqrMagnitude > 0.001f)
         {
-            // 计算本帧需要应用的旋转量
-            float xAmount = Mathf.Lerp(0, targetRotationDelta.x, Time.deltaTime * rotationSpeed);
-            float yAmount = Mathf.Lerp(0, targetRotationDelta.y, Time.deltaTime * rotationSpeed);
+            leanPitchYaw.Pitch -= targetRotationDelta.y * deltaScale * smoothFactor;
+            leanPitchYaw.Yaw += targetRotationDelta.x * deltaScale * smoothFactor;
 
-            // 应用水平旋转（绕Y轴）- 由父物体控制，使用世界坐标系
-            obj.transform.parent.Rotate(0, -xAmount * deltaScale, 0, Space.World);
-
-            // 应用垂直旋转（绕X轴）- 由子物体控制，使用世界坐标系
-            // 为了正确模拟地球仪旋转，需要围绕世界坐标系中的X轴旋转
-            obj.transform.Rotate(yAmount * deltaScale, 0, 0, Space.World);
-
-            // 减少剩余的旋转增量
-            targetRotationDelta.x -= xAmount;
-            targetRotationDelta.y -= yAmount;
-
-            // 如果旋转增量很小，则认为已完成
-            if (Mathf.Abs(targetRotationDelta.x) < 0.001f && Mathf.Abs(targetRotationDelta.y) < 0.001f)
-            {
-                targetRotationDelta = Vector2.zero;
-            }
+            // 逐渐减少剩余的旋转增量
+            targetRotationDelta.x *= (1f - smoothFactor);
+            targetRotationDelta.y *= (1f - smoothFactor);
         }
-
     }
 
-    public Vector2 verticalAngleLimit = new Vector2(-80, 80); // 垂直旋转角度限制
-
-    private float verticalAngle = 0.0f; // 当前垂直旋转角度
     private IEnumerator WaitForTcpServiceInitialization()
     {
         // 等待tcpService初始化完成
@@ -462,39 +450,37 @@ public class MouseRoteReceiver : MonoBehaviour
     /// <param name="index"></param>
     private void ResetZ(int index)
     {
-        Transform root = moons[0].transform.parent.parent;
-        float z = 0f;
+        float z = 60;
         switch (index)
         {
             case 0:
-                z = 0f;
+                z = 60;
                 break;
             case 1:
-                z = -1f;
+                z = 60f;
                 break;
             case 2:
-                z = 0f;
+                z = 60f;
                 break;
             case 3:
-                z = -1f;
+                z = 60f;
                 break;
             case 4:
-                z = 3f;
+                z = 60f;
                 break;
             case 5:
-                z = 1f;
+                z = 70f;
                 break;
             case 6:
-                z = 0f;
+                z = 60f;
                 break;
             case 7:
-                z = -1f;
+                z = 60f;
                 break;
             default:
                 break;
         }
-
-        root.DOLocalMoveZ(z, Settings.ini.Game.ZSpeed).SetEase(Ease.InOutSine); // 设置平滑的缓动效果
+        leanPitchYaw.Camera.DOFieldOfView(z, 2f);
     }
 
     private void PlayVideo(string str)
