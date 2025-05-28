@@ -19032,7 +19032,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009608667490930810, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_text
-      value: "\u5BC6\u7535\u98CE\u4E91"
+      value: "\u5BC6\u7535\u98CE\u66B4"
       objectReference: {fileID: 0}
     - target: {fileID: 3302180835575569769, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_IsActive

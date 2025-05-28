@@ -39,7 +39,12 @@ public class MouseRoteReceiver : MonoBehaviour
     private Vector2 targetRotationDelta = Vector2.zero;
 
     public GameObject Panel_level1_1_1, Panel_level1_1_2, Panel_level1_1_3, Panel_level1_2, Panel_level1_2_1, Panel_level1_2_2, panel_level1_2_3, Panel_卫星在空姿态, Panel_LoopVideo, video_car, panel_TanChuangVideo;
-    public MediaPlayer media, media_Loop, media_Car, media_TanChuang, media_Quanxi, mediaPlayer_2;
+    public MediaPlayer media, media_Loop, media_Car, media_TanChuang, media_Quanxi;
+
+    /// <summary>
+    /// 地坪视频播放器
+    /// </summary>
+    public MediaPlayer mediaPlayer_2;
     public Sprite[] sprites_Introduce;   //介绍图组
     public Image img_Introduce;  //图片介绍组件
     public GameObject WeiXingGuangDian;  //卫星光点
@@ -145,6 +150,7 @@ public class MouseRoteReceiver : MonoBehaviour
             try
             {
                 var info = requestInfo as DTOInfo;
+                Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                 switch ((OrderTypeEnum)info.OrderType)
                 {
                     case OrderTypeEnum.Rotate:
@@ -177,12 +183,12 @@ public class MouseRoteReceiver : MonoBehaviour
                             {
                                 case "卫星":
                                     break;
-                                case "发射展示":
+                                case "发射展示":  //1-1 卫星发射展示
                                     PlayVideo("发射展示.mp4");
                                     Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
                                     break;
-                                case "发射展示返回":
+                                case "发射展示返回"://1-1返回 
                                     Panel_level1_1_1.SetActive(false);
                                     media.Control.Rewind();
                                     media.Pause();
@@ -190,7 +196,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     media_Loop.Play();
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "待机循环地屏.mp4");
                                     break;
-                                case "星座展示":
+                                case "星座展示"://1-2 卫星星座展示
                                     for (int i = 1; i < moons.Length; i++)
                                     {
                                         moons[i].SetActive(false);
@@ -201,7 +207,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "循环地屏2.mp4");
                                     break;
-                                case "星座展示返回":
+                                case "星座展示返回"://1-2 返回 选项界面
                                     Panel_level1_1_2.SetActive(false);
                                     obj.transform.parent.gameObject.SetActive(false);
                                     for (int i = 0; i < moons.Length; i++)
@@ -212,7 +218,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     media_Loop.Play();
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "待机循环地屏.mp4");
                                     break;
-                                case "星座对比":
+                                case "星座对比"://1-3 卫星在空姿态
                                     Panel_level1_1_3.SetActive(true);
                                     WeiXingGuangDian.SetActive(true);
                                     obj = theEarth;
@@ -224,18 +230,18 @@ public class MouseRoteReceiver : MonoBehaviour
 
 
                                     break;
-                                case "星座对比返回":
+                                case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
                                     Panel_level1_1_3.SetActive(true);
                                     Panel_卫星在空姿态.SetActive(false);
                                     WeiXingGuangDian.SetActive(true);
                                     break;
-                                case "在空姿态":
+                                case "在空姿态"://1-3-1 内外星座对比
                                     Panel_level1_1_3.SetActive(false);
                                     Panel_卫星在空姿态.SetActive(true);
                                     WeiXingGuangDian.SetActive(false);
                                     obj = theEarth;
                                     break;
-                                case "在空姿态返回":
+                                case "在空姿态返回":// 1-3返回 1
                                     Panel_level1_1_3.SetActive(false);
                                     WeiXingGuangDian.SetActive(false);
                                     obj.transform.parent.gameObject.SetActive(false);
