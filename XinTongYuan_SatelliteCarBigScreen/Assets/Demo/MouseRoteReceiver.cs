@@ -333,8 +333,8 @@ public class MouseRoteReceiver : MonoBehaviour
                                     panel_TanChuangVideo.SetActive(false);
                                     Panel_LoopVideo.SetActive(true);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
-                                    Debug.Log("播放 汽车百年进化论地屏");
-                                    mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
+                                    Debug.Log("播放 火箭发射地屏");
+                                    mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "火箭发射地屏.mp4");
                                     break;
                             }
                         }
