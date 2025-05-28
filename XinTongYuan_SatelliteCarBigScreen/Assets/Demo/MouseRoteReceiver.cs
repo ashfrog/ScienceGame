@@ -324,6 +324,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     panel_level1_2_3.SetActive(true);
                                     break;
                                 case "汽车内饰返回":
+                                    camTabSwitcher.SwitchTab((int)CamGroup.全息);
                                     Panel_level1_2_2.SetActive(false);
                                     for (int i = 0; i < cars.Length; i++)
                                     {
@@ -332,7 +333,6 @@ public class MouseRoteReceiver : MonoBehaviour
                                     panel_TanChuangVideo.SetActive(false);
                                     Panel_LoopVideo.SetActive(true);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
-                                    camTabSwitcher.SwitchTab((int)CamGroup.全息);
                                     Debug.Log("播放 汽车百年进化论地屏");
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     break;
