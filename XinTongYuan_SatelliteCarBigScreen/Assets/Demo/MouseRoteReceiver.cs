@@ -47,6 +47,7 @@ public class MouseRoteReceiver : MonoBehaviour
         P1_1_1,
         P1_1_2,
         P1_1_3,
+        卫星在空姿态,
         P1_2,
         P1_2_1,
         P1_2_2,
@@ -66,19 +67,6 @@ public class MouseRoteReceiver : MonoBehaviour
     }
     public TabSwitcher tabSwitcher_Obj;
 
-
-
-
-
-
-    public enum CamGroup
-    {
-        全息,
-        投射
-    }
-
-    [SerializeField]
-    private TabSwitcher camTabSwitcher;
 
     public enum EarthGroup
     {
@@ -103,6 +91,7 @@ public class MouseRoteReceiver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        tabSwitcher_UI.SwitchTab((int)TabUILabel.P循环屏保);
         StartCoroutine(WaitForTcpServiceInitialization());
         media_Car.Events.AddListener(OnVideoEvent);
 
@@ -212,30 +201,30 @@ public class MouseRoteReceiver : MonoBehaviour
                                     {
                                         moons[i].SetActive(false);
                                     }
-                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.地球);
+                                    //tabSwitcher_Obj.SwitchTab(TabObjLabel.地球);
                                     //Panel_level1_1_2.SetActive(true);
                                     //obj = theEarth;
                                     theEarth.gameObject.SetActive(true);
-                                    Panel_LoopVideo.SetActive(false);
+                                    //Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "循环地屏2.mp4");
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
-                                    Panel_level1_1_2.SetActive(false);
+                                    //Panel_level1_1_2.SetActive(false);
                                     theEarth.gameObject.SetActive(false);
                                     for (int i = 0; i < moons.Length; i++)
                                     {
                                         moons[i].SetActive(true);
                                     }
-                                    Panel_LoopVideo.SetActive(true);
+                                    //Panel_LoopVideo.SetActive(true);
                                     media_Loop.Play();
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
-                                    Panel_level1_1_3.SetActive(true);
+                                    //Panel_level1_1_3.SetActive(true);
                                     WeiXingGuangDian.SetActive(true);
                                     //obj = theEarth;
                                     theEarth.gameObject.SetActive(true);
-                                    Panel_LoopVideo.SetActive(false);
+                                    //Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     ResetZ(4);
 
@@ -243,47 +232,47 @@ public class MouseRoteReceiver : MonoBehaviour
 
                                     break;
                                 case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
-                                    Panel_level1_1_3.SetActive(true);
-                                    Panel_卫星在空姿态.SetActive(false);
+                                    //Panel_level1_1_3.SetActive(true);
+                                    //Panel_卫星在空姿态.SetActive(false);
                                     WeiXingGuangDian.SetActive(true);
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比
-                                    Panel_level1_1_3.SetActive(false);
-                                    Panel_卫星在空姿态.SetActive(true);
+                                    //Panel_level1_1_3.SetActive(false);
+                                    //Panel_卫星在空姿态.SetActive(true);
                                     WeiXingGuangDian.SetActive(false);
                                     //obj = theEarth;
                                     break;
                                 case "在空姿态返回":// 1-3返回 1
-                                    Panel_level1_1_3.SetActive(false);
+                                    //Panel_level1_1_3.SetActive(false);
                                     WeiXingGuangDian.SetActive(false);
                                     theEarth.gameObject.SetActive(false);
                                     for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
                                     {
                                         WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
                                     }
-                                    Panel_LoopVideo.SetActive(true);
+                                    //Panel_LoopVideo.SetActive(true);
                                     media_Loop.Play();
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     break;
                                 case "汽车":
-                                    video_car.SetActive(true);
+                                    //video_car.SetActive(true);
                                     media_Car.GetComponent<MediaPlayer>().Rewind(true);
                                     media_Car.GetComponent<MediaPlayer>().Play();
-                                    Panel_LoopVideo.SetActive(false);
+                                    //Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
 
                                     break;
                                 case "汽车返回":
-                                    Panel_LoopVideo.SetActive(true);
-                                    video_car.SetActive(false);
+                                    //Panel_LoopVideo.SetActive(true);
+                                    //video_car.SetActive(false);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "待机循环动画.mp4");
                                     break;
                                 case "汽车模型":
-                                    Panel_level1_2_1.SetActive(true);
-                                    Panel_level1_2_2.SetActive(false);
-                                    panel_level1_2_3.SetActive(false);
-                                    panel_TanChuangVideo.SetActive(false);
-                                    camTabSwitcher.SwitchTab((int)CamGroup.全息);
+                                    //Panel_level1_2_1.SetActive(true);
+                                    //Panel_level1_2_2.SetActive(false);
+                                    //panel_level1_2_3.SetActive(false);
+                                    //panel_TanChuangVideo.SetActive(false);
+                                    //camTabSwitcher.SwitchTab((int)CamGroup.全息);
                                     theEarth.gameObject.SetActive(false);
                                     break;
                                 case "汽车模型返回":
@@ -293,29 +282,25 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ShowCarModel(curCarIndex);
                                     break;
                                 case "汽车街景返回":
-                                    Panel_level1_2_2.SetActive(false);
+                                    tabSwitcher_UI.SwitchTab((int)TabUILabel.P循环屏保);
                                     for (int i = 0; i < cars.Length; i++)
                                     {
                                         cars[i].SetActive(false);
                                     }
-                                    panel_TanChuangVideo.SetActive(false);
-                                    Panel_LoopVideo.SetActive(true);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏屏保.mp4");
                                     break;
                                 case "汽车内饰":
-                                    Panel_level1_2_1.SetActive(false);
-                                    Panel_level1_2_2.SetActive(false);
-                                    panel_level1_2_3.SetActive(true);
+                                    //Panel_level1_2_1.SetActive(false);
+                                    //Panel_level1_2_2.SetActive(false);
+                                    //panel_level1_2_3.SetActive(true);
                                     break;
                                 case "汽车内饰返回":
-                                    camTabSwitcher.SwitchTab((int)CamGroup.全息);
-                                    Panel_level1_2_2.SetActive(false);
+
                                     for (int i = 0; i < cars.Length; i++)
                                     {
                                         cars[i].SetActive(false);
                                     }
-                                    panel_TanChuangVideo.SetActive(false);
-                                    Panel_LoopVideo.SetActive(true);
+                                    tabSwitcher_UI.SwitchTab((int)TabUILabel.P循环屏保);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
                                     Debug.Log("播放 火箭发射地屏");
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "火箭发射地屏.mp4");
@@ -435,8 +420,8 @@ public class MouseRoteReceiver : MonoBehaviour
                         ShowCarModel(index2);
                         break;
                     case OrderTypeEnum.SetPlayMovieFolder: //弹窗视频 内饰视频
-                        camTabSwitcher.SwitchTab((int)CamGroup.全息);
-                        panel_TanChuangVideo.SetActive(true);
+                        //camTabSwitcher.SwitchTab((int)CamGroup.全息);
+                        //panel_TanChuangVideo.SetActive(true);
                         string cmd1 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
                         media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd1 + ".mp4");
                         mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
@@ -503,7 +488,7 @@ public class MouseRoteReceiver : MonoBehaviour
 
     private void PlayVideo(string str)
     {
-        Panel_level1_1_1.SetActive(true);
+        tabSwitcher_UI.SwitchTab((int)TabUILabel.P1_1_1);
         media.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, str);
         media.Play();
     }
