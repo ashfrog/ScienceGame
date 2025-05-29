@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class TabPageGroup
@@ -43,6 +44,11 @@ public class TabSwitcher : MonoBehaviour
     {
         currentTabIndex = index;
         UpdateTabPages();
+    }
+
+    public void SwitchTab(Enum label)
+    {
+        SwitchTab(label.ToString());
     }
 
     /// <summary>

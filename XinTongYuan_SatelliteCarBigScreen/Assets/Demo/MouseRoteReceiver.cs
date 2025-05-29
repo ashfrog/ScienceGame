@@ -47,14 +47,14 @@ public class MouseRoteReceiver : MonoBehaviour
         P1_1_1,
         P1_1_2,
         P1_1_3,
-        卫星在空姿态,
         P1_2,
         P1_2_1,
         P1_2_2,
         P1_2_3,
         P循环屏保,
         P汽车百年进化论,
-        P弹窗视频
+        P弹窗视频,
+        卫星在空姿态,
     }
     public TabSwitcher tabSwitcher_UI;
     public enum TabObjLabel
@@ -91,7 +91,7 @@ public class MouseRoteReceiver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tabSwitcher_UI.SwitchTab((int)TabUILabel.P循环屏保);
+        tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保.ToString());
         StartCoroutine(WaitForTcpServiceInitialization());
         media_Car.Events.AddListener(OnVideoEvent);
 
@@ -106,7 +106,7 @@ public class MouseRoteReceiver : MonoBehaviour
             case MediaPlayerEvent.EventType.FinishedPlaying:
                 //Panel_LoopVideo.SetActive(true);
                 //video_car.SetActive(false);
-                tabSwitcher_UI.SwitchTab((int)TabUILabel.P循环屏保);
+                tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
                 media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
                 break;
         }
@@ -183,11 +183,11 @@ public class MouseRoteReceiver : MonoBehaviour
                                 case "发射展示":  //1-1 卫星发射展示
                                     PlayVideo("发射展示.mp4");
                                     //Panel_LoopVideo.SetActive(false);
-                                    tabSwitcher_UI.SwitchTab((int)TabUILabel.P1_1_1);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
                                     break;
                                 case "发射展示返回"://1-1返回 
-                                    tabSwitcher_UI.SwitchTab((int)TabUILabel.P循环屏保);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
                                     //Panel_level1_1_1.SetActive(false);
                                     media.Control.Rewind();
                                     media.Pause();
@@ -196,7 +196,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座展示"://1-2 卫星星座展示
-                                    tabSwitcher_UI.SwitchTab((int)TabUILabel.P1_2);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
                                     for (int i = 1; i < moons.Length; i++)
                                     {
                                         moons[i].SetActive(false);
@@ -210,6 +210,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
                                     //Panel_level1_1_2.SetActive(false);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
                                     theEarth.gameObject.SetActive(false);
                                     for (int i = 0; i < moons.Length; i++)
                                     {
@@ -282,7 +283,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ShowCarModel(curCarIndex);
                                     break;
                                 case "汽车街景返回":
-                                    tabSwitcher_UI.SwitchTab((int)TabUILabel.P循环屏保);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
                                     for (int i = 0; i < cars.Length; i++)
                                     {
                                         cars[i].SetActive(false);
@@ -488,7 +489,7 @@ public class MouseRoteReceiver : MonoBehaviour
 
     private void PlayVideo(string str)
     {
-        tabSwitcher_UI.SwitchTab((int)TabUILabel.P1_1_1);
+        tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
         media.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, str);
         media.Play();
     }
