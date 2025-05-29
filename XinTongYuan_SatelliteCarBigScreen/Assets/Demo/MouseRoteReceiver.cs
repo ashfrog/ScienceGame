@@ -288,14 +288,14 @@ public class MouseRoteReceiver : MonoBehaviour
                                 //media_Quanxi.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"汽车街景{curCarIndex}.mp4");
                                 //break;
                                 case "汽车街景":
-                                    camTabSwitcher.SwitchTab((int)CamGroup.投射);
-                                    Panel_level1_2_1.SetActive(false);
-                                    Panel_level1_2_2.SetActive(false);
-                                    panel_level1_2_3.SetActive(false);
-                                    video_car.SetActive(false);
-                                    Panel_LoopVideo.SetActive(false);
-                                    panel_TanChuangVideo.SetActive(false);
-                                    //media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd + cmdparam + ".mp4");
+                                    //camTabSwitcher.SwitchTab((int)CamGroup.投射);
+                                    //Panel_level1_2_1.SetActive(false);
+                                    //Panel_level1_2_2.SetActive(false);
+                                    //panel_level1_2_3.SetActive(false);
+                                    //video_car.SetActive(false);
+                                    //Panel_LoopVideo.SetActive(false);
+                                    //panel_TanChuangVideo.SetActive(false);
+
                                     int.TryParse(cmdparam, out int generation);
                                     if (generation == 0)
                                     {
@@ -306,7 +306,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                         media_Quanxi.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车街景" + generation + ".mp4");
                                         curCarIndex = generation;
                                     }
-
+                                    ShowCarModel(curCarIndex);
                                     break;
                                 case "汽车街景返回":
                                     Panel_level1_2_2.SetActive(false);
@@ -448,14 +448,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         break;
                     case OrderTypeEnum.SetPlayMovie://汽车模型浏览
                         int index2 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
-                        for (int i = 0; i < cars.Length; i++)
-                        {
-                            cars[i].SetActive(false);
-                        }
-                        //obj = cars[index2].transform.GetChild(0).gameObject;
-                        cars[index2].SetActive(true);
-
-                        mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"{index2 + 1}代俯视.mp4");
+                        ShowCarModel(index2);
                         break;
                     case OrderTypeEnum.SetPlayMovieFolder: //弹窗视频 内饰视频
                         camTabSwitcher.SwitchTab((int)CamGroup.全息);
@@ -472,6 +465,19 @@ public class MouseRoteReceiver : MonoBehaviour
             }
         });
     }
+
+    private void ShowCarModel(int index2)
+    {
+        for (int i = 0; i < cars.Length; i++)
+        {
+            cars[i].SetActive(false);
+        }
+        //obj = cars[index2].transform.GetChild(0).gameObject;
+        cars[index2].SetActive(true);
+
+        mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"{index2 + 1}代俯视.mp4");
+    }
+
     /// <summary>
     /// 卫星轨道移动位置 展示全
     /// </summary>

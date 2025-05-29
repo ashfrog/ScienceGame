@@ -5744,23 +5744,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1703.1976
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 851.5988
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -70
       objectReference: {fileID: 0}
     - target: {fileID: 4220009016301446260, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.x
@@ -26009,24 +26009,17 @@ MonoBehaviour:
   BindControls:
   - {fileID: 505234561}
   - {fileID: 577848970}
-  - {fileID: 1732166967}
-  - {fileID: 1050697219}
   - {fileID: 311241016}
   - {fileID: 1311958306}
   - {fileID: 815247191}
-  - {fileID: 2109751191}
   - {fileID: 1721138989}
   - {fileID: 2026552896}
-  - {fileID: 1790862920}
   - {fileID: 396908509}
   - {fileID: 809724886}
-  - {fileID: 1054872538}
   - {fileID: 1967511621}
   - {fileID: 221333561}
-  - {fileID: 1564891947}
   - {fileID: 1279368748}
   - {fileID: 1228200623}
-  - {fileID: 492040028}
   - {fileID: 1070487931}
   - {fileID: 1184847690}
   - {fileID: 1184847690}
