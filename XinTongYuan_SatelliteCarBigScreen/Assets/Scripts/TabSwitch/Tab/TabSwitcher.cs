@@ -53,6 +53,11 @@ public class TabSwitcher : MonoBehaviour
         Debug.Log("切换页面:" + label.ToString());
     }
 
+    public void Hide()
+    {
+        InitTabPages(false);
+    }
+
     /// <summary>
     /// 通过Tab类型名切换
     /// </summary>
@@ -111,7 +116,7 @@ public class TabSwitcher : MonoBehaviour
         }
     }
 
-    private void InitTabPages()
+    private void InitTabPages(bool enable = true)
     {
         foreach (var group in tabPageGroups)
         {
@@ -120,7 +125,7 @@ public class TabSwitcher : MonoBehaviour
                 foreach (var page in group.pages)
                 {
                     if (page != null)
-                        page.SetActive(true);
+                        page.SetActive(enable);
                 }
             }
         }

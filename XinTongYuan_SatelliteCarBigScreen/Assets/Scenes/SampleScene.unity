@@ -5082,7 +5082,7 @@ MonoBehaviour:
   theEarth: {fileID: 917317442}
   tabSwitcher_UI: {fileID: 1642463619}
   tabSwitcher_Obj: {fileID: 1131064997}
-  earthTabSwitcher: {fileID: 0}
+  carTabSwitcher: {fileID: 1863080028}
   wxTabSwitcher: {fileID: 1879425122}
   camObj: {fileID: 963194227}
 --- !u!114 &1092004890
@@ -5108,7 +5108,7 @@ GameObject:
   - component: {fileID: 1131064998}
   - component: {fileID: 1131064997}
   m_Layer: 0
-  m_Name: TabSwitcherObj
+  m_Name: TabSwitcher_Obj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6704,7 +6704,7 @@ GameObject:
   - component: {fileID: 1642463618}
   - component: {fileID: 1642463619}
   m_Layer: 0
-  m_Name: TabSwitcherTopUI
+  m_Name: TabSwitcher_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7595,6 +7595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1863080027}
+  - component: {fileID: 1863080028}
   m_Layer: 1
   m_Name: "\u8F66\u6A21"
   m_TagString: Untagged
@@ -7623,6 +7624,43 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1863080028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863080026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1805c72cc985853419c9cfe19b5c6ce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tabButtons: []
+  currentTabIndex: 0
+  allTabTypes:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  tabPageGroups:
+  - pages:
+    - {fileID: 44787018}
+    tabType: 1
+  - pages:
+    - {fileID: 1835317610}
+    tabType: 2
+  - pages:
+    - {fileID: 55841027}
+    tabType: 3
+  - pages:
+    - {fileID: 365565133}
+    tabType: 4
+  - pages:
+    - {fileID: 79424562}
+    tabType: 5
+  initTabPages: 0
 --- !u!1001 &1864722701
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9344,6 +9382,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450651833071710}
   - component: {fileID: 1909170103}
+  - component: {fileID: 919132147842196197}
   m_Layer: 1
   m_Name: "\u536B\u661F\u8F68\u9053"
   m_TagString: Untagged
@@ -9351,6 +9390,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &919132147842196197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147842196196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1805c72cc985853419c9cfe19b5c6ce5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tabButtons: []
+  currentTabIndex: 0
+  allTabTypes:
+  - key1
+  - key2
+  tabPageGroups: []
+  initTabPages: 0
 --- !u!33 &983530350642321035
 MeshFilter:
   m_ObjectHideFlags: 0
