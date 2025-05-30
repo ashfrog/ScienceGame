@@ -42,6 +42,11 @@ public enum OrderTypeEnum
     WeiXingDot = 31,
 
     /// <summary>
+    /// 卫星视图
+    /// </summary>
+    WeiXingView = 32,
+
+    /// <summary>
     /// 获取音量
     /// </summary>
     GetVolumn = 101,

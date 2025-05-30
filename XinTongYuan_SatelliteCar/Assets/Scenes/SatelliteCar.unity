@@ -850,6 +850,7 @@ MonoBehaviour:
   satelliteDataRowPrefab: {fileID: 1069241128}
   contentParent: {fileID: 384305529}
   s: {fileID: 21300000, guid: 4bc072fd0b2607e4fa56b234b94d73dc, type: 3}
+  fHClientController: {fileID: 1642404122}
 --- !u!4 &108761795
 Transform:
   m_ObjectHideFlags: 0
@@ -16449,7 +16450,7 @@ GameObject:
   - component: {fileID: 1642404121}
   - component: {fileID: 1642404124}
   m_Layer: 0
-  m_Name: TCP
+  m_Name: TCP(FHClientController)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

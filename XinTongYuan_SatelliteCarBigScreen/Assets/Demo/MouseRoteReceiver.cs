@@ -37,8 +37,9 @@ public class MouseRoteReceiver : MonoBehaviour
     public Image img_Introduce;  //图片介绍组件
     public GameObject WeiXingGuangDian;  //卫星光点
     public GameObject[] cars;
+    public GameObject oribit; //卫星轨道模型
+    public GameObject[] moons; //卫星光点组
     public GameObject theEarth; //地球模型
-    public GameObject[] moons; //卫星轨道组
 
 
     public enum TabUILabel //需要Inspector中TabSwitcher的allTabTypes保持一致
@@ -82,8 +83,14 @@ public class MouseRoteReceiver : MonoBehaviour
     }
     [SerializeField]
     private TabSwitcher earthTabSwitcher;
+    [SerializeField]
+    private TabSwitcher wxTabSwitcher;
 
     private int curCarIndex;
+
+    [SerializeField]
+    Camera camObj;
+
 
 
 
@@ -197,6 +204,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座展示"://1-2 卫星星座展示
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
+                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.地球);
                                     for (int i = 1; i < moons.Length; i++)
                                     {
                                         moons[i].SetActive(false);
@@ -204,14 +212,14 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //tabSwitcher_Obj.SwitchTab(TabObjLabel.地球);
                                     //Panel_level1_1_2.SetActive(true);
                                     //obj = theEarth;
-                                    theEarth.gameObject.SetActive(true);
+                                    //oribit.gameObject.SetActive(true);
                                     //Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "循环地屏2.mp4");
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
                                     //Panel_level1_1_2.SetActive(false);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
-                                    theEarth.gameObject.SetActive(false);
+                                    oribit.gameObject.SetActive(false);
                                     for (int i = 0; i < moons.Length; i++)
                                     {
                                         moons[i].SetActive(true);
@@ -225,7 +233,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_UI.SwitchTab(TabUILabel.卫星在空姿态);
                                     WeiXingGuangDian.SetActive(true);
                                     //obj = theEarth;
-                                    theEarth.gameObject.SetActive(true);
+                                    oribit.gameObject.SetActive(true);
                                     //Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     ResetZ(4);
@@ -247,7 +255,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                 case "在空姿态返回":// 1-3返回 1
                                     //Panel_level1_1_3.SetActive(false);
                                     WeiXingGuangDian.SetActive(false);
-                                    theEarth.gameObject.SetActive(false);
+                                    oribit.gameObject.SetActive(false);
                                     for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
                                     {
                                         WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
@@ -275,7 +283,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //panel_level1_2_3.SetActive(false);
                                     //panel_TanChuangVideo.SetActive(false);
                                     //camTabSwitcher.SwitchTab((int)CamGroup.全息);
-                                    theEarth.gameObject.SetActive(false);
+                                    oribit.gameObject.SetActive(false);
                                     break;
                                 case "汽车模型返回":
 
@@ -428,6 +436,30 @@ public class MouseRoteReceiver : MonoBehaviour
                         media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd1 + ".mp4");
                         mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                         break;
+                    case OrderTypeEnum.WeiXingView: //卫星视图
+                        string weixingraw = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+                        Debug.Log(weixingraw);
+                        string[] weixingraws = weixingraw.Split('|');
+                        if (weixingraw.Length >= 2)
+                        {
+                            string name = weixingraws[0]; //卫星名称
+                            int weixingindex = int.Parse(weixingraws[1]);
+                            Debug.Log(name + " " + weixingindex);
+                            tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
+                            wxTabSwitcher.SwitchTab(weixingindex % wxTabSwitcher.tabPageGroups.Count);
+
+                            camObj.DOFieldOfView(normalFOV, 0.1f).OnComplete(() =>
+                            {
+                                camObj.DOFieldOfView(smallFOV, fovDuration);
+                            });
+                            //将地球模型往下移动3
+                            theEarth.transform.DOMoveY(-3.5f, fovDuration).SetEase(Ease.OutQuad).OnComplete(() =>
+                            {
+                            });
+                        }
+
+
+                        break;
                 }
             }
             catch (Exception ex)
@@ -436,6 +468,10 @@ public class MouseRoteReceiver : MonoBehaviour
             }
         });
     }
+
+    float normalFOV = 60f; // 正常视角
+    float smallFOV = 6f; //拉进视角
+    float fovDuration = 0.5f; // 动画持续时间
 
     private void ShowCarModel(int index2)
     {

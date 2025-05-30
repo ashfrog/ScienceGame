@@ -82,7 +82,7 @@ public class SatelliteDataReader : MonoBehaviour
         newRow.GetComponent<Button>().onClick.AddListener(() =>
         {
             Debug.Log("click " + i);
-            fHClientController.Send(DataTypeEnum.Media30, OrderTypeEnum.Str, row[0].ToString() + "|" + index);
+            fHClientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.WeiXingView, row[0].ToString() + "|" + index);
         });
         if (i % 2 != 0)
         {

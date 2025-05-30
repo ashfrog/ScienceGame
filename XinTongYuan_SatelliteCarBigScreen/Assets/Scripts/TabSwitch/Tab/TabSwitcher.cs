@@ -49,6 +49,7 @@ public class TabSwitcher : MonoBehaviour
     public void SwitchTab(Enum label)
     {
         SwitchTab(label.ToString());
+        Debug.Log("切换页面:" + label.ToString());
     }
 
     /// <summary>
