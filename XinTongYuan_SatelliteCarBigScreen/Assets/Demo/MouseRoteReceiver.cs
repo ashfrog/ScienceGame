@@ -92,12 +92,13 @@ public class MouseRoteReceiver : MonoBehaviour
     Camera camObj;
 
 
-
+    private float defaultCameraFieldofView;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        defaultCameraFieldofView = camObj.fieldOfView;
         tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保.ToString());
         StartCoroutine(WaitForTcpServiceInitialization());
         media_Car.Events.AddListener(OnVideoEvent);
@@ -196,6 +197,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "发射展示返回"://1-1返回 
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
+                                    tabSwitcher_Obj.SwitchTab("");
                                     //Panel_level1_1_1.SetActive(false);
                                     media.Control.Rewind();
                                     media.Pause();
@@ -220,6 +222,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                 case "星座展示返回"://1-2 返回 选项界面
                                     //Panel_level1_1_2.SetActive(false);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
+                                    tabSwitcher_Obj.SwitchTab("");
                                     oribit.gameObject.SetActive(false);
                                     for (int i = 0; i < moons.Length; i++)
                                     {
@@ -232,6 +235,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                 case "星座对比"://1-3 卫星在空姿态
                                     //Panel_level1_1_3.SetActive(true);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.卫星在空姿态);
+                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
                                     WeiXingGuangDian.SetActive(true);
                                     //obj = theEarth;
                                     oribit.gameObject.SetActive(true);
@@ -245,6 +249,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                 case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
                                     //Panel_level1_1_3.SetActive(true);
                                     //Panel_卫星在空姿态.SetActive(false);
+                                    tabSwitcher_Obj.SwitchTab("");
                                     WeiXingGuangDian.SetActive(true);
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比
@@ -255,8 +260,10 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "在空姿态返回":// 1-3返回 1
                                     //Panel_level1_1_3.SetActive(false);
-                                    WeiXingGuangDian.SetActive(false);
-                                    oribit.gameObject.SetActive(false);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
+                                    tabSwitcher_Obj.SwitchTab("");
+                                    theEarth.transform.localPosition = new Vector3(0, 0, 0); //重置地球位置
+                                    camObj.fieldOfView = defaultCameraFieldofView; //重置相机视角
                                     for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
                                     {
                                         WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
@@ -451,24 +458,27 @@ public class MouseRoteReceiver : MonoBehaviour
 
                             //动画 leanPitchYaw.Pitch 从0渐变到20f;
                             leanPitchYaw.Pitch = 0f;
-                            DOTween.To(() => leanPitchYaw.Pitch, x => leanPitchYaw.Pitch = x, 30f, 2f);
+                            DOTween.To(() => leanPitchYaw.Pitch, x => leanPitchYaw.Pitch = x, 30f, rotateDuration);
                             // 让 leanPitchYaw.Yaw 在 1 秒内从当前值增加 30f
                             DOTween.To(
                                 () => leanPitchYaw.Yaw,
                                 x => leanPitchYaw.Yaw = x,
                                 leanPitchYaw.Yaw + 90f,
-                                2f
+                                rotateDuration
                             );
 
-                            //leanPitchYaw.Yaw += 30f;
                             camObj.DOFieldOfView(normalFOV, 0f).OnComplete(() =>
                             {
-                                camObj.DOFieldOfView(smallFOV, fovDuration);
+                                camObj.DOFieldOfView(smallFOV, 1f);
                             });
-                            //将地球模型往下移动
-                            theEarth.transform.DOMoveY(-3.5f, fovDuration).SetEase(Ease.OutQuad).OnComplete(() =>
+                            if (theEarth.transform.localPosition.y > -0.01f)
                             {
-                            });
+                                //将地球模型往下移动
+                                theEarth.transform.DOMoveY(-4.5f, fovDuration).SetEase(Ease.OutQuad).OnComplete(() =>
+                                {
+                                    mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
+                                });
+                            }
                         }
 
 
@@ -481,8 +491,8 @@ public class MouseRoteReceiver : MonoBehaviour
             }
         });
     }
-
-    float normalFOV = 100f; // 正常视角
+    float rotateDuration = 2f;
+    float normalFOV = 60f; // 正常视角
     float smallFOV = 6f; //拉进视角
     float fovDuration = 1f; // 动画持续时间
 
@@ -534,7 +544,7 @@ public class MouseRoteReceiver : MonoBehaviour
             default:
                 break;
         }
-        leanPitchYaw.Camera.DOFieldOfView(z, 2f);
+        leanPitchYaw.Camera.DOFieldOfView(z, 0.5f);
     }
 
     private void PlayVideo(string str)
