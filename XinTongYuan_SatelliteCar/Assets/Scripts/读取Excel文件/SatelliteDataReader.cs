@@ -10,6 +10,7 @@ public class SatelliteDataReader : MonoBehaviour
     public GameObject satelliteDataRowPrefab; // 预制体
     public Transform contentParent; // 用于放置预制体的父对象
     public Sprite s;
+    public FHClientController fHClientController;
     void Start()
     {
         //initialize(0);
@@ -77,9 +78,11 @@ public class SatelliteDataReader : MonoBehaviour
         newRow.transform.Find("MassText").GetComponent<Text>().text = row[9].ToString();
         newRow.transform.Find("COSPARText").GetComponent<Text>().text = row[10].ToString();
 
+        int index = i;
         newRow.GetComponent<Button>().onClick.AddListener(() =>
         {
             Debug.Log("click " + i);
+            fHClientController.Send(DataTypeEnum.Media30, OrderTypeEnum.Str, row[0].ToString() + "|" + index);
         });
         if (i % 2 != 0)
         {

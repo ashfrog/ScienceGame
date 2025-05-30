@@ -5744,23 +5744,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1703.1976
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 851.5988
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4157064794220502037, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -70
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4220009016301446260, guid: b7b1d046caa966f479b3e9076db7ed11, type: 3}
       propertyPath: m_AnchorMax.x
@@ -8315,7 +8315,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -9236,7 +9236,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -9418,7 +9418,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -14649,7 +14649,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -21769,7 +21769,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -22028,7 +22028,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -23040,7 +23040,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -28382,7 +28382,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -39317,7 +39317,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -41975,7 +41975,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:
@@ -48817,7 +48817,7 @@ MonoBehaviour:
   breathPeriod: 2
   minIntensity: 0.2
   maxIntensity: 0.8
-  breathColor: {r: 1, g: 0, b: 0, a: 1}
+  breathColor: {r: 1, g: 0.43529412, b: 0, a: 1}
   breathCurve:
     serializedVersion: 2
     m_Curve:

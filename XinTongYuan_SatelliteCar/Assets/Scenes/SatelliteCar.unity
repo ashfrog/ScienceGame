@@ -4638,7 +4638,7 @@ GameObject:
   m_Component:
   - component: {fileID: 416513333}
   m_Layer: 5
-  m_Name: Panel_level1_1_3(4)
+  m_Name: Panel_level1_1_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6802,7 +6802,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &612953379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9355,7 +9355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 875442218}
   m_Layer: 5
-  m_Name: Panel_level1_1_1(2)
+  m_Name: Panel_level1_1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10366,7 +10366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 965038728}
   m_Layer: 5
-  m_Name: Panel_level1_1_3_1(5)
+  m_Name: Panel_level1_1_3_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11228,7 +11228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 993705484}
   m_Layer: 5
-  m_Name: Panel_level1_1_2(3)
+  m_Name: Panel_level1_1_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -18810,7 +18810,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1882940080}
   m_Layer: 5
-  m_Name: Panel_level1(0)
+  m_Name: Panel_level1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19721,7 +19721,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1994591193}
   m_Layer: 5
-  m_Name: Panel_level1_1(1)
+  m_Name: Panel_level1_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

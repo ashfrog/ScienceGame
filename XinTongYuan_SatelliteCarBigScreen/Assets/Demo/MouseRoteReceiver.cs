@@ -222,6 +222,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
                                     //Panel_level1_1_3.SetActive(true);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.卫星在空姿态);
                                     WeiXingGuangDian.SetActive(true);
                                     //obj = theEarth;
                                     theEarth.gameObject.SetActive(true);
