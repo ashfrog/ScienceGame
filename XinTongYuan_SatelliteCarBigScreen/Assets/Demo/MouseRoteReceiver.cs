@@ -188,9 +188,10 @@ public class MouseRoteReceiver : MonoBehaviour
 
                                     break;
                                 case "发射展示":  //1-1 卫星发射展示
+                                    tabSwitcher_Obj.SwitchTab("");
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
                                     PlayVideo("发射展示.mp4");
                                     //Panel_LoopVideo.SetActive(false);
-                                    tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
                                     break;
                                 case "发射展示返回"://1-1返回 
@@ -436,7 +437,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd1 + ".mp4");
                         mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                         break;
-                    case OrderTypeEnum.WeiXingView: //卫星视图
+                    case OrderTypeEnum.WeiXingView: //卫星视图 卫星展示
                         string weixingraw = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
                         Debug.Log(weixingraw);
                         string[] weixingraws = weixingraw.Split('|');
@@ -448,11 +449,23 @@ public class MouseRoteReceiver : MonoBehaviour
                             tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
                             wxTabSwitcher.SwitchTab(weixingindex % wxTabSwitcher.tabPageGroups.Count);
 
-                            camObj.DOFieldOfView(normalFOV, 0.1f).OnComplete(() =>
+                            //动画 leanPitchYaw.Pitch 从0渐变到20f;
+                            leanPitchYaw.Pitch = 0f;
+                            DOTween.To(() => leanPitchYaw.Pitch, x => leanPitchYaw.Pitch = x, 30f, 2f);
+                            // 让 leanPitchYaw.Yaw 在 1 秒内从当前值增加 30f
+                            DOTween.To(
+                                () => leanPitchYaw.Yaw,
+                                x => leanPitchYaw.Yaw = x,
+                                leanPitchYaw.Yaw + 90f,
+                                2f
+                            );
+
+                            //leanPitchYaw.Yaw += 30f;
+                            camObj.DOFieldOfView(normalFOV, 0f).OnComplete(() =>
                             {
                                 camObj.DOFieldOfView(smallFOV, fovDuration);
                             });
-                            //将地球模型往下移动3
+                            //将地球模型往下移动
                             theEarth.transform.DOMoveY(-3.5f, fovDuration).SetEase(Ease.OutQuad).OnComplete(() =>
                             {
                             });
@@ -469,9 +482,9 @@ public class MouseRoteReceiver : MonoBehaviour
         });
     }
 
-    float normalFOV = 60f; // 正常视角
+    float normalFOV = 100f; // 正常视角
     float smallFOV = 6f; //拉进视角
-    float fovDuration = 0.5f; // 动画持续时间
+    float fovDuration = 1f; // 动画持续时间
 
     private void ShowCarModel(int index2)
     {

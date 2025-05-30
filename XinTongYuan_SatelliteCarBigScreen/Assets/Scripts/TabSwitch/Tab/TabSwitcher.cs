@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 [System.Serializable]
 public class TabPageGroup
@@ -71,18 +72,42 @@ public class TabSwitcher : MonoBehaviour
 
     private void UpdateTabPages()
     {
-        for (int i = 0; i < tabPageGroups.Count; i++)
+        // 收集当前活动Tab的所有页面
+        HashSet<GameObject> currentActivePages = new HashSet<GameObject>();
+        if (currentTabIndex >= 0 && currentTabIndex < tabPageGroups.Count)
         {
-            var group = tabPageGroups[i];
-            bool active = i == currentTabIndex;
+            var currentGroup = tabPageGroups[currentTabIndex];
+            if (currentGroup.pages != null)
+            {
+                foreach (var page in currentGroup.pages)
+                {
+                    if (page != null)
+                        currentActivePages.Add(page);
+                }
+            }
+        }
+
+        // 收集所有需要处理的页面
+        HashSet<GameObject> allPages = new HashSet<GameObject>();
+        foreach (var group in tabPageGroups)
+        {
             if (group.pages != null)
             {
                 foreach (var page in group.pages)
                 {
                     if (page != null)
-                        page.SetActive(active);
+                        allPages.Add(page);
                 }
             }
+        }
+
+        // 更新页面状态
+        foreach (var page in allPages)
+        {
+            // 如果页面在当前活动的Tab中，则显示
+            // 否则隐藏
+            bool shouldBeActive = currentActivePages.Contains(page);
+            page.SetActive(shouldBeActive);
         }
     }
 
