@@ -109,6 +109,13 @@ public class TabSwitcherEditor : Editor
         // 1. 先绘制allTabTypes（可动态增删）
         EditorGUILayout.PropertyField(allTabTypesProp, new GUIContent("自定义Tab类型名"), true);
 
+        // 拷贝按钮紧贴在右边
+        Rect lastRect = GUILayoutUtility.GetLastRect();
+        if (GUI.Button(new Rect(lastRect.xMax - 50, lastRect.y, 50, EditorGUIUtility.singleLineHeight), "拷贝"))
+        {
+            CopyTabTypesToClipboard();
+        }
+
         EditorGUILayout.Space();
 
         // 2. 其它字段
@@ -134,5 +141,37 @@ public class TabSwitcherEditor : Editor
         }
 
         serializedObject.ApplyModifiedProperties();
+    }
+
+    /// <summary>
+    /// 拷贝Tab类型名到剪贴板
+    /// </summary>
+    private void CopyTabTypesToClipboard()
+    {
+        if (allTabTypesProp.arraySize == 0)
+        {
+            Debug.LogWarning("没有Tab类型可以拷贝");
+            return;
+        }
+
+        List<string> tabTypes = new List<string>();
+        for (int i = 0; i < allTabTypesProp.arraySize; i++)
+        {
+            string tabType = allTabTypesProp.GetArrayElementAtIndex(i).stringValue;
+            if (!string.IsNullOrEmpty(tabType))
+            {
+                tabTypes.Add(tabType);
+            }
+        }
+
+        if (tabTypes.Count == 0)
+        {
+            Debug.LogWarning("没有有效的Tab类型可以拷贝");
+            return;
+        }
+
+        string result = string.Join(", ", tabTypes);
+        EditorGUIUtility.systemCopyBuffer = result;
+        Debug.Log($"已拷贝 {tabTypes.Count} 个Tab类型名: {result}");
     }
 }
