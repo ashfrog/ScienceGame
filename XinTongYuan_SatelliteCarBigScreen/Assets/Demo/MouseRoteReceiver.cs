@@ -439,7 +439,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         break;
                     case OrderTypeEnum.SetPlayMovie://汽车模型浏览
                         int index2 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
-                        ShowCarModel(index2);
+                        ShowCarModel(index2 + 1);
                         break;
                     case OrderTypeEnum.SetPlayMovieFolder: //弹窗视频 内饰视频
                         tabSwitcher_UI.SwitchTab(TabUILabel.P弹窗视频);
@@ -513,7 +513,7 @@ public class MouseRoteReceiver : MonoBehaviour
     private void ShowCarModel(int index2)
     {
         carTabSwitcher.SwitchTab(curCarIndex.ToString());
-        mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"{index2 + 1}代俯视.mp4");
+        mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"{index2}代俯视.mp4");
     }
 
     /// <summary>
