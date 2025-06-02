@@ -513,7 +513,7 @@ public class MouseRoteReceiver : MonoBehaviour
     private void ShowCarModel(int index2)
     {
         carTabSwitcher.SwitchTab(curCarIndex.ToString());
-        mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"{index2}代俯视.mp4");
+        mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"{index2 + 1}代俯视.mp4");
     }
 
     /// <summary>
