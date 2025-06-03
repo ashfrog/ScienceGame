@@ -86,6 +86,9 @@ public class MouseRoteReceiver : MonoBehaviour
     [SerializeField]
     private TabSwitcher wxTabSwitcher;
 
+    [SerializeField]
+    private TabSwitcher orbitTabSwitcher;
+
     private int curCarIndex;
 
     [SerializeField]
@@ -207,11 +210,12 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座展示"://1-2 卫星星座展示
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
-                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.地球);
-                                    for (int i = 1; i < moons.Length; i++)
-                                    {
-                                        moons[i].SetActive(false);
-                                    }
+                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
+                                    orbitTabSwitcher.SwitchTab(0);
+                                    //for (int i = 1; i < moons.Length; i++)
+                                    //{
+                                    //    moons[i].SetActive(false);
+                                    //}
                                     //tabSwitcher_Obj.SwitchTab(TabObjLabel.地球);
                                     //Panel_level1_1_2.SetActive(true);
                                     //obj = theEarth;
@@ -221,6 +225,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
                                     StopDoTween();
+                                    camObj.fieldOfView = defaultCameraFieldofView;
                                     //Panel_level1_1_2.SetActive(false);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
                                     tabSwitcher_Obj.Hide();
@@ -338,12 +343,14 @@ public class MouseRoteReceiver : MonoBehaviour
                         break;
                     case OrderTypeEnum.LoadUrl:          //星座展示 选星座
                         int index = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                        tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
+                        orbitTabSwitcher.SwitchTab(index);
                         img_Introduce.sprite = sprites_Introduce[index];
-                        for (int i = 0; i < moons.Length; i++)
-                        {
-                            moons[i].SetActive(false);
-                        }
-                        moons[index].SetActive(true);
+                        //for (int i = 0; i < moons.Length; i++)
+                        //{
+                        //    moons[i].SetActive(false);
+                        //}
+                        //moons[index].SetActive(true);
                         ResetZ(index);
                         break;
                     case OrderTypeEnum.Reload:            //星座对比
@@ -449,6 +456,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         break;
                     case OrderTypeEnum.WeiXingView: //卫星视图 卫星展示
                         string weixingraw = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+                        tabSwitcher_UI.Hide();
                         Debug.Log(weixingraw);
                         string[] weixingraws = weixingraw.Split('|');
                         if (weixingraw.Length >= 2)
@@ -479,7 +487,14 @@ public class MouseRoteReceiver : MonoBehaviour
                                 //将地球模型往下移动
                                 theEarth.transform.DOMoveY(-4.5f, fovDuration).SetEase(Ease.OutQuad).OnComplete(() =>
                                 {
-                                    mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
+                                    //当前mediaPlayer_2播放的不是该视频才播放
+                                    string medianame = "地屏循环地球.mp4";
+                                    if (!mediaPlayer_2.m_VideoPath.Contains(medianame))
+                                    {
+                                        mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, medianame);
+                                    }
+                                    theEarth.transform.localPosition = new Vector3(0, 0, 0);
+                                    theEarth.SetActive(false);
                                 });
                             }
                         }
@@ -517,7 +532,7 @@ public class MouseRoteReceiver : MonoBehaviour
     }
 
     /// <summary>
-    /// 卫星轨道移动位置 展示全
+    /// 卫星轨道移动位置 展示全 fieldofview
     /// </summary>
     /// <param name="index"></param>
     private void ResetZ(int index)
@@ -526,33 +541,33 @@ public class MouseRoteReceiver : MonoBehaviour
         switch (index)
         {
             case 0:
-                z = 60;
+                z = 55;
                 break;
             case 1:
-                z = 60f;
+                z = 16f;
                 break;
             case 2:
-                z = 60f;
+                z = 25f;
                 break;
             case 3:
-                z = 60f;
+                z = 68f;
                 break;
             case 4:
-                z = 70f;
+                z = 66f;
                 break;
             case 5:
-                z = 60f;
+                z = 54f;
                 break;
             case 6:
-                z = 60f;
+                z = 32f;
                 break;
             case 7:
-                z = 60f;
+                z = 40f;
                 break;
             default:
                 break;
         }
-        leanPitchYaw.Camera.DOFieldOfView(z, 0.5f);
+        leanPitchYaw.Camera.DOFieldOfView(z, 1f);
     }
 
     private void PlayVideo(string str)

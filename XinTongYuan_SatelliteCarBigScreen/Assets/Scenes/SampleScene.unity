@@ -309,7 +309,7 @@ PrefabInstance:
     - target: {fileID: 3539106639889771732, guid: 0354a672892c9e44b93158ef7a8c0914,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9179351500064957738, guid: 0354a672892c9e44b93158ef7a8c0914,
         type: 3}
@@ -1258,7 +1258,7 @@ PrefabInstance:
     - target: {fileID: 1147840225914251527, guid: dfd27ee974f8b5a4b931c9b2b860103d,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1901698398044525381, guid: dfd27ee974f8b5a4b931c9b2b860103d,
         type: 3}
@@ -5577,6 +5577,7 @@ MonoBehaviour:
   tabSwitcher_Obj: {fileID: 1131064997}
   carTabSwitcher: {fileID: 1863080028}
   wxTabSwitcher: {fileID: 1879425122}
+  orbitTabSwitcher: {fileID: 1181168980}
   camObj: {fileID: 963194227}
 --- !u!114 &1092004890
 MonoBehaviour:
@@ -5641,7 +5642,6 @@ MonoBehaviour:
     tabType: "\u536B\u661F\u5C55\u793A"
   - pages:
     - {fileID: 1181168975}
-    - {fileID: 1001593272}
     tabType: "\u536B\u661F\u8F68\u9053"
   - pages:
     - {fileID: 1863080026}
