@@ -16,12 +16,54 @@ public class TabSwitcherEditor : Editor
     private Rect dragDropArea;
     private const float DRAG_DROP_AREA_HEIGHT = 40f;
 
+    // 初始化标志
+    private bool isInitialized = false;
+
     void OnEnable()
     {
-        allTabTypesProp = serializedObject.FindProperty("allTabTypes");
-        tabPageGroupsProp = serializedObject.FindProperty("tabPageGroups");
-        tabButtonsProp = serializedObject.FindProperty("tabButtons");
+        // 延迟初始化，避免 serializedObject 为 null 的问题
+        EditorApplication.delayCall += InitializeEditor;
+    }
 
+    void OnDisable()
+    {
+        // 清理延迟调用，避免内存泄漏
+        EditorApplication.delayCall -= InitializeEditor;
+    }
+
+    private void InitializeEditor()
+    {
+        // 检查目标对象和 serializedObject 是否有效
+        if (target == null || serializedObject == null)
+        {
+            return;
+        }
+
+        try
+        {
+            allTabTypesProp = serializedObject.FindProperty("allTabTypes");
+            tabPageGroupsProp = serializedObject.FindProperty("tabPageGroups");
+            tabButtonsProp = serializedObject.FindProperty("tabButtons");
+
+            // 检查所有必要的属性是否找到
+            if (allTabTypesProp == null || tabPageGroupsProp == null || tabButtonsProp == null)
+            {
+                Debug.LogError("TabSwitcherEditor: 无法找到必要的序列化属性，请检查 TabSwitcher 脚本");
+                return;
+            }
+
+            InitializeReorderableList();
+            isInitialized = true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"TabSwitcherEditor 初始化失败: {e.Message}");
+            isInitialized = false;
+        }
+    }
+
+    private void InitializeReorderableList()
+    {
         // 创建可重排序列表
         reorderableList = new ReorderableList(serializedObject, tabPageGroupsProp, true, true, true, true);
 
@@ -37,6 +79,9 @@ public class TabSwitcherEditor : Editor
         // 绘制每个列表项
         reorderableList.drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
         {
+            if (tabPageGroupsProp == null || index >= tabPageGroupsProp.arraySize)
+                return;
+
             var element = tabPageGroupsProp.GetArrayElementAtIndex(index);
             var pagesProp = element.FindPropertyRelative("pages");
             var tabTypeProp = element.FindPropertyRelative("tabType");
@@ -45,9 +90,12 @@ public class TabSwitcherEditor : Editor
 
             // Tab类型下拉选择
             List<string> tabTypes = new List<string>();
-            for (int j = 0; j < allTabTypesProp.arraySize; j++)
+            if (allTabTypesProp != null)
             {
-                tabTypes.Add(allTabTypesProp.GetArrayElementAtIndex(j).stringValue);
+                for (int j = 0; j < allTabTypesProp.arraySize; j++)
+                {
+                    tabTypes.Add(allTabTypesProp.GetArrayElementAtIndex(j).stringValue);
+                }
             }
 
             EditorGUI.LabelField(new Rect(rect.x, rect.y, 100, EditorGUIUtility.singleLineHeight),
@@ -77,6 +125,8 @@ public class TabSwitcherEditor : Editor
         // 添加新元素时的回调
         reorderableList.onAddCallback = (ReorderableList list) =>
         {
+            if (tabPageGroupsProp == null || allTabTypesProp == null) return;
+
             tabPageGroupsProp.InsertArrayElementAtIndex(tabPageGroupsProp.arraySize);
             var newGroup = tabPageGroupsProp.GetArrayElementAtIndex(tabPageGroupsProp.arraySize - 1);
             newGroup.FindPropertyRelative("tabType").stringValue = (allTabTypesProp.arraySize > 0)
@@ -87,6 +137,9 @@ public class TabSwitcherEditor : Editor
         // 动态计算每个元素的高度
         reorderableList.elementHeightCallback = (int index) =>
         {
+            if (tabPageGroupsProp == null || index >= tabPageGroupsProp.arraySize)
+                return EditorGUIUtility.singleLineHeight;
+
             var element = tabPageGroupsProp.GetArrayElementAtIndex(index);
             var pagesProp = element.FindPropertyRelative("pages");
 
@@ -111,16 +164,39 @@ public class TabSwitcherEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        // 如果还没有初始化，显示加载信息并尝试重新初始化
+        if (!isInitialized)
+        {
+            if (target == null)
+            {
+                EditorGUILayout.HelpBox("目标对象为空，请选择一个 TabSwitcher 组件", MessageType.Error);
+                return;
+            }
+
+            EditorGUILayout.HelpBox("编辑器正在初始化...", MessageType.Info);
+            InitializeEditor();
+            return;
+        }
+
+        if (serializedObject == null)
+        {
+            EditorGUILayout.HelpBox("序列化对象无效", MessageType.Error);
+            return;
+        }
+
         serializedObject.Update();
 
         // 1. 先绘制allTabTypes（可动态增删）
-        EditorGUILayout.PropertyField(allTabTypesProp, new GUIContent("自定义Tab类型名"), true);
-
-        // 拷贝按钮紧贴在右边
-        Rect lastRect = GUILayoutUtility.GetLastRect();
-        if (GUI.Button(new Rect(lastRect.xMax - 50, lastRect.y, 50, EditorGUIUtility.singleLineHeight), "拷贝"))
+        if (allTabTypesProp != null)
         {
-            CopyTabTypesToClipboard();
+            EditorGUILayout.PropertyField(allTabTypesProp, new GUIContent("自定义Tab类型名"), true);
+
+            // 拷贝按钮紧贴在右边
+            Rect lastRect = GUILayoutUtility.GetLastRect();
+            if (GUI.Button(new Rect(lastRect.xMax - 50, lastRect.y, 50, EditorGUIUtility.singleLineHeight), "拷贝"))
+            {
+                CopyTabTypesToClipboard();
+            }
         }
 
         EditorGUILayout.Space();
@@ -139,21 +215,27 @@ public class TabSwitcherEditor : Editor
         EditorGUILayout.Space();
 
         // 4. 使用可重排序列表绘制tabPageGroups
-        reorderableList.DoLayoutList();
+        if (reorderableList != null)
+        {
+            reorderableList.DoLayoutList();
+        }
 
         EditorGUILayout.Space();
 
         // 添加一些辅助信息
-        if (tabPageGroupsProp.arraySize == 0)
+        if (tabPageGroupsProp != null)
         {
-            EditorGUILayout.HelpBox("添加Tab页面组的方法：\n" +
-                                  "• 点击上方列表的 '+' 按钮手动添加\n" +
-                                  "• 直接拖入多个Button到Tab按钮数组中自动创建\n" +
-                                  "• 拖拽多个GameObject到上方拖拽区域自动创建", MessageType.Info);
-        }
-        else
-        {
-            EditorGUILayout.HelpBox("可以拖拽左侧的 '≡' 图标来重新排序Tab页面组", MessageType.Info);
+            if (tabPageGroupsProp.arraySize == 0)
+            {
+                EditorGUILayout.HelpBox("添加Tab页面组的方法：\n" +
+                                      "• 点击上方列表的 '+' 按钮手动添加\n" +
+                                      "• 直接拖入多个Button到Tab按钮数组中自动创建\n" +
+                                      "• 拖拽多个GameObject到上方拖拽区域自动创建", MessageType.Info);
+            }
+            else
+            {
+                EditorGUILayout.HelpBox("可以拖拽左侧的 '≡' 图标来重新排序Tab页面组", MessageType.Info);
+            }
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -237,6 +319,8 @@ public class TabSwitcherEditor : Editor
     /// </summary>
     private void CreateTabPageGroupsFromDraggedObjects(List<GameObject> draggedObjects)
     {
+        if (tabPageGroupsProp == null) return;
+
         serializedObject.Update();
 
         // 为每个拖拽的对象创建一个Tab页面组
@@ -272,6 +356,8 @@ public class TabSwitcherEditor : Editor
     /// </summary>
     private string GetOrCreateTabTypeName(string objectName, int index)
     {
+        if (allTabTypesProp == null) return $"Tab{index + 1}";
+
         // 首先尝试基于对象名称创建一个合适的Tab类型名
         string baseTypeName = objectName;
 
@@ -308,6 +394,8 @@ public class TabSwitcherEditor : Editor
     /// </summary>
     private bool IsTabTypeNameExists(string typeName)
     {
+        if (allTabTypesProp == null) return false;
+
         for (int i = 0; i < allTabTypesProp.arraySize; i++)
         {
             if (allTabTypesProp.GetArrayElementAtIndex(i).stringValue == typeName)
@@ -321,6 +409,8 @@ public class TabSwitcherEditor : Editor
     /// </summary>
     private void DrawTabButtonsField()
     {
+        if (tabButtonsProp == null) return;
+
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(tabButtonsProp, new GUIContent("Tab按钮数组"), true);
 
@@ -336,6 +426,8 @@ public class TabSwitcherEditor : Editor
     /// </summary>
     private void CheckAndCreateTabPageGroups()
     {
+        if (tabButtonsProp == null || tabPageGroupsProp == null) return;
+
         serializedObject.ApplyModifiedProperties(); // 确保更改生效
 
         int tabButtonCount = tabButtonsProp.arraySize;
@@ -387,6 +479,8 @@ public class TabSwitcherEditor : Editor
     /// </summary>
     private string GetAvailableTabTypeName(int index)
     {
+        if (allTabTypesProp == null) return $"Tab{index + 1}";
+
         // 首先尝试使用现有的Tab类型名
         if (index < allTabTypesProp.arraySize)
         {
@@ -421,7 +515,7 @@ public class TabSwitcherEditor : Editor
     /// </summary>
     private void CopyTabTypesToClipboard()
     {
-        if (allTabTypesProp.arraySize == 0)
+        if (allTabTypesProp == null || allTabTypesProp.arraySize == 0)
         {
             Debug.LogWarning("没有Tab类型可以拷贝");
             return;

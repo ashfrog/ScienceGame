@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 14.75466, g: 14.75118, b: 13.618759, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5628,6 +5628,7 @@ MonoBehaviour:
   - "\u536B\u661F\u5C55\u793A"
   - "\u536B\u661F\u8F68\u9053"
   - "\u8F66\u6A21"
+  - "\u536B\u661F\u5149\u70B9"
   tabPageGroups:
   - pages:
     - {fileID: 917317442}
@@ -5638,7 +5639,6 @@ MonoBehaviour:
     tabType: "\u5E74\u4EFD\u536B\u661F\u6570\u91CF"
   - pages:
     - {fileID: 1879425120}
-    - {fileID: 917317442}
     tabType: "\u536B\u661F\u5C55\u793A"
   - pages:
     - {fileID: 1181168975}
@@ -5646,6 +5646,12 @@ MonoBehaviour:
   - pages:
     - {fileID: 1863080026}
     tabType: "\u8F66\u6A21"
+  - pages: []
+    tabType: "\u5730\u7403"
+  - pages:
+    - {fileID: 2038668173}
+    - {fileID: 917317442}
+    tabType: "\u536B\u661F\u5149\u70B9"
   initTabPages: 0
 --- !u!4 &1131064998
 Transform:

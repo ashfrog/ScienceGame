@@ -60,11 +60,7 @@ public class MouseRoteReceiver : MonoBehaviour
     public TabSwitcher tabSwitcher_UI;
     public enum TabObjLabel
     {
-        地球,
-        年份卫星数量,
-        卫星展示,
-        卫星轨道,
-        车模
+        地球, 年份卫星数量, 卫星展示, 卫星轨道, 车模, 卫星光点
     }
     public TabSwitcher tabSwitcher_Obj;
 
@@ -157,7 +153,7 @@ public class MouseRoteReceiver : MonoBehaviour
             try
             {
                 var info = requestInfo as DTOInfo;
-                //Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
+                Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                 switch ((OrderTypeEnum)info.OrderType)
                 {
                     case OrderTypeEnum.Rotate:
@@ -240,11 +236,11 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
                                     //Panel_level1_1_3.SetActive(true);
-                                    tabSwitcher_UI.SwitchTab(TabUILabel.卫星在空姿态);
-                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
-                                    WeiXingGuangDian.SetActive(true);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_3);
+                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星光点);
+                                    //WeiXingGuangDian.SetActive(true);
                                     //obj = theEarth;
-                                    oribit.gameObject.SetActive(true);
+                                    //oribit.gameObject.SetActive(true);
                                     //Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     ResetZ(4);
@@ -464,7 +460,11 @@ public class MouseRoteReceiver : MonoBehaviour
                             string name = weixingraws[0]; //卫星名称
                             int weixingindex = int.Parse(weixingraws[1]);
                             Debug.Log(name + " " + weixingindex);
-                            tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
+                            //if (!TabObjLabel.卫星展示.ToString().Equals(tabSwitcher_Obj.GetCurrentTabName()))
+                            {
+                                tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
+                            }
+
                             wxTabSwitcher.SwitchTab(weixingindex % wxTabSwitcher.tabPageGroups.Count);
 
                             //动画 leanPitchYaw.Pitch 从0渐变到20f;

@@ -75,6 +75,21 @@ public class TabSwitcher : MonoBehaviour
         Debug.LogWarning("TabType " + tabTypeName + " not found in tabPageGroups.");
     }
 
+
+    /// <summary>
+    /// 获取当前Tab的名称
+    /// </summary>
+    /// <returns>当前Tab的类型名，如果索引无效则返回空字符串</returns>
+    public string GetCurrentTabName()
+    {
+        if (currentTabIndex >= 0 && currentTabIndex < tabPageGroups.Count)
+        {
+            return tabPageGroups[currentTabIndex].tabType;
+        }
+        return string.Empty;
+    }
+
+
     private void UpdateTabPages()
     {
         // 收集当前活动Tab的所有页面
@@ -130,4 +145,5 @@ public class TabSwitcher : MonoBehaviour
             }
         }
     }
+
 }
