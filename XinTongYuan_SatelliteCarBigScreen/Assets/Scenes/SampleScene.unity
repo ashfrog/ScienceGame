@@ -5784,10 +5784,9 @@ MonoBehaviour:
   tabButtons: []
   currentTabIndex: 0
   allTabTypes:
-  - "\u4F3D\u5229\u7565\u536B\u661F"
-  - "\u536B\u661F\u8F68\u9053\u5730\u7403"
   - "GPS\u536B\u661F"
   - "\u4E00\u7F51\u536B\u661F"
+  - "\u4F3D\u5229\u7565\u536B\u661F"
   - "\u5317\u6597\u536B\u661F"
   - "\u5343\u5E06\u536B\u661F"
   - "\u56FD\u7F51\u536B\u661F"
@@ -5795,32 +5794,37 @@ MonoBehaviour:
   - "\u683C\u6D1B\u7EB3\u65AF\u536B\u661F"
   tabPageGroups:
   - pages:
+    - {fileID: 1001593272}
     - {fileID: 252855959}
     tabType: "\u4F3D\u5229\u7565\u536B\u661F"
   - pages:
     - {fileID: 1001593272}
-    tabType: "\u536B\u661F\u8F68\u9053\u5730\u7403"
-  - pages:
-    - {fileID: 1588222395}
-    tabType: "GPS\u536B\u661F"
-  - pages:
-    - {fileID: 1674036281}
-    tabType: "\u4E00\u7F51\u536B\u661F"
-  - pages:
-    - {fileID: 1499512521}
-    tabType: "\u5317\u6597\u536B\u661F"
-  - pages:
-    - {fileID: 1741774532}
-    tabType: "\u5343\u5E06\u536B\u661F"
-  - pages:
     - {fileID: 1876735176}
     tabType: "\u56FD\u7F51\u536B\u661F"
   - pages:
+    - {fileID: 1001593272}
+    - {fileID: 1741774532}
+    tabType: "\u5343\u5E06\u536B\u661F"
+  - pages:
+    - {fileID: 1001593272}
+    - {fileID: 1499512521}
+    tabType: "\u5317\u6597\u536B\u661F"
+  - pages:
+    - {fileID: 1001593272}
+    - {fileID: 291013069}
+    tabType: "\u683C\u6D1B\u7EB3\u65AF\u536B\u661F"
+  - pages:
+    - {fileID: 1001593272}
+    - {fileID: 1588222395}
+    tabType: "GPS\u536B\u661F"
+  - pages:
+    - {fileID: 1001593272}
     - {fileID: 1658191078}
     tabType: "\u661F\u94FE\u536B\u661F"
   - pages:
-    - {fileID: 291013069}
-    tabType: "\u683C\u6D1B\u7EB3\u65AF\u536B\u661F"
+    - {fileID: 1001593272}
+    - {fileID: 1674036281}
+    tabType: "\u4E00\u7F51\u536B\u661F"
   initTabPages: 0
 --- !u!1 &1256296718
 GameObject:

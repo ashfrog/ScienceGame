@@ -51,7 +51,7 @@ public class TabSwitcherEditor : Editor
             }
 
             EditorGUI.LabelField(new Rect(rect.x, rect.y, 100, EditorGUIUtility.singleLineHeight),
-                                "Tab " + (index + 1) + ":");
+                                "Tab " + (index) + ":");
 
             if (tabTypes.Count > 0)
             {
