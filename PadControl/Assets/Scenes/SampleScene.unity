@@ -25842,6 +25842,7 @@ GameObject:
   - component: {fileID: 1150018793}
   - component: {fileID: 1150018794}
   - component: {fileID: 1150018795}
+  - component: {fileID: 1150018796}
   m_Layer: 5
   m_Name: "Panel_\u60C5\u666F\u6A21\u5F0F\u63A7\u5236"
   m_TagString: Untagged
@@ -25999,8 +26000,7 @@ MonoBehaviour:
   - {fileID: 1129285205}
   - {fileID: 439738741}
   btnOff: {fileID: 0}
-  btnOffBinds:
-  - {fileID: 1986805937}
+  btnOffBinds: []
   onCmd: []
   offCmd: []
   isHexCmd: 0
@@ -26064,6 +26064,54 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 1
+--- !u!114 &1150018796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150018786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cde020e397061ac44b62dca60908a165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fhClientController: {fileID: 0}
+  deviceIPNO: 0
+  orderType: 20
+  btnOn: {fileID: 0}
+  btnOnBinds: []
+  btnOff: {fileID: 0}
+  btnOffBinds:
+  - {fileID: 1986805937}
+  onCmd: []
+  offCmd: []
+  isHexCmd: 0
+  appendCRC16: 0
+  messageInterval: 0.1
+  BindControls:
+  - {fileID: 505234561}
+  - {fileID: 815247191}
+  - {fileID: 1721138989}
+  - {fileID: 2026552896}
+  - {fileID: 396908509}
+  - {fileID: 809724886}
+  - {fileID: 1967511621}
+  - {fileID: 221333561}
+  - {fileID: 1279368748}
+  - {fileID: 1228200623}
+  - {fileID: 1070487931}
+  - {fileID: 1184847690}
+  - {fileID: 1184847690}
+  - {fileID: 1501395946}
+  - {fileID: 942971675}
+  - {fileID: 122705765}
+  - {fileID: 1688863384}
+  - {fileID: 920769902}
+  - {fileID: 782225937}
+  showConfirmDialog: 0
+  ignoreBindInGroup: 0
+  enqueDelay: 0
 --- !u!1001 &1154341860
 PrefabInstance:
   m_ObjectHideFlags: 0

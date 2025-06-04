@@ -28,8 +28,8 @@ public class SectionClick : MonoBehaviour
         {
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.none);
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.StopMovie, "");
+            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.5f);
         }
-
     }
 
     // 参观模式按钮点击事件
