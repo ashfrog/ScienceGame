@@ -139,6 +139,12 @@ public class IPSettings : BaseSettings
         set => WriteValue("DoorIPHost", value.ToString());
     }
 
+    public float MediaTime
+    {
+        get => ReadFloat("MediaTime", 30f);
+        set => WriteValue("MediaTime", value.ToString());
+    }
+
     public int IPNO
     {
         get => ReadInt("IPNO", -1);

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using System;
+using TMPro;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class WeatherData
@@ -11,309 +12,230 @@ public class WeatherData
     public string code;
     public string updateTime;
     public string fxLink;
-    public DailyWeather[] daily;
-
-    [System.Serializable]
-    public class DailyWeather
-    {
-        public string fxDate;        // 预报日期
-        public string sunrise;       // 日出时间
-        public string sunset;        // 日落时间
-        public string moonrise;      // 月升时间
-        public string moonset;       // 月落时间
-        public string moonPhase;     // 月相名称
-        public string tempMax;       // 预报当天最高温度
-        public string tempMin;       // 预报当天最低温度
-        public string iconDay;       // 预报白天天气状况图标代码
-        public string textDay;       // 预报白天天气状况文字描述
-        public string iconNight;     // 预报夜间天气状况图标代码
-        public string textNight;     // 预报夜间天气状况文字描述
-        public string wind360Day;    // 预报白天风向360角度
-        public string windDirDay;    // 预报白天风向
-        public string windScaleDay;  // 预报白天风力等级
-        public string windSpeedDay;  // 预报白天风速，公里/小时
-        public string wind360Night;  // 预报夜间风向360角度
-        public string windDirNight;  // 预报夜间风向
-        public string windScaleNight;// 预报夜间风力等级
-        public string windSpeedNight;// 预报夜间风速，公里/小时
-        public string humidity;      // 相对湿度，百分比数值
-        public string precip;        // 预报当天总降水量，毫米
-        public string pressure;      // 大气压强，百帕
-        public string vis;           // 能见度，公里
-        public string cloud;         // 云量，百分比数值
-        public string uvIndex;       // 紫外线强度指数
-    }
+    public WeatherNow now;
+    public WeatherRefer refer;
 }
 
 [System.Serializable]
-public class CurrentWeatherData
+public class WeatherNow
 {
-    public string code;
-    public string updateTime;
-    public string fxLink;
-    public CurrentWeather now;
+    public string obsTime;
+    public string temp;
+    public string feelsLike;
+    public string icon;
+    public string text;
+    public string wind360;
+    public string windDir;
+    public string windScale;
+    public string windSpeed;
+    public string humidity;
+    public string precip;
+    public string pressure;
+    public string vis;
+    public string cloud;
+    public string dew;
+}
 
-    [System.Serializable]
-    public class CurrentWeather
-    {
-        public string obsTime;    // 数据观测时间
-        public string temp;       // 温度，摄氏度
-        public string feelsLike;  // 体感温度，摄氏度
-        public string icon;       // 天气状况图标代码
-        public string text;       // 天气状况的文字描述
-        public string wind360;    // 风向360角度
-        public string windDir;    // 风向
-        public string windScale;  // 风力等级
-        public string windSpeed;  // 风速，公里/小时
-        public string humidity;   // 相对湿度，百分比数值
-        public string precip;     // 当前小时累计降水量，毫米
-        public string pressure;   // 大气压强，百帕
-        public string vis;        // 能见度，公里
-        public string cloud;      // 云量，百分比数值
-        public string dew;        // 露点温度
-    }
+[System.Serializable]
+public class WeatherRefer
+{
+    public string[] sources;
+    public string[] license;
 }
 
 public class QWeatherAPI : MonoBehaviour
 {
     [Header("API配置")]
-    public string apiKey = "YOUR_API_KEY_HERE";
+    public string apiKey = "your-api-key-here";
+    public string baseUrl = "https://p75ctu5wrj.re.qweatherapi.com/v7/weather/now";
 
-    [Header("城市配置")]
-    public string cityId = "101040100"; // 重庆城市ID
-    public string cityName = "重庆";
+    [Header("位置设置")]
+    public string locationId = "101040100"; // 北京的位置ID
 
-    [Header("API URLs")]
-    private const string BASE_URL = "https://devapi.qweather.com/v7/weather/";
-    private const string CURRENT_WEATHER_URL = BASE_URL + "now";
-    private const string FORECAST_3D_URL = BASE_URL + "3d";
-    private const string FORECAST_7D_URL = BASE_URL + "7d";
+    [Header("认证方式选择")]
+    public bool useHeaderAuth = true; // true使用Header认证，false使用参数认证
 
-    [Header("UI显示")]
-    public TMP_Text weatherDisplayText;
-    public UnityEngine.UI.Button refreshButton;
-
-    [Header("调试信息")]
-    public bool showDebugInfo = true;
-
-    // 缓存的天气数据
-    private CurrentWeatherData currentWeather;
-    private WeatherData forecastWeather;
+    public RawImage weatherIcon;
+    public TMP_Text text_温度;
+    public TMP_Text text_天气状况;
+    public TMP_Text text_湿度;
 
     void Start()
     {
-        // 绑定刷新按钮
-        if (refreshButton != null)
+        // 启动时获取天气数据
+        GetWeatherData();
+    }
+    float curt = 0;
+    /// <summary>
+    /// 1小时获取一次天气
+    /// </summary>
+    float wt = 3600;
+    private void Update()
+    {
+        curt += Time.deltaTime;
+        if (curt > wt)
         {
-            refreshButton.onClick.AddListener(RefreshWeatherData);
+            curt = 0;
+            GetWeatherData();
         }
-
-        // 启动时自动获取天气数据
-        RefreshWeatherData();
-
-        // 每30分钟自动更新一次
-        InvokeRepeating(nameof(RefreshWeatherData), 1800f, 1800f);
     }
 
-    public void RefreshWeatherData()
+    public void GetWeatherData()
     {
-        if (string.IsNullOrEmpty(apiKey) || apiKey == "YOUR_API_KEY_HERE")
-        {
-            Debug.LogError("请设置有效的和风天气API Key！");
-            UpdateWeatherDisplay("错误：未设置API Key");
-            return;
-        }
-
-        // 同时获取当前天气和预报
-        StartCoroutine(GetCurrentWeather());
-        StartCoroutine(GetWeatherForecast(7)); // 获取7天预报
+        StartCoroutine(FetchWeatherData());
     }
 
-    private IEnumerator GetCurrentWeather()
+    IEnumerator FetchWeatherData()
     {
-        string url = $"{CURRENT_WEATHER_URL}?location={cityId}&key={apiKey}";
+        UnityWebRequest request;
 
-        if (showDebugInfo)
+        if (useHeaderAuth)
         {
-            Debug.Log($"请求当前天气URL: {url}");
+            // 方式1：使用Header认证
+            string url = $"{baseUrl}?location={locationId}";
+            request = UnityWebRequest.Get(url);
+            request.SetRequestHeader("X-QW-Api-Key", apiKey);
+        }
+        else
+        {
+            // 方式2：使用请求参数认证
+            string url = $"{baseUrl}?location={locationId}&key={apiKey}";
+            request = UnityWebRequest.Get(url);
         }
 
-        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        // 设置通用请求头
+        request.SetRequestHeader("Accept-Encoding", "gzip");
+        request.SetRequestHeader("Accept", "application/json");
+
+        Debug.Log($"发送请求到: {request.url}");
+        Debug.Log($"认证方式: {(useHeaderAuth ? "Header认证" : "参数认证")}");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
         {
-            // 设置请求头
-            request.SetRequestHeader("User-Agent", "Unity-QWeather-Client/1.0");
+            Debug.Log("请求成功!");
+            Debug.Log($"响应数据: {request.downloadHandler.text}");
 
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
+            try
             {
-                string jsonResponse = request.downloadHandler.text;
-
-                if (showDebugInfo)
-                {
-                    Debug.Log($"当前天气API响应: {jsonResponse}");
-                }
-
-                try
-                {
-                    currentWeather = JsonUtility.FromJson<CurrentWeatherData>(jsonResponse);
-
-                    if (currentWeather.code == "200")
-                    {
-                        Debug.Log("当前天气数据获取成功！");
-                        UpdateCurrentWeatherDisplay();
-                    }
-                    else
-                    {
-                        Debug.LogError($"API返回错误代码: {currentWeather.code}");
-                        UpdateWeatherDisplay($"API错误: 代码 {currentWeather.code}");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"解析当前天气JSON失败: {e.Message}");
-                    UpdateWeatherDisplay("数据解析失败");
-                }
+                // 解析JSON数据
+                WeatherData weatherData = Newtonsoft.Json.JsonConvert.DeserializeObject<WeatherData>(request.downloadHandler.text);
+                ProcessWeatherData(weatherData);
             }
-            else
+            catch (Exception e)
             {
-                Debug.LogError($"当前天气API请求失败: {request.error}");
-                UpdateWeatherDisplay($"网络错误: {request.error}");
+                Debug.LogError($"JSON解析错误: {e.Message}");
             }
         }
-    }
-
-    private IEnumerator GetWeatherForecast(int days = 3)
-    {
-        string forecastUrl = days <= 3 ? FORECAST_3D_URL : FORECAST_7D_URL;
-        string url = $"{forecastUrl}?location={cityId}&key={apiKey}";
-
-        if (showDebugInfo)
+        else
         {
-            Debug.Log($"请求天气预报URL: {url}");
+            Debug.LogError($"请求失败: {request.error}");
+            Debug.LogError($"响应码: {request.responseCode}");
+            Debug.LogError($"错误详情: {request.downloadHandler.text}");
         }
 
-        using (UnityWebRequest request = UnityWebRequest.Get(url))
+        request.Dispose();
+    }
+
+    void ProcessWeatherData(WeatherData data)
+    {
+        if (data.code == "200")
         {
-            request.SetRequestHeader("User-Agent", "Unity-QWeather-Client/1.0");
+            Debug.Log("=== 天气数据 ===");
+            Debug.Log($"温度: {data.now.temp}°C");
+            Debug.Log($"体感温度: {data.now.feelsLike}°C");
+            Debug.Log($"天气状况: {data.now.text}");
+            Debug.Log($"湿度: {data.now.humidity}%");
+            Debug.Log($"风向: {data.now.windDir}");
+            Debug.Log($"风速: {data.now.windSpeed} km/h");
+            Debug.Log($"更新时间: {data.now.obsTime}");
 
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                string jsonResponse = request.downloadHandler.text;
-
-                if (showDebugInfo)
-                {
-                    Debug.Log($"天气预报API响应: {jsonResponse}");
-                }
-
-                try
-                {
-                    forecastWeather = JsonUtility.FromJson<WeatherData>(jsonResponse);
-
-                    if (forecastWeather.code == "200")
-                    {
-                        Debug.Log("天气预报数据获取成功！");
-                        UpdateForecastWeatherDisplay();
-                    }
-                    else
-                    {
-                        Debug.LogError($"预报API返回错误代码: {forecastWeather.code}");
-                    }
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"解析天气预报JSON失败: {e.Message}");
-                }
-            }
-            else
-            {
-                Debug.LogError($"天气预报API请求失败: {request.error}");
-            }
+            // 在这里你可以更新UI或执行其他逻辑
+            OnWeatherDataReceived(data);
+        }
+        else
+        {
+            Debug.LogError($"API返回错误码: {data.code}");
         }
     }
 
-    private void UpdateCurrentWeatherDisplay()
+    // 天气数据接收回调
+    void OnWeatherDataReceived(WeatherData data)
     {
-        if (currentWeather?.now == null) return;
+        // 在这里添加你的天气数据处理逻辑
+        // 例如更新UI、触发游戏事件等
+        //{"code":"200","updateTime":"2025-06-04T14:36+08:00","fxLink":"https://www.qweather.com/weather/chongqing-101040100.html",
+        //"now":{"obsTime":"2025-06-04T14:32+08:00","temp":"27","feelsLike":"28","icon":"104","text":"阴","wind360":"180",
+        //"windDir":"南风","windScale":"2","windSpeed":"8","humidity":"62","precip":"0.0","pressure":"979","vis":"9",
+        //"cloud":"91","dew":"20"},
+        //"refer":{"sources":["QWeather"],"license":["QWeather Developers License"]}}
+        Debug.Log("=== 天气数据 ===");
+        Debug.Log($"温度: {data.now.temp}°C");
+        //Debug.Log($"体感温度: {data.now.feelsLike}°C");
+        Debug.Log($"天气状况: {data.now.text}");
+        Debug.Log($"湿度: {data.now.humidity}%");
+        //Debug.Log($"风向: {data.now.windDir}");
+        //Debug.Log($"风速: {data.now.windSpeed} km/h");
+        Debug.Log($"icon图标: {data.now.icon}");
 
-        var now = currentWeather.now;
-        string displayText = $"🌍 {cityName} 当前天气\n\n";
-        displayText += $"🌡️ 温度: {now.temp}°C (体感 {now.feelsLike}°C)\n";
-        displayText += $"☁️ 天气: {now.text}\n";
-        displayText += $"💨 风向: {now.windDir} {now.windScale}级 ({now.windSpeed}km/h)\n";
-        displayText += $"💧 湿度: {now.humidity}%\n";
-        displayText += $"👁️ 能见度: {now.vis}km\n";
-        displayText += $"📊 气压: {now.pressure}hPa\n";
-        displayText += $"🕐 更新时间: {now.obsTime}\n";
+        text_温度.text = $"{data.now.temp}°C";
+        text_天气状况.text = $"{data.now.text}";
+        text_湿度.text = $"{data.now.humidity}%";
 
-        UpdateWeatherDisplay(displayText);
-    }
-
-    private void UpdateForecastWeatherDisplay()
-    {
-        if (forecastWeather?.daily == null || forecastWeather.daily.Length == 0) return;
-
-        string forecastText = "\n\n📅 未来天气预报\n";
-        forecastText += "═══════════════════\n";
-
-        for (int i = 0; i < Math.Min(forecastWeather.daily.Length, 5); i++)
+        //将StreamingAssets\weather_icons路径下的png图片显示出来
+        string iconPath = $"weather_icons/{data.now.icon}.png";
+        string fullPath = System.IO.Path.Combine(Application.streamingAssetsPath, iconPath);
+        Debug.Log($"图标路径: {fullPath}");
+        if (System.IO.File.Exists(fullPath))
         {
-            var day = forecastWeather.daily[i];
-            string date = DateTime.Parse(day.fxDate).ToString("MM/dd");
-            string dayName = i == 0 ? "今天" : DateTime.Parse(day.fxDate).ToString("dddd");
-
-            forecastText += $"📆 {date} ({dayName})\n";
-            forecastText += $"   🌡️ {day.tempMin}°C ~ {day.tempMax}°C\n";
-            forecastText += $"   🌞 白天: {day.textDay}\n";
-            forecastText += $"   🌙 夜间: {day.textNight}\n";
-            forecastText += $"   💧 湿度: {day.humidity}% | 降水: {day.precip}mm\n";
-            if (i < Math.Min(forecastWeather.daily.Length, 5) - 1)
-            {
-                forecastText += "   ─────────────────\n";
-            }
-        }
-
-        // 将预报信息追加到当前天气显示
-        if (weatherDisplayText != null && currentWeather?.now != null)
-        {
-            weatherDisplayText.text += forecastText;
+            Debug.Log("图标文件存在，加载中...");
+            StartCoroutine(LoadWeatherIcon(fullPath));
         }
     }
 
-    private void UpdateWeatherDisplay(string text)
+    /// <summary>
+    /// Coroutine to load the weather icon from the specified path.
+    /// </summary>
+    /// <param name="fullPath">Full path to the weather icon file.</param>
+    /// <returns>IEnumerator for coroutine.</returns>
+    public IEnumerator LoadWeatherIcon(string fullPath)
     {
-        if (weatherDisplayText != null)
+        // Check if the file exists
+        if (!System.IO.File.Exists(fullPath))
         {
-            weatherDisplayText.text = text;
+            Debug.LogError($"File not found at path: {fullPath}");
+            yield break;
         }
 
-        Debug.Log($"天气信息更新: {text}");
+        // Load the image as a Texture2D
+        byte[] fileData = System.IO.File.ReadAllBytes(fullPath);
+        Texture2D texture = new Texture2D(2, 2);
+        if (!texture.LoadImage(fileData))
+        {
+            Debug.LogError("Failed to load image from file.");
+            yield break;
+        }
+
+        if (weatherIcon != null)
+        {
+            Destroy(weatherIcon.texture);
+            weatherIcon.texture = texture;
+        }
+        yield return null;
     }
 
-    // 公共方法，供其他脚本调用
-    public CurrentWeatherData GetCurrentWeatherData()
+    // 公共方法：获取指定城市的天气
+    public void GetWeatherForLocation(string newLocationId)
     {
-        return currentWeather;
+        locationId = newLocationId;
+        GetWeatherData();
     }
 
-    public WeatherData GetForecastWeatherData()
+    // 公共方法：切换认证方式
+    public void SwitchAuthMethod()
     {
-        return forecastWeather;
-    }
-
-    // 获取特定城市的天气（可扩展功能）
-    public void GetWeatherForCity(string newCityId, string newCityName)
-    {
-        cityId = newCityId;
-        cityName = newCityName;
-        RefreshWeatherData();
-    }
-
-    // 检查API配置是否有效
-    public bool IsAPIConfigured()
-    {
-        return !string.IsNullOrEmpty(apiKey) && apiKey != "YOUR_API_KEY_HERE";
+        useHeaderAuth = !useHeaderAuth;
+        Debug.Log($"切换到: {(useHeaderAuth ? "Header认证" : "参数认证")}");
     }
 }

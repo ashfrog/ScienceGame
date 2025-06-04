@@ -13,6 +13,13 @@ using System.Threading;
 
 public class StrTcpClient : MonoBehaviour
 {
+
+    enum PanelType
+    {
+        Media, Time
+    }
+    [SerializeField]
+    TabSwitcher tabSwitcher_time;
     private TcpClient m_tcpClient;
 
     public Action<String> StrTcpClientReceive;
@@ -34,6 +41,7 @@ public class StrTcpClient : MonoBehaviour
     private static SemaphoreSlim semaphore_2 = new SemaphoreSlim(1); // 限制异步线程同时进行的连接数 推荐1连接最稳定
     private void OnEnable()
     {
+        Settings.ini.IPHost.MediaTime = Settings.ini.IPHost.MediaTime;
         this.ipHost = Settings.ini.IPHost.DoorIPHost;
         if (string.IsNullOrEmpty(ipHost))
         {
@@ -72,11 +80,20 @@ public class StrTcpClient : MonoBehaviour
         m_tcpClient.Received += TcpClient_Received;
     }
 
+    float curt = 0;
+    float wt = 30;
+
     private void Update()
     {
         if ((Input.GetKeyDown(KeyCode.F2)))
         {
             Send("abc");
+        }
+        curt += Time.deltaTime;
+        if (curt > wt)
+        {
+            curt = 0;
+            tabSwitcher_time.SwitchTab(PanelType.Time);
         }
     }
 
@@ -158,14 +175,15 @@ public class StrTcpClient : MonoBehaviour
             if ("AAAAAAAAA1".Equals(hexString))
             {
                 Debug.Log("开门联动");
+                tabSwitcher_time.SwitchTab(PanelType.Media);
                 fHTcpClient_VCRPlayer._vcr.PlayNext();
+                curt = 0;
             }
             if (StrTcpClientReceive != null)
             {
                 StrTcpClientReceive.Invoke(Encoding.UTF8.GetString(byteBlock.ToArray()));
             }
         });
-
     }
 
     public void logmsg(string msg)
