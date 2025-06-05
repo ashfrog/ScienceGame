@@ -32,11 +32,22 @@ public class SGraphicsSettings : BaseSettings
         get => ReadBool("FullScreen", true);
         set => WriteValue("FullScreen", value.ToString());
     }
+    public bool TopMost
+    {
+        get => ReadBool("TopMost", true);
+        set => WriteValue("TopMost", value.ToString());
+    }
 
     public string ScreenSaver
     {
-        get => ReadValue("ScreenSaver", "");
+        get => ReadValue("ScreenSaver", "屏保.jpg");
         set => WriteValue("ScreenSaver", value);
+    }
+
+    public int TabMode
+    {
+        get => ReadInt("TabMode", 0);
+        set => WriteValue("TabMode", value.ToString());
     }
 
     public (int width, int height) Resolution

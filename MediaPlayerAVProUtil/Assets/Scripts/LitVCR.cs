@@ -19,6 +19,7 @@ using UnityEngine.Windows;
 using File = System.IO.File;
 using Directory = System.IO.Directory;
 using Input = UnityEngine.Input;
+using Vuplex.WebView;
 
 //-----------------------------------------------------------------------------
 // Copyright 2015-2018 RenderHeads Ltd.  All rights reserverd.
@@ -122,6 +123,16 @@ public class LitVCR : MonoBehaviour
         one,
         all
     }
+
+    public enum TabMode
+    {
+        视频, 网页
+    }
+    [SerializeField]
+    TabSwitcher tabSwitcher;
+
+    [SerializeField]
+    private CanvasWebViewPrefab canvasWebViewPrefab;
 
     /// <summary>
     /// 雷达视频文件夹如 /0.00
@@ -420,8 +431,8 @@ public class LitVCR : MonoBehaviour
             {
                 string arrStr = File.ReadAllText(playlistFilePath);
                 var files = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(arrStr);
-                videoPaths = files.Select(s => Path.Combine(persistentDataPath, s)).ToList();
-                return videoPaths.ToString();
+                videoPaths = files.Select(s => IsWebUrl(s) ? s : Path.Combine(persistentDataPath, s)).ToList();
+                return string.Join(", ", videoPaths); // 改为更适合输出的方式
             }
             catch (Exception ex)
             {
@@ -430,7 +441,7 @@ public class LitVCR : MonoBehaviour
         }
 
         videoPaths = FileUtils.GetMediaFiles(persistentDataPath);
-        return videoPaths.ToString();
+        return string.Join(", ", videoPaths); // 改为更适合输出的方式
     }
 
     public string GetFileListStr()
@@ -691,7 +702,17 @@ public class LitVCR : MonoBehaviour
     }
 
     Coroutine imgCroutine;
-
+    /// <summary>
+    /// 检查是否以 http:// 或 https:// 开头
+    /// </summary>
+    /// <param name="path"></param>
+    /// <returns></returns>
+    static bool IsWebUrl(string path)
+    {
+        // 检查是否以 http:// 或 https:// 开头
+        return path.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
+            || path.StartsWith("https://", StringComparison.OrdinalIgnoreCase);
+    }
     /// <summary>
     /// 根据index播放指定视频
     /// </summary>
@@ -705,40 +726,63 @@ public class LitVCR : MonoBehaviour
         this.imgstopped = imgstopped;
         if (videoindex < videoPaths.Count)
         {
-            if (File.Exists(videoPaths[videoindex]))
+            //如果videoPaths[videoindex]是网页路径
+            if (IsWebUrl(videoPaths[videoindex]))
             {
-                this.videoindex = videoindex;
-
-                if (FileUtils.IsImgFile(videoPaths[videoindex])) //播放图片文件
-                {
-                    if (imgCroutine != null)
-                    {
-                        StopCoroutine(imgCroutine);
-                    }
-                    imgCroutine = StartCoroutine(asyncLoadImg(videoPaths[videoindex]));
-                    if (PlayingPlayer && PlayingPlayer.Control != null && !isMovPaused())
-                    {
-                        PlayingPlayer.Control.Pause();
-                    }
-                }
-                else if (FileUtils.IsMovFile(videoPaths[videoindex]))//播放视频文件
-                {
-                    if (imgCroutine != null)
-                    {
-                        StopCoroutine(imgCroutine);
-                    }
-                    LoadingPlayer.m_VideoPath = videoPaths[videoindex];
-                    OpenVideoFile(videoPaths[videoindex], reload);
-                }
-                SetMask(maskDisplay, videoindex);
+                tabSwitcher.SwitchTab(TabMode.网页);
+                StartCoroutine(LoadUrlWhenReady(videoPaths[videoindex]));
             }
             else
             {
-                Debug.Log("视频文件已移除:" + videoPaths[videoindex]);
-                videoPaths.RemoveAt(videoindex);
+                tabSwitcher.SwitchTab(TabMode.视频);
+                if (File.Exists(videoPaths[videoindex]))
+                {
+                    this.videoindex = videoindex;
+
+                    if (FileUtils.IsImgFile(videoPaths[videoindex])) //播放图片文件
+                    {
+                        if (imgCroutine != null)
+                        {
+                            StopCoroutine(imgCroutine);
+                        }
+                        imgCroutine = StartCoroutine(asyncLoadImg(videoPaths[videoindex]));
+                        if (PlayingPlayer && PlayingPlayer.Control != null && !isMovPaused())
+                        {
+                            PlayingPlayer.Control.Pause();
+                        }
+                    }
+                    else if (FileUtils.IsMovFile(videoPaths[videoindex]))//播放视频文件
+                    {
+                        if (imgCroutine != null)
+                        {
+                            StopCoroutine(imgCroutine);
+                        }
+                        LoadingPlayer.m_VideoPath = videoPaths[videoindex];
+                        OpenVideoFile(videoPaths[videoindex], reload);
+                    }
+                    SetMask(maskDisplay, videoindex);
+                }
+                else
+                {
+                    Debug.Log("文件不存在:" + videoPaths[videoindex]);
+                    //videoPaths.RemoveAt(videoindex);
+                }
             }
         }
+    }
 
+    IEnumerator LoadUrlWhenReady(string url)
+    {
+        // 等待 WebView 初始化
+        while (canvasWebViewPrefab == null || canvasWebViewPrefab.WebView == null)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        // 额外等待一帧确保完全初始化
+        yield return new WaitForEndOfFrame();
+
+        canvasWebViewPrefab.WebView.LoadUrl(url);
     }
 
     private void SetMask(MaskableGraphic grath, int videoindex)

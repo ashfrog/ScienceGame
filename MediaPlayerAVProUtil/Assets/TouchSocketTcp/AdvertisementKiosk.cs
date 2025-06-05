@@ -113,8 +113,13 @@ public class AdvertisementKiosk : MonoBehaviour
 
     private void Start()
     {
+
+        Settings.ini.Graphics.TopMost = Settings.ini.Graphics.TopMost;
+        Settings.ini.Graphics.FullScreen = Settings.ini.Graphics.FullScreen;
         // 设置全屏
-        Screen.fullScreen = true;
+        Screen.fullScreen = Settings.ini.Graphics.FullScreen;
+
+
 
         // 设置屏幕常亮
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -134,7 +139,7 @@ public class AdvertisementKiosk : MonoBehaviour
         }
 
 #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
-        if (File.Exists(Path.Combine(Application.streamingAssetsPath, "置顶.txt")))
+        if (Settings.ini.Graphics.TopMost || File.Exists(Path.Combine(Application.streamingAssetsPath, "置顶.txt")))
         {
             StartCoroutine(GetWindowHandle());
 
