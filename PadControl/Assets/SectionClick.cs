@@ -27,6 +27,7 @@ public class SectionClick : MonoBehaviour
         for (int i = (int)DataTypeEnum.Media_XZTY_18; i <= (int)DataTypeEnum.Media_MDFY_29; i++)
         {
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.none);
+            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayScreenSaver, "");
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.StopMovie, "");
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.5f);
         }
@@ -41,6 +42,7 @@ public class SectionClick : MonoBehaviour
         {
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.all);
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayNext, "");
+            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.5f);
         }
     }
 
@@ -53,6 +55,7 @@ public class SectionClick : MonoBehaviour
         {
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.all);
             FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayNext, "");
+            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.3f);
         }
 
     }

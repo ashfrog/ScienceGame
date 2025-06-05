@@ -116,6 +116,11 @@ public enum OrderTypeEnum
     GetCurMovieName = 408,
 
     /// <summary>
+    /// 显示屏保
+    /// </summary>
+    PlayScreenSaver = 409,
+
+    /// <summary>
     /// 获取视频总时长
     /// </summary>
     GetMovAllSecond = 601,

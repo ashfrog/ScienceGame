@@ -68,11 +68,15 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
                     case OrderTypeEnum.PauseMovie:
                         _vcr.OnPauseButton();          //暂停
                         break;
+                    case OrderTypeEnum.PlayScreenSaver:
+                        _vcr.PlayScreenSaver();
+                        break;
                     case OrderTypeEnum.PlayMovie:
                         _vcr.OnPlayButton();           //播放
                         break;
                     case OrderTypeEnum.StopMovie:
                         _vcr.Stop();
+                        _vcr.PlayScreenSaver();
                         break;
                     case OrderTypeEnum.SetMovSeek:                   //设置播放进度
                         float setSeek = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(info.Body));
