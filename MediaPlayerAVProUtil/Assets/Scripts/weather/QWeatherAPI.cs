@@ -181,7 +181,7 @@ public class QWeatherAPI : MonoBehaviour
 
         text_温度.text = $"{data.now.temp}°C";
         text_天气状况.text = $"{data.now.text}";
-        text_湿度.text = $"{data.now.humidity}%";
+        text_湿度.text = $"{data.now.humidity}";
 
         //将StreamingAssets\weather_icons路径下的png图片显示出来
         string iconPath = $"weather_icons/{data.now.icon}.png";
