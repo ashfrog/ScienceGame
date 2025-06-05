@@ -116,6 +116,7 @@ public class AdvertisementKiosk : MonoBehaviour
 
         Settings.ini.Graphics.TopMost = Settings.ini.Graphics.TopMost;
         Settings.ini.Graphics.FullScreen = Settings.ini.Graphics.FullScreen;
+        Settings.ini.Graphics.HideCursor = Settings.ini.Graphics.HideCursor;
         // 设置全屏
         Screen.fullScreen = Settings.ini.Graphics.FullScreen;
 
@@ -124,12 +125,16 @@ public class AdvertisementKiosk : MonoBehaviour
         // 设置屏幕常亮
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
-        // 隐藏鼠标
+        if (Settings.ini.Graphics.HideCursor)
+        {
+            // 隐藏鼠标
 #if UNITY_EDITOR
-        Cursor.visible = true;
+            Cursor.visible = true;
 #else
         Cursor.visible = false;
 #endif
+        }
+
         Application.runInBackground = true;
         //多屏
         for (int i = 0; i < Display.displays.Length; i++)

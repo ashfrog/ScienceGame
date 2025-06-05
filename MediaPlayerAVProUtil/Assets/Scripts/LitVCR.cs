@@ -543,10 +543,12 @@ public class LitVCR : MonoBehaviour
     {
         _loadingPlayer = _mediaPlayerB;
 
-        if (String.IsNullOrEmpty(Settings.ini.Path.MediaPath))
+        Settings.ini.Path.MediaPath = Settings.ini.Path.MediaPath;
+        if (!Directory.Exists(Settings.ini.Path.MediaPath))
         {
             Settings.ini.Path.MediaPath = System.IO.Path.Combine(Application.streamingAssetsPath, "媒体文件");
         }
+
         if (!System.IO.Directory.Exists(Settings.ini.Path.MediaPath))
         {
             System.IO.Directory.CreateDirectory(Settings.ini.Path.MediaPath);

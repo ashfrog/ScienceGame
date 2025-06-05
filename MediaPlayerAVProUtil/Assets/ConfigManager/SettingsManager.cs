@@ -32,6 +32,12 @@ public class SGraphicsSettings : BaseSettings
         get => ReadBool("FullScreen", true);
         set => WriteValue("FullScreen", value.ToString());
     }
+
+    public bool HideCursor
+    {
+        get => ReadBool("HideCursor", true);
+        set => WriteValue("HideCursor", value.ToString());
+    }
     public bool TopMost
     {
         get => ReadBool("TopMost", true);
