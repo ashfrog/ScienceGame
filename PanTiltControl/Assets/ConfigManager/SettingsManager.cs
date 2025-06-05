@@ -80,6 +80,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("SkipVerify", value.ToString());
     }
 
+    public bool enableY
+    {
+        get => ReadBool("enableY", true);
+        set => WriteValue("enableY", value.ToString());
+    }
+
     public string Difficulty
     {
         get => ReadValue("Difficulty", "Normal");

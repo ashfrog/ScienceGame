@@ -21,7 +21,10 @@ public class JoystickInputLogger : MonoBehaviour
     float minaxis = 0.2f;
 
     bool PressedKey0 = false;
-
+    private void Start()
+    {
+        Settings.ini.Game.enableY = Settings.ini.Game.enableY;
+    }
     void Update()
     {
 
@@ -128,25 +131,28 @@ public class JoystickInputLogger : MonoBehaviour
                     if (horizontal > minaxis)
                     {
                         //向右
-                        sp.SendHexData("FF 01 00 02 20 00 23");
+                        sp.SendHexData("FF 01 00 04 20 00 25");
                     }
                     else if (horizontal < -minaxis)
                     {
                         //向左
-                        sp.SendHexData("FF 01 00 04 20 00 25");
+                        sp.SendHexData("FF 01 00 02 20 00 23");
                     }
                 }
                 else
                 {
-                    if (vertical > minaxis)
+                    if (Settings.ini.Game.enableY)
                     {
-                        //向上
-                        sp.SendHexData("FF 01 00 08 00 20 29");
-                    }
-                    else if (vertical < -minaxis)
-                    {
-                        //向下
-                        sp.SendHexData("FF 01 00 10 00 20 31");
+                        if (vertical > minaxis)
+                        {
+                            //向上
+                            sp.SendHexData("FF 01 00 08 00 20 29");
+                        }
+                        else if (vertical < -minaxis)
+                        {
+                            //向下
+                            sp.SendHexData("FF 01 00 10 00 20 31");
+                        }
                     }
                 }
 
