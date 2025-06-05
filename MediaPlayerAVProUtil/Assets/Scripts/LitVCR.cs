@@ -365,16 +365,25 @@ public class LitVCR : MonoBehaviour
         {
             LoadingPlayer.m_VideoPath = videopath;
 
-            if (LoopMode.one.ToString().Equals(GetLoopMode())) //单个循环播放
+            if (!Path.GetFileName(videopath).Equals(Settings.ini.Graphics.ScreenSaver)) //当前视频不是屏保视频
+            {
+                if (LoopMode.one.ToString().Equals(GetLoopMode())) //单个循环播放
+                {
+                    PlayingPlayer.m_Loop = true;
+                    LoadingPlayer.m_Loop = true;
+                }
+                else //多个视频
+                {
+                    PlayingPlayer.m_Loop = false;
+                    LoadingPlayer.m_Loop = false;
+                }
+            }
+            else
             {
                 PlayingPlayer.m_Loop = true;
                 LoadingPlayer.m_Loop = true;
             }
-            else //多个视频
-            {
-                PlayingPlayer.m_Loop = false;
-                LoadingPlayer.m_Loop = false;
-            }
+
             LoadingPlayer.OpenVideoFromFile(_location, LoadingPlayer.m_VideoPath, true);
 
             currentPlayingVideo = videopath;
@@ -833,7 +842,7 @@ public class LitVCR : MonoBehaviour
                         PlayNext();
                     }
                 }
-                else if (LoopMode.one.ToString().Equals(GetLoopMode())) //正在播放的时候修为了 单个循环
+                else if (LoopMode.one.ToString().Equals(GetLoopMode())) //单个循环
                 {
                     OpenVideoByIndex(videoindex);
                 }
