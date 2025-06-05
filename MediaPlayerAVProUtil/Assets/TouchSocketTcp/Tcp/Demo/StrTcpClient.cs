@@ -93,7 +93,10 @@ public class StrTcpClient : MonoBehaviour
         if (curt > wt)
         {
             curt = 0;
-            tabSwitcher_time.SwitchTab(PanelType.Time);
+            if (tabSwitcher_time != null)
+            {
+                tabSwitcher_time.SwitchTab(PanelType.Time);
+            }
         }
     }
 
@@ -175,7 +178,10 @@ public class StrTcpClient : MonoBehaviour
             if ("AAAAAAAAA1".Equals(hexString))
             {
                 Debug.Log("开门联动");
-                tabSwitcher_time.SwitchTab(PanelType.Media);
+                if (tabSwitcher_time != null)
+                {
+                    tabSwitcher_time.SwitchTab(PanelType.Media);
+                }
                 fHTcpClient_VCRPlayer._vcr.PlayNext();
                 curt = 0;
             }
