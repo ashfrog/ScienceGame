@@ -84,6 +84,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("VideoIndex", value.ToString());
     }
 
+    public bool InitPlay
+    {
+        get => ReadBool("InitPlay", true);
+        set => WriteValue("InitPlay", value.ToString());
+    }
+
     public bool SkipVerify
     {
         get => ReadBool("SkipVerify", false);

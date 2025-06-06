@@ -238,7 +238,7 @@ public class LitVCR : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         _mediaDisplay.gameObject.SetActive(true);
 
-        Settings.ini.Game.VideoIndex = videoindex;
+
         yield return new WaitForSeconds(5f);
 
         enablePlayNext = true;
@@ -573,6 +573,7 @@ public class LitVCR : MonoBehaviour
     private void Start()
     {
         Settings.ini.Graphics.EnableMask = Settings.ini.Graphics.EnableMask;
+        Settings.ini.Game.InitPlay = Settings.ini.Game.InitPlay;
         enablemask = Settings.ini.Graphics.EnableMask;
         if (enablemask)
         {
@@ -616,6 +617,21 @@ public class LitVCR : MonoBehaviour
             if (LoadingPlayer)
             {
                 LoadingPlayer.Events.AddListener(OnVideoEvent);
+            }
+        }
+
+        StartCoroutine(InitPlayScreen());
+    }
+
+    IEnumerator InitPlayScreen()
+    {
+        if (Settings.ini.Game.InitPlay)
+        {
+            while (Settings.ini.Game.VideoIndex > 0)
+            {
+                Debug.Log("非0索引:" + Settings.ini.Game.VideoIndex + "即将跳转播放下一面");
+                Settings.ini.Game.VideoIndex = (Settings.ini.Game.VideoIndex + 1) % 3;
+                yield return StartCoroutine(PlayNextWait());
             }
         }
     }
@@ -720,7 +736,7 @@ public class LitVCR : MonoBehaviour
             if (File.Exists(videoPaths[videoindex]))
             {
                 this.videoindex = videoindex;
-
+                Settings.ini.Game.VideoIndex = videoindex;
                 if (FileUtils.IsImgFile(videoPaths[videoindex])) //播放图片文件
                 {
                     if (imgCroutine != null)
