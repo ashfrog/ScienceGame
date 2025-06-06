@@ -490,7 +490,7 @@ public class LitVCR : MonoBehaviour
     {
         if (PlayingPlayer && PlayingPlayer.Control != null)
         {
-            if (String.IsNullOrEmpty(PlayingPlayer.m_VideoPath))
+            if (String.IsNullOrEmpty(PlayingPlayer.m_VideoPath) || IsWebUrl(videoPaths[videoindex]))
             {
                 OpenVideoByIndex(videoindex);
             }
@@ -498,6 +498,7 @@ public class LitVCR : MonoBehaviour
             {
                 if (FileUtils.IsMovFile(videoPaths[videoindex]))
                 {
+                    tabSwitcher.SwitchTab(TabMode.视频);
                     PlayingPlayer.Control.Play();
                     DisableImg(rawimage, _mediaDisplay);
                 }
@@ -721,10 +722,11 @@ public class LitVCR : MonoBehaviour
     /// <param name="videoindex"></param>
     public void OpenVideoByIndex(int videoindex, bool reload = true, bool imgstopped = false)
     {
-        if (videoindex < 0 || videoindex >= videoPaths.Count)
+        if (videoindex < 0 || videoindex > videoPaths.Count)
         {
             videoindex = 0;
         }
+        this.videoindex = videoindex;
         this.imgstopped = imgstopped;
         if (videoindex < videoPaths.Count)
         {
@@ -813,7 +815,7 @@ public class LitVCR : MonoBehaviour
 
     public void OpenVideoByFileName(String filename, bool imgstopped = false)
     {
-        int index = 0;
+        int index = -1;
         for (int i = 0; i < videoPaths.Count; i++)
         {
             var name = Path.GetFileName(videoPaths[i]);
@@ -823,7 +825,27 @@ public class LitVCR : MonoBehaviour
                 break;
             }
         }
-        OpenVideoByIndex(index, true, imgstopped);
+        if (index != -1) //在播放列表中
+        {
+            OpenVideoByIndex(index, true, imgstopped);
+        }
+        else //不在播放列表中 
+        {
+            tabSwitcher.SwitchTab(TabMode.视频);
+            string screensaverfile = Path.Combine(persistentDataPath, GetScreenSaver());
+            if (File.Exists(screensaverfile)) //屏保图片存在
+            {
+                if (imgCroutine != null)
+                {
+                    StopCoroutine(imgCroutine);
+                }
+                imgCroutine = StartCoroutine(asyncLoadImg(screensaverfile));
+                if (PlayingPlayer && PlayingPlayer.Control != null && !isMovPaused())
+                {
+                    PlayingPlayer.Control.Pause();
+                }
+            }
+        }
     }
 
     private void DisableImg(RawImage rawimg, DisplayUGUI mediaDisplay)

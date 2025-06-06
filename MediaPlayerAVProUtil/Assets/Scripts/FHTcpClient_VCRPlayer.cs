@@ -50,6 +50,7 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
                 {
                     case OrderTypeEnum.GetFileList:                  //获取文件列表
                         string filesStr = _vcr.GetFileListStr();
+                        filesStr = filesStr.Replace("," + Settings.ini.Graphics.ScreenSaver, "");
                         tcpClient.Send(sendDataTypeEnum, OrderTypeEnum.GetFileList, filesStr);
                         break;
                     case OrderTypeEnum.GetVolumn:                    //获取当前音量

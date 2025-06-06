@@ -46,7 +46,7 @@ public class SGraphicsSettings : BaseSettings
 
     public string ScreenSaver
     {
-        get => ReadValue("ScreenSaver", "屏保.jpg");
+        get => ReadValue("ScreenSaver", "屏保.png");
         set => WriteValue("ScreenSaver", value);
     }
 
