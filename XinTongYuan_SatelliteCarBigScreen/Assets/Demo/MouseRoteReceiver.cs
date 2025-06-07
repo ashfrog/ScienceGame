@@ -98,7 +98,8 @@ public class MouseRoteReceiver : MonoBehaviour
     void Start()
     {
         defaultCameraFieldofView = camObj.fieldOfView;
-        tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保.ToString());
+        tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
+        tabSwitcher_Obj.Hide();
         StartCoroutine(WaitForTcpServiceInitialization());
         media_Car.Events.AddListener(OnVideoEvent);
 

@@ -150,7 +150,10 @@ public class TabSwitcherEditor : Editor
             {
                 height += EditorGUIUtility.singleLineHeight; // "Pages"标签行
                 height += EditorGUIUtility.singleLineHeight; // Size字段行
-                height += pagesProp.arraySize * EditorGUIUtility.singleLineHeight; // 每个页面元素
+
+                // 即使数组为空，也要为添加按钮预留空间
+                int arraySize = Mathf.Max(1, pagesProp.arraySize); // 至少预留一行空间
+                height += arraySize * EditorGUIUtility.singleLineHeight; // 每个页面元素或空行
                 height += 10; // 额外间距
             }
             else
