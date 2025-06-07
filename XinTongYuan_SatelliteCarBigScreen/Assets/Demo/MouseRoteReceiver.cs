@@ -290,6 +290,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                 case "汽车返回":
                                     //Panel_LoopVideo.SetActive(true);
                                     //video_car.SetActive(false);
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
                                     media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "待机循环动画.mp4");
                                     break;
                                 case "汽车模型":
@@ -299,14 +300,14 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //panel_TanChuangVideo.SetActive(false);
                                     //camTabSwitcher.SwitchTab((int)CamGroup.全息);
                                     //oribit.gameObject.SetActive(false);
-                                    tabSwitcher_UI.Hide();
+                                    ShowCarMode();
                                     break;
                                 case "汽车模型返回":
+                                    ShowCarMode();
                                     break;
                                 case "汽车街景":
                                     int.TryParse(cmdparam, out curCarIndex);
-                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.车模);
-                                    tabSwitcher_UI.Hide();
+                                    ShowCarMode();
                                     ShowCarModel(curCarIndex);
                                     break;
                                 case "汽车街景返回":
@@ -447,6 +448,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         break;
                     case OrderTypeEnum.SetPlayMovieFolder: //弹窗视频 内饰视频
                         tabSwitcher_UI.SwitchTab(TabUILabel.P弹窗视频);
+                        tabSwitcher_Obj.Hide();
                         string cmd1 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
                         media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd1 + ".mp4");
                         mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
@@ -510,6 +512,14 @@ public class MouseRoteReceiver : MonoBehaviour
             }
         });
     }
+
+    private void ShowCarMode()
+    {
+        tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
+        media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "光循环动画.mp4");
+        tabSwitcher_Obj.SwitchTab(TabObjLabel.车模);
+    }
+
     float rotateDuration = 2f;
     float normalFOV = 60f; // 正常视角
     float smallFOV = 6f; //拉进视角
