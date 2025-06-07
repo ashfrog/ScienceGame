@@ -43,7 +43,7 @@ public enum DataTypeEnum
     /// <summary>
     /// 电脑ipNo 192.168.3.18-3.25
     /// </summary>
-    Media_XZTY_18 = 18, //新增投影
+    Media_XZTY_18 = 18, //新增投影 大门LED
     Media_XTDP_19 = 19, //序厅大屏
     Media_HDTY_20 = 20, //互动投影
     Media_QXTY_21 = 21, //全息投影
@@ -56,7 +56,7 @@ public enum DataTypeEnum
     TY_PROJECTOR_26 = 26,//  投影机
     TY_PROJECOTR_27 = 27,//投影机
 
-    Media_DBCY_28 = 28,//电波传音
+    Media_DBCY_28 = 28,//电波传音 3转屏
     Media_MDFY_29 = 29, //密电风云
 
     Door_31 = 31, //门禁机1

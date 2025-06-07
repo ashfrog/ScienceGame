@@ -24,12 +24,15 @@ public class SectionClick : MonoBehaviour
         Debug.Log("讲解模式按钮被点击");
         // TODO: 添加讲解模式的具体逻辑
 
-        for (int i = (int)DataTypeEnum.Media_XZTY_18; i <= (int)DataTypeEnum.Media_MDFY_29; i++)
+        for (int i = (int)DataTypeEnum.Media_XTDP_19; i <= (int)DataTypeEnum.Media_MDFY_29; i++)
         {
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.none);
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayScreenSaver, "");
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.StopMovie, "");
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.5f);
+            if (i != (int)DataTypeEnum.Media_DBCY_28)
+            {
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.none);
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayScreenSaver, "");
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.StopMovie, "");
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.5f);
+            }
         }
     }
 
@@ -38,11 +41,14 @@ public class SectionClick : MonoBehaviour
     {
         Debug.Log("参观模式按钮被点击");
         // TODO: 添加参观模式的具体逻辑
-        for (int i = (int)DataTypeEnum.Media_XZTY_18; i <= (int)DataTypeEnum.Media_MDFY_29; i++)
+        for (int i = (int)DataTypeEnum.Media_XTDP_19; i <= (int)DataTypeEnum.Media_MDFY_29; i++)
         {
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.all);
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayNext, "");
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.5f);
+            if (i != (int)DataTypeEnum.Media_DBCY_28)
+            {
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.all);
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayNext, "");
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.5f);
+            }
         }
     }
 
@@ -51,13 +57,15 @@ public class SectionClick : MonoBehaviour
     {
         Debug.Log("节能模式按钮被点击");
         // TODO: 添加节能模式的具体逻辑
-        for (int i = (int)DataTypeEnum.Media_XZTY_18; i <= (int)DataTypeEnum.Media_MDFY_29; i++)
+        for (int i = (int)DataTypeEnum.Media_XTDP_19; i <= (int)DataTypeEnum.Media_MDFY_29; i++)
         {
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.all);
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayNext, "");
-            FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.3f);
+            if (i != (int)DataTypeEnum.Media_DBCY_28)
+            {
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.LoopMode, LoopMode.all);
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.PlayNext, "");
+                FHClientController.ins.Send((DataTypeEnum)i, OrderTypeEnum.SetVolumn, 0.3f);
+            }
         }
-
     }
     /// <summary>
     /// 关闭投影灯光
