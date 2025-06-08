@@ -734,7 +734,7 @@ public class LitVCR : MonoBehaviour
             if (IsWebUrl(videoPaths[videoindex]))
             {
                 tabSwitcher.SwitchTab(TabMode.网页);
-                StartCoroutine(LoadUrlWhenReady(videoPaths[videoindex]));
+                LoadUrlWhenReady(videoPaths[videoindex]);
             }
             else
             {
@@ -775,16 +775,18 @@ public class LitVCR : MonoBehaviour
         }
     }
 
-    IEnumerator LoadUrlWhenReady(string url)
+    async void LoadUrlWhenReady(string url)
     {
-        // 等待 WebView 初始化
-        while (canvasWebViewPrefab == null || canvasWebViewPrefab.WebView == null)
+        // Get a reference to the CanvasWebViewPrefab.
+        // https://support.vuplex.com/articles/how-to-reference-a-webview
+        if (canvasWebViewPrefab == null)
         {
-            yield return new WaitForEndOfFrame();
+            canvasWebViewPrefab = GameObject.Find("CanvasWebViewPrefab").GetComponent<CanvasWebViewPrefab>();
         }
 
-        // 额外等待一帧确保完全初始化
-        yield return new WaitForEndOfFrame();
+        // Wait for the prefab to initialize because its WebView property is null until then.
+        // https://developer.vuplex.com/webview/WebViewPrefab#WaitUntilInitialized
+        await canvasWebViewPrefab.WaitUntilInitialized();
 
         canvasWebViewPrefab.WebView.LoadUrl(url);
     }
