@@ -126,7 +126,7 @@ public class LitVCR : MonoBehaviour
 
     public enum TabMode
     {
-        视频, 网页
+        视频, 网页, 时间
     }
     [SerializeField]
     TabSwitcher tabSwitcher;

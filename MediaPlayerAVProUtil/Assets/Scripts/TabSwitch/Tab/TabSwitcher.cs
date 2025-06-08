@@ -17,7 +17,7 @@ public class TabPageGroup
 public class TabSwitcher : MonoBehaviour
 {
     public Button[] tabButtons;
-    public int currentTabIndex = 0;
+    public int currentTabIndex = -1;
 
     [Header("Tab类型名（类似enum，可增删）")]
     public List<string> allTabTypes = new List<string> { "key1", "key2" };

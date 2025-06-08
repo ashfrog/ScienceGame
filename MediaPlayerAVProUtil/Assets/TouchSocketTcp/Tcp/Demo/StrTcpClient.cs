@@ -16,7 +16,7 @@ public class StrTcpClient : MonoBehaviour
 
     enum PanelType
     {
-        Media, Time
+        视频, 网页, 时间
     }
     [SerializeField]
     TabSwitcher tabSwitcher_time;
@@ -95,7 +95,7 @@ public class StrTcpClient : MonoBehaviour
             curt = 0;
             if (tabSwitcher_time != null)
             {
-                tabSwitcher_time.SwitchTab(PanelType.Time);
+                tabSwitcher_time.SwitchTab(PanelType.时间);
             }
         }
     }
@@ -180,7 +180,7 @@ public class StrTcpClient : MonoBehaviour
                 Debug.Log("开门联动");
                 if (tabSwitcher_time != null)
                 {
-                    tabSwitcher_time.SwitchTab(PanelType.Media);
+                    tabSwitcher_time.SwitchTab(PanelType.视频);
                 }
                 fHTcpClient_VCRPlayer._vcr.PlayNext();
                 curt = 0;
