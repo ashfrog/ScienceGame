@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using static UnityEngine.GraphicsBuffer;
 using DG.Tweening;
 using Lean.Common;
+using System.IO;
 
 public class MouseRoteReceiver : MonoBehaviour
 {
@@ -191,7 +192,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                 case "发射展示":  //1-1 卫星发射展示
                                     tabSwitcher_Obj.Hide();
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
-                                    PlayVideo("发射展示.mp4");
+                                    PlayVideo("火箭发射全息屏.mp4");
                                     //Panel_LoopVideo.SetActive(false);
                                     mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
                                     break;
@@ -450,7 +451,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         tabSwitcher_UI.SwitchTab(TabUILabel.P弹窗视频);
                         tabSwitcher_Obj.Hide();
                         string cmd1 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
-                        media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, cmd1 + ".mp4");
+                        media_TanChuang.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, Path.Combine("汽车功能弹窗视频", cmd1 + ".mp4"));
                         mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                         break;
                     case OrderTypeEnum.WeiXingView: //卫星视图 卫星展示
