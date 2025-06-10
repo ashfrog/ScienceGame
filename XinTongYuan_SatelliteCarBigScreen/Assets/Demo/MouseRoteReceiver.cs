@@ -292,8 +292,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //media_Car.GetComponent<MediaPlayer>().Play();
                                     litVCR1.OpenVideoByFileName("汽车百年进化论全息屏.mp4", true, () =>
                                     {
-                                        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
-                                        tabSwitcher_UI.SwitchTab(TabUILabel.P1_2);
+                                        ReturnP1_2();
                                     });
                                     //Panel_LoopVideo.SetActive(false);
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
@@ -594,6 +593,14 @@ public class MouseRoteReceiver : MonoBehaviour
         litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
         tabSwitcher_UI.SwitchTab(TabUILabel.P1_1);
     }
+
+    void ReturnP1_2()
+    {
+        tabSwitcher_Obj.Hide();
+        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
+        tabSwitcher_UI.SwitchTab(TabUILabel.P1_2);
+    }
+
     private void ShowCarUI()
     {
         switch (curCarIndex)
