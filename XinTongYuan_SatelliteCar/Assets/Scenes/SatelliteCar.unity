@@ -4627,8 +4627,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiPanelShow: {fileID: 1994591192}
   uiPanelHide: {fileID: 1882940079}
-  isSendMess: 0
-  mess: 
+  isSendMess: 1
+  mess: "\u536B\u661F"
 --- !u!1 &416513332
 GameObject:
   m_ObjectHideFlags: 0
@@ -18810,6 +18810,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1882940080}
+  - component: {fileID: 1882940081}
   m_Layer: 5
   m_Name: Panel_level1
   m_TagString: Untagged
@@ -18842,6 +18843,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1882940081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1882940079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01a8a430097596f4daa5e056109e578e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  msg: "\u4E3B\u9875\u9762"
 --- !u!1 &1899047537
 GameObject:
   m_ObjectHideFlags: 0

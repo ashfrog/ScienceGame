@@ -45,6 +45,8 @@ public class LitVCR : MonoBehaviour
 
     private string currentPlayingVideo = "";
 
+    private Action finishAction;
+
     //private const string VOLUMN_KEY = "volumn";//音量设置key
 
     //private const string LOOPMODE = "loopmode";//循环模式key
@@ -345,7 +347,7 @@ public class LitVCR : MonoBehaviour
     /// </summary>
     /// <param name="videopath">视频绝对路径</param>
     /// <param name="reload">强制重新加载视频</param>
-    public void OpenVideoFile(string videopath, bool reload = false)
+    public void OpenVideoFile(string videopath, bool reload = false, Action finishAction = null)
     {
         //视频存在 && 当前播放的路径不是这个视频
         bool reloadCurrent = (!String.Equals(videopath.Trim(), currentPlayingVideo.Trim(), StringComparison.OrdinalIgnoreCase) || reload);
@@ -353,16 +355,27 @@ public class LitVCR : MonoBehaviour
         {
             LoadingPlayer.m_VideoPath = videopath;
 
-            if (LoopMode.one.ToString().Equals(GetLoopMode())) //单个循环播放
-            {
-                PlayingPlayer.m_Loop = true;
-                LoadingPlayer.m_Loop = true;
-            }
-            else //多个视频
+            //if (LoopMode.one.ToString().Equals(GetLoopMode()) && finishAction != null) //单个循环播放 并且 完成action为null
+            //{
+            //    PlayingPlayer.m_Loop = true;
+            //    LoadingPlayer.m_Loop = true;
+            //}
+            //else //多个视频
+            //{
+            //    PlayingPlayer.m_Loop = false;
+            //    LoadingPlayer.m_Loop = false;
+            //}
+            if (finishAction != null)
             {
                 PlayingPlayer.m_Loop = false;
                 LoadingPlayer.m_Loop = false;
             }
+            else
+            {
+                PlayingPlayer.m_Loop = true;
+                LoadingPlayer.m_Loop = true;
+            }
+
             LoadingPlayer.OpenVideoFromFile(_location, LoadingPlayer.m_VideoPath, true);
 
             currentPlayingVideo = videopath;
@@ -633,7 +646,7 @@ public class LitVCR : MonoBehaviour
     /// 根据index播放指定视频
     /// </summary>
     /// <param name="videoindex"></param>
-    public void OpenVideoByIndex(int videoindex, bool reload = true, bool imgstopped = false)
+    public void OpenVideoByIndex(int videoindex, bool reload = true, bool imgstopped = false, Action finishAction = null)
     {
         this.imgstopped = imgstopped;
         if (videoindex < videoPaths.Count)
@@ -655,7 +668,7 @@ public class LitVCR : MonoBehaviour
                 {
                     StopAllCoroutines();
                     LoadingPlayer.m_VideoPath = videoPaths[videoindex];
-                    OpenVideoFile(videoPaths[videoindex], reload);
+                    OpenVideoFile(videoPaths[videoindex], reload, finishAction);
                 }
             }
             else
@@ -666,8 +679,9 @@ public class LitVCR : MonoBehaviour
         }
     }
 
-    public void OpenVideoByFileName(String filename, bool imgstopped = false)
+    public void OpenVideoByFileName(String filename, bool imgstopped = false, Action finishAction = null)
     {
+        this.finishAction = finishAction;
         int index = 0;
         for (int i = 0; i < videoPaths.Count; i++)
         {
@@ -678,7 +692,7 @@ public class LitVCR : MonoBehaviour
                 break;
             }
         }
-        OpenVideoByIndex(index, true, imgstopped);
+        OpenVideoByIndex(index, true, imgstopped, finishAction);
     }
 
     private void DisableImg(RawImage rawimg, DisplayUGUI mediaDisplay)
@@ -721,6 +735,17 @@ public class LitVCR : MonoBehaviour
 
             case MediaPlayerEvent.EventType.FinishedPlaying:
                 Debug.Log("视频播放停止事件:" + mp.m_VideoPath);
+                if (finishAction != null)
+                {
+                    try
+                    {
+                        finishAction?.Invoke();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogException(ex);
+                    }
+                }
 
                 SkipNextScreenSaver();
 
