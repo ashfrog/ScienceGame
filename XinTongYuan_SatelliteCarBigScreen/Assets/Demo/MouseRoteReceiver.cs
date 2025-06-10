@@ -30,6 +30,10 @@ public class MouseRoteReceiver : MonoBehaviour
     //public GameObject Panel_level1_1_1, Panel_level1_1_2, Panel_level1_1_3, Panel_level1_2, Panel_level1_2_1, Panel_level1_2_2, panel_level1_2_3, Panel_卫星在空姿态, Panel_LoopVideo, video_car, panel_TanChuangVideo;
     public MediaPlayer media, media_Loop, media_Car, media_TanChuang;
 
+    public LitVCR litVCR1;
+
+    public LitVCR litVCR2;
+
     /// <summary>
     /// 地坪视频播放器
     /// </summary>
@@ -98,6 +102,8 @@ public class MouseRoteReceiver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        string filnames1 = litVCR1.ReloadFileList();
+        string filnames2 = litVCR2.ReloadFileList();
         defaultCameraFieldofView = camObj.fieldOfView;
         tabSwitcher_UI.SwitchTab(TabUILabel.P循环屏保);
         tabSwitcher_Obj.Hide();

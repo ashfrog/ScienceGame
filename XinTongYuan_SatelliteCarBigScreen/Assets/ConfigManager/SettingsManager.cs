@@ -182,7 +182,7 @@ public class PathSettings : BaseSettings
 
     public string MediaPath
     {
-        get => ReadValue("MediaPath", "");
+        get => ReadValue("MediaPath", "媒体文件");
         set => WriteValue("MediaPath", value);
     }
 }
