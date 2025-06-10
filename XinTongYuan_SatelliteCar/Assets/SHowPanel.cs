@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SHowPanel : MonoBehaviour
+public class ShowPanel : MonoBehaviour
 {
     [SerializeField]
     string msg;

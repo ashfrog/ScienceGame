@@ -12,6 +12,8 @@ using static UnityEngine.GraphicsBuffer;
 using DG.Tweening;
 using Lean.Common;
 using System.IO;
+using TMPro;
+using System.Linq;
 
 public class MouseRoteReceiver : MonoBehaviour
 {
@@ -39,10 +41,13 @@ public class MouseRoteReceiver : MonoBehaviour
     public GameObject[] moons; //卫星光点组
     public GameObject theEarth; //地球模型
 
+    [SerializeField]
+    TMP_Text text_WX;
+
 
     public enum TabUILabel //需要Inspector中TabSwitcher的allTabTypes保持一致
     {
-        P1_1, P1_1_1, P1_1_2, P1_1_3, P1_2, P1_2_1, P1_2_2, P1_2_3, panel_level2_1_1, panel_level2_1_2, panel_level2_1_3, panel_level2_1_4, panel_level2_1_5
+        P1_1, P1_1_1, P1_1_2, P1_1_3, P1_2, P1_2_1, P1_2_2, P1_2_3, panel_level2_1_1, panel_level2_1_2, panel_level2_1_3, panel_level2_1_4, panel_level2_1_5, Panel_卫星展示
     }
     public TabSwitcher tabSwitcher_UI;
     public enum TabObjLabel
@@ -54,15 +59,7 @@ public class MouseRoteReceiver : MonoBehaviour
 
     public enum EarthGroup
     {
-        北斗卫星A,
-        北斗卫星B,
-        北斗卫星C,
-        GPS卫星A,
-        GPS卫星B,
-        伽利略卫星,
-        千帆,
-        星链,
-        一网
+        北斗一号, 北斗二号, 北斗三号, 全球定位系统1, 全球定位系统2, 伽俐略, 千帆, 星链, 一网
     }
     [SerializeField]
     private TabSwitcher carTabSwitcher;
@@ -147,7 +144,17 @@ public class MouseRoteReceiver : MonoBehaviour
                         {
                             string cmdstr = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
                             Debug.Log(cmdstr);
-                            MainPageLoop();
+                            switch (cmdstr)
+                            {
+                                case "主页面":
+                                    MainPageLoop();
+                                    break;
+                                case "P1_1":
+                                    //litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
+                                    //tabSwitcher_UI.SwitchTab(TabUILabel.P1_1);
+                                    break;
+                            }
+
                         }
                         break;
                     case OrderTypeEnum.Rotate:
@@ -182,8 +189,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     print(cmd + " " + cmdparam);
                                     litVCR1.OpenVideoByFileName("卫星产业系统展示.mp4", true, () =>
                                     {
-                                        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
-                                        tabSwitcher_UI.SwitchTab(TabUILabel.P1_1);
+                                        ReturnP1_1();
                                     });
                                     break;
                                 case "发射展示":  //1-1 卫星发射展示
@@ -195,7 +201,8 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
                                     break;
                                 case "发射展示返回"://1-1返回 
-                                    MainPageLoop();
+                                    //MainPageLoop();
+                                    ReturnP1_1();
                                     break;
                                 case "星座展示"://1-2 卫星星座展示
                                     print(cmd + " " + cmdparam);
@@ -226,7 +233,8 @@ public class MouseRoteReceiver : MonoBehaviour
                                     {
                                         moons[i].SetActive(true);
                                     }
-                                    MainPageLoop();
+                                    //MainPageLoop();
+                                    ReturnP1_1();
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
                                     print(cmd + " " + cmdparam);
@@ -247,8 +255,9 @@ public class MouseRoteReceiver : MonoBehaviour
                                     StopDoTween();
                                     //Panel_level1_1_3.SetActive(true);
                                     //Panel_卫星在空姿态.SetActive(false);
-                                    tabSwitcher_Obj.Hide();
+
                                     WeiXingGuangDian.SetActive(true);
+                                    //ReturnP1_1();
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比
                                     print(cmd + " " + cmdparam);
@@ -268,8 +277,9 @@ public class MouseRoteReceiver : MonoBehaviour
                                     {
                                         WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
                                     }
+                                    ReturnP1_1();
                                     //Panel_LoopVideo.SetActive(true);
-                                    MainPageLoop();
+                                    //MainPageLoop();
                                     //media_Loop.Play();
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     break;
@@ -462,6 +472,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         ShowCarModel(index2 + 1);
                         break;
                     case OrderTypeEnum.SetPlayMovieFolder: //弹窗视频 内饰视频
+                        tabSwitcher_UI.Hide();
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                         tabSwitcher_Obj.Hide();
                         string cmd1 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
@@ -473,20 +484,64 @@ public class MouseRoteReceiver : MonoBehaviour
                     case OrderTypeEnum.WeiXingView: //卫星视图 卫星展示
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                         string weixingraw = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
-                        tabSwitcher_UI.Hide();
+
                         Debug.Log(weixingraw);
                         string[] weixingraws = weixingraw.Split('|');
                         if (weixingraw.Length >= 2)
                         {
+                            tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
+                            tabSwitcher_UI.SwitchTab(TabUILabel.Panel_卫星展示);
+
                             string name = weixingraws[0]; //卫星名称
+                            text_WX.SetText(name);
                             int weixingindex = int.Parse(weixingraws[1]);
-                            Debug.Log(name + " " + weixingindex);
-                            //if (!TabObjLabel.卫星展示.ToString().Equals(tabSwitcher_Obj.GetCurrentTabName()))
+                            if (name.Contains(EarthGroup.一网.ToString()))
                             {
-                                tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星展示);
+                                wxTabSwitcher.SwitchTab(EarthGroup.一网);
+                            }
+                            else if (name.Contains(EarthGroup.伽俐略.ToString()))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.伽俐略);
+                            }
+                            else if (name.Contains("全球定位"))
+                            {
+                                int id = weixingindex % 2;
+                                if (id == 0)
+                                {
+                                    wxTabSwitcher.SwitchTab(EarthGroup.全球定位系统1);
+                                }
+                                else
+                                {
+                                    wxTabSwitcher.SwitchTab(EarthGroup.全球定位系统2);
+                                }
+                            }
+                            else if (name.Contains(EarthGroup.北斗一号.ToString()))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.北斗一号);
+                            }
+                            else if (name.Contains(EarthGroup.北斗三号.ToString()))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.北斗三号);
+                            }
+                            else if (name.Contains(EarthGroup.北斗二号.ToString()))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.北斗二号);
+                            }
+                            else if (name.Contains(EarthGroup.千帆.ToString()))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.千帆);
+                            }
+                            else if (name.All(char.IsDigit))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.星链);
+                            }
+                            else
+                            {
+                                //wxTabSwitcher.SwitchTab(weixingindex % wxTabSwitcher.tabPageGroups.Count);
+                                text_WX.SetText("无数据");
                             }
 
-                            wxTabSwitcher.SwitchTab(weixingindex % wxTabSwitcher.tabPageGroups.Count);
+
 
                             //动画 leanPitchYaw.Pitch 从0渐变到20f;
                             leanPitchYaw.Pitch = 0f;
@@ -532,6 +587,13 @@ public class MouseRoteReceiver : MonoBehaviour
         });
     }
 
+
+    void ReturnP1_1()
+    {
+        tabSwitcher_Obj.Hide();
+        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
+        tabSwitcher_UI.SwitchTab(TabUILabel.P1_1);
+    }
     private void ShowCarUI()
     {
         switch (curCarIndex)
