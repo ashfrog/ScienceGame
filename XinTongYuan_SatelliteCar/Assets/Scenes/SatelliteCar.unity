@@ -12180,8 +12180,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_VideoLocation: 2
-  m_VideoPath: "\u53D1\u5C04\u5C55\u793A.mp4"
-  m_AutoOpen: 1
+  m_VideoPath: 
+  m_AutoOpen: 0
   m_AutoStart: 0
   m_Loop: 0
   m_Volume: 1

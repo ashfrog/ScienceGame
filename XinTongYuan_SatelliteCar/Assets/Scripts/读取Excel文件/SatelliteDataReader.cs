@@ -14,7 +14,7 @@ public class SatelliteDataReader : MonoBehaviour
     void Start()
     {
         //initialize(0);
-        satelliteDataRowPrefab.transform.parent = null;
+        satelliteDataRowPrefab.transform.SetParent(null);
     }
 
     public void initialize(int index) //index代表读取第几个表

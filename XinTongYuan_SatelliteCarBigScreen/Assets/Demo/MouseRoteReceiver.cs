@@ -59,7 +59,7 @@ public class MouseRoteReceiver : MonoBehaviour
 
     public enum EarthGroup
     {
-        北斗一号, 北斗二号, 北斗三号, 全球定位系统1, 全球定位系统2, 伽俐略, 千帆, 星链, 一网
+        北斗一号, 北斗二号, 北斗三号, 全球定位系统1, 全球定位系统2, 伽俐略, 千帆, 星链, 一网, 格洛纳斯A, 格洛纳斯B
     }
     [SerializeField]
     private TabSwitcher carTabSwitcher;
@@ -332,6 +332,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ShowCarUI();
                                     ShowCarMode();
                                     ShowCarModel(curCarIndex);
+                                    leanPitchYaw.Pitch = 0f;
                                     break;
                                 case "汽车街景返回":
                                     print(cmd + " " + cmdparam);
@@ -540,6 +541,14 @@ public class MouseRoteReceiver : MonoBehaviour
                             else if (name.Contains(EarthGroup.千帆.ToString()))
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.千帆);
+                            }
+                            else if (name.StartsWith("飓风模型"))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.格洛纳斯A);
+                            }
+                            else if (name.StartsWith("飓风"))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.格洛纳斯B);
                             }
                             else if (name.All(char.IsDigit))
                             {
