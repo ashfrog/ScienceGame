@@ -4440,6 +4440,7 @@ GameObject:
   m_Component:
   - component: {fileID: 398299947}
   - component: {fileID: 398299948}
+  - component: {fileID: 398299950}
   m_Layer: 5
   m_Name: Panel_CarYear
   m_TagString: Untagged
@@ -4491,6 +4492,14 @@ MonoBehaviour:
   - {fileID: 366513728}
   displayImage: {fileID: 0}
   defaultSelectedIndex: 0
+--- !u!222 &398299950
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398299946}
+  m_CullTransparentMesh: 1
 --- !u!1 &401717405
 GameObject:
   m_ObjectHideFlags: 0

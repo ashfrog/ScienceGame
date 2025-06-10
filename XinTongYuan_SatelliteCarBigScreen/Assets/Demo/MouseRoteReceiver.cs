@@ -537,6 +537,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             else
                             {
                                 //wxTabSwitcher.SwitchTab(weixingindex % wxTabSwitcher.tabPageGroups.Count);
+                                wxTabSwitcher.Hide();
                                 text_WX.SetText("无数据");
                             }
 
