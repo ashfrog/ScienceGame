@@ -150,12 +150,22 @@ public class MouseRoteReceiver : MonoBehaviour
                                     MainPageLoop();
                                     break;
                                 case "P1_1":
-                                    //litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
-                                    //tabSwitcher_UI.SwitchTab(TabUILabel.P1_1);
+                                    ReturnP1_1();
+                                    break;
+                                case "P1_2":
+                                    ReturnP1_2();
                                     break;
                             }
 
                         }
+                        break;
+                    case OrderTypeEnum.VolumnUp:
+                        litVCR1.VolumnUp();
+                        litVCR2.VolumnUp();
+                        break;
+                    case OrderTypeEnum.VolumnDown:
+                        litVCR1.VolumnDown();
+                        litVCR2.VolumnDown();
                         break;
                     case OrderTypeEnum.Rotate:
                         {
@@ -198,6 +208,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
                                     //MainPageLoop();
                                     litVCR1.OpenVideoByFileName("火箭发射全息屏.mp4");
+                                    litVCR2.OpenVideoByFileName("地屏循环地球.mp4");
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
                                     break;
                                 case "发射展示返回"://1-1返回 
@@ -357,7 +368,7 @@ public class MouseRoteReceiver : MonoBehaviour
                     case OrderTypeEnum.PauseMovie:
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                         //media.Pause();
-                        litVCR2.OnPauseButton();
+                        litVCR1.OnPauseButton();
                         break;
                     case OrderTypeEnum.LoadUrl:          //星座展示 选星座
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
@@ -498,7 +509,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.一网);
                             }
-                            else if (name.Contains(EarthGroup.伽俐略.ToString()))
+                            else if (name.Contains("伽利略"))
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.伽俐略);
                             }
@@ -532,6 +543,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             }
                             else if (name.All(char.IsDigit))
                             {
+                                text_WX.SetText("星链-猎鹰九号");
                                 wxTabSwitcher.SwitchTab(EarthGroup.星链);
                             }
                             else

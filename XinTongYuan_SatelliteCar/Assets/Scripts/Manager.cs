@@ -72,28 +72,31 @@ public class Manager : MonoBehaviour
 
     public void OnPlay()
     {
-        media.Play();
+        //media.Play();
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.PlayMovie, "");
     }
     public void OnPause()
     {
-        media.Pause();
+        //media.Pause();
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.PauseMovie, "");
     }
+
     public void IncreaseVolume()  //音量加
     {
-        float currentVolume = media.Control.GetVolume();
-        float newVolume = Mathf.Clamp(currentVolume + volumeStep, 0f, 1f);
-        media.Control.SetVolume(newVolume);
-        print(newVolume);
+        //float currentVolume = media.Control.GetVolume();
+        //float newVolume = Mathf.Clamp(currentVolume + volumeStep, 0f, 1f);
+        //media.Control.SetVolume(newVolume);
+        //print(newVolume);
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.VolumnUp, "");
     }
 
     public void DecreaseVolume()  //音量减
     {
-        float currentVolume = media.Control.GetVolume();
-        float newVolume = Mathf.Clamp(currentVolume - volumeStep, 0f, 1f);
-        media.Control.SetVolume(newVolume);
-        print(newVolume);
+        //float currentVolume = media.Control.GetVolume();
+        //float newVolume = Mathf.Clamp(currentVolume - volumeStep, 0f, 1f);
+        //media.Control.SetVolume(newVolume);
+        //print(newVolume);
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.VolumnDown, "");
     }
     public void OnRewind()  //重播暂停
     {
@@ -139,6 +142,11 @@ public class Manager : MonoBehaviour
     public void OnCarTrim()  //汽车内饰
     {
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, "汽车内饰");
+    }
+
+    public void OnStr(string str)
+    {
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Str, str);
     }
     public void OnJieShao(int index)  //发送更改星座介绍命令
     {

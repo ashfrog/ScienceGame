@@ -55,6 +55,9 @@ public enum OrderTypeEnum
     /// </summary>
     SetVolumn = 102,
 
+    VolumnUp = 105,
+    VolumnDown = 106,
+
     /// <summary>
     /// 获取当前播放进度
     /// </summary>
