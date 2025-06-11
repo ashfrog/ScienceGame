@@ -16845,6 +16845,7 @@ GameObject:
   - component: {fileID: 1642404122}
   - component: {fileID: 1642404121}
   - component: {fileID: 1642404124}
+  - component: {fileID: 1642404125}
   m_Layer: 0
   m_Name: TCP(FHClientController)
   m_TagString: Untagged
@@ -16881,6 +16882,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offLineStatue: {fileID: 0}
   ipHost: 127.0.0.1:4849
+  P1_1: {fileID: 1994591192}
+  P1_1_1: {fileID: 875442217}
 --- !u!4 &1642404123
 Transform:
   m_ObjectHideFlags: 0
@@ -16906,6 +16909,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98f79193aae57f34fa1c9d3e75e2430c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1642404125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642404120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52103d91c9d24314192992070041b9b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1643766397

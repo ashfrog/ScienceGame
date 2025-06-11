@@ -666,6 +666,12 @@ public class LitVCR : MonoBehaviour
                 }
                 else if (FileUtils.IsMovFile(videoPaths[videoindex]))//播放视频文件
                 {
+                    //当前正在播放该视频 则不重新加载
+                    if (String.Equals(videoPaths[videoindex].Trim(), currentPlayingVideo.Trim(), StringComparison.OrdinalIgnoreCase) && !reload)
+                    {
+                        return;
+                    }
+
                     StopAllCoroutines();
                     LoadingPlayer.m_VideoPath = videoPaths[videoindex];
                     OpenVideoFile(videoPaths[videoindex], reload, finishAction);
@@ -679,7 +685,7 @@ public class LitVCR : MonoBehaviour
         }
     }
 
-    public void OpenVideoByFileName(String filename, bool imgstopped = false, Action finishAction = null)
+    public void OpenVideoByFileName(String filename, bool reload = false, bool imgstopped = false, Action finishAction = null)
     {
         this.finishAction = finishAction;
         int index = 0;
@@ -692,7 +698,7 @@ public class LitVCR : MonoBehaviour
                 break;
             }
         }
-        OpenVideoByIndex(index, true, imgstopped, finishAction);
+        OpenVideoByIndex(index, reload, imgstopped, finishAction);
     }
 
     private void DisableImg(RawImage rawimg, DisplayUGUI mediaDisplay)

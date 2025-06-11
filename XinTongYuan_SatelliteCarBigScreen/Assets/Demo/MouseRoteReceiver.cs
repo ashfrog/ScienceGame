@@ -197,7 +197,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             {
                                 case "卫星":
                                     print(cmd + " " + cmdparam);
-                                    litVCR1.OpenVideoByFileName("卫星产业系统展示.mp4", true, () =>
+                                    litVCR1.OpenVideoByFileName("卫星产业系统展示.mp4", true, true, () =>
                                     {
                                         ReturnP1_1();
                                     });
@@ -207,7 +207,12 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_Obj.Hide();
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
                                     //MainPageLoop();
-                                    litVCR1.OpenVideoByFileName("火箭发射全息屏.mp4");
+                                    SocketClient sc = client;
+                                    litVCR1.OpenVideoByFileName("火箭发射全息屏.mp4", true, true, () =>
+                                    {
+                                        ReturnP1_1();
+                                        tcpService.Send(sc, OrderTypeEnum.Str, "P1_1");
+                                    });
                                     litVCR2.OpenVideoByFileName("地屏循环地球.mp4");
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "地屏循环地球.mp4");
                                     break;
@@ -231,7 +236,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //Panel_LoopVideo.SetActive(false);
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "循环地屏2.mp4");
                                     litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
-                                    litVCR2.OpenVideoByFileName("循环地屏2.mp4");
+                                    litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
                                     print(cmd + " " + cmdparam);
@@ -301,7 +306,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //video_car.SetActive(true);
                                     //media_Car.GetComponent<MediaPlayer>().Rewind(true);
                                     //media_Car.GetComponent<MediaPlayer>().Play();
-                                    litVCR1.OpenVideoByFileName("汽车百年进化论全息屏.mp4", true, () =>
+                                    litVCR1.OpenVideoByFileName("汽车百年进化论全息屏.mp4", false, true, () =>
                                     {
                                         ReturnP1_2();
                                     });
@@ -612,14 +617,14 @@ public class MouseRoteReceiver : MonoBehaviour
     void ReturnP1_1()
     {
         tabSwitcher_Obj.Hide();
-        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
+        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
         tabSwitcher_UI.SwitchTab(TabUILabel.P1_1);
     }
 
     void ReturnP1_2()
     {
         tabSwitcher_Obj.Hide();
-        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4", true);
+        litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
         tabSwitcher_UI.SwitchTab(TabUILabel.P1_2);
     }
 

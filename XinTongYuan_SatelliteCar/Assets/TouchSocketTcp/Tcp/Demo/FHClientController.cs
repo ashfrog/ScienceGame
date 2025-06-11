@@ -1,6 +1,9 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.IO;
+using System.Text;
+using TouchSocket.Sockets;
 using UnityEngine;
 
 public class FHClientController : MonoBehaviour
@@ -15,6 +18,9 @@ public class FHClientController : MonoBehaviour
     public Action<DTOInfo> receiveData;
 
     public string ipHost = "127.0.0.1:4849";
+
+    public GameObject P1_1;
+    public GameObject P1_1_1;
 
     private void Update()
     {
@@ -65,6 +71,29 @@ public class FHClientController : MonoBehaviour
     private void ReceiveData(DTOInfo info)
     {
         receiveData?.Invoke(info);
+        Loom.QueueOnMainThread(() =>
+        {
+            try
+            {
+
+                Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
+                string cmdstr = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+                switch (cmdstr)
+                {
+                    case "P1_1":
+                        Debug.Log(cmdstr);
+                        P1_1_1.SetActive(false);
+                        P1_1.SetActive(true);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Debug.LogException(ex);
+            }
+
+        });
     }
 
     /// <summary>
