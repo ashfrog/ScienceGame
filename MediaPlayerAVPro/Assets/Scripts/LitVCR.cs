@@ -627,6 +627,7 @@ public class LitVCR : MonoBehaviour
     {
         if (Settings.ini.Game.InitPlay)
         {
+            yield return new WaitForSeconds(3);
             while (Settings.ini.Game.VideoIndex > 0)
             {
                 Debug.Log("非0索引:" + Settings.ini.Game.VideoIndex + "即将跳转播放下一面");
