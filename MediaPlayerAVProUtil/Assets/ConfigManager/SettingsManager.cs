@@ -95,6 +95,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("LoopMode", value.ToString());
     }
 
+    public float AutoResetTime
+    {
+        get => ReadFloat("AutoResetTime", 8f);
+        set => WriteValue("AutoResetTime", value.ToString());
+    }
+
     public int VideoIndex
     {
         get => ReadInt("VideoIndex", 0);

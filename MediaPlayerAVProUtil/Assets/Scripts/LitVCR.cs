@@ -52,6 +52,8 @@ public class LitVCR : MonoBehaviour
     private string currentPlayingVideo = "";
 
     bool enablemask;
+    float autoResetTime;
+    Coroutine autoResetCroutine;
 
     //private const string VOLUMN_KEY = "volumn";//音量设置key
 
@@ -575,7 +577,9 @@ public class LitVCR : MonoBehaviour
     private void Start()
     {
         Settings.ini.Graphics.EnableMask = Settings.ini.Graphics.EnableMask;
+        Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
         enablemask = Settings.ini.Graphics.EnableMask;
+        autoResetTime = Settings.ini.Game.AutoResetTime;
         if (enablemask)
         {
             //读取StreamAssets下mask目录内的图片到maskTexture
@@ -730,6 +734,11 @@ public class LitVCR : MonoBehaviour
         this.imgstopped = imgstopped;
         if (videoindex < videoPaths.Count)
         {
+            if (autoResetCroutine != null)
+            {
+                StopCoroutine(autoResetCroutine);
+                autoResetCroutine = null;
+            }
             //如果videoPaths[videoindex]是网页路径
             if (IsWebUrl(videoPaths[videoindex]))
             {
@@ -760,6 +769,7 @@ public class LitVCR : MonoBehaviour
                         if (imgCroutine != null)
                         {
                             StopCoroutine(imgCroutine);
+                            imgCroutine = null;
                         }
                         LoadingPlayer.m_VideoPath = videoPaths[videoindex];
                         OpenVideoFile(videoPaths[videoindex], reload);
@@ -862,6 +872,13 @@ public class LitVCR : MonoBehaviour
         }
     }
 
+    IEnumerator AutoReset()
+    {
+        yield return new WaitForSeconds(autoResetTime);
+        Stop();
+        PlayScreenSaver();
+    }
+
     // Callback function to handle events
     public void OnVideoEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
     {
@@ -890,6 +907,13 @@ public class LitVCR : MonoBehaviour
 
             case MediaPlayerEvent.EventType.FinishedPlaying:
                 Debug.Log("视频播放停止事件:" + mp.m_VideoPath);
+
+                if (LoopMode.none.ToString().Equals(GetLoopMode()))
+                {
+                    //等待自动重置视频
+                    autoResetCroutine = StartCoroutine(AutoReset());
+                    return;
+                }
 
                 SkipNextScreenSaver();
 
