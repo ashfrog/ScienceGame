@@ -18,6 +18,14 @@ Shader "AVProVideo/Lit/custom1" {
         _MovTex5("_MovTex5", 2D) = "black" {}
         _FilterTex5("_FilterTex5", 2D) = "black" {}
         [HideInInspector]_Cutoff ("Alpha cutoff", Range(0,1)) = 0.5
+        
+        // 新增颜色校正参数
+        _ColorBalance ("Color Balance", Vector) = (1,1,1,1)
+        _Brightness ("Brightness", Range(0,2)) = 1
+        _Contrast ("Contrast", Range(0,2)) = 1
+        _Saturation ("Saturation", Range(0,2)) = 1
+        _Gamma ("Gamma", Range(0.1,3)) = 1
+        [Toggle] _LinearToSRGB ("Linear to sRGB", Float) = 0
     }
     SubShader {
         Tags {
@@ -42,6 +50,7 @@ Shader "AVProVideo/Lit/custom1" {
             #pragma multi_compile_fog
             //#pragma only_renderers d3d9 d3d11 glcore gles 
             #pragma target 3.0
+            
             uniform sampler2D _MainTex; uniform float4 _MainTex_ST;
             uniform sampler2D _FilterTex; uniform float4 _FilterTex_ST;
             uniform sampler2D _MovTex1; uniform float4 _MovTex1_ST;
@@ -54,6 +63,56 @@ Shader "AVProVideo/Lit/custom1" {
             uniform sampler2D _FilterTex4; uniform float4 _FilterTex4_ST;
             uniform sampler2D _MovTex5; uniform float4 _MovTex5_ST;
             uniform sampler2D _FilterTex5; uniform float4 _FilterTex5_ST;
+            
+            // 新增颜色校正参数
+            uniform float4 _ColorBalance;
+            uniform float _Brightness;
+            uniform float _Contrast;
+            uniform float _Saturation;
+            uniform float _Gamma;
+            uniform float _LinearToSRGB;
+
+            // 颜色空间转换函数
+            float3 LinearToSRGBApprox(float3 col)
+            {
+                return pow(col, 1.0/2.2);
+            }
+            
+            float3 SRGBToLinearApprox(float3 col)
+            {
+                return pow(col, 2.2);
+            }
+            
+            // 亮度计算
+            float Luminance(float3 color)
+            {
+                return dot(color, float3(0.299, 0.587, 0.114));
+            }
+            
+            // 颜色校正函数
+            float3 ColorCorrection(float3 color)
+            {
+                // 应用颜色平衡
+                color *= _ColorBalance.rgb;
+                
+                // 应用Gamma校正
+                color = pow(abs(color), _Gamma);
+                
+                // 应用亮度
+                color *= _Brightness;
+                
+                // 应用对比度
+                color = (color - 0.5) * _Contrast + 0.5;
+                
+                // 应用饱和度
+                float lum = Luminance(color);
+                color = lerp(float3(lum, lum, lum), color, _Saturation);
+                
+                // 确保颜色在有效范围内
+                color = saturate(color);
+                
+                return color;
+            }
 
             struct VertexInput {
                 float4 vertex : POSITION;
@@ -72,13 +131,9 @@ Shader "AVProVideo/Lit/custom1" {
                 return o;
             }
             float4 frag(VertexOutput i) : COLOR {
-////// Lighting:
-////// Emissive:
-             
-				float4 _MainTex_var = tex2D(_MainTex, TRANSFORM_TEX(i.uv0, _MainTex));
-                float3 emissive = _MainTex_var.rgb;
-                float3 finalColor = emissive;
-				float4 _FilterTex_var = tex2D(_FilterTex, TRANSFORM_TEX(i.uv0, _FilterTex));
+                // 采样所有纹理
+                float4 _MainTex_var = tex2D(_MainTex, TRANSFORM_TEX(i.uv0, _MainTex));
+                float4 _FilterTex_var = tex2D(_FilterTex, TRANSFORM_TEX(i.uv0, _FilterTex));
                 float4 _MovTex1_var = tex2D(_MovTex1, TRANSFORM_TEX(i.uv0, _MovTex1));
                 float4 _FilterTex1_var = tex2D(_FilterTex1, TRANSFORM_TEX(i.uv0, _FilterTex1));
                 float4 _MovTex2_var = tex2D(_MovTex2, TRANSFORM_TEX(i.uv0, _MovTex2));
@@ -89,15 +144,33 @@ Shader "AVProVideo/Lit/custom1" {
                 float4 _FilterTex4_var = tex2D(_FilterTex4, TRANSFORM_TEX(i.uv0, _FilterTex4));
                 float4 _MovTex5_var = tex2D(_MovTex5, TRANSFORM_TEX(i.uv0, _MovTex5));
                 float4 _FilterTex5_var = tex2D(_FilterTex5, TRANSFORM_TEX(i.uv0, _FilterTex5));
-
-                fixed4 finalRGBA = fixed4(finalColor, _FilterTex_var.r);
+                
+                // 如果需要从线性空间转换
+                float3 baseColor = _MainTex_var.rgb;
+                if (_LinearToSRGB > 0.5)
+                {
+                    baseColor = SRGBToLinearApprox(baseColor);
+                }
+                
+                // 应用颜色校正
+                baseColor = ColorCorrection(baseColor);
+                
+                // 构建最终颜色
+                fixed4 finalRGBA = fixed4(baseColor, _FilterTex_var.r);
+                
+                // 应用混合层
                 finalRGBA = lerp(finalRGBA, _MovTex1_var, _FilterTex1_var.r);
                 finalRGBA = lerp(finalRGBA, _MovTex2_var, _FilterTex2_var.r);
                 finalRGBA = lerp(finalRGBA, _MovTex3_var, _FilterTex3_var.r);
                 finalRGBA = lerp(finalRGBA, _MovTex4_var, _FilterTex4_var.r);
                 finalRGBA = lerp(finalRGBA, _MovTex5_var, _FilterTex5_var.r);
-
-
+                
+                // 如果需要转换到sRGB空间用于显示
+                if (_LinearToSRGB > 0.5)
+                {
+                    finalRGBA.rgb = LinearToSRGBApprox(finalRGBA.rgb);
+                }
+                
                 UNITY_APPLY_FOG(i.fogCoord, finalRGBA);
                 return finalRGBA;
             }
