@@ -24,7 +24,8 @@ public class Manager : MonoBehaviour
     public GameObject[] trims; //内饰
 
     [SerializeField]
-    private TabSwitcher tabSwitcher;
+    public TabSwitcher tabSwitcher;
+
 
 
     private void Awake()
@@ -156,4 +157,8 @@ public class Manager : MonoBehaviour
     {
         _mouseTouchInputManager.touchArea = rt;
     }
+}
+public enum TabUIMainType
+{
+    Panel_level1, Panel_level1_1, Panel_level1_1_1, Panel_level1_1_2, Panel_level1_1_3, Panel_level1_1_3_1, Panel_level1_2
 }

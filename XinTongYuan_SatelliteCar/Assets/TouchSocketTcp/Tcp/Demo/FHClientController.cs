@@ -85,6 +85,9 @@ public class FHClientController : MonoBehaviour
                         P1_1_1.SetActive(false);
                         P1_1.SetActive(true);
                         break;
+                    case "MainPage":
+                        Manager._ins.tabSwitcher.SwitchTab(TabUIMainType.Panel_level1);
+                        break;
                 }
             }
             catch (Exception ex)

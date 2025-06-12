@@ -88,6 +88,8 @@ public class MouseRoteReceiver : MonoBehaviour
         StartCoroutine(WaitForTcpServiceInitialization());
         MainPageLoop();
         Settings.ini.Game.ZSpeed = Settings.ini.Game.ZSpeed;
+        Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
+        autoResetTime = Settings.ini.Game.AutoResetTime;
     }
 
     public void OnVideoEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
@@ -105,6 +107,8 @@ public class MouseRoteReceiver : MonoBehaviour
         Debug.Log("Event: " + et.ToString());
     }
 
+    float curt = 0f;
+    float autoResetTime = 10f;
     // Update is called once per frame
     void Update()
     {
@@ -118,8 +122,16 @@ public class MouseRoteReceiver : MonoBehaviour
             targetRotationDelta.x *= (1f - smoothFactor);
             targetRotationDelta.y *= (1f - smoothFactor);
         }
-    }
 
+        curt += Time.deltaTime;
+        if (curt > autoResetTime)
+        {
+            curt = 0;
+            MainPageLoop();
+            tcpService.Send(sc, OrderTypeEnum.Str, "MainPage");
+        }
+    }
+    SocketClient sc;
     private IEnumerator WaitForTcpServiceInitialization()
     {
         // 等待tcpService初始化完成
@@ -129,10 +141,17 @@ public class MouseRoteReceiver : MonoBehaviour
         tcpService.fh_tcpservice.Received += this.FHService_Received;
     }
     Vector2 vec2;
+
+
+
+
+
     private void FHService_Received(SocketClient client, ByteBlock byteBlock, IRequestInfo requestInfo)
     {
         Loom.QueueOnMainThread(() =>
         {
+            sc = client;
+            curt = 0;
             // 处理接收到的消息
             try
             {

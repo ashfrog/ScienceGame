@@ -65,6 +65,11 @@ public class GameSettings : BaseSettings
         get => ReadFloat("Volumn", 1f);
         set => WriteValue("Volumn", value.ToString());
     }
+    public float AutoResetTime
+    {
+        get => ReadFloat("AutoResetTime", 300f);
+        set => WriteValue("AutoResetTime", value.ToString());
+    }
 
     public float ZSpeed
     {

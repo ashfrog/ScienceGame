@@ -46,7 +46,7 @@ public class LitVCR : MonoBehaviour
 
     public string filterSectionNo;
 
-    private const string shaderMask = "AVProVideo/Lit/custom1";
+    private const string shaderMask = "AVProVideo/UI/ColorCorrected";
 
     private string currentPlayingVideo = "";
 
