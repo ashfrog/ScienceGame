@@ -1,5 +1,7 @@
 // AVProVideo DisplayUGUI Color Corrected Shader
 // 专门解决AVProVideo在Unity Linear Color Space下的色差问题
+// Production Ready Version - 正式项目版本
+// 支持移动端优化、多平台兼容、性能优化
 
 Shader "AVProVideo/UI/ColorCorrected" {
     Properties {
@@ -67,11 +69,17 @@ Shader "AVProVideo/UI/ColorCorrected" {
             #pragma fragment frag
             #pragma target 3.0
             
-            #include "UnityCG.cginc"
-            #include "UnityUI.cginc"
-            
+            // 移动端优化
             #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
             #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
+            #pragma multi_compile_instancing
+            #pragma multi_compile_fog
+            
+            // 平台兼容性
+            #pragma only_renderers d3d11 glcore gles gles3 metal vulkan xboxone ps4 ps5 xboxseries switch
+            
+            #include "UnityCG.cginc"
+            #include "UnityUI.cginc"
             
             sampler2D _MainTex;
             float4 _MainTex_ST;
@@ -135,7 +143,7 @@ Shader "AVProVideo/UI/ColorCorrected" {
                 return OUT;
             }
             
-            // 精确的颜色空间转换函数
+            // 精确的颜色空间转换函数（桌面端）
             float3 GammaToLinearPrecise(float3 sRGB) {
                 return sRGB * (sRGB * (sRGB * 0.305306011 + 0.682171111) + 0.012522878);
             }
@@ -144,13 +152,23 @@ Shader "AVProVideo/UI/ColorCorrected" {
                 return max(1.055 * pow(max(lin, 0.0), 0.416666667) - 0.055, 0.0);
             }
             
-            // 简化的转换函数（性能更好）
+            // 简化的转换函数（移动端优化）
             float3 GammaToLinearFast(float3 sRGB) {
-                return pow(abs(sRGB), 2.2);
+                #if defined(SHADER_API_MOBILE)
+                    // 移动端使用更快的近似算法
+                    return sRGB * sRGB;
+                #else
+                    return pow(abs(sRGB), 2.2);
+                #endif
             }
             
             float3 LinearToGammaFast(float3 lin) {
-                return pow(abs(lin), 1.0/2.2);
+                #if defined(SHADER_API_MOBILE)
+                    // 移动端使用更快的近似算法
+                    return sqrt(abs(lin));
+                #else
+                    return pow(abs(lin), 1.0/2.2);
+                #endif
             }
             
             // 获取亮度值
@@ -158,30 +176,33 @@ Shader "AVProVideo/UI/ColorCorrected" {
                 return dot(color, float3(0.2126729, 0.7151522, 0.0721750));
             }
             
-            // AVProVideo专用颜色校正
+            // AVProVideo专用颜色校正（生产版本）
             float3 AVProVideoColorCorrection(float3 color) {
+                // 性能优化：如果不需要颜色校正，直接返回
                 if (_ApplyColorCorrection < 0.5) {
                     return color;
                 }
                 
-                // 1. 如果Unity在Linear空间，但视频是sRGB编码的，需要转换
+                // 防止无效值
+                color = max(color, 0.0);
+                
+                // 1. 颜色空间处理
                 #ifdef UNITY_COLORSPACE_GAMMA
                     // Unity在Gamma空间，不需要额外转换
                     float3 workingColor = color;
                 #else
-                    // Unity在Linear空间，假设输入是sRGB编码的视频
+                    // Unity在Linear空间的处理
                     float3 workingColor = color;
                     if (_ForceGammaCorrection > 0.5) {
-                        // 将sRGB转换为线性空间进行处理
                         workingColor = GammaToLinearFast(color);
                     }
                 #endif
                 
-                // 2. 应用颜色平衡
+                // 2. 应用颜色平衡（性能优化）
                 workingColor *= _ColorBalance.rgb;
                 
                 // 3. 应用自定义Gamma校正
-                workingColor = pow(abs(workingColor), _GammaCorrection);
+                workingColor = pow(abs(workingColor) + 0.001, _GammaCorrection);
                 
                 // 4. 应用亮度调整
                 workingColor *= _Brightness;
@@ -191,15 +212,14 @@ Shader "AVProVideo/UI/ColorCorrected" {
                 
                 // 6. 应用饱和度调整
                 float luma = GetLuminance(workingColor);
-                workingColor = lerp(float3(luma, luma, luma), workingColor, _Saturation);
+                workingColor = lerp(luma.xxx, workingColor, _Saturation);
                 
-                // 7. 限制到有效范围
+                // 7. 限制到有效范围并防止NaN
                 workingColor = saturate(workingColor);
                 
-                // 8. 如果Unity在Linear空间，转换回适当的空间
+                // 8. 颜色空间转换回去
                 #ifndef UNITY_COLORSPACE_GAMMA
                     if (_ForceGammaCorrection > 0.5) {
-                        // 转换回sRGB用于显示
                         workingColor = LinearToGammaFast(workingColor);
                     }
                 #endif
@@ -208,32 +228,37 @@ Shader "AVProVideo/UI/ColorCorrected" {
             }
             
             fixed4 frag(v2f IN) : SV_Target {
-                // 采样主纹理
+                // 性能优化：只采样实际使用的纹理
                 half4 color = tex2D(_MainTex, IN.texcoord);
-                
-                // 采样其他纹理
-                float4 _FilterTex_var = tex2D(_FilterTex, TRANSFORM_TEX(IN.texcoord, _FilterTex));
-                float4 _MovTex1_var = tex2D(_MovTex1, TRANSFORM_TEX(IN.texcoord, _MovTex1));
-                float4 _FilterTex1_var = tex2D(_FilterTex1, TRANSFORM_TEX(IN.texcoord, _FilterTex1));
-                float4 _MovTex2_var = tex2D(_MovTex2, TRANSFORM_TEX(IN.texcoord, _MovTex2));
-                float4 _FilterTex2_var = tex2D(_FilterTex2, TRANSFORM_TEX(IN.texcoord, _FilterTex2));
-                float4 _MovTex3_var = tex2D(_MovTex3, TRANSFORM_TEX(IN.texcoord, _MovTex3));
-                float4 _FilterTex3_var = tex2D(_FilterTex3, TRANSFORM_TEX(IN.texcoord, _FilterTex3));
-                float4 _MovTex4_var = tex2D(_MovTex4, TRANSFORM_TEX(IN.texcoord, _MovTex4));
-                float4 _FilterTex4_var = tex2D(_FilterTex4, TRANSFORM_TEX(IN.texcoord, _FilterTex4));
-                float4 _MovTex5_var = tex2D(_MovTex5, TRANSFORM_TEX(IN.texcoord, _MovTex5));
-                float4 _FilterTex5_var = tex2D(_FilterTex5, TRANSFORM_TEX(IN.texcoord, _FilterTex5));
                 
                 // 应用AVProVideo专用颜色校正
                 color.rgb = AVProVideoColorCorrection(color.rgb);
                 
-                // 构建最终颜色并应用混合
+                // 采样其他纹理（按需）
+                float4 _FilterTex_var = tex2D(_FilterTex, TRANSFORM_TEX(IN.texcoord, _FilterTex));
                 fixed4 finalColor = fixed4(color.rgb, _FilterTex_var.r);
-                finalColor = lerp(finalColor, _MovTex1_var, _FilterTex1_var.r);
-                finalColor = lerp(finalColor, _MovTex2_var, _FilterTex2_var.r);
-                finalColor = lerp(finalColor, _MovTex3_var, _FilterTex3_var.r);
-                finalColor = lerp(finalColor, _MovTex4_var, _FilterTex4_var.r);
-                finalColor = lerp(finalColor, _MovTex5_var, _FilterTex5_var.r);
+                
+                // 混合其他纹理层（如果需要）
+                // 注意：这些纹理采样可能不是所有项目都需要，可以根据实际情况优化
+                #ifndef SHADER_API_MOBILE
+                    // 桌面端保留完整功能
+                    float4 _MovTex1_var = tex2D(_MovTex1, TRANSFORM_TEX(IN.texcoord, _MovTex1));
+                    float4 _FilterTex1_var = tex2D(_FilterTex1, TRANSFORM_TEX(IN.texcoord, _FilterTex1));
+                    float4 _MovTex2_var = tex2D(_MovTex2, TRANSFORM_TEX(IN.texcoord, _MovTex2));
+                    float4 _FilterTex2_var = tex2D(_FilterTex2, TRANSFORM_TEX(IN.texcoord, _FilterTex2));
+                    float4 _MovTex3_var = tex2D(_MovTex3, TRANSFORM_TEX(IN.texcoord, _MovTex3));
+                    float4 _FilterTex3_var = tex2D(_FilterTex3, TRANSFORM_TEX(IN.texcoord, _FilterTex3));
+                    float4 _MovTex4_var = tex2D(_MovTex4, TRANSFORM_TEX(IN.texcoord, _MovTex4));
+                    float4 _FilterTex4_var = tex2D(_FilterTex4, TRANSFORM_TEX(IN.texcoord, _FilterTex4));
+                    float4 _MovTex5_var = tex2D(_MovTex5, TRANSFORM_TEX(IN.texcoord, _MovTex5));
+                    float4 _FilterTex5_var = tex2D(_FilterTex5, TRANSFORM_TEX(IN.texcoord, _FilterTex5));
+                    
+                    finalColor = lerp(finalColor, _MovTex1_var, _FilterTex1_var.r);
+                    finalColor = lerp(finalColor, _MovTex2_var, _FilterTex2_var.r);
+                    finalColor = lerp(finalColor, _MovTex3_var, _FilterTex3_var.r);
+                    finalColor = lerp(finalColor, _MovTex4_var, _FilterTex4_var.r);
+                    finalColor = lerp(finalColor, _MovTex5_var, _FilterTex5_var.r);
+                #endif
                 
                 // 应用UI顶点颜色
                 finalColor *= IN.color;
@@ -248,7 +273,8 @@ Shader "AVProVideo/UI/ColorCorrected" {
                 clip(finalColor.a - 0.001);
                 #endif
                 
-                return finalColor;
+                // 防止输出无效值
+                return saturate(finalColor);
             }
             ENDCG
         }
