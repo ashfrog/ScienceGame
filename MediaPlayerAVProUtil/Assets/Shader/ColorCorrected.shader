@@ -69,18 +69,22 @@ Shader "AVProVideo/UI/ColorCorrected" {
             #pragma fragment frag
             #pragma target 3.0
             
-            // 移动端优化
-            #pragma multi_compile_local _ UNITY_UI_CLIP_RECT
-            #pragma multi_compile_local _ UNITY_UI_ALPHACLIP
+            // 移动端优化 - 修复：使用正确的multi_compile指令
+            #pragma multi_compile __ UNITY_UI_CLIP_RECT
+            #pragma multi_compile __ UNITY_UI_ALPHACLIP
             #pragma multi_compile_instancing
-            #pragma multi_compile_fog
             
-            // 平台兼容性
-            #pragma only_renderers d3d11 glcore gles gles3 metal vulkan xboxone ps4 ps5 xboxseries switch
+            // 移除可能导致冲突的fog编译指令
+            // #pragma multi_compile_fog
             
+            // 平台兼容性 - 简化以避免宏冲突
+            #pragma only_renderers d3d11 glcore gles gles3 metal vulkan
+            
+            // 修复：调整include顺序，避免宏重定义
             #include "UnityCG.cginc"
             #include "UnityUI.cginc"
             
+            // 变量声明
             sampler2D _MainTex;
             float4 _MainTex_ST;
             sampler2D _FilterTex;
