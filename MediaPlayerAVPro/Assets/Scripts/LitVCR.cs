@@ -51,6 +51,8 @@ public class LitVCR : MonoBehaviour
     private string currentPlayingVideo = "";
 
     bool enablemask;
+    float autoResetTime;
+    Coroutine autoResetCroutine;
 
     //private const string VOLUMN_KEY = "volumn";//音量设置key
 
@@ -226,11 +228,12 @@ public class LitVCR : MonoBehaviour
     /// 转屏要3秒转好 转屏8秒后才能转下一次
     /// </summary>
     /// <returns></returns>
-    IEnumerator PlayNextWait()
+    IEnumerator PlayNextWait(bool wait5s = true)
     {
         enablePlayNext = false;
         _mediaDisplay.gameObject.SetActive(false);
         FHClientController.ins.SendHex(DataTypeEnum.SW_RS_9_20005, OrderTypeEnum.Str, "01 05 00 01 FF 00 DD FA");
+        OnPauseButton();
         yield return new WaitForSeconds(2.8f);
         SkipNextScreenSaver();
         videoindex = ++videoindex % videoPaths.Count;
@@ -238,8 +241,10 @@ public class LitVCR : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         _mediaDisplay.gameObject.SetActive(true);
 
-
-        yield return new WaitForSeconds(5f);
+        if (wait5s)
+        {
+            yield return new WaitForSeconds(5f);
+        }
 
         enablePlayNext = true;
     }
@@ -574,7 +579,9 @@ public class LitVCR : MonoBehaviour
     {
         Settings.ini.Graphics.EnableMask = Settings.ini.Graphics.EnableMask;
         Settings.ini.Game.InitPlay = Settings.ini.Game.InitPlay;
+        Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
         enablemask = Settings.ini.Graphics.EnableMask;
+        autoResetTime = Settings.ini.Game.AutoResetTime;
         if (enablemask)
         {
             //读取StreamAssets下mask目录内的图片到maskTexture
@@ -734,6 +741,11 @@ public class LitVCR : MonoBehaviour
         this.imgstopped = imgstopped;
         if (videoindex < videoPaths.Count)
         {
+            if (autoResetCroutine != null)
+            {
+                StopCoroutine(autoResetCroutine);
+                autoResetCroutine = null;
+            }
             if (File.Exists(videoPaths[videoindex]))
             {
                 this.videoindex = videoindex;
@@ -743,6 +755,7 @@ public class LitVCR : MonoBehaviour
                     if (imgCroutine != null)
                     {
                         StopCoroutine(imgCroutine);
+                        imgCroutine = null;
                     }
                     imgCroutine = StartCoroutine(asyncLoadImg(videoPaths[videoindex]));
                     if (PlayingPlayer && PlayingPlayer.Control != null && !isMovPaused())
@@ -755,6 +768,7 @@ public class LitVCR : MonoBehaviour
                     if (imgCroutine != null)
                     {
                         StopCoroutine(imgCroutine);
+                        imgCroutine = null;
                     }
                     LoadingPlayer.m_VideoPath = videoPaths[videoindex];
                     OpenVideoFile(videoPaths[videoindex], reload);
@@ -821,6 +835,28 @@ public class LitVCR : MonoBehaviour
         }
     }
 
+    float defaultVolumn;
+    IEnumerator AutoReset() //自动重置视频到开头
+    {
+        yield return new WaitForSeconds(autoResetTime);
+        Stop();
+        PlayScreenSaver();
+
+        if (videoindex == 2) //第三个视频播完 重置到第一个视频
+        {
+            yield return new WaitForSeconds(0.2f);
+            defaultVolumn = GetVolumn();
+            SetVolumn(0f);
+            if (enablePlayNext)
+            {
+                autoResetCroutine = null; //自动转屏不算用户触发 不打断自动转屏协程
+                yield return StartCoroutine(PlayNextWait(false));
+            }
+            SetVolumn(defaultVolumn);
+            Stop();
+        }
+    }
+
     // Callback function to handle events
     public void OnVideoEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
     {
@@ -849,6 +885,16 @@ public class LitVCR : MonoBehaviour
 
             case MediaPlayerEvent.EventType.FinishedPlaying:
                 Debug.Log("视频播放停止事件:" + mp.m_VideoPath);
+
+                if (LoopMode.none.ToString().Equals(GetLoopMode()))
+                {
+                    if (autoResetTime > 0)
+                    {
+                        //等待自动重置视频
+                        autoResetCroutine = StartCoroutine(AutoReset());
+                        return;
+                    }
+                }
 
                 SkipNextScreenSaver();
 

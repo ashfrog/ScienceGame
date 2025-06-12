@@ -757,6 +757,7 @@ public class LitVCR : MonoBehaviour
                         if (imgCroutine != null)
                         {
                             StopCoroutine(imgCroutine);
+                            imgCroutine = null;
                         }
                         imgCroutine = StartCoroutine(asyncLoadImg(videoPaths[videoindex]));
                         if (PlayingPlayer && PlayingPlayer.Control != null && !isMovPaused())
@@ -910,9 +911,12 @@ public class LitVCR : MonoBehaviour
 
                 if (LoopMode.none.ToString().Equals(GetLoopMode()))
                 {
-                    //等待自动重置视频
-                    autoResetCroutine = StartCoroutine(AutoReset());
-                    return;
+                    if (autoResetTime > 0)
+                    {
+                        //等待自动重置视频
+                        autoResetCroutine = StartCoroutine(AutoReset());
+                        return;
+                    }
                 }
 
                 SkipNextScreenSaver();
