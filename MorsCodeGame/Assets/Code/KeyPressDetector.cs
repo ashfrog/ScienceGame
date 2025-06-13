@@ -56,13 +56,20 @@ public class KeyPressDetector : MonoBehaviour
     [Header("效果图像")]
     public RawImage effectImage;
 
+    private float scaleValue = 1f;
+
     private void Start()
     {
         Settings.ini.Game.EazyMode = Settings.ini.Game.EazyMode;
+        Settings.ini.Game.ToleranceTimeStart = Settings.ini.Game.ToleranceTimeStart;
+        Settings.ini.Game.ToleranceTimeEnd = Settings.ini.Game.ToleranceTimeEnd;
+        Settings.ini.Game.ScaleValue = Settings.ini.Game.ScaleValue;
         easyMode = Settings.ini.Game.EazyMode;
         Settings.ini.Game.DotTime = Settings.ini.Game.DotTime;
         dotDathTime = Settings.ini.Game.DotTime;
-
+        toleranceTimeStart = Settings.ini.Game.ToleranceTimeStart;
+        toleranceTimeEnd = Settings.ini.Game.ToleranceTimeEnd;
+        scaleValue = Settings.ini.Game.ScaleValue;
         // 确保音频组件存在
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
@@ -288,7 +295,14 @@ public class KeyPressDetector : MonoBehaviour
         newUVRect.x = progress * maxProgressUV;
         currentProgressImage.uvRect = newUVRect;
 
-        // Debug.Log($"更新进度: {progress:F2}, UV X: {newUVRect.x:F2}");
+        // 跟随进度放大
+        RectTransform rectTrans = currentProgressImage.GetComponent<RectTransform>();
+        if (rectTrans != null)
+        {
+            float scale = Mathf.Lerp(1f, scaleValue, progress); // 进度越大，scale越大
+            rectTrans.localScale = new Vector3(scale, scale, 1f);
+        }
+        //Debug.Log($"更新进度: {progress:F2}, UV X: {newUVRect.x:F2}");
     }
 
     /// <summary>
@@ -301,6 +315,12 @@ public class KeyPressDetector : MonoBehaviour
             // 恢复原始UV Rect
             currentProgressImage.uvRect = originalUVRect;
             Debug.Log("停止长按进度效果，恢复原始UV");
+            // 恢复原始缩放
+            RectTransform rectTrans = currentProgressImage.GetComponent<RectTransform>();
+            if (rectTrans != null)
+            {
+                rectTrans.localScale = Vector3.one * 1f;
+            }
         }
 
         currentProgressImage = null;
@@ -363,6 +383,7 @@ public class KeyPressDetector : MonoBehaviour
                 elapsed += Time.deltaTime;
                 float t = elapsed / feedbackDuration;
                 targetImage.color = Color.Lerp(originalColor, longPressColor, Mathf.Sin(t * Mathf.PI * 2f) * 0.5f + 0.5f);
+                Debug.Log(elapsed);
             }
             catch (Exception ex)
             {

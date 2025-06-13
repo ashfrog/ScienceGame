@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CardGenerator\Editor\CardTextGeneratorEditor.cs" />
+    <Compile Include="Assets\CodeUtils\TabSwitch\Tab\Editor\TabSwitcherEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

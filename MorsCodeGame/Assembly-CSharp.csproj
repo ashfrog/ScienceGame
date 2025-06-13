@@ -122,12 +122,14 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
-    <Compile Include="Assets\CodeUtils\TabSwitch\TabSwitcher.cs" />
+    <Compile Include="Assets\CodeUtils\TabSwitch\Tab\TabSwitcher.cs" />
     <Compile Include="Assets\PanelScript\Panel_QingBao.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\CardGenerator\CardTextGenerator.cs" />
     <Compile Include="Assets\CardGenerator\CardUISetup.cs" />
     <Compile Include="Assets\MainController.cs" />
+    <Compile Include="Assets\CodeUtils\TabSwitch\Tab\TabTypeManager.cs" />
+    <Compile Include="Assets\TextLoad.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

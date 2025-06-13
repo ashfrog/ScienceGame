@@ -107,6 +107,22 @@ public class GameSettings : BaseSettings
         get => ReadBool("EazyMode", true);
         set => WriteValue("EazyMode", value.ToString());
     }
+    public float ScaleValue
+    {
+        get => ReadFloat("ScaleValue", 1.5f);
+        set => WriteValue("ScaleValue", value.ToString());
+    }
+    public float ToleranceTimeStart
+    {
+        get => ReadFloat("ToleranceTimeStart", 0.1f);
+        set => WriteValue("ToleranceTimeStart", value.ToString());
+    }
+
+    public float ToleranceTimeEnd
+    {
+        get => ReadFloat("ToleranceTimeEnd", 0.25f);
+        set => WriteValue("ToleranceTimeEnd", value.ToString());
+    }
 
     public string Difficulty
     {
@@ -124,6 +140,12 @@ public class GameSettings : BaseSettings
     {
         get => ReadValue("Language", "en");
         set => WriteValue("Language", value);
+    }
+
+    public string TextTooltip
+    {
+        get => ReadValue("TextTooltip", "发报机玩法：按K键开始游戏，长按/短按K键发送不同信号（长按=长信号，短按=短信号）。通过组合长短信号传递信息，模拟真实电报操作。注意节奏间隔，准确还原莫尔斯电码。");
+        set => WriteValue("TextTooltip", value);
     }
 }
 
