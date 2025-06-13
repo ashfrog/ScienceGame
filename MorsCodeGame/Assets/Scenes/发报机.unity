@@ -2339,7 +2339,7 @@ MonoBehaviour:
   perfectTimeRange: 180
   normalTimeRange: 200
   ignoreTimeRange: 200
-  dotDathTime: 0.12
+  dotDathTime: 0.2
   triggerLine: {fileID: 1961489661}
   SpawnPointRoot: {fileID: 1729460618}
   easyMode: 0
@@ -2366,16 +2366,12 @@ MonoBehaviour:
   morseCodeObjects: []
   nextTab: 4
   SecondText: {fileID: 1518556717}
-  prefabid: 0
   textMeshProUGUI_Nor: {fileID: 54532305}
   textMeshProUGUI_Zhr: {fileID: 273605560}
   textMeshProUGUI_No: {fileID: 723305454}
   textMeshProUGUI_Zh: {fileID: 1355988560}
   textAnimator: {fileID: 1763129135}
   animationName: "\u53D1\u62A5\u5B8C\u6210Ani"
-  morseCode: ... --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ......
-    --- ... --- ... --- ... --- ...... --- ... --- ... --- ... --- ...... --- ...
-    --- ... --- ... --- ...
 --- !u!4 &365704917
 Transform:
   m_ObjectHideFlags: 0
@@ -9368,7 +9364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1763129132
 RectTransform:
   m_ObjectHideFlags: 0

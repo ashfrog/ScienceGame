@@ -2,343 +2,409 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 /// <summary>
-/// 改进的按键检测器 - 增强反馈和可玩性
+///  handle the detection of key presses when the Morse code reaches a trigger line.
 /// </summary>
 public class KeyPressDetector : MonoBehaviour
 {
-    [Header("判定区间设置")]
-    public float perfectTimeRange = 450f; // 增加宽容度
-    public float normalTimeRange = 650f;  // 增加宽容度
-    public float ignoreTimeRange = 800f;  // 增加宽容度
+    public float perfectTimeRange = 300f;
+    public float normalTimeRange = 400f;
+    public float ignoreTimeRange = 500f;
 
-    [Header("按键时间设置")]
-    public float dotDashTime = 0.25f; // 稍微增加点击时间
+    /// <summary>
+    /// 200毫秒内按下的是点按，否则是长按
+    /// </summary>
+    public float dotDathTime = 0.2f;
 
-    [Header("音效设置")]
-    public AudioSource audioSource;
-    public AudioClip dotPressSound;
-    public AudioClip dashPressSound;
-    public AudioClip perfectSound;
-    public AudioClip goodSound;
-    public AudioClip missSound;
-    public AudioClip comboSound;
-
-    [Header("视觉反馈设置")]
-    public GameObject feedbackTextPrefab;
-    public Transform feedbackParent;
-    public ParticleSystem perfectEffect;
-    public ParticleSystem goodEffect;
-
-    [Header("游戏对象引用")]
     public RectTransform triggerLine;
     public RectTransform SpawnPointRoot;
     public bool easyMode;
 
-    // 连击系统
-    private int comboCount = 0;
-    private int maxCombo = 0;
-    private float lastSuccessTime = 0f;
+    [Header("容错时间设置")]
+    [Tooltip("容错时间窗口开始时间（秒）")]
+    public float toleranceTimeStart = 0.1f;
+    [Tooltip("容错时间窗口结束时间（秒）")]
+    public float toleranceTimeEnd = 0.15f;
 
-    // 统计数据
-    private int totalHits = 0;
-    private int perfectHits = 0;
-    private int goodHits = 0;
-    private int missHits = 0;
+    [Header("扩展检测设置")]
+    public float visualDetectionRange = 800f;
+    public bool enableMissedObjectRecovery = true;
 
-    // 原有变量
-    private float pressTime;
-    private bool pressed;
-    private RectTransform lockedMorseObject;
-    private bool hasProcessedPress;
+    [Header("长按反馈设置")]
+    [Tooltip("长按反馈触发时间（秒）")]
+    public float longPressFeedbackTime = 0.3f;
+    [Tooltip("长按时的颜色")]
+    public Color longPressColor = Color.cyan;
+    [Tooltip("长按反馈持续时间")]
+    public float feedbackDuration = 0.2f;
 
-    // UI反馈
-    public TextMeshProUGUI comboText;
-    public TextMeshProUGUI accuracyText;
-    public Slider accuracySlider;
+    [Header("音频反馈")]
+    public AudioSource audioSource;
+    public AudioClip dotPressSound;
+    public AudioClip dashPressSound;
+    public AudioClip longPressFeedbackSound;
+    public AudioClip toleranceHitSound;
 
-    void Start()
-    {
-        InitializeSettings();
-        InitializeUI();
-    }
+    [Header("视觉反馈")]
+    public GameObject longPressFeedbackPrefab; // 长按反馈特效预制体
+    public Transform feedbackParent; // 特效父物体
 
-    void InitializeSettings()
+    private void Start()
     {
         Settings.ini.Game.EazyMode = Settings.ini.Game.EazyMode;
         easyMode = Settings.ini.Game.EazyMode;
         Settings.ini.Game.DotTime = Settings.ini.Game.DotTime;
-        dotDashTime = Settings.ini.Game.DotTime;
+        dotDathTime = Settings.ini.Game.DotTime;
 
-        // 简单模式下更宽松的判定
-        if (easyMode)
-        {
-            perfectTimeRange *= 1.5f;
-            normalTimeRange *= 1.5f;
-            ignoreTimeRange *= 1.3f;
-        }
+        // 确保音频组件存在
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
-    void InitializeUI()
-    {
-        if (comboText) comboText.gameObject.SetActive(false);
-        UpdateAccuracy();
-    }
+    private float pressTime;
+    private bool pressed;
+    private RectTransform lockedMorseObject;
+    private bool hasProcessedPress;
+    private bool hasProcessedLongPress;
+    private bool hasTriggeredLongPressFeedback; // 是否已触发长按反馈
+    private Coroutine longPressFeedbackCoroutine;
 
     void Update()
     {
-        HandleInput();
-        UpdateComboDisplay();
-    }
-
-    void HandleInput()
-    {
         if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
-            OnKeyPress();
-        }
+            pressed = true;
+            pressTime = Time.time;
+            hasProcessedPress = false;
+            hasProcessedLongPress = false;
+            hasTriggeredLongPressFeedback = false;
 
-        if (Input.GetKeyUp(KeyCodeInput.keyCode))
-        {
-            OnKeyRelease();
-        }
+            // 优先查找最接近触发线的物体
+            lockedMorseObject = FindBestMorseCodeObject();
 
-        if (pressed)
-        {
-            HandleLongPress();
-        }
-    }
-
-    void OnKeyPress()
-    {
-        pressed = true;
-        pressTime = Time.time;
-        hasProcessedPress = false;
-        lockedMorseObject = FindClosestMorseCodeObject();
-
-        // 视觉反馈：按下动画
-        if (lockedMorseObject != null)
-        {
-            StartCoroutine(PressAnimation(lockedMorseObject));
-        }
-
-        // 音效反馈
-        PlayPressSound(true); // 预播放点击音效
-
-        // 简单模式立即处理
-        if (easyMode)
-        {
-            DetectKeyPress(true, 0f, lockedMorseObject);
-            hasProcessedPress = true;
-        }
-    }
-
-    void OnKeyRelease()
-    {
-        pressed = false;
-        float duration = Time.time - pressTime;
-
-        bool isDot = duration <= dotDashTime;
-
-        // 播放对应音效
-        PlayPressSound(isDot);
-
-        // 执行判定
-        if (duration <= dotDashTime)
-        {
-            DetectKeyPress(true, duration, lockedMorseObject);
-        }
-        else if (!hasProcessedPress)
-        {
-            DetectKeyPress(false, duration, lockedMorseObject);
-        }
-
-        // 清理状态
-        lockedMorseObject = null;
-        hasProcessedPress = false;
-    }
-
-    void HandleLongPress()
-    {
-        float duration = Time.time - pressTime;
-        if (duration > dotDashTime && duration < 0.4f && !hasProcessedPress)
-        {
-            DetectKeyPress(false, duration, lockedMorseObject);
-            hasProcessedPress = true;
-        }
-    }
-
-    void DetectKeyPress(bool isDot, float pressedTime = 0f, RectTransform targetObject = null)
-    {
-        RectTransform morseCodeObject = targetObject ?? FindClosestMorseCodeObject();
-
-        if (morseCodeObject != null)
-        {
-            float distance = GetDistance(morseCodeObject);
-            ItemPrefab morseCode = morseCodeObject.GetComponent<ItemPrefab>();
-            bool isDotObj = morseCode.isDot;
-
-            // 判定逻辑
-            JudgmentResult result = CalculateJudgment(distance, isDot, isDotObj, pressedTime);
-
-            // 应用判定结果
-            ApplyJudgmentResult(morseCodeObject, result);
-
-            // 更新统计
-            UpdateStatistics(result);
-
-            // 设置字符
-            SetMorseCharacter(morseCode, isDot, isDotObj);
-        }
-    }
-
-    JudgmentResult CalculateJudgment(float distance, bool isDot, bool isDotObj, float pressedTime)
-    {
-        JudgmentResult result = new JudgmentResult();
-
-        if (distance >= ignoreTimeRange)
-        {
-            result.type = JudgmentType.Miss;
-            result.message = "太远了";
-            return result;
-        }
-
-        // 类型匹配检查
-        bool typeMatch = isDotObj == isDot;
-
-        // 特殊情况：长按时间不够的处理
-        if (!isDotObj && pressedTime > 0 && pressedTime < dotDashTime)
-        {
-            result.type = JudgmentType.Miss;
-            result.message = "长按时间不够";
-            return result;
-        }
-
-        if (!typeMatch)
-        {
-            // 容错机制：如果距离很近，给予Good判定而不是Miss
-            if (distance < perfectTimeRange * 1.2f)
+            // 如果是简单模式，直接处理按下事件
+            if (easyMode && lockedMorseObject != null)
             {
-                result.type = JudgmentType.Good;
-                result.message = isDotObj ? "应该点击" : "应该长按";
+                DetectKeyPress(true, 0f, lockedMorseObject);
+                hasProcessedPress = true;
+            }
+
+            // 播放按下音效
+            PlayPressSound(true); // 默认播放点按音效
+        }
+
+        if (Input.GetKeyUp(KeyCodeInput.keyCode) && pressed)
+        {
+            pressed = false;
+            float duration = Time.time - pressTime;
+
+            // 停止长按反馈
+            if (longPressFeedbackCoroutine != null)
+            {
+                StopCoroutine(longPressFeedbackCoroutine);
+                longPressFeedbackCoroutine = null;
+            }
+
+            // 如果没有锁定物体，尝试重新查找
+            if (lockedMorseObject == null && enableMissedObjectRecovery)
+            {
+                lockedMorseObject = FindBestMorseCodeObject();
+                Debug.Log("恢复查找到物体: " + (lockedMorseObject != null));
+            }
+
+            // 确保有锁定的物体才进行处理
+            if (lockedMorseObject != null)
+            {
+                bool isDotPress = DetermineInputType(duration);
+
+                if (!hasProcessedPress && !hasProcessedLongPress)
+                {
+                    DetectKeyPress(isDotPress, duration, lockedMorseObject);
+                    if (isDotPress)
+                        hasProcessedPress = true;
+                    else
+                        hasProcessedLongPress = true;
+                }
             }
             else
             {
-                result.type = JudgmentType.Miss;
-                result.message = isDotObj ? "应该点击" : "应该长按";
+                Debug.LogWarning("按键释放时没有找到目标物体");
             }
-            return result;
+
+            // 清除状态
+            lockedMorseObject = null;
+            hasProcessedPress = false;
+            hasProcessedLongPress = false;
+            hasTriggeredLongPressFeedback = false;
         }
 
-        // 距离判定
-        if (distance < perfectTimeRange)
+        // 长按检测和反馈
+        if (pressed && lockedMorseObject != null)
         {
-            result.type = JudgmentType.Perfect;
-            result.message = "完美!";
+            float duration = Time.time - pressTime;
+
+            // 长按反馈触发
+            if (duration >= longPressFeedbackTime && !hasTriggeredLongPressFeedback)
+            {
+                TriggerLongPressFeedback();
+                hasTriggeredLongPressFeedback = true;
+            }
+
+            // 长按逻辑处理
+            if (duration > dotDathTime && !hasProcessedLongPress && !easyMode)
+            {
+                // 检查是否在容错时间窗口内
+                bool isInToleranceWindow = duration >= toleranceTimeStart && duration <= toleranceTimeEnd;
+
+                if (!isInToleranceWindow)
+                {
+                    DetectKeyPress(false, duration, lockedMorseObject);
+                    hasProcessedLongPress = true;
+                }
+            }
         }
-        else if (distance < normalTimeRange)
+    }
+
+    /// <summary>
+    /// 根据按下时间和容错机制确定输入类型
+    /// </summary>
+    private bool DetermineInputType(float duration)
+    {
+        // 容错时间窗口：0.1-0.15秒内不区分点按和长按
+        if (duration >= toleranceTimeStart && duration <= toleranceTimeEnd)
         {
-            result.type = JudgmentType.Good;
-            result.message = "不错!";
+            Debug.Log($"容错时间窗口命中 - 时长: {duration:F3}s");
+            return true; // 容错窗口内默认为点按
+        }
+
+        // 正常判定逻辑
+        return duration <= dotDathTime;
+    }
+
+    /// <summary>
+    /// 触发长按反馈
+    /// </summary>
+    private void TriggerLongPressFeedback()
+    {
+        Debug.Log("触发长按反馈");
+
+        // 音频反馈
+        if (audioSource && longPressFeedbackSound)
+        {
+            audioSource.PlayOneShot(longPressFeedbackSound, 0.8f);
+        }
+
+        // 视觉反馈
+        if (lockedMorseObject != null)
+        {
+            longPressFeedbackCoroutine = StartCoroutine(ShowLongPressFeedback(lockedMorseObject));
+        }
+
+        // 特效反馈
+        if (longPressFeedbackPrefab && feedbackParent)
+        {
+            GameObject feedback = Instantiate(longPressFeedbackPrefab, feedbackParent);
+            feedback.transform.position = lockedMorseObject.position;
+            Destroy(feedback, feedbackDuration * 2f);
+        }
+    }
+
+    /// <summary>
+    /// 显示长按视觉反馈
+    /// </summary>
+    private System.Collections.IEnumerator ShowLongPressFeedback(RectTransform target)
+    {
+        RawImage targetImage = target.GetComponent<RawImage>();
+        if (targetImage == null) yield break;
+
+        Color originalColor = targetImage.color;
+
+        // 渐变到长按颜色
+        float elapsed = 0f;
+        while (elapsed < feedbackDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / feedbackDuration;
+            targetImage.color = Color.Lerp(originalColor, longPressColor, Mathf.Sin(t * Mathf.PI * 2f) * 0.5f + 0.5f);
+            yield return null;
+        }
+
+        // 恢复原色
+        targetImage.color = originalColor;
+    }
+
+    void DetectKeyPress(bool isdot, float pressedTime = 0f, RectTransform targetObject = null)
+    {
+        RectTransform morseCodeObject = targetObject ?? FindBestMorseCodeObject();
+
+        if (morseCodeObject == null)
+        {
+            Debug.LogWarning("DetectKeyPress: 没有找到摩尔斯码物体");
+            return;
+        }
+
+        float distance = GetDistance(morseCodeObject);
+        ItemPrefab morseCode = morseCodeObject.GetComponent<ItemPrefab>();
+
+        if (morseCode == null)
+        {
+            Debug.LogWarning("DetectKeyPress: 物体没有ItemPrefab组件");
+            return;
+        }
+
+        bool isDotObj = morseCode.isDot;
+        bool isInToleranceWindow = pressedTime >= toleranceTimeStart && pressedTime <= toleranceTimeEnd;
+
+        Debug.Log($"按键检测 - 距离: {distance}, 输入: {(isdot ? "点" : "划")}, 物体: {(isDotObj ? "点" : "划")}, 时长: {pressedTime:F3}s, 容错: {isInToleranceWindow}");
+
+        // 使用更宽松的检测范围
+        bool isInRange = distance < (enableMissedObjectRecovery ? visualDetectionRange : ignoreTimeRange);
+
+        if (isInRange)
+        {
+            // 设置按下的字符
+            SetMorseCharacter(morseCode, isdot, isDotObj, isInToleranceWindow);
+
+            // 判定逻辑
+            bool isCorrectType = isDotObj == isdot || isInToleranceWindow; // 容错窗口内总是正确
+
+            if (distance < perfectTimeRange && isCorrectType)
+            {
+                Debug.Log(isInToleranceWindow ? "容错完美命中!" : "完美命中!");
+                morseCodeObject.GetComponent<RawImage>().color = Color.green;
+
+                // 播放容错命中音效
+                if (isInToleranceWindow && audioSource && toleranceHitSound)
+                {
+                    audioSource.PlayOneShot(toleranceHitSound, 0.6f);
+                }
+            }
+            else if (distance < normalTimeRange && isCorrectType)
+            {
+                Debug.Log(isInToleranceWindow ? "容错良好命中!" : "良好命中!");
+                morseCodeObject.GetComponent<RawImage>().color = Color.yellow;
+
+                // 播放容错命中音效
+                if (isInToleranceWindow && audioSource && toleranceHitSound)
+                {
+                    audioSource.PlayOneShot(toleranceHitSound, 0.6f);
+                }
+            }
+            else if (!isCorrectType && !isInToleranceWindow)
+            {
+                if (isDotObj && !isdot)
+                {
+                    morseCodeObject.GetComponent<RawImage>().color = Color.red;
+                    Debug.Log("点按成长按");
+                }
+                else if (!isDotObj && isdot && pressedTime > 0 && pressedTime < dotDathTime)
+                {
+                    morseCodeObject.GetComponent<RawImage>().color = Color.red;
+                    Debug.Log("线段按的时间不够");
+                }
+                else
+                {
+                    morseCodeObject.GetComponent<RawImage>().color = Color.red;
+                    Debug.Log("类型不匹配");
+                }
+            }
+            else
+            {
+                Debug.Log("距离过远但在检测范围内");
+                morseCodeObject.GetComponent<RawImage>().color = Color.red;
+            }
+
+            // 简单模式下总是显示绿色
+            if (easyMode)
+            {
+                morseCodeObject.GetComponent<RawImage>().color = Color.green;
+            }
         }
         else
         {
-            result.type = JudgmentType.Miss;
-            result.message = "时机不对";
-        }
-
-        return result;
-    }
-
-    void ApplyJudgmentResult(RectTransform morseCodeObject, JudgmentResult result)
-    {
-        // 颜色反馈
-        Color color = GetJudgmentColor(result.type);
-        morseCodeObject.GetComponent<RawImage>().color = color;
-
-        // 简单模式强制绿色
-        if (easyMode && result.type != JudgmentType.Miss)
-        {
-            morseCodeObject.GetComponent<RawImage>().color = Color.green;
-        }
-
-        // 文字反馈
-        ShowFeedbackText(result.message, morseCodeObject.position, color);
-
-        // 音效反馈
-        PlayJudgmentSound(result.type);
-
-        // 粒子效果
-        PlayJudgmentEffect(result.type, morseCodeObject.position);
-
-        // 连击处理
-        HandleCombo(result.type);
-    }
-
-    Color GetJudgmentColor(JudgmentType type)
-    {
-        switch (type)
-        {
-            case JudgmentType.Perfect: return Color.green;
-            case JudgmentType.Good: return Color.yellow;
-            case JudgmentType.Miss: return Color.red;
-            default: return Color.white;
+            Debug.Log($"按键被忽略 - 距离过远: {distance} > {(enableMissedObjectRecovery ? visualDetectionRange : ignoreTimeRange)}");
+            // 即使距离过远，也要设置字符，避免显示为空
+            SetMorseCharacter(morseCode, isdot, isDotObj, isInToleranceWindow);
         }
     }
 
-    void UpdateStatistics(JudgmentResult result)
-    {
-        totalHits++;
-        switch (result.type)
-        {
-            case JudgmentType.Perfect: perfectHits++; break;
-            case JudgmentType.Good: goodHits++; break;
-            case JudgmentType.Miss: missHits++; break;
-        }
-        UpdateAccuracy();
-    }
-
-    void SetMorseCharacter(ItemPrefab morseCode, bool isDot, bool isDotObj)
+    private void SetMorseCharacter(ItemPrefab morseCode, bool isdot, bool isDotObj, bool isInToleranceWindow)
     {
         if (easyMode)
         {
+            // 简单模式：根据物体类型设置正确的字符
             morseCode.pressDotChar = isDotObj ? '.' : '-';
         }
+        else if (isInToleranceWindow)
+        {
+            // 容错模式：根据物体类型设置正确的字符（忽略玩家输入）
+            morseCode.pressDotChar = isDotObj ? '.' : '-';
+            Debug.Log($"容错模式设置字符: {morseCode.pressDotChar}");
+        }
         else
         {
-            morseCode.pressDotChar = isDot ? '.' : '-';
+            // 普通模式：根据玩家输入设置字符
+            morseCode.pressDotChar = isdot ? '.' : '-';
         }
+
+        Debug.Log($"设置字符: {morseCode.pressDotChar} (物体ID: {morseCode.id})");
     }
 
-    void HandleCombo(JudgmentType type)
+    private float GetDistance(RectTransform morseCodeObject)
     {
-        if (type == JudgmentType.Perfect || type == JudgmentType.Good)
-        {
-            comboCount++;
-            if (comboCount > maxCombo)
-                maxCombo = comboCount;
-            lastSuccessTime = Time.time;
+        Vector2 morseCodeObjectScreenPosition = morseCodeObject.anchoredPosition;
+        Vector2 triggerLineScreenPosition = triggerLine.anchoredPosition;
+        float distance = Mathf.Abs(triggerLineScreenPosition.x - morseCodeObjectScreenPosition.x);
+        return distance;
+    }
 
-            // 连击奖励
-            if (comboCount >= 5 && comboCount % 5 == 0)
+    RectTransform FindBestMorseCodeObject()
+    {
+        RectTransform closestObject = null;
+        float closestDistance = float.MaxValue;
+        float bestScore = float.MaxValue;
+
+        ItemPrefab[] morseCodeObjects = SpawnPointRoot.GetComponentsInChildren<ItemPrefab>();
+
+        if (morseCodeObjects.Length == 0)
+        {
+            Debug.LogWarning("没有找到摩尔斯码物体");
+            return null;
+        }
+
+        foreach (ItemPrefab morseCodeObject in morseCodeObjects)
+        {
+            if (morseCodeObject == null) continue;
+
+            RectTransform rectTransform = morseCodeObject.GetComponent<RectTransform>();
+            if (rectTransform == null) continue;
+
+            float distance = GetDistance(rectTransform);
+            float score = distance;
+
+            // 如果物体已经有按键记录且不是空字符，降低优先级
+            if (morseCodeObject.pressDotChar != '\0' && morseCodeObject.pressDotChar != ' ')
             {
-                ShowComboBonus();
+                score += 1000f;
+            }
+
+            if (score < bestScore)
+            {
+                bestScore = score;
+                closestDistance = distance;
+                closestObject = rectTransform;
             }
         }
-        else
+
+        if (closestObject != null)
         {
-            comboCount = 0;
+            Debug.Log($"选择物体 - 距离: {closestDistance}, ID: {closestObject.GetComponent<ItemPrefab>()?.id}");
         }
-    }
 
-    void ShowComboBonus()
-    {
-        if (audioSource && comboSound)
-            audioSource.PlayOneShot(comboSound);
-
-        ShowFeedbackText($"连击 x{comboCount}!", Camera.main.WorldToScreenPoint(triggerLine.position), Color.cyan);
+        return closestObject;
     }
 
     // 音效播放方法
@@ -350,191 +416,13 @@ public class KeyPressDetector : MonoBehaviour
         if (clip) audioSource.PlayOneShot(clip, 0.7f);
     }
 
-    void PlayJudgmentSound(JudgmentType type)
+#if UNITY_EDITOR
+    private void OnValidate()
     {
-        if (!audioSource) return;
-
-        AudioClip clip = null;
-        switch (type)
-        {
-            case JudgmentType.Perfect: clip = perfectSound; break;
-            case JudgmentType.Good: clip = goodSound; break;
-            case JudgmentType.Miss: clip = missSound; break;
-        }
-
-        if (clip) audioSource.PlayOneShot(clip);
+        // 确保容错时间窗口设置合理
+        if (toleranceTimeStart < 0) toleranceTimeStart = 0;
+        if (toleranceTimeEnd < toleranceTimeStart) toleranceTimeEnd = toleranceTimeStart + 0.05f;
+        if (longPressFeedbackTime < toleranceTimeEnd) longPressFeedbackTime = toleranceTimeEnd + 0.1f;
     }
-
-    void PlayJudgmentEffect(JudgmentType type, Vector3 position)
-    {
-        ParticleSystem effect = null;
-        switch (type)
-        {
-            case JudgmentType.Perfect: effect = perfectEffect; break;
-            case JudgmentType.Good: effect = goodEffect; break;
-        }
-
-        if (effect)
-        {
-            effect.transform.position = position;
-            effect.Play();
-        }
-    }
-
-    // 视觉反馈协程
-    IEnumerator PressAnimation(RectTransform target)
-    {
-        Vector3 originalScale = target.localScale;
-        Vector3 pressScale = originalScale * 1.1f;
-
-        // 按下放大
-        float timer = 0f;
-        while (timer < 0.1f)
-        {
-            timer += Time.deltaTime;
-            target.localScale = Vector3.Lerp(originalScale, pressScale, timer / 0.1f);
-            yield return null;
-        }
-    }
-
-    void ShowFeedbackText(string text, Vector3 worldPos, Color color)
-    {
-        if (feedbackTextPrefab == null || feedbackParent == null) return;
-
-        GameObject obj = Instantiate(feedbackTextPrefab, feedbackParent);
-
-        // 转换世界坐标到屏幕坐标
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
-        obj.transform.position = screenPos;
-
-        TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
-        if (tmp)
-        {
-            tmp.text = text;
-            tmp.color = color;
-        }
-
-        // 添加上升动画
-        StartCoroutine(FeedbackTextAnimation(obj));
-    }
-
-    IEnumerator FeedbackTextAnimation(GameObject obj)
-    {
-        Vector3 startPos = obj.transform.position;
-        Vector3 endPos = startPos + Vector3.up * 50f;
-
-        float timer = 0f;
-        TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
-
-        while (timer < 1f)
-        {
-            timer += Time.deltaTime;
-            obj.transform.position = Vector3.Lerp(startPos, endPos, timer);
-
-            if (tmp)
-            {
-                Color color = tmp.color;
-                color.a = 1f - timer;
-                tmp.color = color;
-            }
-
-            yield return null;
-        }
-
-        Destroy(obj);
-    }
-
-    void UpdateComboDisplay()
-    {
-        if (comboText)
-        {
-            if (comboCount > 1)
-            {
-                comboText.gameObject.SetActive(true);
-                comboText.text = $"连击 x{comboCount}";
-            }
-            else
-            {
-                comboText.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    void UpdateAccuracy()
-    {
-        if (totalHits == 0) return;
-
-        float accuracy = (float)(perfectHits + goodHits) / totalHits * 100f;
-
-        if (accuracyText)
-            accuracyText.text = $"准确率: {accuracy:F1}%";
-
-        if (accuracySlider)
-            accuracySlider.value = accuracy / 100f;
-    }
-
-    // 原有方法保持不变
-    private float GetDistance(RectTransform morseCodeObject)
-    {
-        Vector2 morseCodeObjectScreenPosition = morseCodeObject.anchoredPosition;
-        Vector2 triggerLineScreenPosition = triggerLine.anchoredPosition;
-        float distance = Mathf.Abs(triggerLineScreenPosition.x - morseCodeObjectScreenPosition.x);
-        return distance;
-    }
-
-    RectTransform FindClosestMorseCodeObject()
-    {
-        RectTransform closestObject = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (ItemPrefab morseCodeObject in SpawnPointRoot.GetComponentsInChildren<ItemPrefab>())
-        {
-            float distance = GetDistance(morseCodeObject.GetComponent<RectTransform>());
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestObject = morseCodeObject.GetComponent<RectTransform>();
-            }
-        }
-
-        return closestObject;
-    }
-
-    // 公共方法：获取游戏统计
-    public GameStatistics GetStatistics()
-    {
-        return new GameStatistics
-        {
-            TotalHits = totalHits,
-            PerfectHits = perfectHits,
-            GoodHits = goodHits,
-            MissHits = missHits,
-            MaxCombo = maxCombo,
-            Accuracy = totalHits > 0 ? (float)(perfectHits + goodHits) / totalHits : 0f
-        };
-    }
-}
-
-// 辅助类定义
-public enum JudgmentType
-{
-    Perfect,
-    Good,
-    Miss
-}
-
-public struct JudgmentResult
-{
-    public JudgmentType type;
-    public string message;
-}
-
-public struct GameStatistics
-{
-    public int TotalHits;
-    public int PerfectHits;
-    public int GoodHits;
-    public int MissHits;
-    public int MaxCombo;
-    public float Accuracy;
+#endif
 }
