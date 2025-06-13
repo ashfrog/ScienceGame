@@ -35,45 +35,73 @@ public class KeyPressDetector : MonoBehaviour
     {
 
     }
+
     private float pressTime;
-    bool pressed;
+    private bool pressed;
+    private RectTransform lockedMorseObject; // 锁定的摩尔斯码物体
+    private bool hasProcessedPress; // 是否已经处理过按下事件
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
             pressed = true;
             pressTime = Time.time;
-            DetectKeyPress(true, 0f);
+            hasProcessedPress = false;
 
+            // 在按下时锁定最近的物体
+            lockedMorseObject = FindClosestMorseCodeObject();
+
+            // 如果是简单模式，直接处理按下事件
+            if (easyMode)
+            {
+                DetectKeyPress(true, 0f, lockedMorseObject);
+                hasProcessedPress = true;
+            }
         }
+
         if (Input.GetKeyUp(KeyCodeInput.keyCode))
         {
             pressed = false;
             float duration = Time.time - pressTime;
+
+            // 使用锁定的物体进行判定
             if (duration <= dotDathTime)
             {
-                DetectKeyPress(true, duration);
+                // 点击
+                DetectKeyPress(true, duration, lockedMorseObject);
             }
+            else
+            {
+                // 长按（如果在按住期间没有处理过）
+                if (!hasProcessedPress)
+                {
+                    DetectKeyPress(false, duration, lockedMorseObject);
+                }
+            }
+
+            // 清除锁定的物体
+            lockedMorseObject = null;
+            hasProcessedPress = false;
         }
+
         if (pressed)
         {
             float duration = Time.time - pressTime;
-            if (duration > dotDathTime && duration < 0.3f && pressed)
+            // 长按判定：超过点击时间且小于0.3秒，且还没处理过
+            if (duration > dotDathTime && duration < 0.3f && !hasProcessedPress)
             {
-                DetectKeyPress(false, duration);
-                pressed = false;
+                DetectKeyPress(false, duration, lockedMorseObject);
+                hasProcessedPress = true; // 标记已处理，避免重复处理
             }
-            //Debug.Log(duration);
         }
-
-
-
-
     }
 
-    void DetectKeyPress(bool isdot, float pressedTime = 0f)
+    void DetectKeyPress(bool isdot, float pressedTime = 0f, RectTransform targetObject = null)
     {
-        RectTransform morseCodeObject = FindClosestMorseCodeObject();
+        // 使用传入的目标物体，如果没有则查找最近的
+        RectTransform morseCodeObject = targetObject ?? FindClosestMorseCodeObject();
+
         if (morseCodeObject != null)
         {
             float distance = GetDistance(morseCodeObject);
@@ -105,18 +133,19 @@ public class KeyPressDetector : MonoBehaviour
                         morseCodeObject.GetComponent<RawImage>().color = Color.red;
                         Debug.Log("线段按的时间不够");
                     }
-
                 }
                 else
                 {
                     Debug.Log("其它");
                     morseCodeObject.GetComponent<RawImage>().color = Color.red;
                 }
+
                 if (easyMode)
                 {
                     morseCodeObject.GetComponent<RawImage>().color = Color.green;
                 }
             }
+
             if (easyMode)
             {
                 morseCode.pressDotChar = isDotObj ? '.' : '-';

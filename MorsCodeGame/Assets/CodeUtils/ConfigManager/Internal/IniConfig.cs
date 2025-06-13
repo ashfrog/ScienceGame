@@ -4,6 +4,9 @@ using System.Text;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using UnityEngine.Windows;
+using Directory = System.IO.Directory;
+using File = System.IO.File;
 
 public class IniConfig
 {
@@ -153,7 +156,14 @@ public class IniConfig
 
     public bool ReadBool(string section, string key, bool defaultValue = false)
     {
+
         string value = ReadValue(section, key, defaultValue.ToString());
+
+        if (value == "0")
+        {
+            return false;
+        }
+
         return bool.TryParse(value, out bool result) ? result : defaultValue;
     }
 }
