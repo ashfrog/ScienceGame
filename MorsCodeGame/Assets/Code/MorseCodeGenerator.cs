@@ -33,7 +33,7 @@ public class MorseCodeGenerator : MonoBehaviour
 
     public TextMeshProUGUI SecondText;
 
-    public int prefabid;
+    int prefabid;
 
     static Dictionary<string, string> codeDic_NoZh;
 
@@ -82,11 +82,11 @@ public class MorseCodeGenerator : MonoBehaviour
         { '8', "---.." }, { '9', "----." }
     };
 
-    public string morseCode = "... --- ... --- ... --- ... --- ...";
+    string morseCode = "... --- ... --- ... --- ... --- ...";
 
     bool startgame;
 
-    public enum GameState
+    enum GameState
     {
         prepare,
         starting,
