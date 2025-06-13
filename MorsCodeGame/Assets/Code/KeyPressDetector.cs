@@ -25,7 +25,7 @@ public class KeyPressDetector : MonoBehaviour
     [Tooltip("容错时间窗口开始时间（秒）")]
     public float toleranceTimeStart = 0.1f;
     [Tooltip("容错时间窗口结束时间（秒）")]
-    public float toleranceTimeEnd = 0.15f;
+    public float toleranceTimeEnd = 0.2f;
 
     [Header("扩展检测设置")]
     public float visualDetectionRange = 800f;
@@ -37,7 +37,7 @@ public class KeyPressDetector : MonoBehaviour
     [Tooltip("长按时的颜色")]
     public Color longPressColor = Color.cyan;
     [Tooltip("长按反馈持续时间")]
-    public float feedbackDuration = 0.2f;
+    public float feedbackDuration = 0.4f;
 
     [Header("音频反馈")]
     public AudioSource audioSource;
@@ -45,10 +45,6 @@ public class KeyPressDetector : MonoBehaviour
     public AudioClip dashPressSound;
     public AudioClip longPressFeedbackSound;
     public AudioClip toleranceHitSound;
-
-    [Header("视觉反馈")]
-    public GameObject longPressFeedbackPrefab; // 长按反馈特效预制体
-    public Transform feedbackParent; // 特效父物体
 
     private void Start()
     {
@@ -201,14 +197,6 @@ public class KeyPressDetector : MonoBehaviour
         if (lockedMorseObject != null)
         {
             longPressFeedbackCoroutine = StartCoroutine(ShowLongPressFeedback(lockedMorseObject));
-        }
-
-        // 特效反馈
-        if (longPressFeedbackPrefab && feedbackParent)
-        {
-            GameObject feedback = Instantiate(longPressFeedbackPrefab, feedbackParent);
-            feedback.transform.position = lockedMorseObject.position;
-            Destroy(feedback, feedbackDuration * 2f);
         }
     }
 
