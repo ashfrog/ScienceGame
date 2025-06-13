@@ -58,16 +58,7 @@
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\DisplayUGUIEditor.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\PlaylistMediaPlayerEditor.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\PostProcessBuild.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\UpdateStereoMaterialEditor.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\AudioOutputEditor.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Components\Support\PlayMaker\Editor\AVProVideoActionHeaderPropertyDrawer.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\MediaPlayerEditor.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\SupportWindow.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\ApplyToMeshEditor.cs" />
-    <Compile Include="Assets\AVProVideo\Scripts\Editor\ApplyToMaterialEditor.cs" />
+    <Compile Include="Assets\CardGenerator\Editor\CardTextGeneratorEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
@@ -454,12 +445,12 @@
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="TouchSocket">
-      <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.4\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TouchSocket">
+      <HintPath>Assets\TouchSocketTcp\Plugins\TouchSocket.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
@@ -994,10 +985,6 @@
       <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Shared.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1012,10 +999,6 @@
     </Reference>
     <Reference Include="Unity.TestTools.CodeCoverage.Editor.OpenCover.Model">
       <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Timeline">
@@ -1058,16 +1041,8 @@
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Unity.TestTools.CodeCoverage.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.State">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Core">
@@ -1078,23 +1053,87 @@
       <HintPath>Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.VisualScripting.Shared.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.Timeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TestTools.CodeCoverage.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.TestTools.CodeCoverage.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.State">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{240097CA-DFB2-DD50-49B9-A1AB4199D356}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="EasyTextEffects.csproj">
-      <Project>{BD34DE9C-ED60-26D7-E741-5AA62A61E1F2}</Project>
-      <Name>EasyTextEffects</Name>
+    <ProjectReference Include="Febucci.TextAnimator.Editor.csproj">
+      <Project>{18044A68-9F3F-90AC-6301-EF718550AA5D}</Project>
+      <Name>Febucci.TextAnimator.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Febucci.TextAnimator.Demo.Runtime.csproj">
+      <Project>{A0DD3EF0-A453-DA33-1621-9C0A17F57E45}</Project>
+      <Name>Febucci.TextAnimator.Demo.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Editor.csproj">
+      <Project>{2B1D069B-3730-265E-D9E4-3DE466BD03F1}</Project>
+      <Name>AVProVideo.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.Examples.csproj">
       <Project>{47DA62F8-B3E7-6722-84DF-481E7E9CEA39}</Project>
       <Name>AmazingAssets.AdvancedDissolve.Examples</Name>
     </ProjectReference>
+    <ProjectReference Include="AVProVideo.Demos.csproj">
+      <Project>{C526609B-3F4C-6976-36AF-4EC6A30A0814}</Project>
+      <Name>AVProVideo.Demos</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.UnityUI.csproj">
+      <Project>{3D62B194-245B-98CD-C7BD-9846DDB0DA79}</Project>
+      <Name>AVProVideo.Extensions.UnityUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="Febucci.TextAnimator.Runtime.csproj">
+      <Project>{16703A4A-1E3E-5A12-3F57-B2355AD50EBE}</Project>
+      <Name>Febucci.TextAnimator.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.UnityUI.Editor.csproj">
+      <Project>{1EE796E7-1D19-D8BB-F0E6-79FD597E8C55}</Project>
+      <Name>AVProVideo.Extensions.UnityUI.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Febucci.Attributes.Editor.csproj">
+      <Project>{EFC92ECA-EBD8-7C05-152A-8E1B87966003}</Project>
+      <Name>Febucci.Attributes.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Runtime.csproj">
+      <Project>{316DB694-E79B-03F9-05A6-45B0FB5F5B07}</Project>
+      <Name>AVProVideo.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Febucci.Attributes.Runtime.csproj">
+      <Project>{37973063-E80A-15D2-1532-0F6862315287}</Project>
+      <Name>Febucci.Attributes.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Febucci.TextAnimator.TMP.Runtime.csproj">
+      <Project>{42C27A2D-38BF-FDFD-54EF-B938110FD6F6}</Project>
+      <Name>Febucci.TextAnimator.TMP.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.VisualEffectGraph.csproj">
+      <Project>{9B1AB474-CDD9-0BA3-70E0-51B3EF2D2CCB}</Project>
+      <Name>AVProVideo.Extensions.VisualEffectGraph</Name>
+    </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.csproj">
       <Project>{4737F41A-1835-C02A-C2F7-BC1A76B0FF60}</Project>
       <Name>AmazingAssets.AdvancedDissolve</Name>
+    </ProjectReference>
+    <ProjectReference Include="AVProVideo.Extensions.Timeline.csproj">
+      <Project>{6464B59A-8034-8D7D-9CA2-E4EF53E11F09}</Project>
+      <Name>AVProVideo.Extensions.Timeline</Name>
     </ProjectReference>
     <ProjectReference Include="AmazingAssets.AdvancedDissolve.Editor.csproj">
       <Project>{C97F788C-2B1D-25EF-D925-9A9BD0073699}</Project>

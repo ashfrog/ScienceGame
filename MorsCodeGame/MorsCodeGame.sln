@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Febucci.TextAnimator.Editor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Febucci.Attributes.Editor", "Febucci.Attributes.Editor.csproj", "{EFC92ECA-EBD8-7C05-152A-8E1B87966003}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{B3F6524B-4E57-EA01-3741-7F8289D7D54C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{EFC92ECA-EBD8-7C05-152A-8E1B87966003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFC92ECA-EBD8-7C05-152A-8E1B87966003}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFC92ECA-EBD8-7C05-152A-8E1B87966003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3F6524B-4E57-EA01-3741-7F8289D7D54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3F6524B-4E57-EA01-3741-7F8289D7D54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3F6524B-4E57-EA01-3741-7F8289D7D54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3F6524B-4E57-EA01-3741-7F8289D7D54C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
