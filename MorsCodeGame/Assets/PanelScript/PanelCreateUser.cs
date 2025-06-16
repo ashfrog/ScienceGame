@@ -16,12 +16,22 @@ public class PanelCreateUser : MonoBehaviour
     [SerializeField]
     DisplayUGUI displayUGUI;
 
+    [SerializeField]
+    List<GameObject> finishEnableObjs;
+
+    [SerializeField]
+    bool autoSwitch = true;
+
+    [SerializeField]
+    Camera cardCamera;
+
     bool inited;
     private void Start()
     {
         inited = true;
         playlistMediaPlayer.Events.AddListener(OnPlaylistFinished);
     }
+
     private void OnEnable()
     {
         displayUGUI.gameObject.SetActive(false);
@@ -34,6 +44,18 @@ public class PanelCreateUser : MonoBehaviour
             }
         }
 
+        if (finishEnableObjs != null)
+        {
+            foreach (var obj in finishEnableObjs)
+            {
+                obj.SetActive(false);
+            }
+        }
+
+        if (cardCamera != null)
+        {
+            cardCamera.depth = -1;
+        }
         StartCoroutine(ActivateDisplayUGUIAfterDelay(0.2f));
     }
 
@@ -41,6 +63,10 @@ public class PanelCreateUser : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCodeInput.keyCode))
         {
+            if (cardCamera != null)
+            {
+                cardCamera.depth = -1;
+            }
             tabSwitcher.SwitchTab(nextTab); // 直接跳转到下一个场景
         }
     }
@@ -56,7 +82,21 @@ public class PanelCreateUser : MonoBehaviour
     {
         if (mp == playlistMediaPlayer.CurrentPlayer && playlistMediaPlayer.PlaylistIndex == (playlistMediaPlayer.Playlist.Items.Count - 1) && et == MediaPlayerEvent.EventType.FinishedPlaying)
         {
-            tabSwitcher.SwitchTab(nextTab); // 播放完列表后跳转到下一个场景
+            if (finishEnableObjs != null)
+            {
+                foreach (var obj in finishEnableObjs)
+                {
+                    obj.SetActive(true);
+                }
+            }
+            if (cardCamera != null)
+            {
+                cardCamera.depth = 1;
+            }
+            if (autoSwitch)
+            {
+                tabSwitcher.SwitchTab(nextTab); // 播放完列表后跳转到下一个场景
+            }
         }
     }
 }
