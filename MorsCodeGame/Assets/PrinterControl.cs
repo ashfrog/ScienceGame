@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,10 +13,16 @@ public class PrinterControl : MonoBehaviour
 
     [SerializeField]
     TabSwitcher tabSwitcher;
+#if UNITY_EDITOR
+    public static string exefolder = System.Environment.CurrentDirectory;
+#else
+    public static string exefolder = System.AppDomain.CurrentDomain.BaseDirectory;
+#endif
 
     private void OnEnable()
     {
         cardCamera.depth = 1;
+        cardTextGenerator.SetCardText("发报");
     }
 
     private void OnDisable()
@@ -65,9 +72,12 @@ public class PrinterControl : MonoBehaviour
     void OnDoubleClick()
     {
         Debug.Log("K键双击事件");
-        cardTextGenerator.SetCardText("发报");
+
         string cardPath = Path.Combine(Settings.ini.Game.SaveCardDirectory, System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg");
         cardTextGenerator.GenerateAndSaveCard(cardPath);
+        String printPhotoExePath = Path.Combine(exefolder, "Printer", "PrintPhoto.exe");
+        //打印照片
+        System.Diagnostics.Process.Start(printPhotoExePath, cardPath);
         tabSwitcher.SwitchTab(0);
         // 这里写双击执行的逻辑
     }
