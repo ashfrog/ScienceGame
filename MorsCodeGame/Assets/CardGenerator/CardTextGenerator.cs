@@ -38,6 +38,8 @@ public class CardTextGenerator : MonoBehaviour
     void Start()
     {
         Settings.ini.Game.SaveCardDirectory = Settings.ini.Game.SaveCardDirectory;
+        Settings.ini.Game.FontSize = Settings.ini.Game.FontSize;
+        fontSize = Settings.ini.Game.FontSize;
         saveDirectory = Settings.ini.Game.SaveCardDirectory;
         // 确保保存目录存在
         if (!Directory.Exists(saveDirectory))

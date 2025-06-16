@@ -22,7 +22,8 @@ public class PrinterControl : MonoBehaviour
     private void OnEnable()
     {
         cardCamera.depth = 1;
-        cardTextGenerator.SetCardText("发报");
+        string PrintVar = PlayerPrefs.GetString("PrintKey");
+        cardTextGenerator.SetCardText(PrintVar);
     }
 
     private void OnDisable()

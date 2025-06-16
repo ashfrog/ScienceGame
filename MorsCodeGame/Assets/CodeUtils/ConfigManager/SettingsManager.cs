@@ -84,6 +84,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("SkipVerify", value.ToString());
     }
 
+    public float FontSize
+    {
+        get => ReadFloat("FontSize", 60f);
+        set => WriteValue("FontSize", value.ToString());
+    }
+
     public int Speed
     {
         get => ReadInt("Speed", 250);

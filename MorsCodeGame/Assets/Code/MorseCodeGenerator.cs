@@ -124,7 +124,11 @@ public class MorseCodeGenerator : MonoBehaviour
         String morsecodesZHStrs = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "报文.json"));
         List<String> morsecodesZHs = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(morsecodesZHStrs);
         string morseCodeZH = morsecodesZHs[UnityEngine.Random.Range(0, morsecodesZHs.Count)];
+
         textMeshProUGUI_Zhr.text += morseCodeZH;
+
+        PlayerPrefs.SetString("PrintKey", morseCodeZH);
+
         String codesDicStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "中文电码表.json"));
         morseCode = ConvertZH2MorsCode(morseCodeZH, codesDicStr);
         SecondText.SetText(@"<size=60><bounce>轻击电键 开始发报</bounce></size>");
