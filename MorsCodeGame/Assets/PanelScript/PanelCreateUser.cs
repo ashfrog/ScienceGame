@@ -19,7 +19,14 @@ public class PanelCreateUser : MonoBehaviour
     [SerializeField]
     bool autoSwitch = true;
 
+    [SerializeField]
+    bool enableKControl = true;
+
     bool inited;
+
+    [SerializeField]
+    PrinterControl printerControl;
+
     private void Start()
     {
         inited = true;
@@ -29,6 +36,7 @@ public class PanelCreateUser : MonoBehaviour
     private void OnEnable()
     {
         displayUGUI.gameObject.SetActive(false);
+
         tabSwitcher = GetComponentInParent<TabSwitcher>();
         if (inited) //第二次OnEnable才进入
         {
@@ -39,11 +47,16 @@ public class PanelCreateUser : MonoBehaviour
         }
 
         StartCoroutine(ActivateDisplayUGUIAfterDelay(0.2f));
+
+        if (printerControl != null)
+        {
+            printerControl.enabled = false;
+        }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCodeInput.keyCode))
+        if (Input.GetKeyDown(KeyCodeInput.keyCode) && enableKControl)
         {
             tabSwitcher.SwitchTab(nextTab); // 直接跳转到下一个场景
         }
@@ -63,6 +76,14 @@ public class PanelCreateUser : MonoBehaviour
             if (autoSwitch)
             {
                 tabSwitcher.SwitchTab(nextTab); // 播放完列表后跳转到下一个场景
+            }
+            else
+            {
+                if (printerControl != null)
+                {
+                    enableKControl = false; //将K键检测交给 PrinterControl.cs
+                    printerControl.enabled = true;
+                }
             }
         }
     }

@@ -129,6 +129,7 @@
     <Compile Include="Assets\CardGenerator\CardUISetup.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\Tab\TabTypeManager.cs" />
     <Compile Include="Assets\TextLoad.cs" />
+    <Compile Include="Assets\PrinterControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

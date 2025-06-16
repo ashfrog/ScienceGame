@@ -37,6 +37,8 @@ public class CardTextGenerator : MonoBehaviour
 
     void Start()
     {
+        Settings.ini.Game.SaveCardDirectory = Settings.ini.Game.SaveCardDirectory;
+        saveDirectory = Settings.ini.Game.SaveCardDirectory;
         // 确保保存目录存在
         if (!Directory.Exists(saveDirectory))
         {
@@ -90,7 +92,7 @@ public class CardTextGenerator : MonoBehaviour
     /// <summary>
     /// 生成并保存卡片图片
     /// </summary>
-    public void GenerateAndSaveCard()
+    public void GenerateAndSaveCard(string fileName = "card.jpg")
     {
         UpdateTextDisplay();
 
@@ -114,7 +116,7 @@ public class CardTextGenerator : MonoBehaviour
 
         // 保存图片
         byte[] data = screenshot.EncodeToPNG();
-        string fullPath = Path.Combine(saveDirectory, fileName + "_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + fileExtension);
+        string fullPath = Path.Combine(saveDirectory, fileName);
         File.WriteAllBytes(fullPath, data);
 
         // 清理内存

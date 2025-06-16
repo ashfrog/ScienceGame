@@ -1,0 +1,74 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
+
+public class PrinterControl : MonoBehaviour
+{
+    [SerializeField]
+    Camera cardCamera;
+    [SerializeField]
+    CardTextGenerator cardTextGenerator;
+
+    [SerializeField]
+    TabSwitcher tabSwitcher;
+
+    private void OnEnable()
+    {
+        cardCamera.depth = 1;
+    }
+
+    private void OnDisable()
+    {
+        cardCamera.depth = -1;
+    }
+
+    // 双击最大间隔时间
+    public float doubleClickThreshold = 0.3f;
+
+    private float lastPressTime = -1f;
+    private bool waitingForSecondClick = false;
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (waitingForSecondClick && (Time.time - lastPressTime) < doubleClickThreshold)
+            {
+                // 双击
+                waitingForSecondClick = false;
+                OnDoubleClick();
+            }
+            else
+            {
+                // 可能是单击，开始计时
+                waitingForSecondClick = true;
+                lastPressTime = Time.time;
+            }
+        }
+
+        // 超过双击间隔，判定为单击
+        if (waitingForSecondClick && (Time.time - lastPressTime) >= doubleClickThreshold)
+        {
+            waitingForSecondClick = false;
+            OnSingleClick();
+        }
+    }
+
+    void OnSingleClick()
+    {
+        Debug.Log("K键单击事件");
+        // 这里写单击执行的逻辑
+        tabSwitcher.SwitchTab(0);
+    }
+
+    void OnDoubleClick()
+    {
+        Debug.Log("K键双击事件");
+        cardTextGenerator.SetCardText("发报");
+        string cardPath = Path.Combine(Settings.ini.Game.SaveCardDirectory, System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg");
+        cardTextGenerator.GenerateAndSaveCard(cardPath);
+        tabSwitcher.SwitchTab(0);
+        // 这里写双击执行的逻辑
+    }
+}

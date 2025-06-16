@@ -73,7 +73,11 @@ public class GameSettings : BaseSettings
     public GameSettings(IniConfig config) : base(config, "Game")
     {
     }
-
+    public string SaveCardDirectory
+    {
+        get => ReadValue("SaveCardDirectory", "D:\\SaveCard");
+        set => WriteValue("SaveCardDirectory", value);
+    }
     public bool SkipVerify
     {
         get => ReadBool("SkipVerify", false);
