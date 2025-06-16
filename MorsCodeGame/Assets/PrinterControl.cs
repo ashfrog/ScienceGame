@@ -21,9 +21,16 @@ public class PrinterControl : MonoBehaviour
 
     private void OnEnable()
     {
+        curT = 0f;
         cardCamera.depth = 1;
         string PrintVar = PlayerPrefs.GetString("PrintKey");
         cardTextGenerator.SetCardText(PrintVar);
+    }
+
+    private void Start()
+    {
+        Settings.ini.Game.ResetTime = Settings.ini.Game.ResetTime;
+        waitT = Settings.ini.Game.ResetTime;
     }
 
     private void OnDisable()
@@ -36,6 +43,9 @@ public class PrinterControl : MonoBehaviour
 
     private float lastPressTime = -1f;
     private bool waitingForSecondClick = false;
+
+    float curT = 0;
+    float waitT = 8f;
 
     void Update()
     {
@@ -60,6 +70,13 @@ public class PrinterControl : MonoBehaviour
         {
             waitingForSecondClick = false;
             OnSingleClick();
+        }
+
+        curT += Time.deltaTime;
+        if (curT > waitT)
+        {
+            curT = 0f;
+            tabSwitcher.SwitchTab(0);
         }
     }
 

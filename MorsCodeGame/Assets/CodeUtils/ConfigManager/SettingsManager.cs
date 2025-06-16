@@ -89,7 +89,11 @@ public class GameSettings : BaseSettings
         get => ReadFloat("FontSize", 60f);
         set => WriteValue("FontSize", value.ToString());
     }
-
+    public float ResetTime
+    {
+        get => ReadFloat("ResetTime", 8f);
+        set => WriteValue("ResetTime", value.ToString());
+    }
     public int Speed
     {
         get => ReadInt("Speed", 250);
