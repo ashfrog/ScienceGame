@@ -9522,7 +9522,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 01a116c54b836624f8d41865d8d1af26, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 97097eb62d8d20c46bd4101100820a94, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -9787,7 +9787,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1737519907
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10020,7 +10020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1763129132
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12114,7 +12114,7 @@ MonoBehaviour:
       sourceType: 0
       mediaPath:
         _pathType: 2
-        _path: AVProVideoSamples/SampleCube.mp4
+        _path: "\u5931\u8D25.mp4"
       texture: {fileID: 0}
       textureDuration: 0
       loop: 0

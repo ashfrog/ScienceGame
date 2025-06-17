@@ -83,7 +83,11 @@ public class GameSettings : BaseSettings
         get => ReadBool("SkipVerify", false);
         set => WriteValue("SkipVerify", value.ToString());
     }
-
+    public bool Mute
+    {
+        get => ReadBool("Mute", false);
+        set => WriteValue("Mute", value.ToString());
+    }
     public float FontSize
     {
         get => ReadFloat("FontSize", 60f);

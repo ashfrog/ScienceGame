@@ -276,7 +276,14 @@ public class MorseCodeGenerator : MonoBehaviour
 
     void SwitchTab()
     {
-        tabSwitcher.SwitchTab(nextTab);
+        if (textMeshProUGUI_Zhr.text.EndsWith(textMeshProUGUI_Zh.text))
+        {
+            tabSwitcher.SwitchTab(nextTab);
+        }
+        else
+        {
+            tabSwitcher.SwitchTab(nextTab + 1);
+        }
     }
 
     int morsCount;

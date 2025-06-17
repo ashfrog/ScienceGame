@@ -75,15 +75,18 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Demo\MouseTouchInputManager.cs" />
+    <Compile Include="Assets\TextLoad.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\OrderTypeEnum.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
+    <Compile Include="Assets\CardGenerator\CardTextGenerator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
     <Compile Include="Assets\Code\MorseCodeGenerator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Internal\ConfigManager.cs" />
     <Compile Include="Assets\TouchSocketTcp\AdvertisementKiosk.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\FHTcpClient.cs" />
+    <Compile Include="Assets\CardGenerator\CardUISetup.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMPro_InstructionOverlay.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHTcpService.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="Assets\TouchSocketTcp\Tcp\CRC16\ConvertUtil.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\ToggleButtonWithImage.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
+    <Compile Include="Assets\CodeUtils\TabSwitch\Tab\TabTypeManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\PanelScript\MyPanel.cs" />
     <Compile Include="Assets\TouchSocketTcp\Loom.cs" />
@@ -124,12 +128,8 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\CodeUtils\TabSwitch\Tab\TabSwitcher.cs" />
     <Compile Include="Assets\PanelScript\Panel_QingBao.cs" />
-    <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-    <Compile Include="Assets\CardGenerator\CardTextGenerator.cs" />
-    <Compile Include="Assets\CardGenerator\CardUISetup.cs" />
-    <Compile Include="Assets\CodeUtils\TabSwitch\Tab\TabTypeManager.cs" />
-    <Compile Include="Assets\TextLoad.cs" />
     <Compile Include="Assets\PrinterControl.cs" />
+    <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
