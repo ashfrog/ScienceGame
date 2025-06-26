@@ -722,7 +722,7 @@ public class MouseRoteReceiver : MonoBehaviour
                 z = 40;
                 break;
             case 1:
-                z = 10f;
+                z = 45f;
                 break;
             case 2:
                 z = 10f;
