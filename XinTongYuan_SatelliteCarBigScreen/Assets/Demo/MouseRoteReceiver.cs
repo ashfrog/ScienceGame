@@ -719,28 +719,28 @@ public class MouseRoteReceiver : MonoBehaviour
         switch (index)
         {
             case 0:
-                z = 55;
+                z = 40;
                 break;
             case 1:
-                z = 16f;
+                z = 10f;
                 break;
             case 2:
-                z = 25f;
+                z = 10f;
                 break;
             case 3:
-                z = 68f;
+                z = 58f;
                 break;
             case 4:
-                z = 66f;
+                z = 35f;
                 break;
             case 5:
-                z = 54f;
+                z = 45f;
                 break;
             case 6:
-                z = 32f;
+                z = 10f;
                 break;
             case 7:
-                z = 40f;
+                z = 10f;
                 break;
             default:
                 break;
