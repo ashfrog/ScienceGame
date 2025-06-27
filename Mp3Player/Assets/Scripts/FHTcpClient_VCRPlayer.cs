@@ -26,16 +26,9 @@ public class FHTcpClient_VCRPlayer : MonoBehaviour
 
         setVolumn = PlayerPrefs.GetFloat("volumn", 0.5f);
 
-        if (Settings.ini.IPHost.IPNO == -1)
-        {
-            Settings.ini.IPHost.IPNO = 0;
-        }
+        Settings.ini.IPHost.IPNO = Settings.ini.IPHost.IPNO;
+        Settings.ini.IPHost.PadIPNO = Settings.ini.IPHost.PadIPNO;
         receiveDataTypeEnum = (DataTypeEnum)Settings.ini.IPHost.IPNO;
-
-        if (Settings.ini.IPHost.PadIPNO == -1)
-        {
-            Settings.ini.IPHost.PadIPNO = 0;
-        }
         sendDataTypeEnum = (DataTypeEnum)Settings.ini.IPHost.PadIPNO;
 
 

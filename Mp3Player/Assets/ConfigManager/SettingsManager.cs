@@ -152,7 +152,7 @@ public class IPSettings : BaseSettings
 
     public string ServerIPHost
     {
-        get => ReadValue("ServerIPHost", "192.168.0.48:7790");
+        get => ReadValue("ServerIPHost", "192.168.3.8:7790");
         set => WriteValue("ServerIPHost", value.ToString());
     }
 
@@ -170,13 +170,13 @@ public class IPSettings : BaseSettings
 
     public int IPNO
     {
-        get => ReadInt("IPNO", 18);
+        get => ReadInt("IPNO", 30);
         set => WriteValue("IPNO", value.ToString());
     }
 
     public int PadIPNO
     {
-        get => ReadInt("PadIPNO", 118);
+        get => ReadInt("PadIPNO", 130);
         set => WriteValue("PadIPNO", value.ToString());
     }
 

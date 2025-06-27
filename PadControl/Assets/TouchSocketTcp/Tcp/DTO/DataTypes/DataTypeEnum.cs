@@ -58,6 +58,7 @@ public enum DataTypeEnum
 
     Media_DBCY_28 = 28,//电波传音 3转屏
     Media_MDFY_29 = 29, //密电风云
+    Media_MP3Player_30 = 30, //手机铃声
 
     Door_31 = 31, //门禁机1
     Door_32 = 32, //门禁机2
@@ -78,6 +79,7 @@ public enum DataTypeEnum
     S_Pad125 = 125, //平板智御 安全
     S_Pad128 = 128, //平板电波传音
     S_Pad129 = 129, //平板密电风云
+    S_Pad130 = 130, //平板手机铃声
 
     /// <summary>
     /// 展厅区域灯光插座ipNo IP：192.168.3.9 端口：20001
