@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 
 /// <summary>
@@ -190,7 +191,7 @@ public class PathSettings : BaseSettings
 
     public string MediaPath
     {
-        get => ReadValue("MediaPath", "");
+        get => ReadValue("MediaPath", Path.Combine(Application.streamingAssetsPath, "媒体文件"));
         set => WriteValue("MediaPath", value);
     }
 }
