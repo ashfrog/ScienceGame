@@ -31,6 +31,7 @@ public class MorseCodeGenerator : MonoBehaviour
     public RectTransform endPoint;
     public float scrollSpeed = 100f;
     public float fixedSpacing = 80f; // 固定间距
+    public float groupSpacing = 120f; // 摩尔斯码组之间的间隔
     public int nextTab;
     public string animationName = "发报完成Ani";
     public float waitResultTime = 6f;
@@ -42,6 +43,7 @@ public class MorseCodeGenerator : MonoBehaviour
     private string morseCode = "";
     private bool startGame = false;
     private GameState gameState = GameState.prepare;
+    private bool needGroupSpacing = false; // 是否需要组间隔
 
     // 结果统计
     private int morseCount = 0;
@@ -129,6 +131,7 @@ public class MorseCodeGenerator : MonoBehaviour
         startGame = false;
         gameState = GameState.prepare;
         currentMorseIndex = 0;
+        needGroupSpacing = false;
 
         // 清理现有物体
         foreach (GameObject obj in morseCodeObjects)
@@ -268,8 +271,11 @@ public class MorseCodeGenerator : MonoBehaviour
                 GameObject lastObject = morseCodeObjects[morseCodeObjects.Count - 1];
                 float lastObjectX = lastObject.GetComponent<RectTransform>().anchoredPosition.x;
 
+                // 根据是否需要组间隔来决定使用哪个间距
+                float requiredSpacing = needGroupSpacing ? groupSpacing : fixedSpacing;
+
                 // 当最后一个物体向左移动了足够距离时，生成新物体
-                if (spawnPoint.anchoredPosition.x - lastObjectX >= fixedSpacing)
+                if (spawnPoint.anchoredPosition.x - lastObjectX >= requiredSpacing)
                 {
                     SpawnMorseCode();
                 }
@@ -295,6 +301,42 @@ public class MorseCodeGenerator : MonoBehaviour
         }
 
         currentMorseIndex++;
+
+        // 检查下一个字符，判断是否需要组间隔
+        CheckForGroupSpacing();
+    }
+
+    private void CheckForGroupSpacing()
+    {
+        needGroupSpacing = false;
+
+        // 如果已经到末尾，不需要检查
+        if (currentMorseIndex >= morseCode.Length)
+            return;
+
+        // 检查当前位置及之后的字符
+        for (int i = currentMorseIndex; i < morseCode.Length; i++)
+        {
+            char currentChar = morseCode[i];
+
+            // 如果遇到空格，说明这是一个组的分隔
+            if (currentChar == ' ')
+            {
+                // 跳过连续的空格
+                while (i < morseCode.Length && morseCode[i] == ' ')
+                {
+                    currentMorseIndex++;
+                    i++;
+                }
+                needGroupSpacing = true;
+                break;
+            }
+            // 如果遇到点或划，说明还在同一组内
+            else if (currentChar == '.' || currentChar == '-')
+            {
+                break;
+            }
+        }
     }
 
     private GameObject GetPrefabForChar(char ch)
