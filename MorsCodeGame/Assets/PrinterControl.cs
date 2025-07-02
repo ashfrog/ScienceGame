@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 
 public class PrinterControl : MonoBehaviour
@@ -13,6 +14,10 @@ public class PrinterControl : MonoBehaviour
 
     [SerializeField]
     TabSwitcher tabSwitcher;
+
+    [SerializeField]
+    TMP_Text SecondText;
+
 #if UNITY_EDITOR
     public static string exefolder = System.Environment.CurrentDirectory;
 #else
@@ -25,6 +30,23 @@ public class PrinterControl : MonoBehaviour
         cardCamera.depth = 1;
         string PrintVar = PlayerPrefs.GetString("PrintKey");
         cardTextGenerator.SetCardText(PrintVar);
+
+        StartCoroutine(CountDown());
+    }
+
+    IEnumerator CountDown()
+    {
+        SecondText.SetText("");
+        SecondText.ForceMeshUpdate();
+        //SecondText.gameObject.SetActive(false);
+        for (int i = (int)waitT; i > 0; i--)
+        {
+            SecondText.SetText($@"<b><bounce>{i}</bounce></b> ");
+            yield return new WaitForSeconds(1);
+            SecondText.gameObject.SetActive(true);
+        }
+
+        SecondText.gameObject.SetActive(false);
     }
 
     private void Start()
