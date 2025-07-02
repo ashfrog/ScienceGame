@@ -118,6 +118,7 @@
     <Compile Include="Assets\TouchSocketTcp\Tcp\Demo\FHClientController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
+    <Compile Include="Assets\AniAlpha.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\SettingsManager.cs" />
     <Compile Include="Assets\CodeUtils\ConfigManager\Demo.cs" />
     <Compile Include="Assets\KeyCodeInput.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Assets\PanelScript\Panel_QingBao.cs" />
     <Compile Include="Assets\PrinterControl.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-    <Compile Include="Assets\AniAlpha.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
