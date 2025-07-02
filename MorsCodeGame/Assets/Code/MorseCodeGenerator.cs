@@ -131,7 +131,7 @@ public class MorseCodeGenerator : MonoBehaviour
 
         String codesDicStr = System.IO.File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "中文电码表.json"));
         morseCode = ConvertZH2MorsCode(morseCodeZH, codesDicStr);
-        SecondText.SetText(@"<size=60><bounce>轻击电键 开始发报</bounce></size>");
+        SecondText.SetText(@"<size=60><bounce>按键开始</bounce></size>");
         SecondText.gameObject.SetActive(true);
     }
 
