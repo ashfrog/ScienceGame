@@ -2186,7 +2186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.043137256}
+  m_Color: {r: 0, g: 1, b: 0.7653401, a: 0.043137256}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2428,6 +2428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323957a7144a457468bcc772d1b49b58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  morseCodeGenerator: {fileID: 365704916}
   perfectTimeRange: 1200
   normalTimeRange: 1400
   ignoreTimeRange: 1400
@@ -2465,22 +2466,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tabSwitcher: {fileID: 1855779508}
+  textMeshProUGUI_Nor: {fileID: 54532305}
+  textMeshProUGUI_Zhr: {fileID: 273605560}
+  textMeshProUGUI_No: {fileID: 723305454}
+  textMeshProUGUI_Zh: {fileID: 1355988560}
+  textAnimator: {fileID: 1763129135}
+  SecondText: {fileID: 1518556717}
   dotPrefab: {fileID: 1598885032}
   dashPrefab: {fileID: 906321091}
   emptyPrefab: {fileID: 172772512}
   spawnPoint: {fileID: 1729460618}
   endPoint: {fileID: 229004729}
   scrollSpeed: 250
-  spawnInterval: 0.5
-  morseCodeObjects: []
+  fixedSpacing: 80
+  groupSpacing: 120
   nextTab: 4
-  SecondText: {fileID: 1518556717}
-  textMeshProUGUI_Nor: {fileID: 54532305}
-  textMeshProUGUI_Zhr: {fileID: 273605560}
-  textMeshProUGUI_No: {fileID: 723305454}
-  textMeshProUGUI_Zh: {fileID: 1355988560}
-  textAnimator: {fileID: 1763129135}
   animationName: "\u53D1\u62A5\u5B8C\u6210Ani"
+  waitResultTime: 6
 --- !u!4 &365704917
 Transform:
   m_ObjectHideFlags: 0
@@ -5982,8 +5984,6 @@ MonoBehaviour:
   isDot: 0
   id: 0
   pressDotChar: 0
-  hasBeenProcessed: 0
-  processTime: 0
 --- !u!1 &947407612
 GameObject:
   m_ObjectHideFlags: 0
@@ -8859,8 +8859,6 @@ MonoBehaviour:
   isDot: 1
   id: 0
   pressDotChar: 0
-  hasBeenProcessed: 0
-  processTime: 0
 --- !u!1 &1604878107
 GameObject:
   m_ObjectHideFlags: 0
@@ -11767,7 +11765,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -881.6, y: 7.552}
+  m_AnchoredPosition: {x: -913, y: 7.552}
   m_SizeDelta: {x: 13.016, y: 170.469}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1961489663

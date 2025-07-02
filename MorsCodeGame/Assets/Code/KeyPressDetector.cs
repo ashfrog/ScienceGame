@@ -9,6 +9,8 @@ using UnityEngine.UI;
 /// </summary>
 public class KeyPressDetector : MonoBehaviour
 {
+    [SerializeField]
+    MorseCodeGenerator morseCodeGenerator;
     public float perfectTimeRange = 300f;
     public float normalTimeRange = 400f;
     public float ignoreTimeRange = 500f;
@@ -218,7 +220,41 @@ public class KeyPressDetector : MonoBehaviour
                 }
             }
         }
+
+        curt += Time.deltaTime;
+        if (curt > waitT)
+        {
+            curt = 0;
+            SetSpeedByDistance();
+        }
     }
+
+    float curt = 0f;
+    float waitT = 0.1f;
+
+    //通过检测未被按键的物体距离来设置滚动速度 让接近最后触发点停下来 防止错过点击
+    void SetSpeedByDistance()
+    {
+        RectTransform morseCodeObject = FindBestMorseCodeObject();
+
+        if (morseCodeObject == null)
+        {
+            return;
+        }
+
+        float distance = GetDistance(morseCodeObject);
+        Debug.Log(distance);
+        ItemPrefab itemPrefab = morseCodeObject.GetComponent<ItemPrefab>();
+        if (itemPrefab != null)
+        {
+            if (itemPrefab.IsProcessed()) //都按过了将速度调节成正常速度
+            {
+                distance = 300f;
+            }
+            morseCodeGenerator.SetScrollSpeed(distance);
+        }
+    }
+
 
     Coroutine waveCroutine;
     /// <summary>
@@ -481,6 +517,7 @@ public class KeyPressDetector : MonoBehaviour
             {
                 morseCodeObject.GetComponent<RawImage>().color = Color.green;
             }
+            morseCode.MarkAsProcessed();
         }
         else
         {
@@ -545,7 +582,7 @@ public class KeyPressDetector : MonoBehaviour
             float score = distance;
 
             // 如果物体已经有按键记录且不是空字符，降低优先级
-            if (morseCodeObject.pressDotChar != '\0' && morseCodeObject.pressDotChar != ' ')
+            if (morseCodeObject.IsProcessed())
             {
                 score += 1000f;
             }

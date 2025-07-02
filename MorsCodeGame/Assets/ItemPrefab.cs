@@ -9,8 +9,7 @@ public class ItemPrefab : MonoBehaviour
     public char pressDotChar = ' '; // 设置默认值为空格
 
     [Header("反馈设置")]
-    public bool hasBeenProcessed = false; // 是否已被处理
-    public float processTime = 0f; // 处理时间
+    bool hasBeenProcessed = false; // 是否已被处理
 
     private void Awake()
     {
@@ -24,10 +23,9 @@ public class ItemPrefab : MonoBehaviour
     /// <summary>
     /// 标记物体已被处理
     /// </summary>
-    public void MarkAsProcessed(float time)
+    public void MarkAsProcessed()
     {
         hasBeenProcessed = true;
-        processTime = time;
     }
 
     /// <summary>
@@ -35,6 +33,6 @@ public class ItemPrefab : MonoBehaviour
     /// </summary>
     public bool IsProcessed()
     {
-        return hasBeenProcessed && pressDotChar != ' ' && pressDotChar != '\0';
+        return hasBeenProcessed || pressDotChar != ' ' && pressDotChar != '\0';
     }
 }

@@ -29,7 +29,8 @@ public class MorseCodeGenerator : MonoBehaviour
     [Header("生成设置")]
     public RectTransform spawnPoint;
     public RectTransform endPoint;
-    public float scrollSpeed = 100f;
+    [SerializeField]
+    private float scrollSpeed = 100f;
     public float fixedSpacing = 80f; // 固定间距
     public float groupSpacing = 120f; // 摩尔斯码组之间的间隔
     public int nextTab;
@@ -89,6 +90,11 @@ public class MorseCodeGenerator : MonoBehaviour
         starting,
         playing,
         end
+    }
+
+    public void SetScrollSpeed(float speed)
+    {
+        this.scrollSpeed = speed;
     }
 
     void Start()
