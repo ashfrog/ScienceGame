@@ -76,6 +76,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Demo\MouseTouchInputManager.cs" />
     <Compile Include="Assets\TextLoad.cs" />
+    <Compile Include="Assets\DisplayGameTimer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\TouchSocketTcp\Tcp\DTO\DataTypes\OrderTypeEnum.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
@@ -131,7 +132,6 @@
     <Compile Include="Assets\PanelScript\Panel_QingBao.cs" />
     <Compile Include="Assets\PrinterControl.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
-    <Compile Include="Assets\DisplayGameTimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
