@@ -251,6 +251,11 @@ public class MorseCodeGenerator : MonoBehaviour
         SecondText.gameObject.SetActive(false);
         startGame = true;
         gameState = GameState.playing;
+        var displayGameTimer = GetComponent<DisplayGameTimer>();
+        if (displayGameTimer != null)
+        {
+            displayGameTimer.StartGameTimer();
+        }
     }
 
     private void UpdateMorseCode()
