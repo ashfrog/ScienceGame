@@ -104,11 +104,22 @@ public class Manager : MonoBehaviour
         //media.Control.Rewind();
         //media.Pause();
     }
+
+
+    public static readonly float[] fillAmounts = new float[] { 0.08f, 0.17f, 0.29f, 0.38f, 0.5f, 0.56f, 0.7f, 0.8f, 0.9f, 1f };
     public void OnSliderValueChanged(float value)  //时间刻度进度条
     {
-        // Update the text to display the current slider value
-        print(value);
-        progress.fillAmount = value;
+        // value 换算到 [1980,2025] 5年一个节点 上
+        float between = 2025 - 1980;
+        double mapped = 1980 + value * between;
+        // 四舍五入到最近的5年节点
+        int year = (int)(Math.Round((mapped - 1980) / 5.0) * 5 + 1980);
+        print(year);
+
+        // 直接通过索引访问fillAmounts数组
+        int index = (year - 1980) / 5;
+        progress.fillAmount = fillAmounts[index];
+
 
 
         buttons[0].gameObject.SetActive(value >= 0.01f);
