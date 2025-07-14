@@ -63,7 +63,7 @@ public class Manager : MonoBehaviour
         panel_Trim.SetActive(false);
         img_car.sprite = cars[index];
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.TabControl, "汽车模型");
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetPlayMovie, index);
+        //_mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetPlayMovie, index);
     }
 
     public void OnTrimBtn(string name)

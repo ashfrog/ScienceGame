@@ -705,7 +705,7 @@ public class MouseRoteReceiver : MonoBehaviour
     {
         carTabSwitcher.SwitchTab(curCarIndex.ToString());
         //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, $"{index2}代俯视.mp4");
-        litVCR2.OpenVideoByFileName($"{index2}代俯视.mp4");
+        //litVCR2.OpenVideoByFileName($"{index2}代俯视.mp4");
     }
 
     /// <summary>
