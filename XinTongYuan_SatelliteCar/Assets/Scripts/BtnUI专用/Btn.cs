@@ -8,7 +8,7 @@ public class Btn : MonoBehaviour
     public GameObject uiPanelShow;
     public GameObject uiPanelHide;
     protected Button btn;
-    public bool isSendMess=false;//为真是需要发消息的组件
+    public bool isSendMess = false;//为真是需要发消息的组件
     public string mess; //要发送的消息
 
     void Start()
@@ -30,7 +30,7 @@ public class Btn : MonoBehaviour
 
     void SwitchPanels()
     {
-        if (uiPanelShow!=null)
+        if (uiPanelShow != null)
         {
             uiPanelShow.SetActive(true);
         }
@@ -40,8 +40,8 @@ public class Btn : MonoBehaviour
         }
         if (isSendMess)
         {
-            Manager._ins._mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, mess);
+            Manager._ins._mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.TabControl, mess);
         }
-        
+
     }
 }

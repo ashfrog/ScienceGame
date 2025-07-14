@@ -1,5 +1,7 @@
 using Newtonsoft.Json;
+using RenderHeads.Media.AVProVideo.Demos;
 using System;
+using System.Net.Sockets;
 using System.Text;
 using TouchSocket.Core;
 using TouchSocket.Core.ByteManager;
@@ -14,6 +16,7 @@ public class FHTcpService : MonoBehaviour
     public TcpService fh_tcpservice;
 
     private int FHPort = 4849;
+    public LitVCR _vcr;
 
     private void OnEnable()
     {
@@ -58,85 +61,65 @@ public class FHTcpService : MonoBehaviour
         Debug.Log($"FH服务器{FHPort}成功启动");
     }
 
-    private void FHService_Received(SocketClient client, ByteBlock byteBlock, IRequestInfo requestInfo)
+    private void FHService_Received(SocketClient tcpClient, ByteBlock byteBlock, IRequestInfo requestInfo)
     {
         try
         {
-            var info = requestInfo as DTOInfo;
-            switch ((OrderTypeEnum)info.OrderType)
+            Loom.QueueOnMainThread(() =>
             {
-                case OrderTypeEnum.GetFileList:
-                    {
-                        //litVCR.ReloadFileList();
-                        //Send(client, OrderTypeEnum.GetFileList, litVCR.GetFileListStr());
+                var info = requestInfo as DTOInfo;
+                switch ((OrderTypeEnum)info.OrderType)
+                {
+                    case OrderTypeEnum.GetFileList:                  //获取文件列表
+                        string filesStr = _vcr.GetFileListStr();
+                        filesStr = filesStr.Replace("," + Settings.ini.Graphics.ScreenSaver, "");
+                        Send(tcpClient, OrderTypeEnum.GetFileList, filesStr);
                         break;
-                    }
-                case OrderTypeEnum.LoadUrl:
-                    {
-                        string urlStr = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
-                        //canvasWebViewPrefab.WebView.LoadUrl(urlStr);
-                    }
+                    case OrderTypeEnum.GetVolumn:                    //获取当前音量
+                        float getVolumn = _vcr.GetVolumn();
+                        Send(tcpClient, OrderTypeEnum.GetVolumn, getVolumn);
+                        break;
+                    case OrderTypeEnum.GetPlayInfo:                   //获取当前播放进度
+                        string playinfo = _vcr.GetPlayInfo();
+                        Send(tcpClient, OrderTypeEnum.GetPlayInfo, playinfo);
+                        break;
+                    case OrderTypeEnum.SetVolumn:                    //设置音量
+                        var setVolumn = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(info.Body));
+                        PlayerPrefs.SetFloat("volumn", setVolumn);
+                        _vcr.SetVolumn(setVolumn);
+                        break;
+                    case OrderTypeEnum.PauseMovie:
+                        _vcr.OnPauseButton();          //暂停
+                        break;
 
-                    break;
+                    case OrderTypeEnum.PlayMovie:
+                        _vcr.OnPlayButton();           //播放
+                        break;
+                    case OrderTypeEnum.StopMovie:
+                        _vcr.Stop();
+                        _vcr.PlayScreenSaver();
+                        break;
+                    case OrderTypeEnum.SetMovSeek:                   //设置播放进度
+                        float setSeek = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(info.Body));
+                        _vcr.OnVideoSeekSlider(setSeek);
+                        break;
+                    case OrderTypeEnum.PlayPrev:                     //播放上一个视频                    
+                        _vcr.PlayPrevious();
+                        break;
+                    case OrderTypeEnum.PlayNext:                     //播放下一个视频                    
+                        _vcr.PlayNext();
 
-                case OrderTypeEnum.GoBack:
-                    {
-                        //canvasWebViewPrefab.WebView.GoBack();
-                    }
-                    break;
-
-                case OrderTypeEnum.GoForward:
-                    {
-                        //canvasWebViewPrefab.WebView.GoForward();
-                    }
-                    break;
-
-                case OrderTypeEnum.Reload:
-                    {
-                        //canvasWebViewPrefab.WebView.Reload();
-                    }
-                    break;
-
-                case OrderTypeEnum.EnableBrowser:
-                    {
-                        //Loom.QueueOnMainThread(() =>
-                        //{
-                        //    bool browserEnable = JsonConvert.DeserializeObject<bool>(Encoding.UTF8.GetString(info.Body));
-                        //    RawImage[] rawImages = canvasWebViewPrefab.transform.GetComponentsInChildren<RawImage>(true);
-                        //    foreach (var rawImg in rawImages)
-                        //    {
-                        //        rawImg.gameObject.SetActive(browserEnable);
-                        //    }
-                        //});
-                    }
-                    break;
-
-                case OrderTypeEnum.GetEnableBrowser:
-                    {
-                        //Loom.QueueOnMainThread(() =>
-                        //{
-                        //    RawImage[] rawImages = canvasWebViewPrefab.transform.GetComponentsInChildren<RawImage>(true);
-                        //    bool enableBrowser = false;
-                        //    foreach (var rawImg in rawImages)
-                        //    {
-                        //        enableBrowser = rawImg.gameObject.activeSelf;
-                        //    }
-                        //    Send(client, OrderTypeEnum.GetEnableBrowser, enableBrowser);
-                        //});
-                    }
-                    break;
-
-                case OrderTypeEnum.GetPlayInfo:
-                    //{
-                    //    string dto = $"playinfo|{litVCR.GetPlayInfo()}";
-                    //    Send(client, OrderTypeEnum.GetPlayInfo, dto);
-                    //}
-                    break;
-            }
+                        break;
+                    case OrderTypeEnum.SetPlayMovie:                 //指定播放某个视频
+                        string videoPath = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(info.Body));
+                        _vcr.OpenVideoByFileName(videoPath);
+                        break;
+                }
+            });
         }
         catch (Exception ex)
         {
-            Debug.Log("ID:" + client.ID + "  " + ex.Message);
+            Debug.LogException(ex);
         }
     }
 

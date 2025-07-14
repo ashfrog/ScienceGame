@@ -87,8 +87,7 @@ public class MouseRoteReceiver : MonoBehaviour
 
         StartCoroutine(WaitForTcpServiceInitialization());
         MainPageLoop();
-        Settings.ini.Game.ZSpeed = Settings.ini.Game.ZSpeed;
-        Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
+        //Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
         autoResetTime = Settings.ini.Game.AutoResetTime;
     }
 
@@ -198,7 +197,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             targetRotationDelta += vec2;
                         }
                         break;
-                    case OrderTypeEnum.SetMovSeek:
+                    case OrderTypeEnum.TabControl:
                         {
                             string cmdstr = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
 

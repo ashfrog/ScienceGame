@@ -116,6 +116,8 @@ public enum OrderTypeEnum
     /// </summary>
     GetCurMovieName = 408,
 
+    TabControl = 500,
+
     /// <summary>
     /// 获取视频总时长
     /// </summary>

@@ -55,14 +55,14 @@ public class Manager : MonoBehaviour
         trims[index].SetActive(true);
         panel_CarYear.SetActive(true);
 
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, $"汽车街景|{index + 1}");
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.TabControl, $"汽车街景|{index + 1}");
     }
     public void OnCarModel(int index) //汽车模型
     {
         panel_CarModel.SetActive(true);
         panel_Trim.SetActive(false);
         img_car.sprite = cars[index];
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, "汽车模型");
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.TabControl, "汽车模型");
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetPlayMovie, index);
     }
 
@@ -101,8 +101,8 @@ public class Manager : MonoBehaviour
     }
     public void OnRewind()  //重播暂停
     {
-        media.Control.Rewind();
-        media.Pause();
+        //media.Control.Rewind();
+        //media.Pause();
     }
     public void OnSliderValueChanged(float value)  //时间刻度进度条
     {
@@ -138,11 +138,11 @@ public class Manager : MonoBehaviour
     //}
     public void OnCarVista()  //汽车街景
     {
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, "汽车街景");
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.TabControl, "汽车街景");
     }
     public void OnCarTrim()  //汽车内饰
     {
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.SetMovSeek, "汽车内饰");
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.TabControl, "汽车内饰");
     }
 
     public void OnStr(string str)

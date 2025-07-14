@@ -145,25 +145,25 @@ public class LitVCR : MonoBehaviour
         }
     }
 
-    public void SetVolumn(float volumn)
+    public void SetVolumn(float volume)
     {
         //PlayerPrefs.SetFloat(VOLUMN_KEY, volumn);
-        Settings.ini.Game.Volumn = volumn;
+        Settings.ini.Game.Volume = volume;
         LoadVolumn();
     }
 
     public void LoadVolumn()
     {
-        float volumn = Settings.ini.Game.Volumn;
+        float volume = Settings.ini.Game.Volume;
         if (PlayingPlayer && PlayingPlayer.Control != null)
         {
-            PlayingPlayer.Control.SetVolume(volumn);
-            PlayingPlayer.m_Volume = volumn;
+            PlayingPlayer.Control.SetVolume(volume);
+            PlayingPlayer.m_Volume = volume;
         }
         if (LoadingPlayer && PlayingPlayer.Control != null)
         {
-            LoadingPlayer.Control.SetVolume(volumn);
-            LoadingPlayer.m_Volume = volumn;
+            LoadingPlayer.Control.SetVolume(volume);
+            LoadingPlayer.m_Volume = volume;
         }
     }
 
@@ -186,7 +186,7 @@ public class LitVCR : MonoBehaviour
     public float GetVolumn()
     {
         //return PlayerPrefs.GetFloat(VOLUMN_KEY, 1f);
-        return Settings.ini.Game.Volumn;
+        return Settings.ini.Game.Volume;
     }
 
     public void PlayPrevious()
