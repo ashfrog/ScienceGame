@@ -195,7 +195,7 @@ public class FHClientController : MonoBehaviour
                                 playingTime.text = cursecstr;
 
                                 //播放完自动关闭界面
-                                if (curtime + repeatRequestTime * 1.5f >= totaltime)
+                                if ((curtime + repeatRequestTime * 1500f) >= totaltime)
                                 {
                                     P1_1_1.SetActive(false);
                                 }
