@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Btn : MonoBehaviour
 {
     public GameObject uiPanelShow;
+    public List<GameObject> showList = new List<GameObject>();
     public GameObject uiPanelHide;
     protected Button btn;
     public bool isSendMess = false;//为真是需要发消息的组件
@@ -33,6 +34,13 @@ public class Btn : MonoBehaviour
         if (uiPanelShow != null)
         {
             uiPanelShow.SetActive(true);
+        }
+        if (showList != null)
+        {
+            foreach (GameObject go in showList)
+            {
+                go.SetActive(true);
+            }
         }
         if (uiPanelHide != null)
         {

@@ -155,7 +155,10 @@ public class MouseRoteReceiver : MonoBehaviour
             try
             {
                 var info = requestInfo as DTOInfo;
-                Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
+                if ((OrderTypeEnum)info.OrderType != OrderTypeEnum.GetPlayInfo)
+                {
+                    Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
+                }
                 switch ((OrderTypeEnum)info.OrderType)
                 {
                     case OrderTypeEnum.Str:
@@ -334,6 +337,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "汽车返回":
                                     print(cmd + " " + cmdparam);
+                                    MainPageLoop();
                                     break;
                                 case "汽车模型":
                                     print(cmd + " " + cmdparam);

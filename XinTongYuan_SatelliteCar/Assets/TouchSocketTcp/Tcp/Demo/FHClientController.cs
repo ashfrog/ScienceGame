@@ -22,6 +22,7 @@ public class FHClientController : MonoBehaviour
     public string ipHost = "127.0.0.1:4849";
     bool mvSliderDown;
     bool EnableRepeatRequest = true;
+
     [SerializeField]
     Button btnPlay;
     [SerializeField]
@@ -67,6 +68,8 @@ public class FHClientController : MonoBehaviour
 
     public GameObject P1_1;
     public GameObject P1_1_1;
+
+    private float repeatRequestTime = 1f;
 
     private void Update()
     {
@@ -135,8 +138,12 @@ public class FHClientController : MonoBehaviour
         {
             try
             {
+                if ((OrderTypeEnum)dTOInfo.OrderType != OrderTypeEnum.GetPlayInfo)
+                {
+                    Debug.Log((OrderTypeEnum)dTOInfo.OrderType + "  " + (DataTypeEnum)dTOInfo.DataType);
+                }
 
-                Debug.Log((OrderTypeEnum)dTOInfo.OrderType + "  " + (DataTypeEnum)dTOInfo.DataType);
+
 
                 switch ((OrderTypeEnum)dTOInfo.OrderType)
                 {
@@ -170,8 +177,9 @@ public class FHClientController : MonoBehaviour
                                 float curtime = float.Parse(playinfoArray[0]);
                                 float totaltime = float.Parse(playinfoArray[1]);
                                 int.TryParse(playinfoArray[2], out int index);
-                                string curName = playinfoArray[3];
-                                playingFilename.text = curName;
+                                string curNameWithExt = playinfoArray[3];
+                                string fileName = Path.GetFileNameWithoutExtension(curNameWithExt);
+                                playingFilename.text = fileName;
 
                                 if (!mvSliderDown)
                                 {
@@ -185,16 +193,23 @@ public class FHClientController : MonoBehaviour
                                 totalTime.text = totatimestr;
                                 string cursecstr = time2str(curtime);
                                 playingTime.text = cursecstr;
+
+                                //播放完自动关闭界面
+                                if (curtime + repeatRequestTime * 1.5f >= totaltime)
+                                {
+                                    P1_1_1.SetActive(false);
+                                }
                             }
 
                             //Debug.Log(playinfo);
                         }
                         break;
                     case OrderTypeEnum.GetCurMovieName:
-                        string filename = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(dTOInfo.Body));
-                        if (playingFilename.text != filename)
+                        string filenameWithExt = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(dTOInfo.Body));
+                        string shortFileName = Path.GetFileNameWithoutExtension(filenameWithExt);
+                        if (playingFilename.text != shortFileName)
                         {
-                            playingFilename.text = filename;
+                            playingFilename.text = shortFileName;
                         }
                         break;
 
@@ -231,7 +246,8 @@ public class FHClientController : MonoBehaviour
         }
         if (EnableRepeatRequest)
         {
-            InvokeRepeating(nameof(RepeatRequest), 0, 1f);
+            repeatRequestTime = Settings.ini.Game.RepeatRequestTime;
+            InvokeRepeating(nameof(RepeatRequest), 0, repeatRequestTime);
             GetVolumn();
         }
     }

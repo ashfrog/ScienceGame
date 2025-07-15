@@ -82,6 +82,11 @@ public class GameSettings : BaseSettings
         set => WriteValue("ZSpeed", value.ToString());
     }
 
+    public float RepeatRequestTime
+    {
+        get => ReadFloat("RepeatRequestTime", 0.2f);
+        set => WriteValue("RepeatRequestTime", value.ToString());
+    }
     public float ProjectorRX
     {
         get => ReadFloat("ProjectorRX", 1f);
