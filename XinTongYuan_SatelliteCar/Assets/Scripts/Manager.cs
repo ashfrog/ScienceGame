@@ -106,7 +106,7 @@ public class Manager : MonoBehaviour
     }
 
 
-    public static readonly float[] fillAmounts = new float[] { 0.08f, 0.17f, 0.29f, 0.38f, 0.5f, 0.56f, 0.7f, 0.8f, 0.9f, 1f };
+    public static readonly float[] fillAmounts = new float[] { 0.08f, 0.17f, 0.29f, 0.38f, 0.5f, 0.58f, 0.7f, 0.8f, 0.9f, 1f };
     public void OnSliderValueChanged(float value)  //时间刻度进度条
     {
         // value 换算到 [1980,2025] 5年一个节点 上
