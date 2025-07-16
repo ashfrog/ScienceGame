@@ -4423,10 +4423,10 @@ MonoBehaviour:
   tleJsonFile: tle.json
   tleSelectionFile: tlesel.json
   orbitMaterial: {fileID: 2100000, guid: 5b3da07e8d563f34193f848ef6b630ce, type: 2}
-  orbitScale: 0.000001
+  orbitScale: 0.0000002
   orbitSegments: 360
   useGPUInstancing: 1
-  maxOrbitsPerBatch: 100
+  maxOrbitsPerBatch: 10
   orbitColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
