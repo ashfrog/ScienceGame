@@ -126,37 +126,183 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
-    void ParseSatelliteData()
+    /// <summary>
+    /// 解析TLE格式中的catalog number，支持字母编码
+    /// </summary>
+    /// <param name="catalogStr">catalog number字符串</param>
+    /// <returns>解析后的数值</returns>
+    private int ParseCatalogNumber(string catalogStr)
     {
-        foreach (var satellite in allSatellites)
-        {
-            if (string.IsNullOrEmpty(satellite.tle2)) continue;
+        if (string.IsNullOrEmpty(catalogStr))
+            return 0;
 
-            ParseTLE2(satellite);
-            var orbit = CalculateOrbitElements(satellite);
-            orbitElements[satellite.catalogNumber] = orbit;
+        catalogStr = catalogStr.Trim();
+
+        // 尝试直接解析数字
+        if (int.TryParse(catalogStr, out int result))
+        {
+            return result;
         }
+
+        // 处理包含字母的情况
+        // TLE格式中，当catalog number > 99999时，使用字母表示
+        // A=10, B=11, C=12, ..., Z=35
+        int value = 0;
+        for (int i = 0; i < catalogStr.Length; i++)
+        {
+            char c = catalogStr[i];
+            int digitValue;
+
+            if (char.IsDigit(c))
+            {
+                digitValue = c - '0';
+            }
+            else if (char.IsLetter(c))
+            {
+                // 字母转换为数值：A=10, B=11, ..., Z=35
+                digitValue = char.ToUpper(c) - 'A' + 10;
+            }
+            else
+            {
+                // 遇到无效字符，返回0或抛出异常
+                Debug.LogWarning($"无效的catalog number字符: '{c}' in '{catalogStr}'");
+                return 0;
+            }
+
+            value = value * 36 + digitValue; // 36进制
+        }
+
+        return value;
     }
 
+    /// <summary>
+    /// 改进的TLE第二行解析方法
+    /// </summary>
+    /// <param name="satellite">卫星数据对象</param>
     void ParseTLE2(SatelliteData satellite)
     {
         string tle2 = satellite.tle2;
-        if (tle2.Length < 69) return;
+        if (tle2.Length < 69)
+        {
+            Debug.LogWarning($"TLE第二行长度不足: {satellite.name} - 长度: {tle2.Length}");
+            return;
+        }
 
         try
         {
-            satellite.catalogNumber = int.Parse(tle2.Substring(2, 5).Trim());
-            satellite.inclination = float.Parse(tle2.Substring(8, 8).Trim());
-            satellite.raan = float.Parse(tle2.Substring(17, 8).Trim());
-            satellite.eccentricity = float.Parse("0." + tle2.Substring(26, 7).Trim());
-            satellite.argPerigee = float.Parse(tle2.Substring(34, 8).Trim());
-            satellite.meanAnomaly = float.Parse(tle2.Substring(43, 8).Trim());
-            satellite.meanMotion = float.Parse(tle2.Substring(52, 11).Trim());
+            // 解析catalog number (位置2-6，5个字符)
+            string catalogStr = tle2.Substring(2, 5);
+            satellite.catalogNumber = ParseCatalogNumber(catalogStr);
+
+            // 解析其他轨道参数
+            satellite.inclination = ParseFloat(tle2.Substring(8, 8), "inclination");
+            satellite.raan = ParseFloat(tle2.Substring(17, 8), "raan");
+
+            // 偏心率需要加上"0."前缀
+            string eccentricityStr = tle2.Substring(26, 7).Trim();
+            satellite.eccentricity = ParseFloat("0." + eccentricityStr, "eccentricity");
+
+            satellite.argPerigee = ParseFloat(tle2.Substring(34, 8), "argPerigee");
+            satellite.meanAnomaly = ParseFloat(tle2.Substring(43, 8), "meanAnomaly");
+            satellite.meanMotion = ParseFloat(tle2.Substring(52, 11), "meanMotion");
+
+            Debug.Log($"成功解析卫星: {satellite.name} (Catalog: {satellite.catalogNumber})");
         }
         catch (Exception e)
         {
             Debug.LogError($"解析TLE失败: {satellite.name} - {e.Message}");
+            Debug.LogError($"TLE第二行: {tle2}");
         }
+    }
+
+    /// <summary>
+    /// 安全的浮点数解析
+    /// </summary>
+    /// <param name="valueStr">要解析的字符串</param>
+    /// <param name="fieldName">字段名称（用于错误信息）</param>
+    /// <returns>解析后的浮点数</returns>
+    private float ParseFloat(string valueStr, string fieldName)
+    {
+        valueStr = valueStr.Trim();
+
+        if (float.TryParse(valueStr, out float result))
+        {
+            return result;
+        }
+        else
+        {
+            Debug.LogWarning($"无法解析{fieldName}: '{valueStr}'，使用默认值0");
+            return 0f;
+        }
+    }
+
+    /// <summary>
+    /// 验证TLE数据完整性
+    /// </summary>
+    /// <param name="satellite">卫星数据</param>
+    /// <returns>是否有效</returns>
+    private bool ValidateSatelliteData(SatelliteData satellite)
+    {
+        // 检查必要字段
+        if (satellite.catalogNumber <= 0)
+        {
+            Debug.LogWarning($"无效的catalog number: {satellite.catalogNumber} for {satellite.name}");
+            return false;
+        }
+
+        if (satellite.inclination < 0 || satellite.inclination > 180)
+        {
+            Debug.LogWarning($"无效的倾角: {satellite.inclination}° for {satellite.name}");
+            return false;
+        }
+
+        if (satellite.eccentricity < 0 || satellite.eccentricity >= 1)
+        {
+            Debug.LogWarning($"无效的偏心率: {satellite.eccentricity} for {satellite.name}");
+            return false;
+        }
+
+        if (satellite.meanMotion <= 0)
+        {
+            Debug.LogWarning($"无效的平均运动: {satellite.meanMotion} for {satellite.name}");
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 改进的卫星数据解析方法
+    /// </summary>
+    void ParseSatelliteData()
+    {
+        int validCount = 0;
+        int invalidCount = 0;
+
+        foreach (var satellite in allSatellites)
+        {
+            if (string.IsNullOrEmpty(satellite.tle2))
+            {
+                Debug.LogWarning($"卫星 {satellite.name} 缺少TLE第二行数据");
+                invalidCount++;
+                continue;
+            }
+
+            ParseTLE2(satellite);
+
+            if (ValidateSatelliteData(satellite))
+            {
+                var orbit = CalculateOrbitElements(satellite);
+                orbitElements[satellite.catalogNumber] = orbit;
+                validCount++;
+            }
+            else
+            {
+                invalidCount++;
+            }
+        }
+
+        Debug.Log($"卫星数据解析完成: 有效 {validCount} 个, 无效 {invalidCount} 个");
     }
 
     OrbitElements CalculateOrbitElements(SatelliteData satellite)
