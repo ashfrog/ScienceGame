@@ -20950,6 +20950,36 @@ PrefabInstance:
       propertyPath: m_FontData.m_Alignment
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 5224092312265173852, guid: 71b197ecd37623c47adc91312ca56939,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224092312265173853, guid: 71b197ecd37623c47adc91312ca56939,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 365.0096
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224092312265173853, guid: 71b197ecd37623c47adc91312ca56939,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 364.7825
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224092312265173853, guid: 71b197ecd37623c47adc91312ca56939,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 408.46744
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224092312265173853, guid: 71b197ecd37623c47adc91312ca56939,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 23.1393
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224092312265173854, guid: 71b197ecd37623c47adc91312ca56939,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: b52612e4eafa2064a978e5a6277e6252, type: 3}
     - target: {fileID: 5224092312314901460, guid: 71b197ecd37623c47adc91312ca56939,
         type: 3}
       propertyPath: m_AnchoredPosition.x

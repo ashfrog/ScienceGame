@@ -119,6 +119,11 @@ public enum OrderTypeEnum
     TabControl = 500,
 
     /// <summary>
+    /// 播放地屏视频
+    /// </summary>
+    PlayGroundMovie = 510,
+
+    /// <summary>
     /// 获取视频总时长
     /// </summary>
     GetMovAllSecond = 601,

@@ -655,6 +655,8 @@ public class LitVCR : MonoBehaviour
             {
                 this.videoindex = videoindex;
 
+                Debug.Log("openvideo: " + videoPaths[videoindex]);
+
                 if (FileUtils.IsImgFile(videoPaths[videoindex])) //播放图片文件
                 {
                     StopAllCoroutines();

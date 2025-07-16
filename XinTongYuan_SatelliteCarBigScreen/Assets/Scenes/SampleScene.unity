@@ -7949,7 +7949,7 @@ MonoBehaviour:
   pitch: 2
   pitchSensitivity: 0.25
   pitchClamp: 1
-  pitchMin: 0
+  pitchMin: -2
   pitchMax: 40
   yaw: 0
   yawSensitivity: 0.25

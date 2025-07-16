@@ -180,6 +180,11 @@ public class MouseRoteReceiver : MonoBehaviour
 
                         }
                         break;
+                    case OrderTypeEnum.PlayGroundMovie:
+                        string groundMovIndex = JsonConvert.DeserializeObject<string>(Encoding.UTF8.GetString(info.Body));
+                        string groundMovName = $"{groundMovIndex}代俯视.mp4";
+                        litVCR2.OpenVideoByFileName(groundMovName);
+                        break;
                     case OrderTypeEnum.VolumnUp:
                         litVCR1.VolumnUp();
                         litVCR2.VolumnUp();
@@ -399,86 +404,90 @@ public class MouseRoteReceiver : MonoBehaviour
                         litVCR1.OnPauseButton();
                         break;
                     case OrderTypeEnum.LoadUrl:          //星座展示 选星座
-                        Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
-                        int index = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
-                        tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
-                        orbitTabSwitcher.SwitchTab(index);
-                        img_Introduce.sprite = sprites_Introduce[index];
-                        //for (int i = 0; i < moons.Length; i++)
-                        //{
-                        //    moons[i].SetActive(false);
-                        //}
-                        //moons[index].SetActive(true);
-                        ResetZ(index);
-                        break;
-                    case OrderTypeEnum.Reload:            //星座对比
-                        Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
-                        int index1 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
-                        for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
                         {
-                            WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
-                        }
-                        if (index1 > 6 && index1 <= 13)
-                        {
-                            WeiXingGuangDian.transform.GetChild(1).gameObject.SetActive(true);
-                        }
-                        if (index1 > 13 && index1 <= 16)
-                        {
-                            for (int i = 0; i <= 2; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
-                        }
-                        if (index1 == 17)
-                        {
-                            for (int i = 0; i <= 3; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
-                        }
-                        if (index1 == 18)
-                        {
-                            for (int i = 0; i <= 4; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
-                        }
-                        if (index1 == 19)
-                        {
-                            for (int i = 0; i <= 5; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
-                        }
-                        if (index1 == 20)
-                        {
-                            for (int i = 0; i <= 6; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
-                        }
-                        if (index1 == 21)
-                        {
-                            for (int i = 0; i <= 7; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
-                        }
-                        if (index1 == 22)
-                        {
-                            for (int i = 0; i <= 8; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
-                        }
-                        if (index1 == 23)
-                        {
-                            for (int i = 0; i <= 9; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                            }
+                            Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
+                            int index = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                            tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
+                            orbitTabSwitcher.SwitchTab(index);
+                            img_Introduce.sprite = sprites_Introduce[index];
+                            //for (int i = 0; i < moons.Length; i++)
+                            //{
+                            //    moons[i].SetActive(false);
+                            //}
+                            //moons[index].SetActive(true);
+                            ResetZ(index);
                         }
 
+                        break;
+                    case OrderTypeEnum.Reload:            //星座对比
+                        {
+                            Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
+                            int index1 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                            for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
+                            {
+                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
+                            }
+                            if (index1 > 6 && index1 <= 13)
+                            {
+                                WeiXingGuangDian.transform.GetChild(1).gameObject.SetActive(true);
+                            }
+                            if (index1 > 13 && index1 <= 16)
+                            {
+                                for (int i = 0; i <= 2; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                            if (index1 == 17)
+                            {
+                                for (int i = 0; i <= 3; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                            if (index1 == 18)
+                            {
+                                for (int i = 0; i <= 4; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                            if (index1 == 19)
+                            {
+                                for (int i = 0; i <= 5; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                            if (index1 == 20)
+                            {
+                                for (int i = 0; i <= 6; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                            if (index1 == 21)
+                            {
+                                for (int i = 0; i <= 7; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                            if (index1 == 22)
+                            {
+                                for (int i = 0; i <= 8; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                            if (index1 == 23)
+                            {
+                                for (int i = 0; i <= 9; i++)
+                                {
+                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                                }
+                            }
+                        }
                         break;
                     case OrderTypeEnum.WeiXingDot:
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
