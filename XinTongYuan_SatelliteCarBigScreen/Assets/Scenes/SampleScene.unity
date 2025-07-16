@@ -4407,7 +4407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &941347485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4420,14 +4420,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4041af84e27174047903b60552e7942e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orbitMaterial: {fileID: 0}
-  satelliteMaterial: {fileID: 0}
-  satellitePrefab: {fileID: 0}
+  tleJsonFile: tle.json
+  tleSelectionFile: tlesel.json
+  orbitMaterial: {fileID: 2100000, guid: 5b3da07e8d563f34193f848ef6b630ce, type: 2}
   orbitScale: 0.000001
   orbitSegments: 360
-  showOrbitLabels: 1
-  updateInterval: 1
-  orbitLineWidth: 0.02
+  useGPUInstancing: 1
+  maxOrbitsPerBatch: 100
   orbitColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
