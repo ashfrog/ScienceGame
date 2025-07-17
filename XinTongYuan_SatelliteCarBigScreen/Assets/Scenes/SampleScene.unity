@@ -3775,7 +3775,7 @@ PrefabInstance:
     - target: {fileID: 1098339232389368799, guid: a21da37f970e8d04898137a11bd396e2,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1102966126979881723, guid: a21da37f970e8d04898137a11bd396e2,
         type: 3}
@@ -4422,9 +4422,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tleJsonFile: tle.json
   tleSelectionFile: tlesel.json
-  orbitMaterial: {fileID: 2100000, guid: 5b3da07e8d563f34193f848ef6b630ce, type: 2}
+  orbitMaterial: {fileID: 0}
   orbitScale: 0.0000002
-  orbitSegments: 360
+  orbitSegments: 60
   useGPUInstancing: 1
   maxOrbitsPerBatch: 10
   orbitColors:

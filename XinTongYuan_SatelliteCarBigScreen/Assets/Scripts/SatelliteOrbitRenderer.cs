@@ -89,9 +89,23 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         if (orbitMaterial == null)
         {
-            orbitMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-            orbitMaterial.SetFloat("_Metallic", 0f);
-            orbitMaterial.SetFloat("_Smoothness", 0.5f);
+            // 使用HDRP/Unlit着色器，适合线条渲染
+            orbitMaterial = new Material(Shader.Find("HDRP/Unlit"));
+
+            // 设置HDRP Unlit材质属性
+            orbitMaterial.SetFloat("_AlphaCutoffEnable", 0);
+            orbitMaterial.SetFloat("_SurfaceType", 0); // 0 = Opaque, 1 = Transparent
+            orbitMaterial.SetFloat("_BlendMode", 0);
+            orbitMaterial.SetFloat("_SrcBlend", 1);
+            orbitMaterial.SetFloat("_DstBlend", 0);
+            orbitMaterial.SetFloat("_ZWrite", 1);
+            orbitMaterial.SetFloat("_CullMode", 0);
+
+            // 启用颜色属性
+            orbitMaterial.EnableKeyword("_EMISSION");
+            orbitMaterial.SetColor("_UnlitColor", Color.white);
+            orbitMaterial.SetColor("_EmissiveColor", Color.white);
+            orbitMaterial.SetFloat("_EmissiveIntensity", 1.0f);
         }
     }
 
@@ -433,17 +447,20 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             colors[i] = orbitColors[batch[i] % orbitColors.Length];
         }
 
-        // 使用GPU实例化渲染
-        var propertyBlock = new MaterialPropertyBlock();
-        propertyBlock.SetVectorArray("_Color", colors);
-
         // 为每个轨道渲染
         for (int i = 0; i < batch.Count; i++)
         {
             int satNumber = batch[i];
             if (orbitMeshes.ContainsKey(satNumber))
             {
-                propertyBlock.SetColor("_Color", orbitColors[satNumber % orbitColors.Length]);
+                var propertyBlock = new MaterialPropertyBlock();
+                Color orbitColor = orbitColors[satNumber % orbitColors.Length];
+
+                // 为HDRP设置正确的颜色属性
+                propertyBlock.SetColor("_UnlitColor", orbitColor);
+                propertyBlock.SetColor("_EmissiveColor", orbitColor);
+                propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
+
                 Graphics.DrawMesh(orbitMeshes[satNumber], matrices[i], orbitMaterial, 0, null, 0, propertyBlock);
             }
         }
