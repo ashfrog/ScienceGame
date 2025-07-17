@@ -100,6 +100,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("ProjectorZ", value.ToString());
     }
 
+    public int MaxDisplayOrbits
+    {
+        get => ReadInt("MaxDisplayOrbits", 1000);
+        set => WriteValue("MaxDisplayOrbits", value.ToString());
+    }
+
     public float PanelY
     {
         get => ReadFloat("PanelY", 1f);

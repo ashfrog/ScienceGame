@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -54,14 +56,16 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public int maxOrbitsPerBatch = 100;
     public float satelliteSize = 0.01f;
 
+    public int MinYear = 1970; // 最小年份
+    public int MaxYear = 2025; // 最大年份
+
     [Header("显示模式")]
     public DisplayMode displayMode = DisplayMode.Both;
 
-    [Header("视觉效果")]
-    public Color[] orbitColors = {
-        Color.red, Color.blue, Color.green, Color.yellow,
-        Color.magenta, Color.cyan, Color.white
-    };
+    [Header("国家颜色设置")]
+    public Dictionary<string, Color[]> countryColorGroups;
+    // 当前显示星座的名称
+    private string currentDisplayGroupName = "";
 
     // 核心数据
     private List<SatelliteData> allSatellites = new List<SatelliteData>();
@@ -78,9 +82,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void Start()
     {
+        SetMaxDisplayOrbits(Settings.ini.Game.MaxDisplayOrbits);
+
         InitializeMaterials();
         CreateSatelliteMesh();
         LoadSatelliteData();
+        LoadCountryColorGroups();
         ParseSatelliteData();
         LoadSelectionGroups();
 
@@ -199,6 +206,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"加载卫星数据失败: {e.Message}");
+        }
+    }
+
+    void LoadCountryColorGroups()
+    {
+        try
+        {
+            countryColorGroups = LoadCountryGroupsColor(Path.Combine(Application.streamingAssetsPath, "countrycolors.json"));
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"加载国家颜色组失败: {ex.Message}");
         }
     }
 
@@ -380,6 +399,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return orbit;
     }
 
+    // 修改 UpdateSatellitePositions 方法，使用时间偏移
     void UpdateSatellitePositions()
     {
         float currentTime = Time.time;
@@ -389,10 +409,22 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             if (orbitElements.ContainsKey(satNumber))
             {
                 var orbit = orbitElements[satNumber];
-                Vector3 position = CalculateSatellitePosition(orbit, currentTime);
+                // 使用时间偏移让卫星在轨道上分散
+                float offsetTime = currentTime;
+                if (satelliteTimeOffsets.ContainsKey(satNumber))
+                {
+                    offsetTime += satelliteTimeOffsets[satNumber];
+                }
+                Vector3 position = CalculateSatellitePosition(orbit, offsetTime);
                 currentSatellitePositions[satNumber] = position;
             }
         }
+    }
+    // 添加设置最大轨道数量的公共方法
+    public void SetMaxDisplayOrbits(int maxOrbits)
+    {
+        maxDisplayOrbits = Mathf.Clamp(maxOrbits, 10, 2000);
+        Debug.Log($"最大显示轨道数量设置为: {maxDisplayOrbits}");
     }
 
     Vector3 CalculateSatellitePosition(OrbitElements orbit, float time)
@@ -413,13 +445,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void RenderSatellites()
     {
+        // 获取当前显示组的颜色组
+        Color[] groupColors = GetGroupColors(currentDisplayGroupName);
+
         foreach (var kvp in currentSatellitePositions)
         {
             int satNumber = kvp.Key;
             Vector3 position = kvp.Value;
 
             var propertyBlock = new MaterialPropertyBlock();
-            Color satelliteColor = orbitColors[satNumber % orbitColors.Length];
+
+            // 使用卫星编号来选择颜色组中的颜色，确保同一卫星总是使用相同颜色
+            Color satelliteColor = groupColors[satNumber % groupColors.Length];
 
             propertyBlock.SetColor("_UnlitColor", satelliteColor);
             propertyBlock.SetColor("_EmissiveColor", satelliteColor);
@@ -527,13 +564,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             matrices[i] = Matrix4x4.identity;
         }
 
+        // 获取当前显示组的颜色组
+        Color[] groupColors = GetGroupColors(currentDisplayGroupName);
+
         for (int i = 0; i < batch.Count; i++)
         {
             int satNumber = batch[i];
             if (orbitMeshes.ContainsKey(satNumber))
             {
                 var propertyBlock = new MaterialPropertyBlock();
-                Color orbitColor = orbitColors[satNumber % orbitColors.Length];
+
+                // 使用卫星编号来选择颜色组中的颜色，确保同一卫星的轨道和卫星点颜色一致
+                Color orbitColor = groupColors[satNumber % groupColors.Length];
 
                 propertyBlock.SetColor("_UnlitColor", orbitColor);
                 propertyBlock.SetColor("_EmissiveColor", orbitColor);
@@ -544,7 +586,17 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
+    // 获取组颜色的辅助方法
+    private Color[] GetGroupColors(string groupName)
+    {
+        if (countryColorGroups.ContainsKey(groupName))
+        {
+            return countryColorGroups[groupName];
+        }
 
+        // 如果没有找到对应的颜色组，返回白色数组作为默认颜色
+        return new Color[] { Color.white };
+    }
     void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS");
@@ -558,20 +610,77 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
     }
+    // 在类的顶部添加时间偏移字典
+    private Dictionary<int, float> satelliteTimeOffsets = new Dictionary<int, float>();
+
+    [Header("性能优化")]
+    public int maxDisplayOrbits = 200; // 最大显示轨道数量
 
     public void SetDisplayGroup(string groupName)
     {
         if (tleSelDic.ContainsKey(groupName))
         {
-            currentDisplayedOrbits = tleSelDic[groupName].sel;
+            currentDisplayGroupName = groupName; // 记录当前显示的组名
+
+            currentSatellitePositions.Clear();  //清空卫星点
+            List<int> allOrbits = tleSelDic[groupName].sel;
+
+            // 限制轨道数量以优化性能
+            if (allOrbits.Count > maxDisplayOrbits)
+            {
+                // 均匀采样选择轨道，而不是只取前N个
+                List<int> selectedOrbits = new List<int>();
+                float step = (float)allOrbits.Count / maxDisplayOrbits;
+
+                for (int i = 0; i < maxDisplayOrbits; i++)
+                {
+                    int index = Mathf.RoundToInt(i * step);
+                    if (index < allOrbits.Count)
+                    {
+                        selectedOrbits.Add(allOrbits[index]);
+                    }
+                }
+                currentDisplayedOrbits = selectedOrbits;
+                Debug.Log($"限制显示 {groupName} 卫星群: {currentDisplayedOrbits.Count}/{allOrbits.Count} 个轨道");
+            }
+            else
+            {
+                currentDisplayedOrbits = allOrbits;
+                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 个轨道");
+            }
+
+            // 为每个卫星计算时间偏移，让它们在轨道上均匀分布
+            satelliteTimeOffsets.Clear();
+            for (int i = 0; i < currentDisplayedOrbits.Count; i++)
+            {
+                int satNumber = currentDisplayedOrbits[i];
+                // 使用卫星编号的哈希值创建伪随机但固定的时间偏移
+                float timeOffset = (float)(satNumber * 37 % 86400); // 0-86400秒的偏移
+                satelliteTimeOffsets[satNumber] = timeOffset;
+            }
+
             CreateOrbitMeshes(currentDisplayedOrbits);
-            Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 个轨道");
         }
         else
         {
             Debug.LogWarning($"未找到卫星群: {groupName}");
         }
     }
+
+    /// <summary>
+    /// 加载国家轨道颜色组
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    public static Dictionary<string, Color[]> LoadCountryGroupsColor(string filePath) =>
+        JsonConvert.DeserializeObject<Dictionary<string, string[]>>(File.ReadAllText(filePath))
+        .ToDictionary(
+            kv => kv.Key,
+            kv => kv.Value
+                .Select(hex => ColorUtility.TryParseHtmlString(hex.StartsWith("#") ? hex : "#" + hex, out var c) ? c : Color.black)
+                .ToArray()
+        );
+
 
     public void SetDisplayMode(DisplayMode mode)
     {
