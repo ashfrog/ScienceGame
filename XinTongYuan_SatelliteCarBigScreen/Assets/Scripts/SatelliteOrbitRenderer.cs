@@ -121,8 +121,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"加载卫星数据失败: {e.Message}");
-            // 创建测试数据
-            CreateTestData();
         }
     }
 
@@ -446,7 +444,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             matrices[i] = Matrix4x4.identity;
             colors[i] = orbitColors[batch[i] % orbitColors.Length];
         }
-
+        Debug.Log(batch.Count);
         // 为每个轨道渲染
         for (int i = 0; i < batch.Count; i++)
         {
@@ -473,7 +471,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链");
         if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("Galileo");
         if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("BeiDou");
-
     }
 
     public void SetDisplayGroup(string groupName)
@@ -489,28 +486,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Debug.LogWarning($"未找到卫星群: {groupName}");
         }
     }
-
-    void CreateTestData()
-    {
-        // 创建测试数据
-        for (int i = 0; i < 10; i++)
-        {
-            var satellite = new SatelliteData
-            {
-                name = $"TestSat_{i}",
-                catalogNumber = 10000 + i,
-                inclination = UnityEngine.Random.Range(0f, 180f),
-                raan = UnityEngine.Random.Range(0f, 360f),
-                eccentricity = UnityEngine.Random.Range(0f, 0.1f),
-                argPerigee = UnityEngine.Random.Range(0f, 360f),
-                meanAnomaly = UnityEngine.Random.Range(0f, 360f),
-                meanMotion = UnityEngine.Random.Range(10f, 16f)
-            };
-            allSatellites.Add(satellite);
-        }
-    }
-
-
 
     public void SetOrbitSegments(int segments)
     {
