@@ -32,6 +32,13 @@ public class OrbitElements
     public float meanMotion;
 }
 
+public enum DisplayMode
+{
+    OrbitOnly,      // 仅显示轨道
+    SatelliteOnly,  // 仅显示卫星点
+    Both            // 显示轨道和卫星点
+}
+
 public class SatelliteOrbitRenderer : MonoBehaviour
 {
     [Header("数据设置")]
@@ -40,10 +47,15 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     [Header("渲染设置")]
     public Material orbitMaterial;
+    public Material satelliteMaterial;
     public float orbitScale = 1f / 1000000f;
-    public int orbitSegments = 90; // 减少分段数提升性能
+    public int orbitSegments = 90;
     public bool useGPUInstancing = true;
     public int maxOrbitsPerBatch = 100;
+    public float satelliteSize = 0.01f;
+
+    [Header("显示模式")]
+    public DisplayMode displayMode = DisplayMode.Both;
 
     [Header("视觉效果")]
     public Color[] orbitColors = {
@@ -57,29 +69,37 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     // 渲染优化
     private Dictionary<int, Mesh> orbitMeshes = new Dictionary<int, Mesh>();
-    private Dictionary<int, Material> orbitMaterials = new Dictionary<int, Material>();
-    private List<Matrix4x4[]> instanceMatrices = new List<Matrix4x4[]>();
-    private List<MaterialPropertyBlock[]> propertyBlocks = new List<MaterialPropertyBlock[]>();
+    private Dictionary<int, Vector3> currentSatellitePositions = new Dictionary<int, Vector3>();
+    private Mesh satelliteMesh;
 
     // 当前显示的轨道
     private List<int> currentDisplayedOrbits = new List<int>();
     Dictionary<string, TleSel> tleSelDic;
+
     void Start()
     {
         InitializeMaterials();
+        CreateSatelliteMesh();
         LoadSatelliteData();
         ParseSatelliteData();
         LoadSelectionGroups();
 
         // 默认显示GPS
-        SetDisplayGroup("GPS");
+        SetDisplayGroup("格洛纳斯");
     }
 
     void Update()
     {
-        if (useGPUInstancing)
+        UpdateSatellitePositions();
+
+        if (displayMode == DisplayMode.OrbitOnly || displayMode == DisplayMode.Both)
         {
             RenderOrbitsWithInstancing();
+        }
+
+        if (displayMode == DisplayMode.SatelliteOnly || displayMode == DisplayMode.Both)
+        {
+            RenderSatellites();
         }
 
         HandleInput();
@@ -89,26 +109,85 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         if (orbitMaterial == null)
         {
-            // 使用HDRP/Unlit着色器，适合线条渲染
             orbitMaterial = new Material(Shader.Find("HDRP/Unlit"));
-
-            // 设置HDRP Unlit材质属性
             orbitMaterial.SetFloat("_AlphaCutoffEnable", 0);
-            orbitMaterial.SetFloat("_SurfaceType", 0); // 0 = Opaque, 1 = Transparent
+            orbitMaterial.SetFloat("_SurfaceType", 0);
             orbitMaterial.SetFloat("_BlendMode", 0);
             orbitMaterial.SetFloat("_SrcBlend", 1);
             orbitMaterial.SetFloat("_DstBlend", 0);
             orbitMaterial.SetFloat("_ZWrite", 1);
             orbitMaterial.SetFloat("_CullMode", 0);
-
-            // 启用颜色属性
             orbitMaterial.EnableKeyword("_EMISSION");
             orbitMaterial.SetColor("_UnlitColor", Color.white);
             orbitMaterial.SetColor("_EmissiveColor", Color.white);
             orbitMaterial.SetFloat("_EmissiveIntensity", 1.0f);
         }
+
+        if (satelliteMaterial == null)
+        {
+            satelliteMaterial = new Material(Shader.Find("HDRP/Unlit"));
+            satelliteMaterial.SetFloat("_SurfaceType", 0);
+            satelliteMaterial.EnableKeyword("_EMISSION");
+            satelliteMaterial.SetColor("_UnlitColor", Color.white);
+            satelliteMaterial.SetColor("_EmissiveColor", Color.white);
+            satelliteMaterial.SetFloat("_EmissiveIntensity", 2.0f);
+        }
     }
 
+    void CreateSatelliteMesh()
+    {
+        satelliteMesh = new Mesh();
+
+        int latitudeSegments = 16;   // 纬度分段数
+        int longitudeSegments = 24;  // 经度分段数
+        float radius = satelliteSize;
+
+        List<Vector3> vertices = new List<Vector3>();
+        List<int> triangles = new List<int>();
+
+        // 生成球体顶点
+        for (int lat = 0; lat <= latitudeSegments; lat++)
+        {
+            float theta = lat * Mathf.PI / latitudeSegments;
+            float sinTheta = Mathf.Sin(theta);
+            float cosTheta = Mathf.Cos(theta);
+
+            for (int lon = 0; lon <= longitudeSegments; lon++)
+            {
+                float phi = lon * 2 * Mathf.PI / longitudeSegments;
+                float sinPhi = Mathf.Sin(phi);
+                float cosPhi = Mathf.Cos(phi);
+
+                float x = radius * sinTheta * cosPhi;
+                float y = radius * cosTheta;
+                float z = radius * sinTheta * sinPhi;
+                vertices.Add(new Vector3(x, y, z));
+            }
+        }
+
+        // 生成三角形索引
+        for (int lat = 0; lat < latitudeSegments; lat++)
+        {
+            for (int lon = 0; lon < longitudeSegments; lon++)
+            {
+                int first = lat * (longitudeSegments + 1) + lon;
+                int second = first + longitudeSegments + 1;
+
+                triangles.Add(first);
+                triangles.Add(second);
+                triangles.Add(first + 1);
+
+                triangles.Add(second);
+                triangles.Add(second + 1);
+                triangles.Add(first + 1);
+            }
+        }
+
+        satelliteMesh.vertices = vertices.ToArray();
+        satelliteMesh.triangles = triangles.ToArray();
+        satelliteMesh.RecalculateNormals();
+        satelliteMesh.RecalculateBounds();
+    }
     void LoadSatelliteData()
     {
         try
@@ -116,7 +195,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             string filePath = Path.Combine(Application.streamingAssetsPath, tleJsonFile);
             string jsonData = File.ReadAllText(filePath);
             allSatellites = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SatelliteData>>(jsonData);
-            //allSatellites = Newtonsoft.Json.JsonConvert.DeserializeObject<SatelliteDataWrapper>(jsonData).satellites;
         }
         catch (Exception e)
         {
@@ -138,11 +216,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 解析TLE格式中的catalog number，支持字母编码
-    /// </summary>
-    /// <param name="catalogStr">catalog number字符串</param>
-    /// <returns>解析后的数值</returns>
     private int ParseCatalogNumber(string catalogStr)
     {
         if (string.IsNullOrEmpty(catalogStr))
@@ -150,15 +223,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         catalogStr = catalogStr.Trim();
 
-        // 尝试直接解析数字
         if (int.TryParse(catalogStr, out int result))
         {
             return result;
         }
 
-        // 处理包含字母的情况
-        // TLE格式中，当catalog number > 99999时，使用字母表示
-        // A=10, B=11, C=12, ..., Z=35
         int value = 0;
         for (int i = 0; i < catalogStr.Length; i++)
         {
@@ -171,26 +240,20 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             }
             else if (char.IsLetter(c))
             {
-                // 字母转换为数值：A=10, B=11, ..., Z=35
                 digitValue = char.ToUpper(c) - 'A' + 10;
             }
             else
             {
-                // 遇到无效字符，返回0或抛出异常
                 Debug.LogWarning($"无效的catalog number字符: '{c}' in '{catalogStr}'");
                 return 0;
             }
 
-            value = value * 36 + digitValue; // 36进制
+            value = value * 36 + digitValue;
         }
 
         return value;
     }
 
-    /// <summary>
-    /// 改进的TLE第二行解析方法
-    /// </summary>
-    /// <param name="satellite">卫星数据对象</param>
     void ParseTLE2(SatelliteData satellite)
     {
         string tle2 = satellite.tle2;
@@ -202,15 +265,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         try
         {
-            // 解析catalog number (位置2-6，5个字符)
             string catalogStr = tle2.Substring(2, 5);
             satellite.catalogNumber = ParseCatalogNumber(catalogStr);
 
-            // 解析其他轨道参数
             satellite.inclination = ParseFloat(tle2.Substring(8, 8), "inclination");
             satellite.raan = ParseFloat(tle2.Substring(17, 8), "raan");
 
-            // 偏心率需要加上"0."前缀
             string eccentricityStr = tle2.Substring(26, 7).Trim();
             satellite.eccentricity = ParseFloat("0." + eccentricityStr, "eccentricity");
 
@@ -218,7 +278,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             satellite.meanAnomaly = ParseFloat(tle2.Substring(43, 8), "meanAnomaly");
             satellite.meanMotion = ParseFloat(tle2.Substring(52, 11), "meanMotion");
 
-            Debug.Log($"成功解析卫星: {satellite.name} (Catalog: {satellite.catalogNumber})");
+            //Debug.Log($"成功解析卫星: {satellite.name} (Catalog: {satellite.catalogNumber})");
         }
         catch (Exception e)
         {
@@ -227,12 +287,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 安全的浮点数解析
-    /// </summary>
-    /// <param name="valueStr">要解析的字符串</param>
-    /// <param name="fieldName">字段名称（用于错误信息）</param>
-    /// <returns>解析后的浮点数</returns>
     private float ParseFloat(string valueStr, string fieldName)
     {
         valueStr = valueStr.Trim();
@@ -248,14 +302,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 验证TLE数据完整性
-    /// </summary>
-    /// <param name="satellite">卫星数据</param>
-    /// <returns>是否有效</returns>
     private bool ValidateSatelliteData(SatelliteData satellite)
     {
-        // 检查必要字段
         if (satellite.catalogNumber <= 0)
         {
             Debug.LogWarning($"无效的catalog number: {satellite.catalogNumber} for {satellite.name}");
@@ -283,9 +331,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return true;
     }
 
-    /// <summary>
-    /// 改进的卫星数据解析方法
-    /// </summary>
     void ParseSatelliteData()
     {
         int validCount = 0;
@@ -321,7 +366,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         var orbit = new OrbitElements();
 
-        // 计算半长轴
         double mu = 3.986004418e14;
         double n = satellite.meanMotion * 2 * Math.PI / 86400.0;
         orbit.semiMajorAxis = (float)Math.Pow(mu / (n * n), 1.0 / 3.0);
@@ -336,16 +380,64 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return orbit;
     }
 
+    void UpdateSatellitePositions()
+    {
+        float currentTime = Time.time;
+
+        foreach (int satNumber in currentDisplayedOrbits)
+        {
+            if (orbitElements.ContainsKey(satNumber))
+            {
+                var orbit = orbitElements[satNumber];
+                Vector3 position = CalculateSatellitePosition(orbit, currentTime);
+                currentSatellitePositions[satNumber] = position;
+            }
+        }
+    }
+
+    Vector3 CalculateSatellitePosition(OrbitElements orbit, float time)
+    {
+        // 简化的卫星位置计算（实际应用中需要更精确的算法）
+        float meanAnomalyNow = orbit.meanAnomaly + orbit.meanMotion * time * 2 * Mathf.PI / 86400.0f;
+        float trueAnomaly = meanAnomalyNow; // 简化，实际需要解开普勒方程
+
+        float r = orbit.semiMajorAxis * (1 - orbit.eccentricity * orbit.eccentricity) /
+                 (1 + orbit.eccentricity * Mathf.Cos(trueAnomaly));
+
+        float x = r * Mathf.Cos(trueAnomaly);
+        float y = r * Mathf.Sin(trueAnomaly);
+
+        Vector3 orbitalPos = new Vector3(x, y, 0);
+        return TransformToECI(orbitalPos, orbit) * orbitScale;
+    }
+
+    void RenderSatellites()
+    {
+        foreach (var kvp in currentSatellitePositions)
+        {
+            int satNumber = kvp.Key;
+            Vector3 position = kvp.Value;
+
+            var propertyBlock = new MaterialPropertyBlock();
+            Color satelliteColor = orbitColors[satNumber % orbitColors.Length];
+
+            propertyBlock.SetColor("_UnlitColor", satelliteColor);
+            propertyBlock.SetColor("_EmissiveColor", satelliteColor);
+            propertyBlock.SetFloat("_EmissiveIntensity", 2.0f);
+
+            Matrix4x4 matrix = Matrix4x4.TRS(position, Quaternion.LookRotation(Camera.main.transform.forward), Vector3.one);
+            Graphics.DrawMesh(satelliteMesh, matrix, satelliteMaterial, 0, null, 0, propertyBlock);
+        }
+    }
+
     void CreateOrbitMeshes(List<int> satelliteNumbers)
     {
-        // 清除现有网格
         foreach (var mesh in orbitMeshes.Values)
         {
             if (mesh != null) DestroyImmediate(mesh);
         }
         orbitMeshes.Clear();
 
-        // 为每个轨道创建网格
         foreach (int satNumber in satelliteNumbers)
         {
             if (orbitElements.ContainsKey(satNumber))
@@ -363,7 +455,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         var vertices = new Vector3[orbitSegments + 1];
         var indices = new int[orbitSegments * 2];
 
-        // 计算轨道点
         for (int i = 0; i <= orbitSegments; i++)
         {
             float trueAnomaly = (float)i / orbitSegments * 2 * Mathf.PI;
@@ -378,7 +469,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             vertices[i] = worldPos * orbitScale;
         }
 
-        // 创建线条索引
         for (int i = 0; i < orbitSegments; i++)
         {
             indices[i * 2] = i;
@@ -394,7 +484,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     Vector3 TransformToECI(Vector3 orbitalPos, OrbitElements orbit)
     {
-        // 轨道变换到地心坐标系
         float cosArgP = Mathf.Cos(orbit.argPerigee);
         float sinArgP = Mathf.Sin(orbit.argPerigee);
         float cosInc = Mathf.Cos(orbit.inclination);
@@ -402,34 +491,29 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         float cosRaan = Mathf.Cos(orbit.raan);
         float sinRaan = Mathf.Sin(orbit.raan);
 
-        // 近地点幅角旋转
         float x1 = orbitalPos.x * cosArgP - orbitalPos.y * sinArgP;
         float y1 = orbitalPos.x * sinArgP + orbitalPos.y * cosArgP;
         float z1 = orbitalPos.z;
 
-        // 倾角旋转
         float x2 = x1;
         float y2 = y1 * cosInc - z1 * sinInc;
         float z2 = y1 * sinInc + z1 * cosInc;
 
-        // 升交点赤经旋转
         float x3 = x2 * cosRaan - y2 * sinRaan;
         float y3 = x2 * sinRaan + y2 * cosRaan;
         float z3 = z2;
 
-        return new Vector3(x3, z3, y3); // Unity坐标系转换
+        return new Vector3(x3, z3, y3);
     }
 
     void RenderOrbitsWithInstancing()
     {
         if (currentDisplayedOrbits.Count == 0) return;
 
-        // 批量渲染轨道
         for (int i = 0; i < currentDisplayedOrbits.Count; i += maxOrbitsPerBatch)
         {
             int batchSize = Mathf.Min(maxOrbitsPerBatch, currentDisplayedOrbits.Count - i);
             var batch = currentDisplayedOrbits.GetRange(i, batchSize);
-
             RenderOrbitBatch(batch);
         }
     }
@@ -437,15 +521,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     void RenderOrbitBatch(List<int> batch)
     {
         var matrices = new Matrix4x4[batch.Count];
-        var colors = new Vector4[batch.Count];
 
         for (int i = 0; i < batch.Count; i++)
         {
             matrices[i] = Matrix4x4.identity;
-            colors[i] = orbitColors[batch[i] % orbitColors.Length];
         }
-        Debug.Log(batch.Count);
-        // 为每个轨道渲染
+
         for (int i = 0; i < batch.Count; i++)
         {
             int satNumber = batch[i];
@@ -454,7 +535,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 var propertyBlock = new MaterialPropertyBlock();
                 Color orbitColor = orbitColors[satNumber % orbitColors.Length];
 
-                // 为HDRP设置正确的颜色属性
                 propertyBlock.SetColor("_UnlitColor", orbitColor);
                 propertyBlock.SetColor("_EmissiveColor", orbitColor);
                 propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
@@ -464,6 +544,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
+
     void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS");
@@ -471,6 +552,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链");
         if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("Galileo");
         if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("BeiDou");
+
+        // 显示模式切换
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SetDisplayMode(DisplayMode.OrbitOnly);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
     }
 
     public void SetDisplayGroup(string groupName)
@@ -485,6 +571,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             Debug.LogWarning($"未找到卫星群: {groupName}");
         }
+    }
+
+    public void SetDisplayMode(DisplayMode mode)
+    {
+        displayMode = mode;
+        Debug.Log($"显示模式切换为: {mode}");
     }
 
     public void SetOrbitSegments(int segments)
@@ -503,12 +595,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void OnDestroy()
     {
-        // 清理资源
         foreach (var mesh in orbitMeshes.Values)
         {
             if (mesh != null) DestroyImmediate(mesh);
         }
         orbitMeshes.Clear();
+
+        if (satelliteMesh != null) DestroyImmediate(satelliteMesh);
     }
 
     public class TleSel
