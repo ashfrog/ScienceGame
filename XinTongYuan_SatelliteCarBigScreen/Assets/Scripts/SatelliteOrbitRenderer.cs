@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-
+/// <summary>
+/// https://app.keeptrack.space
+/// </summary>
 [System.Serializable]
 public class SatelliteData
 {
@@ -20,6 +22,10 @@ public class SatelliteData
     public float argPerigee;
     public float meanAnomaly;
     public float meanMotion;
+
+    //国家
+    public string country;
+    public string bus;
 }
 
 [System.Serializable]
@@ -36,6 +42,7 @@ public class OrbitElements
 
 public enum DisplayMode
 {
+    None,           // 不显示任何内容
     OrbitOnly,      // 仅显示轨道
     SatelliteOnly,  // 仅显示卫星点
     Both            // 显示轨道和卫星点
@@ -43,9 +50,6 @@ public enum DisplayMode
 
 public class SatelliteOrbitRenderer : MonoBehaviour
 {
-    [Header("数据设置")]
-    public string tleJsonFile = "tle.json";
-    public string tleSelectionFile = "tlesel.json";
 
     [Header("渲染设置")]
     public Material orbitMaterial;
@@ -97,6 +101,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void Update()
     {
+        HandleInput();
+
+        if (displayMode == DisplayMode.None)
+        {
+            return;
+        }
+
         UpdateSatellitePositions();
 
         if (displayMode == DisplayMode.OrbitOnly || displayMode == DisplayMode.Both)
@@ -108,8 +119,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             RenderSatellites();
         }
-
-        HandleInput();
     }
 
     void InitializeMaterials()
@@ -199,9 +208,19 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         try
         {
-            string filePath = Path.Combine(Application.streamingAssetsPath, tleJsonFile);
+            string filePath = Path.Combine(Application.streamingAssetsPath, "tle.json");
             string jsonData = File.ReadAllText(filePath);
             allSatellites = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SatelliteData>>(jsonData);
+
+            List<string> buses = new List<string>();
+            foreach (var satellite in allSatellites)
+            {
+                if (satellite.country == "CN" && satellite.bus != null)
+                {
+                    buses.Add(satellite.bus);
+                }
+            }
+            Debug.Log(buses.ToString());
         }
         catch (Exception e)
         {
@@ -602,10 +621,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS");
         if (Input.GetKeyDown(KeyCode.S)) SetDisplayGroup("格洛纳斯");
         if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链");
-        if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("Galileo");
-        if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("BeiDou");
+        if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("伽利略");
+        if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("北斗");
 
         // 显示模式切换
+        if (Input.GetKeyDown(KeyCode.Alpha0)) SetDisplayMode(DisplayMode.None);
         if (Input.GetKeyDown(KeyCode.Alpha1)) SetDisplayMode(DisplayMode.OrbitOnly);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
