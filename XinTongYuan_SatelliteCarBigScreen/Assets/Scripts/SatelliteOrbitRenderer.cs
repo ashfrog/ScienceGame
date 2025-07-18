@@ -346,6 +346,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             satellite.meanAnomaly = ParseFloat(tle2.Substring(43, 8), "meanAnomaly");
             satellite.meanMotion = ParseFloat(tle2.Substring(52, 11), "meanMotion");
 
+
             //Debug.Log($"成功解析卫星: {satellite.name} (Catalog: {satellite.catalogNumber})");
         }
         catch (Exception e)
@@ -585,7 +586,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     Vector3 CalculateSatellitePosition(OrbitElements orbit, float time)
     {
         // 简化的卫星位置计算（实际应用中需要更精确的算法）
-        float meanAnomalyNow = orbit.meanAnomaly + orbit.meanMotion * time * 2 * Mathf.PI / 5760f; //星链 86400.0/15 一天15圈
+        float meanAnomalyNow = orbit.meanAnomaly + orbit.meanMotion * time * 2 * Mathf.PI / 86400f;
         float trueAnomaly = meanAnomalyNow; // 简化，实际需要解开普勒方程
 
         float r = orbit.semiMajorAxis * (1 - orbit.eccentricity * orbit.eccentricity) /
