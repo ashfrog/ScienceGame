@@ -688,8 +688,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             for (int i = 0; i < currentDisplayedOrbits.Count; i++)
             {
                 int satNumber = currentDisplayedOrbits[i];
-                // 使用卫星编号的哈希值创建伪随机但固定的时间偏移
-                float timeOffset = (float)(satNumber * 37 % 86400); // 0-86400秒的偏移
+                // 计算该卫星在轨道上的均匀分布位置
+                float timeOffset = (float)i / currentDisplayedOrbits.Count * 86400f; // 在一个轨道周期内均匀分布
                 satelliteTimeOffsets[satNumber] = timeOffset;
             }
 
