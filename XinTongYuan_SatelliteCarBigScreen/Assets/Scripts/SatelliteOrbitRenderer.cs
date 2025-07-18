@@ -437,25 +437,27 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     private List<SatelliteData> ApplyFilters(List<SatelliteData> satellites)
     {
         List<SatelliteData> filtered = new List<SatelliteData>();
-        DateTime minFilterYear = new DateTime(filterMinYear, 1, 1);
-        DateTime maxFilterYear = new DateTime(filterMaxYear, 1, 1);
+
         foreach (var satellite in satellites)
         {
             // 年份筛选
             if (enableYearFilter)
             {
-
-                if (DateTime.TryParse(satellite.stableDate, out DateTime date))
+                string yearStr = satellite.stableDate?.Substring(0, 4);
+                if (string.IsNullOrEmpty(yearStr))
                 {
-                    if (date < minFilterYear || date > maxFilterYear)
+                    if (int.TryParse(yearStr, out int year))
                     {
-                        continue;
+                        if (year < filterMinYear || year > filterMaxYear)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            Debug.Log("丢弃解析失败日期:" + satellite.stableDate);
+                            continue;
+                        }
                     }
-                }
-                else
-                {
-                    Debug.Log("丢弃解析失败日期:" + satellite.stableDate);
-                    continue;
                 }
             }
 
@@ -579,10 +581,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         Debug.Log($"最大显示轨道数量设置为: {maxDisplayOrbits}");
     }
 
+    // 简化的卫星位置计算方法
     Vector3 CalculateSatellitePosition(OrbitElements orbit, float time)
     {
         // 简化的卫星位置计算（实际应用中需要更精确的算法）
-        float meanAnomalyNow = orbit.meanAnomaly + orbit.meanMotion * time * 2 * Mathf.PI / 86400.0f;
+        float meanAnomalyNow = orbit.meanAnomaly + orbit.meanMotion * time * 2 * Mathf.PI / 5760f; //星链 86400.0/15 一天15圈
         float trueAnomaly = meanAnomalyNow; // 简化，实际需要解开普勒方程
 
         float r = orbit.semiMajorAxis * (1 - orbit.eccentricity * orbit.eccentricity) /
