@@ -466,13 +466,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         // 获取当前显示组的颜色组
         Color[] groupColors = GetGroupColors(currentDisplayGroupName);
-
+        var propertyBlock = new MaterialPropertyBlock();
         foreach (var kvp in currentSatellitePositions)
         {
             int satNumber = kvp.Key;
             Vector3 position = kvp.Value;
 
-            var propertyBlock = new MaterialPropertyBlock();
+
 
             // 使用卫星编号来选择颜色组中的颜色，确保同一卫星总是使用相同颜色
             Color satelliteColor = groupColors[satNumber % groupColors.Length];
@@ -562,6 +562,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return new Vector3(x3, z3, y3);
     }
 
+    /// <summary>
+    /// 绘制轨道
+    /// </summary>
     void RenderOrbitsWithInstancing()
     {
         if (currentDisplayedOrbits.Count == 0) return;
@@ -574,6 +577,10 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 批量绘制轨道
+    /// </summary>
+    /// <param name="batch"></param>
     void RenderOrbitBatch(List<int> batch)
     {
         var matrices = new Matrix4x4[batch.Count];
@@ -623,6 +630,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链");
         if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("伽利略");
         if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("北斗");
+        if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆");
+        if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网");
+        if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网");
 
         // 显示模式切换
         if (Input.GetKeyDown(KeyCode.Alpha0)) SetDisplayMode(DisplayMode.None);
@@ -636,6 +646,10 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     [Header("性能优化")]
     public int maxDisplayOrbits = 200; // 最大显示轨道数量
 
+    /// <summary>
+    /// 根据星座名映射表展示选中卫星编号列表卫星和轨道
+    /// </summary>
+    /// <param name="groupName">组名 星座卫星群</param>
     public void SetDisplayGroup(string groupName)
     {
         if (tleSelDic.ContainsKey(groupName))
@@ -688,7 +702,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     }
 
     /// <summary>
-    /// 加载国家轨道颜色组
+    /// 加载国家轨道颜色组字典
     /// </summary>
     /// <param name="filePath"></param>
     /// <returns></returns>
@@ -702,24 +716,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         );
 
 
+    /// <summary>
+    /// 隐藏-卫星-轨道-both 模式切换开关
+    /// <param name="mode"></param>
     public void SetDisplayMode(DisplayMode mode)
     {
         displayMode = mode;
         Debug.Log($"显示模式切换为: {mode}");
-    }
-
-    public void SetOrbitSegments(int segments)
-    {
-        orbitSegments = Mathf.Clamp(segments, 30, 360);
-        if (currentDisplayedOrbits.Count > 0)
-        {
-            CreateOrbitMeshes(currentDisplayedOrbits);
-        }
-    }
-
-    public void SetMaxOrbitsPerBatch(int maxBatch)
-    {
-        maxOrbitsPerBatch = Mathf.Clamp(maxBatch, 10, 1000);
     }
 
     void OnDestroy()
@@ -733,7 +736,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (satelliteMesh != null) DestroyImmediate(satelliteMesh);
     }
 
-    public class TleSel
+    class TleSel
     {
         public List<int> sel;
         public float pitch;
