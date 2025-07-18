@@ -3775,7 +3775,7 @@ PrefabInstance:
     - target: {fileID: 1098339232389368799, guid: a21da37f970e8d04898137a11bd396e2,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1102966126979881723, guid: a21da37f970e8d04898137a11bd396e2,
         type: 3}
@@ -4407,7 +4407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &941347485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4420,8 +4420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4041af84e27174047903b60552e7942e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tleJsonFile: tle.json
-  tleSelectionFile: tlesel.json
   orbitMaterial: {fileID: 2100000, guid: 41a98b239e8ed6a4ebeed5ecc2ed2f4c, type: 2}
   satelliteMaterial: {fileID: 2100000, guid: 41a98b239e8ed6a4ebeed5ecc2ed2f4c, type: 2}
   orbitScale: 0.0000002
@@ -4429,15 +4427,9 @@ MonoBehaviour:
   useGPUInstancing: 1
   maxOrbitsPerBatch: 1
   satelliteSize: 0.03
+  MinYear: 1968
+  MaxYear: 2025
   displayMode: 2
-  orbitColors:
-  - {r: 0.8018868, g: 0.22316661, b: 0.22316661, a: 1}
-  - {r: 0.5660378, g: 0.22495195, b: 0, a: 1}
-  - {r: 0, g: 0.7075472, b: 0, a: 1}
-  - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  - {r: 0.4528302, g: 0, b: 0.4528302, a: 1}
-  - {r: 0, g: 1, b: 1, a: 1}
-  - {r: 0.7075472, g: 0.39390606, b: 0, a: 1}
   maxDisplayOrbits: 200
 --- !u!4 &941347486
 Transform:
