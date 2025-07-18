@@ -26,6 +26,7 @@ public class SatelliteData
     //国家
     public string country;
     public string bus;
+    public string stableDate;
 }
 
 [System.Serializable]
@@ -60,8 +61,15 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public int maxOrbitsPerBatch = 100;
     public float satelliteSize = 0.01f;
 
-    public int MinYear = 1970; // 最小年份
-    public int MaxYear = 2025; // 最大年份
+    [Header("筛选设置")]
+    public bool enableYearFilter = false;
+    public bool enableCountryFilter = false;
+    public int filterMinYear = 1970;
+    public int filterMaxYear = 2025;
+    public string[] selectedCountries = new string[] { "US", "CN", "RU" }; // 默认选择的国家
+
+    // 添加筛选后的卫星数据缓存
+    private List<SatelliteData> filteredSatellites = new List<SatelliteData>();
 
     [Header("显示模式")]
     public DisplayMode displayMode = DisplayMode.Both;
@@ -84,6 +92,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     private List<int> currentDisplayedOrbits = new List<int>();
     Dictionary<string, TleSel> tleSelDic;
 
+    // 在类的顶部添加时间偏移字典
+    private Dictionary<int, float> satelliteTimeOffsets = new Dictionary<int, float>();
+
+    [Header("性能优化")]
+    public int maxDisplayOrbits = 200; // 最大显示轨道数量
+
     void Start()
     {
         SetMaxDisplayOrbits(Settings.ini.Game.MaxDisplayOrbits);
@@ -99,6 +113,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         SetDisplayGroup("格洛纳斯");
     }
 
+    private float logMinYear;
+    private float logMaxYear;
     void Update()
     {
         HandleInput();
@@ -119,6 +135,20 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             RenderSatellites();
         }
+    }
+
+    // 获取可用国家列表的方法
+    public string[] GetAvailableCountries()
+    {
+        HashSet<string> countries = new HashSet<string>();
+        foreach (var satellite in allSatellites)
+        {
+            if (!string.IsNullOrEmpty(satellite.country))
+            {
+                countries.Add(satellite.country);
+            }
+        }
+        return countries.ToArray();
     }
 
     void InitializeMaterials()
@@ -373,8 +403,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         int validCount = 0;
         int invalidCount = 0;
+        int filteredOutCount = 0;
 
-        foreach (var satellite in allSatellites)
+        // 首先应用筛选条件
+        filteredSatellites = ApplyFilters(allSatellites);
+
+        foreach (var satellite in filteredSatellites)
         {
             if (string.IsNullOrEmpty(satellite.tle2))
             {
@@ -397,7 +431,106 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             }
         }
 
-        Debug.Log($"卫星数据解析完成: 有效 {validCount} 个, 无效 {invalidCount} 个");
+        filteredOutCount = allSatellites.Count - filteredSatellites.Count;
+        Debug.Log($"卫星数据解析完成: 有效 {validCount} 个, 无效 {invalidCount} 个, 筛选排除 {filteredOutCount} 个");
+    }
+    private List<SatelliteData> ApplyFilters(List<SatelliteData> satellites)
+    {
+        List<SatelliteData> filtered = new List<SatelliteData>();
+        DateTime minFilterYear = new DateTime(filterMinYear, 1, 1);
+        DateTime maxFilterYear = new DateTime(filterMaxYear, 1, 1);
+        foreach (var satellite in satellites)
+        {
+            // 年份筛选
+            if (enableYearFilter)
+            {
+
+                if (DateTime.TryParse(satellite.stableDate, out DateTime date))
+                {
+                    if (date < minFilterYear || date > maxFilterYear)
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    Debug.Log("丢弃解析失败日期:" + satellite.stableDate);
+                    continue;
+                }
+            }
+
+            // 国家筛选
+            if (enableCountryFilter)
+            {
+                if (string.IsNullOrEmpty(satellite.country) ||
+                    !selectedCountries.Contains(satellite.country))
+                {
+                    continue;
+                }
+            }
+
+            filtered.Add(satellite);
+        }
+
+        return filtered;
+    }
+
+    public void SetYearFilter(bool enabled, int minYear = 1970, int maxYear = 2025)
+    {
+        enableYearFilter = enabled;
+        filterMinYear = minYear;
+        filterMaxYear = maxYear;
+        logMinYear = filterMinYear;
+        logMaxYear = filterMaxYear;
+        if (minYear <= maxYear)
+        {
+            if (enabled)
+            {
+                Debug.Log($"年份筛选已启用: {minYear} - {maxYear}");
+                RefreshFilteredData();
+            }
+            else
+            {
+                Debug.Log("年份筛选已禁用");
+                RefreshFilteredData();
+            }
+        }
+    }
+
+    public void SetCountryFilter(bool enabled, string[] countries = null)
+    {
+        enableCountryFilter = enabled;
+        if (countries != null)
+        {
+            selectedCountries = countries;
+        }
+
+        if (enabled)
+        {
+            Debug.Log($"国家筛选已启用: {string.Join(", ", selectedCountries)}");
+            RefreshFilteredData();
+        }
+        else
+        {
+            Debug.Log("国家筛选已禁用");
+            RefreshFilteredData();
+        }
+    }
+
+    // 刷新筛选后的数据
+    private void RefreshFilteredData()
+    {
+        // 清除现有的轨道元素数据
+        orbitElements.Clear();
+
+        // 重新解析筛选后的数据
+        ParseSatelliteData();
+
+        // 如果当前有显示的轨道，重新创建它们
+        if (!string.IsNullOrEmpty(currentDisplayGroupName))
+        {
+            SetDisplayGroup(currentDisplayGroupName);
+        }
     }
 
     OrbitElements CalculateOrbitElements(SatelliteData satellite)
@@ -639,12 +772,25 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1)) SetDisplayMode(DisplayMode.OrbitOnly);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
-    }
-    // 在类的顶部添加时间偏移字典
-    private Dictionary<int, float> satelliteTimeOffsets = new Dictionary<int, float>();
 
-    [Header("性能优化")]
-    public int maxDisplayOrbits = 200; // 最大显示轨道数量
+        // 新增筛选快捷键
+        if (Input.GetKeyDown(KeyCode.Y)) ToggleYearFilter();
+        if (Input.GetKeyDown(KeyCode.C)) ToggleCountryFilter();
+    }
+
+    // 切换年份筛选
+    private void ToggleYearFilter()
+    {
+        SetYearFilter(!enableYearFilter, filterMinYear, filterMaxYear);
+    }
+
+    // 切换国家筛选
+    private void ToggleCountryFilter()
+    {
+        SetCountryFilter(!enableCountryFilter, selectedCountries);
+    }
+
+
 
     /// <summary>
     /// 根据星座名映射表展示选中卫星编号列表卫星和轨道
