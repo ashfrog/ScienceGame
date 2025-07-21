@@ -4427,10 +4427,10 @@ MonoBehaviour:
   useGPUInstancing: 1
   maxOrbitsPerBatch: 1
   satelliteSize: 0.03
-  enableYearFilter: 1
+  enableYearFilter: 0
   enableCountryFilter: 0
-  filterMinYear: 2010
-  filterMaxYear: 2024
+  filterMinYear: 1980
+  filterMaxYear: 1990
   selectedCountries:
   - US
   - CN

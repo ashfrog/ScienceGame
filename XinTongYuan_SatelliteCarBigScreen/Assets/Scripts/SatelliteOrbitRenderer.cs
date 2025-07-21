@@ -14,6 +14,7 @@ public class SatelliteData
     public string tle2;
     public string name;
     public int catalogNumber;
+    public int cachedYear;
 
     // TLE轨道参数
     public float inclination;
@@ -79,8 +80,19 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     // 当前显示星座的名称
     private string currentDisplayGroupName = "";
 
-    // 核心数据
+
+    // 核心数据 - 预解析的数据，避免重复解析
     private List<SatelliteData> allSatellites = new List<SatelliteData>();
+    private Dictionary<int, OrbitElements> allOrbitElements = new Dictionary<int, OrbitElements>(); // 存储所有轨道元素
+    private Dictionary<int, SatelliteData> catalogToSatellite = new Dictionary<int, SatelliteData>(); // catalog号到卫星的映射
+
+    // 筛选后的数据缓存
+    private HashSet<int> filteredCatalogNumbers = new HashSet<int>(); // 筛选后的catalog号集合
+    private Dictionary<int, int> catalogToYear = new Dictionary<int, int>(); // catalog号到年份的映射，预计算
+    private Dictionary<string, HashSet<int>> countryToCatalogs = new Dictionary<string, HashSet<int>>(); // 国家到catalog号的映射
+
+
+    // 核心数据
     private Dictionary<int, OrbitElements> orbitElements = new Dictionary<int, OrbitElements>();
 
     // 渲染优化
@@ -90,6 +102,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     // 当前显示的轨道
     private List<int> currentDisplayedOrbits = new List<int>();
+    private HashSet<int> currentDisplayedOrbitsSet = new HashSet<int>(); // 用于快速查找
     Dictionary<string, TleSel> tleSelDic;
 
     // 在类的顶部添加时间偏移字典
@@ -97,6 +110,10 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     [Header("性能优化")]
     public int maxDisplayOrbits = 200; // 最大显示轨道数量
+
+    // 用于避免重复GC的缓存列表
+    private List<int> tempCatalogList = new List<int>(5000);
+    private List<int> tempDisplayList = new List<int>(1000);
 
     void Start()
     {
@@ -107,6 +124,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         LoadSatelliteData();
         LoadCountryColorGroups();
         ParseSatelliteData();
+
+        PreprocessSatelliteData(); // 预处理所有数据
         LoadSelectionGroups();
 
         // 默认显示GPS
@@ -283,7 +302,79 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Debug.LogError($"加载选择组失败: {e.Message}");
         }
     }
+    // 预处理所有卫星数据 - 一次性解析和验证
+    void PreprocessSatelliteData()
+    {
+        int validCount = 0;
+        int invalidCount = 0;
 
+        // 清空映射表
+        catalogToSatellite.Clear();
+        catalogToYear.Clear();
+        countryToCatalogs.Clear();
+        allOrbitElements.Clear();
+
+        foreach (var satellite in allSatellites)
+        {
+            if (string.IsNullOrEmpty(satellite.tle2))
+            {
+                invalidCount++;
+                continue;
+            }
+
+            ParseTLE2(satellite);
+
+            if (ValidateSatelliteData(satellite))
+            {
+                // 计算轨道元素并缓存
+                var orbit = CalculateOrbitElements(satellite);
+                allOrbitElements[satellite.catalogNumber] = orbit;
+                catalogToSatellite[satellite.catalogNumber] = satellite;
+
+                // 预计算年份
+                int year = ParseYearFromDate(satellite.stableDate);
+                catalogToYear[satellite.catalogNumber] = year;
+                satellite.cachedYear = year;
+
+                // 建立国家到catalog的映射
+                if (!string.IsNullOrEmpty(satellite.country))
+                {
+                    if (!countryToCatalogs.ContainsKey(satellite.country))
+                    {
+                        countryToCatalogs[satellite.country] = new HashSet<int>();
+                    }
+                    countryToCatalogs[satellite.country].Add(satellite.catalogNumber);
+                }
+
+                validCount++;
+            }
+            else
+            {
+                invalidCount++;
+            }
+        }
+
+        // 初始化筛选结果为所有有效卫星
+        RefreshFilteredData();
+
+        Debug.Log($"预处理完成: 有效 {validCount} 个, 无效 {invalidCount} 个");
+    }
+
+    // 解析日期中的年份
+    private int ParseYearFromDate(string dateStr)
+    {
+        if (string.IsNullOrEmpty(dateStr) || dateStr.Length < 4)
+        {
+            return 1970; // 默认年份
+        }
+
+        string yearStr = dateStr.Substring(0, 4);
+        if (int.TryParse(yearStr, out int year))
+        {
+            return year;
+        }
+        return 1970; // 解析失败时的默认年份
+    }
     private int ParseCatalogNumber(string catalogStr)
     {
         if (string.IsNullOrEmpty(catalogStr))
@@ -445,20 +536,15 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             if (enableYearFilter)
             {
                 string yearStr = satellite.stableDate?.Substring(0, 4);
-                if (string.IsNullOrEmpty(yearStr))
+
+                if (string.IsNullOrEmpty(yearStr) || !int.TryParse(yearStr, out int year))
                 {
-                    if (int.TryParse(yearStr, out int year))
-                    {
-                        if (year < filterMinYear || year > filterMaxYear)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            Debug.Log("丢弃解析失败日期:" + satellite.stableDate);
-                            continue;
-                        }
-                    }
+                    Debug.Log("丢弃解析失败日期:" + satellite.stableDate);
+                    continue;
+                }
+                if (year < filterMinYear || year > filterMaxYear)
+                {
+                    continue;
                 }
             }
 
@@ -480,24 +566,25 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     public void SetYearFilter(bool enabled, int minYear = 1970, int maxYear = 2025)
     {
+        bool wasEnabled = enableYearFilter;
         enableYearFilter = enabled;
-        filterMinYear = minYear;
-        filterMaxYear = maxYear;
-        logMinYear = filterMinYear;
-        logMaxYear = filterMaxYear;
-        if (minYear <= maxYear)
+
+        if (enabled)
         {
-            if (enabled)
+            if (!wasEnabled || minYear != filterMinYear || maxYear != filterMaxYear)
             {
-                Debug.Log($"年份筛选已启用: {minYear} - {maxYear}");
-                RefreshFilteredData();
-            }
-            else
-            {
-                Debug.Log("年份筛选已禁用");
-                RefreshFilteredData();
+                UpdateYearFilter(minYear, maxYear);
             }
         }
+        else if (wasEnabled)
+        {
+            filterMinYear = minYear;
+            filterMaxYear = maxYear;
+            RefreshFilteredData();
+            RefreshCurrentDisplay();
+        }
+
+        Debug.Log($"年份筛选{(enabled ? "已启用" : "已禁用")}: {minYear} - {maxYear}");
     }
 
     public void SetCountryFilter(bool enabled, string[] countries = null)
@@ -508,28 +595,131 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             selectedCountries = countries;
         }
 
-        if (enabled)
+        RefreshFilteredData();
+        RefreshCurrentDisplay();
+
+        Debug.Log($"国家筛选{(enabled ? "已启用" : "已禁用")}: {string.Join(", ", selectedCountries)}");
+    }
+
+    // 快速筛选方法 - 基于预计算的映射
+    private void RefreshFilteredData()
+    {
+        filteredCatalogNumbers.Clear();
+
+        foreach (var kvp in catalogToSatellite)
         {
-            Debug.Log($"国家筛选已启用: {string.Join(", ", selectedCountries)}");
+            int catalogNumber = kvp.Key;
+            var satellite = kvp.Value;
+
+            bool passFilter = true;
+
+            // 年份筛选
+            if (enableYearFilter)
+            {
+                int year = catalogToYear[catalogNumber];
+                if (year < filterMinYear || year > filterMaxYear)
+                {
+                    passFilter = false;
+                }
+            }
+
+            // 国家筛选
+            if (passFilter && enableCountryFilter)
+            {
+                if (string.IsNullOrEmpty(satellite.country) || !selectedCountries.Contains(satellite.country))
+                {
+                    passFilter = false;
+                }
+            }
+
+            if (passFilter)
+            {
+                filteredCatalogNumbers.Add(catalogNumber);
+            }
+        }
+
+        Debug.Log($"筛选后的卫星数量: {filteredCatalogNumbers.Count}");
+    }
+
+    // 增量更新年份筛选 - 支持平滑增减年份
+    public void UpdateYearFilter(int minYear, int maxYear)
+    {
+        int oldMinYear = filterMinYear;
+        int oldMaxYear = filterMaxYear;
+
+        filterMinYear = minYear;
+        filterMaxYear = maxYear;
+
+        if (!enableYearFilter)
+        {
+            enableYearFilter = true;
             RefreshFilteredData();
+            RefreshCurrentDisplay();
+            return;
+        }
+
+        // 如果是扩大年份范围，增量添加
+        if (minYear <= oldMinYear && maxYear >= oldMaxYear)
+        {
+            // 添加新的年份范围内的卫星
+            foreach (var kvp in catalogToYear)
+            {
+                int catalogNumber = kvp.Key;
+                int year = kvp.Value;
+
+                if (!filteredCatalogNumbers.Contains(catalogNumber) &&
+                    year >= minYear && year <= maxYear)
+                {
+                    var satellite = catalogToSatellite[catalogNumber];
+
+                    // 检查国家筛选
+                    bool passCountryFilter = true;
+                    if (enableCountryFilter)
+                    {
+                        if (string.IsNullOrEmpty(satellite.country) || !selectedCountries.Contains(satellite.country))
+                        {
+                            passCountryFilter = false;
+                        }
+                    }
+
+                    if (passCountryFilter)
+                    {
+                        filteredCatalogNumbers.Add(catalogNumber);
+                    }
+                }
+            }
+        }
+        // 如果是缩小年份范围，移除不符合的卫星
+        else if (minYear >= oldMinYear && maxYear <= oldMaxYear)
+        {
+            tempCatalogList.Clear();
+            foreach (int catalogNumber in filteredCatalogNumbers)
+            {
+                int year = catalogToYear[catalogNumber];
+                if (year < minYear || year > maxYear)
+                {
+                    tempCatalogList.Add(catalogNumber);
+                }
+            }
+
+            foreach (int catalogNumber in tempCatalogList)
+            {
+                filteredCatalogNumbers.Remove(catalogNumber);
+            }
         }
         else
         {
-            Debug.Log("国家筛选已禁用");
+            // 复杂的范围变化，重新计算
             RefreshFilteredData();
         }
+
+        RefreshCurrentDisplay();
+        Debug.Log($"年份筛选更新: {minYear} - {maxYear}, 当前卫星数量: {filteredCatalogNumbers.Count}");
     }
 
-    // 刷新筛选后的数据
-    private void RefreshFilteredData()
+    // 刷新当前显示的轨道
+    private void RefreshCurrentDisplay()
     {
-        // 清除现有的轨道元素数据
-        orbitElements.Clear();
-
-        // 重新解析筛选后的数据
-        ParseSatelliteData();
-
-        // 如果当前有显示的轨道，重新创建它们
         if (!string.IsNullOrEmpty(currentDisplayGroupName))
         {
             SetDisplayGroup(currentDisplayGroupName);
@@ -625,20 +815,34 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void CreateOrbitMeshes(List<int> satelliteNumbers)
     {
-        foreach (var mesh in orbitMeshes.Values)
-        {
-            if (mesh != null) DestroyImmediate(mesh);
-        }
-        orbitMeshes.Clear();
-
+        // 只创建新的轨道mesh，不销毁现有的（增量更新）
         foreach (int satNumber in satelliteNumbers)
         {
-            if (orbitElements.ContainsKey(satNumber))
+            if (!orbitMeshes.ContainsKey(satNumber) && allOrbitElements.ContainsKey(satNumber))
             {
-                var orbit = orbitElements[satNumber];
+                var orbit = allOrbitElements[satNumber];
                 var mesh = CreateOrbitMesh(orbit);
                 orbitMeshes[satNumber] = mesh;
             }
+        }
+
+        // 清理不再需要的mesh
+        tempCatalogList.Clear();
+        foreach (var kvp in orbitMeshes)
+        {
+            if (!currentDisplayedOrbitsSet.Contains(kvp.Key))
+            {
+                tempCatalogList.Add(kvp.Key);
+            }
+        }
+
+        foreach (int catalogToRemove in tempCatalogList)
+        {
+            if (orbitMeshes[catalogToRemove] != null)
+            {
+                Destroy(orbitMeshes[catalogToRemove]);
+            }
+            orbitMeshes.Remove(catalogToRemove);
         }
     }
 
