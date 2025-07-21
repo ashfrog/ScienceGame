@@ -796,18 +796,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void RenderSatellites()
     {
-        // 获取当前显示组的颜色组
-        Color[] groupColors = GetGroupColors(currentDisplayGroupName);
         var propertyBlock = new MaterialPropertyBlock();
         foreach (var kvp in currentSatellitePositions)
         {
             int satNumber = kvp.Key;
             Vector3 position = kvp.Value;
 
+            // 根据 catalogNumber 找国家
+            if (!catalogToSatellite.TryGetValue(satNumber, out var satellite))
+                continue;
 
-
-            // 使用卫星编号来选择颜色组中的颜色，确保同一卫星总是使用相同颜色
-            Color satelliteColor = groupColors[satNumber % groupColors.Length];
+            Color[] countryColors = GetCountryColors(satellite.country);
+            Color satelliteColor = countryColors[satNumber % countryColors.Length];
 
             propertyBlock.SetColor("_UnlitColor", satelliteColor);
             propertyBlock.SetColor("_EmissiveColor", satelliteColor);
@@ -928,7 +928,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
 
         // 获取当前显示组的颜色组
-        Color[] groupColors = GetGroupColors(currentDisplayGroupName);
+        Color[] groupColors = GetCountryColors(currentDisplayGroupName);
 
         for (int i = 0; i < batch.Count; i++)
         {
@@ -937,27 +937,28 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             {
                 var propertyBlock = new MaterialPropertyBlock();
 
-                // 使用卫星编号来选择颜色组中的颜色，确保同一卫星的轨道和卫星点颜色一致
-                Color orbitColor = groupColors[satNumber % groupColors.Length];
+                if (catalogToSatellite.TryGetValue(satNumber, out var satellite))
+                {
+                    Color[] countryColors = GetCountryColors(satellite.country);
+                    Color orbitColor = countryColors[satNumber % countryColors.Length];
 
-                propertyBlock.SetColor("_UnlitColor", orbitColor);
-                propertyBlock.SetColor("_EmissiveColor", orbitColor);
-                propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
+                    propertyBlock.SetColor("_UnlitColor", orbitColor);
+                    propertyBlock.SetColor("_EmissiveColor", orbitColor);
+                    propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
 
-                Graphics.DrawMesh(orbitMeshes[satNumber], matrices[i], orbitMaterial, 0, null, 0, propertyBlock);
+                    Graphics.DrawMesh(orbitMeshes[satNumber], matrices[i], orbitMaterial, 0, null, 0, propertyBlock);
+                }
             }
         }
     }
 
     // 获取组颜色的辅助方法
-    private Color[] GetGroupColors(string groupName)
+    private Color[] GetCountryColors(string country)
     {
-        if (countryGroupColorGroups.ContainsKey(groupName))
-        {
-            return countryGroupColorGroups[groupName];
-        }
+        if (!string.IsNullOrEmpty(country) && countryGroupColorGroups.ContainsKey(country))
+            return countryGroupColorGroups[country];
 
-        // 如果没有找到对应的颜色组，返回白色数组作为默认颜色
+        // 如果没有找到对应的国家颜色组，返回白色数组作为默认颜色
         return new Color[] { Color.white };
     }
     int endy = 1980;
@@ -971,7 +972,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆");
         if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网");
         if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网");
-        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(1980, endy += 1);
+        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(1980, endy += 5);
+        if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(1980, endy -= 5);
 
 
         // 显示模式切换

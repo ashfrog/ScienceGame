@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 14.75466, g: 14.75118, b: 13.618759, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4423,9 +4423,9 @@ MonoBehaviour:
   orbitMaterial: {fileID: 2100000, guid: b924186dac45ada45b077d2676dcb8f4, type: 2}
   satelliteMaterial: {fileID: 2100000, guid: 41a98b239e8ed6a4ebeed5ecc2ed2f4c, type: 2}
   orbitScale: 0.0000002
-  orbitSegments: 120
+  orbitSegments: 360
   useGPUInstancing: 1
-  maxOrbitsPerBatch: 100
+  maxOrbitsPerBatch: 500
   satelliteSize: 0.03
   enableYearFilter: 1
   enableCountryFilter: 0
