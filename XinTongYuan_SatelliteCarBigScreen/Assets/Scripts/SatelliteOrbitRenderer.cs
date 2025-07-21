@@ -1104,14 +1104,14 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             currentSatellitePositions.Clear();  //清空卫星点
             List<int> allOrbits = tleSelDic[groupName].sel;
 
-            // 限制卫星数量以优化性能
-            if (allOrbits.Count > maxDisplaySatellites)
+            // 限制轨道数量以优化性能
+            if (allOrbits.Count > maxDisplayOrbits)
             {
                 // 均匀采样选择轨道，而不是只取前N个
                 List<int> selectedOrbits = new List<int>();
-                float step = (float)allOrbits.Count / maxDisplaySatellites;
+                float step = (float)allOrbits.Count / maxDisplayOrbits;
 
-                for (int i = 0; i < maxDisplaySatellites; i++)
+                for (int i = 0; i < maxDisplayOrbits; i++)
                 {
                     int index = Mathf.RoundToInt(i * step);
                     if (index < allOrbits.Count)
