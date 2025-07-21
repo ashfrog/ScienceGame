@@ -106,6 +106,18 @@ public class GameSettings : BaseSettings
         set => WriteValue("MaxDisplayOrbits", value.ToString());
     }
 
+    public int MaxDisplaySatellite
+    {
+        get => ReadInt("MaxDisplaySatellite", 5000);
+        set => WriteValue("MaxDisplaySatellite", value.ToString());
+    }
+
+    public int MaxOrbitsPerBatch
+    {
+        get => ReadInt("MaxOrbitsPerBatch", 1000);
+        set => WriteValue("MaxOrbitsPerBatch", value.ToString());
+    }
+
     public float PanelY
     {
         get => ReadFloat("PanelY", 1f);

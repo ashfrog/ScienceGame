@@ -111,14 +111,16 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     [Header("性能优化")]
     public int maxDisplayOrbits = 200; // 最大显示轨道数量
 
+    public int maxDisplaySatellites = 2000;//最大显示卫星数量
+
     // 用于避免重复GC的缓存列表
     private List<int> tempCatalogList = new List<int>(5000);
     private List<int> tempDisplayList = new List<int>(1000);
 
     void Start()
     {
-        SetMaxDisplayOrbits(Settings.ini.Game.MaxDisplayOrbits);
-
+        SetMaxDisplay(Settings.ini.Game.MaxDisplayOrbits, Settings.ini.Game.MaxDisplaySatellite);
+        maxOrbitsPerBatch = Settings.ini.Game.MaxOrbitsPerBatch;
         InitializeMaterials();
         CreateSatelliteMesh();
         LoadSatelliteData();
@@ -766,9 +768,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
     // 添加设置最大轨道数量的公共方法
-    public void SetMaxDisplayOrbits(int maxOrbits)
+    public void SetMaxDisplay(int maxOrbits, int maxSatellites)
     {
-        maxDisplayOrbits = Mathf.Clamp(maxOrbits, 10, 2000);
+        maxDisplayOrbits = Mathf.Clamp(maxOrbits, 10, 10000);
+
+        maxDisplaySatellites = Mathf.Clamp(maxSatellites, 10, 30000);
+
         Debug.Log($"最大显示轨道数量设置为: {maxDisplayOrbits}");
     }
 
@@ -955,6 +960,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         // 如果没有找到对应的颜色组，返回白色数组作为默认颜色
         return new Color[] { Color.white };
     }
+    int endy = 1980;
     void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS");
@@ -965,6 +971,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆");
         if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网");
         if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网");
+        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(1980, endy += 1);
+
 
         // 显示模式切换
         if (Input.GetKeyDown(KeyCode.Alpha0)) SetDisplayMode(DisplayMode.None);
@@ -988,8 +996,70 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         SetCountryFilter(!enableCountryFilter, selectedCountries);
     }
+    /// <summary>
+    /// 筛选所有符合年限的卫星数据
+    /// </summary>
+    /// <param name="startYear"></param>
+    /// <param name="endYear"></param>
+    public void SetDisplayAll(int startYear = 1980, int endYear = 2025)
+    {
 
+        currentDisplayGroupName = ""; // 清空分组名，表示非分组显示
 
+        // 更新年份筛选条件（如果传入的区间与当前不同则更新）
+        if (filterMinYear != startYear || filterMaxYear != endYear || !enableYearFilter)
+        {
+            SetYearFilter(true, startYear, endYear);
+        }
+        else
+        {
+            // 仅刷新筛选结果
+            RefreshFilteredData();
+        }
+
+        // 构建当前显示轨道列表，只包含筛选后的卫星，并且轨道数据存在
+        currentDisplayedOrbits = filteredCatalogNumbers
+            .Where(catalogNum => allOrbitElements.ContainsKey(catalogNum))
+            .ToList();
+
+        // 性能限制：轨道数量超出最大值时均匀采样
+        if (currentDisplayedOrbits.Count > maxDisplayOrbits)
+        {
+            List<int> selectedOrbits = new List<int>();
+            float step = (float)currentDisplayedOrbits.Count / maxDisplayOrbits;
+            for (int i = 0; i < maxDisplayOrbits; i++)
+            {
+                int index = Mathf.RoundToInt(i * step);
+                if (index < currentDisplayedOrbits.Count)
+                {
+                    selectedOrbits.Add(currentDisplayedOrbits[index]);
+                }
+            }
+            currentDisplayedOrbits = selectedOrbits;
+            Debug.Log($"筛选后轨道数超限: 仅显示 {currentDisplayedOrbits.Count}/{filteredCatalogNumbers.Count}");
+        }
+
+        // 更新Set以便后续清理Mesh用
+        currentDisplayedOrbitsSet = new HashSet<int>(currentDisplayedOrbits);
+
+        // 清空当前卫星位置缓存
+        currentSatellitePositions.Clear();
+
+        // 为每个卫星计算时间偏移，让它们在轨道上均匀分布
+        satelliteTimeOffsets.Clear();
+        int count = currentDisplayedOrbits.Count;
+        for (int i = 0; i < count; i++)
+        {
+            int satNumber = currentDisplayedOrbits[i];
+            float timeOffset = (float)i / count * 86400f;
+            satelliteTimeOffsets[satNumber] = timeOffset;
+        }
+
+        // 创建轨道Mesh
+        CreateOrbitMeshes(currentDisplayedOrbits);
+
+        Debug.Log($"显示全部（不分组）: {currentDisplayedOrbits.Count} 条轨道，年份 {startYear}-{endYear}");
+    }
 
     /// <summary>
     /// 根据星座名映射表展示选中卫星编号列表卫星和轨道

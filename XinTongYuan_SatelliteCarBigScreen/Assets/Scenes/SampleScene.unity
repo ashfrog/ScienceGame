@@ -1189,7 +1189,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &196024699
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1719,7 +1719,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &255211730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2773,7 +2773,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &507864422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3775,7 +3775,7 @@ PrefabInstance:
     - target: {fileID: 1098339232389368799, guid: a21da37f970e8d04898137a11bd396e2,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1102966126979881723, guid: a21da37f970e8d04898137a11bd396e2,
         type: 3}
@@ -4423,20 +4423,21 @@ MonoBehaviour:
   orbitMaterial: {fileID: 2100000, guid: b924186dac45ada45b077d2676dcb8f4, type: 2}
   satelliteMaterial: {fileID: 2100000, guid: 41a98b239e8ed6a4ebeed5ecc2ed2f4c, type: 2}
   orbitScale: 0.0000002
-  orbitSegments: 60
+  orbitSegments: 120
   useGPUInstancing: 1
   maxOrbitsPerBatch: 100
   satelliteSize: 0.03
   enableYearFilter: 1
   enableCountryFilter: 0
   filterMinYear: 1980
-  filterMaxYear: 1990
+  filterMaxYear: 2025
   selectedCountries:
   - US
   - CN
   - RU
   displayMode: 3
-  maxDisplayOrbits: 200
+  maxDisplayOrbits: 1000
+  maxDisplaySatellites: 2000
 --- !u!4 &941347486
 Transform:
   m_ObjectHideFlags: 0
@@ -6235,7 +6236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1338000340
 MonoBehaviour:
   m_ObjectHideFlags: 0
