@@ -794,27 +794,55 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return TransformToECI(orbitalPos, orbit) * orbitScale;
     }
 
+    // SatelliteOrbitRenderer.cs (仅返回修改部分)
+
     void RenderSatellites()
     {
+        if (currentSatellitePositions.Count == 0) return;
+
+        const int batchSize = 1023; // Unity顶点属性数组最大实例数
+        var matrices = new Matrix4x4[batchSize];
         var propertyBlock = new MaterialPropertyBlock();
+
+        // 预取摄像机朝向
+        Quaternion camRot = Camera.main ? Camera.main.transform.rotation : Quaternion.identity;
+
+        int i = 0;
         foreach (var kvp in currentSatellitePositions)
         {
             int satNumber = kvp.Key;
             Vector3 position = kvp.Value;
 
-            // 根据 catalogNumber 找国家
             if (!catalogToSatellite.TryGetValue(satNumber, out var satellite))
                 continue;
 
+            // 按国家着色
             Color[] countryColors = GetCountryColors(satellite.country);
             Color satelliteColor = countryColors[satNumber % countryColors.Length];
 
-            propertyBlock.SetColor("_UnlitColor", satelliteColor);
-            propertyBlock.SetColor("_EmissiveColor", satelliteColor);
-            propertyBlock.SetFloat("_EmissiveIntensity", 2.0f);
+            matrices[i] = Matrix4x4.TRS(position, camRot, Vector3.one);
 
-            Matrix4x4 matrix = Matrix4x4.TRS(position, Quaternion.LookRotation(Camera.main.transform.forward), Vector3.one);
-            Graphics.DrawMesh(satelliteMesh, matrix, satelliteMaterial, 0, null, 0, propertyBlock);
+            // 设置本批颜色
+            if (i == 0)
+            {
+                propertyBlock.SetColor("_UnlitColor", satelliteColor);
+                propertyBlock.SetColor("_EmissiveColor", satelliteColor);
+                propertyBlock.SetFloat("_EmissiveIntensity", 2.0f);
+            }
+
+            i++;
+
+            // 满一批或最后一批
+            if (i == batchSize)
+            {
+                Graphics.DrawMeshInstanced(satelliteMesh, 0, satelliteMaterial, matrices, batchSize, propertyBlock);
+                i = 0;
+            }
+        }
+        // 绘制最后不足一批的卫星
+        if (i > 0)
+        {
+            Graphics.DrawMeshInstanced(satelliteMesh, 0, satelliteMaterial, matrices, i, propertyBlock);
         }
     }
 
