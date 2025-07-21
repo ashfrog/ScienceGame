@@ -806,7 +806,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         // 预取摄像机朝向
         Quaternion camRot = Camera.main ? Camera.main.transform.rotation : Quaternion.identity;
-
+        Debug.Log(currentSatellitePositions.Count);
         int i = 0;
         foreach (var kvp in currentSatellitePositions)
         {
@@ -1052,12 +1052,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             .Where(catalogNum => allOrbitElements.ContainsKey(catalogNum))
             .ToList();
 
-        // 性能限制：轨道数量超出最大值时均匀采样
-        if (currentDisplayedOrbits.Count > maxDisplayOrbits)
+        // 性能限制：卫星数量超出最大值时均匀采样
+        if (currentDisplayedOrbits.Count > maxDisplaySatellites)
         {
             List<int> selectedOrbits = new List<int>();
-            float step = (float)currentDisplayedOrbits.Count / maxDisplayOrbits;
-            for (int i = 0; i < maxDisplayOrbits; i++)
+            float step = (float)currentDisplayedOrbits.Count / maxDisplaySatellites;
+            for (int i = 0; i < maxDisplaySatellites; i++)
             {
                 int index = Mathf.RoundToInt(i * step);
                 if (index < currentDisplayedOrbits.Count)
@@ -1066,7 +1066,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 }
             }
             currentDisplayedOrbits = selectedOrbits;
-            Debug.Log($"筛选后轨道数超限: 仅显示 {currentDisplayedOrbits.Count}/{filteredCatalogNumbers.Count}");
+            Debug.Log($"筛选后卫星数超限: 仅显示 {currentDisplayedOrbits.Count}/{filteredCatalogNumbers.Count}");
         }
 
         // 更新Set以便后续清理Mesh用
@@ -1088,7 +1088,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         // 创建轨道Mesh
         CreateOrbitMeshes(currentDisplayedOrbits);
 
-        Debug.Log($"显示全部（不分组）: {currentDisplayedOrbits.Count} 条轨道，年份 {startYear}-{endYear}");
+        Debug.Log($"显示全部（不分组）: {currentDisplayedOrbits.Count} 条卫星，年份 {startYear}-{endYear}");
     }
 
     /// <summary>
@@ -1104,14 +1104,14 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             currentSatellitePositions.Clear();  //清空卫星点
             List<int> allOrbits = tleSelDic[groupName].sel;
 
-            // 限制轨道数量以优化性能
-            if (allOrbits.Count > maxDisplayOrbits)
+            // 限制卫星数量以优化性能
+            if (allOrbits.Count > maxDisplaySatellites)
             {
                 // 均匀采样选择轨道，而不是只取前N个
                 List<int> selectedOrbits = new List<int>();
-                float step = (float)allOrbits.Count / maxDisplayOrbits;
+                float step = (float)allOrbits.Count / maxDisplaySatellites;
 
-                for (int i = 0; i < maxDisplayOrbits; i++)
+                for (int i = 0; i < maxDisplaySatellites; i++)
                 {
                     int index = Mathf.RoundToInt(i * step);
                     if (index < allOrbits.Count)
@@ -1120,12 +1120,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                     }
                 }
                 currentDisplayedOrbits = selectedOrbits;
-                Debug.Log($"限制显示 {groupName} 卫星群: {currentDisplayedOrbits.Count}/{allOrbits.Count} 个轨道");
+                Debug.Log($"限制显示 {groupName} 卫星群: {currentDisplayedOrbits.Count}/{allOrbits.Count} 个卫星");
             }
             else
             {
                 currentDisplayedOrbits = allOrbits;
-                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 个轨道");
+                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 个卫星");
             }
 
             // 为每个卫星计算时间偏移，让它们在轨道上均匀分布
@@ -1145,6 +1145,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Debug.LogWarning($"未找到卫星群: {groupName}");
         }
     }
+
 
     /// <summary>
     /// 加载国家轨道颜色组字典
