@@ -76,7 +76,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public DisplayMode displayMode = DisplayMode.Both;
 
     [Header("国家颜色设置")]
-    public Dictionary<string, Color[]> countryColorGroups;
+    public Dictionary<string, Color[]> countryGroupColorGroups;
     // 当前显示星座的名称
     private string currentDisplayGroupName = "";
 
@@ -281,7 +281,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         try
         {
-            countryColorGroups = LoadCountryGroupsColor(Path.Combine(Application.streamingAssetsPath, "countrycolors.json"));
+            countryGroupColorGroups = LoadCountryGroupsColor(Path.Combine(Application.streamingAssetsPath, "CountryGroupColors.json"));
         }
         catch (Exception ex)
         {
@@ -835,15 +835,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 tempCatalogList.Add(kvp.Key);
             }
         }
-
-        foreach (int catalogToRemove in tempCatalogList)
-        {
-            if (orbitMeshes[catalogToRemove] != null)
-            {
-                Destroy(orbitMeshes[catalogToRemove]);
-            }
-            orbitMeshes.Remove(catalogToRemove);
-        }
     }
 
     Mesh CreateOrbitMesh(OrbitElements orbit)
@@ -956,9 +947,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     // 获取组颜色的辅助方法
     private Color[] GetGroupColors(string groupName)
     {
-        if (countryColorGroups.ContainsKey(groupName))
+        if (countryGroupColorGroups.ContainsKey(groupName))
         {
-            return countryColorGroups[groupName];
+            return countryGroupColorGroups[groupName];
         }
 
         // 如果没有找到对应的颜色组，返回白色数组作为默认颜色

@@ -4420,14 +4420,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4041af84e27174047903b60552e7942e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  orbitMaterial: {fileID: 2100000, guid: 41a98b239e8ed6a4ebeed5ecc2ed2f4c, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: b924186dac45ada45b077d2676dcb8f4, type: 2}
   satelliteMaterial: {fileID: 2100000, guid: 41a98b239e8ed6a4ebeed5ecc2ed2f4c, type: 2}
   orbitScale: 0.0000002
   orbitSegments: 60
   useGPUInstancing: 1
-  maxOrbitsPerBatch: 1
+  maxOrbitsPerBatch: 100
   satelliteSize: 0.03
-  enableYearFilter: 0
+  enableYearFilter: 1
   enableCountryFilter: 0
   filterMinYear: 1980
   filterMaxYear: 1990
@@ -4435,7 +4435,7 @@ MonoBehaviour:
   - US
   - CN
   - RU
-  displayMode: 2
+  displayMode: 3
   maxDisplayOrbits: 200
 --- !u!4 &941347486
 Transform:
