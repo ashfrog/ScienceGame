@@ -1120,12 +1120,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                     }
                 }
                 currentDisplayedOrbits = selectedOrbits;
-                Debug.Log($"限制显示 {groupName} 卫星群: {currentDisplayedOrbits.Count}/{allOrbits.Count} 个卫星");
+                Debug.Log($"限制显示 {groupName} 卫星群: {currentDisplayedOrbits.Count}/{allOrbits.Count} 个轨道");
             }
             else
             {
                 currentDisplayedOrbits = allOrbits;
-                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 个卫星");
+                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 个轨道");
             }
 
             // 为每个卫星计算时间偏移，让它们在轨道上均匀分布
