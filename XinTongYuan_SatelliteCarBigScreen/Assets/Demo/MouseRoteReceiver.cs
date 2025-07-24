@@ -44,6 +44,9 @@ public class MouseRoteReceiver : MonoBehaviour
     [SerializeField]
     TMP_Text text_WX;
 
+    [SerializeField]
+    SatelliteOrbitRenderer satelliteOrbitRenderer;
+
 
     public enum TabUILabel //需要Inspector中TabSwitcher的allTabTypes保持一致
     {
@@ -410,6 +413,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                             orbitTabSwitcher.SwitchTab(index);
                             img_Introduce.sprite = sprites_Introduce[index];
+
                             //for (int i = 0; i < moons.Length; i++)
                             //{
                             //    moons[i].SetActive(false);

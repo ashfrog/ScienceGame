@@ -989,6 +989,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         // 如果没有找到对应的国家颜色组，返回白色数组作为默认颜色
         return new Color[] { Color.white };
     }
+    int starty = 1960;
     int endy = 1980;
     void HandleInput()
     {
@@ -1000,8 +1001,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆");
         if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网");
         if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网");
-        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(1980, endy += 5);
-        if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(1980, endy -= 5);
+        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(starty += 5, endy += 5, "CN");
+        if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(starty -= 5, endy -= 5, "CN");
 
 
         // 显示模式切换
@@ -1027,13 +1028,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         SetCountryFilter(!enableCountryFilter, selectedCountries);
     }
     /// <summary>
-    /// 筛选所有符合年限的卫星数据
+    /// 筛选所有符合年限以及国家的卫星数据
     /// </summary>
     /// <param name="startYear"></param>
     /// <param name="endYear"></param>
-    public void SetDisplayAll(int startYear = 1980, int endYear = 2025)
+    /// <param name="country">为空则不过滤国家，否则只显示指定国家</param>
+    public void SetDisplayAll(int startYear = 1980, int endYear = 2025, string country = "")
     {
-
         currentDisplayGroupName = ""; // 清空分组名，表示非分组显示
 
         // 更新年份筛选条件（如果传入的区间与当前不同则更新）
@@ -1045,6 +1046,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             // 仅刷新筛选结果
             RefreshFilteredData();
+        }
+
+        // 新增：处理国家筛选参数
+        if (!string.IsNullOrEmpty(country))
+        {
+            // 只显示指定国家
+            SetCountryFilter(true, new string[] { country });
+        }
+        else
+        {
+            // 不启用国家筛选
+            SetCountryFilter(false);
         }
 
         // 构建当前显示轨道列表，只包含筛选后的卫星，并且轨道数据存在
@@ -1088,7 +1101,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         // 创建轨道Mesh
         CreateOrbitMeshes(currentDisplayedOrbits);
 
-        Debug.Log($"显示全部（不分组）: {currentDisplayedOrbits.Count} 条卫星，年份 {startYear}-{endYear}");
+        Debug.Log($"显示全部（不分组）: {currentDisplayedOrbits.Count} 条卫星，年份 {startYear}-{endYear}，国家{(string.IsNullOrEmpty(country) ? "全部" : country)}");
     }
 
     /// <summary>
