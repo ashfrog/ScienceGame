@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using WebSocketSharp;
 /// <summary>
 /// https://app.keeptrack.space
 /// </summary>
@@ -52,7 +53,6 @@ public enum DisplayMode
 
 public class SatelliteOrbitRenderer : MonoBehaviour
 {
-
     [Header("渲染设置")]
     public Material orbitMaterial;
     public Material satelliteMaterial;
@@ -117,6 +117,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     private List<int> tempCatalogList = new List<int>(5000);
     private List<int> tempDisplayList = new List<int>(1000);
 
+    [SerializeField]
+    bool printSelectcatalogNumber = false;
+
     void Start()
     {
         SetMaxDisplay(Settings.ini.Game.MaxDisplayOrbits, Settings.ini.Game.MaxDisplaySatellite);
@@ -127,11 +130,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         LoadCountryColorGroups();
         ParseSatelliteData();
 
+        if (printSelectcatalogNumber)
+        {
+            string selectsatelite = "";
+            foreach (var satellite in allSatellites)
+            {
+                selectsatelite += satellite.catalogNumber + ",";
+            }
+            Debug.Log(selectsatelite);
+        }
+
         PreprocessSatelliteData(); // 预处理所有数据
         LoadSelectionGroups();
-
-        // 默认显示GPS
-        SetDisplayGroup("格洛纳斯");
     }
 
     private float logMinYear;
@@ -255,6 +265,22 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         satelliteMesh.RecalculateNormals();
         satelliteMesh.RecalculateBounds();
     }
+
+    /// <summary>
+    /// 辅助筛选星座卫星工具
+    /// </summary>
+    public enum SelectName
+    {
+        QIANFAN, //千帆
+        BEIDOU, //北斗
+        ONEWEB, //一网
+        HULIANGWANG,//国网
+        CZ, //国家航天局卫星
+    }
+
+    [SerializeField]
+    SelectName selectName;
+
     void LoadSatelliteData()
     {
         try
@@ -263,15 +289,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             string jsonData = File.ReadAllText(filePath);
             allSatellites = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SatelliteData>>(jsonData);
 
-            List<string> buses = new List<string>();
-            foreach (var satellite in allSatellites)
+            if (printSelectcatalogNumber)
             {
-                if (satellite.country == "CN" && satellite.bus != null)
+                if (!String.IsNullOrEmpty(selectName.ToString()))
                 {
-                    buses.Add(satellite.bus);
+                    allSatellites = allSatellites.Where(s => s.name != null && s.name.StartsWith(selectName.ToString())).ToList();
+                    Debug.Log($"筛选出包含 '{selectName.ToString()}' 的卫星: {allSatellites.Count} 个");
+                }
+                else
+                {
+                    Debug.Log("未指定特定的bus名称，加载所有卫星数据");
                 }
             }
-            Debug.Log(buses.ToString());
         }
         catch (Exception e)
         {
@@ -539,9 +568,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             {
                 string yearStr = satellite.stableDate?.Substring(0, 4);
 
-                if (string.IsNullOrEmpty(yearStr) || !int.TryParse(yearStr, out int year))
+                if (string.IsNullOrEmpty(yearStr))
                 {
-                    Debug.Log("丢弃解析失败日期:" + satellite.stableDate);
+                    continue;
+                }
+                if (!int.TryParse(yearStr, out int year))
+                {
+                    Debug.Log("提取前4位日期失败:" + satellite.stableDate);
                     continue;
                 }
                 if (year < filterMinYear || year > filterMaxYear)
@@ -806,7 +839,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         // 预取摄像机朝向
         Quaternion camRot = Camera.main ? Camera.main.transform.rotation : Quaternion.identity;
-        Debug.Log(currentSatellitePositions.Count);
         int i = 0;
         foreach (var kvp in currentSatellitePositions)
         {
@@ -989,20 +1021,20 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         // 如果没有找到对应的国家颜色组，返回白色数组作为默认颜色
         return new Color[] { Color.white };
     }
-    int starty = 1960;
-    int endy = 1980;
+    int starty = 1980;
+    int endy = 2025;
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS");
-        if (Input.GetKeyDown(KeyCode.S)) SetDisplayGroup("格洛纳斯");
-        if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链");
-        if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("伽利略");
-        if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("北斗");
-        if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆");
-        if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网");
-        if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网");
-        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(starty += 5, endy += 5, "CN");
-        if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(starty -= 5, endy -= 5, "CN");
+        if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS星座");
+        if (Input.GetKeyDown(KeyCode.S)) SetDisplayGroup("格洛纳斯星座");
+        if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链星座");
+        if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("伽利略星座");
+        if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("北斗星座");
+        if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆星座");
+        if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网星座");
+        if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网卫星");
+        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(starty += 5, endy += 5, "");
+        if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(starty -= 5, endy -= 5, "");
 
 
         // 显示模式切换
@@ -1113,7 +1145,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (tleSelDic.ContainsKey(groupName))
         {
             currentDisplayGroupName = groupName; // 记录当前显示的组名
-
+            SetDisplayMode(DisplayMode.Both);
             currentSatellitePositions.Clear();  //清空卫星点
             List<int> allOrbits = tleSelDic[groupName].sel;
 
@@ -1138,7 +1170,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             else
             {
                 currentDisplayedOrbits = allOrbits;
-                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 个轨道");
+                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 颗卫星的轨道");
             }
 
             // 为每个卫星计算时间偏移，让它们在轨道上均匀分布

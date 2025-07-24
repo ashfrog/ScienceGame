@@ -58,7 +58,20 @@ public class MouseRoteReceiver : MonoBehaviour
         地球, 年份卫星数量, 卫星展示, 卫星轨道, 车模, 卫星光点
     }
     public TabSwitcher tabSwitcher_Obj;
-
+    /// <summary>
+    /// index对应星座
+    /// </summary>
+    public enum ConstellationGroup
+    {
+        伽利略星座,
+        国网星座,
+        千帆星座,
+        北斗星座,
+        格洛纳斯星座,
+        GPS星座,
+        星链星座,
+        一网卫星
+    }
 
     public enum EarthGroup
     {
@@ -254,6 +267,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
                                     tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                                     orbitTabSwitcher.SwitchTab(0);
+                                    satelliteOrbitRenderer.SetDisplayGroup("伽利略星座");
                                     //for (int i = 1; i < moons.Length; i++)
                                     //{
                                     //    moons[i].SetActive(false);
@@ -274,6 +288,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //Panel_level1_1_2.SetActive(false);
                                     tabSwitcher_Obj.Hide();
                                     oribit.gameObject.SetActive(false);
+                                    satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                                     for (int i = 0; i < moons.Length; i++)
                                     {
                                         moons[i].SetActive(true);
@@ -412,6 +427,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             int index = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                             tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                             orbitTabSwitcher.SwitchTab(index);
+                            satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ConstellationGroup), index));
                             img_Introduce.sprite = sprites_Introduce[index];
 
                             //for (int i = 0; i < moons.Length; i++)
