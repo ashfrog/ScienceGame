@@ -1,10 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using Lean.Common;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Windows;
 using WebSocketSharp;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
+using File = System.IO.File;
+using Input = UnityEngine.Input;
 /// <summary>
 /// https://app.keeptrack.space
 /// </summary>
@@ -67,7 +72,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public bool enableCountryFilter = false;
     public int filterMinYear = 1970;
     public int filterMaxYear = 2025;
-    public string[] selectedCountries = new string[] { "US", "CN", "RU" }; // 默认选择的国家
+    public List<String> selectedCountries = new List<string> { "US", "CN", "RU" }; // 默认选择的国家
 
     // 添加筛选后的卫星数据缓存
     private List<SatelliteData> filteredSatellites = new List<SatelliteData>();
@@ -632,7 +637,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         Debug.Log($"年份筛选{(enabled ? "已启用" : "已禁用")}: {minYear} - {maxYear}");
     }
 
-    public void SetCountryFilter(bool enabled, string[] countries = null)
+    public void SetCountryFilter(bool enabled, List<string> countries = null)
     {
         enableCountryFilter = enabled;
         if (countries != null)
@@ -644,6 +649,10 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         RefreshCurrentDisplay();
 
         Debug.Log($"国家筛选{(enabled ? "已启用" : "已禁用")}: {string.Join(", ", selectedCountries)}");
+    }
+    public void SetCountryFilter(bool enabled, string country = "")
+    {
+        SetCountryFilter(enabled, country.Split(',').ToList());
     }
 
     // 快速筛选方法 - 基于预计算的映射
@@ -1126,6 +1135,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     /// <param name="country">为空则不过滤国家，否则只显示指定国家</param>
     public void SetDisplayAll(int startYear = 1980, int endYear = 2025, string country = "")
     {
+        if (displayMode.Equals(DisplayMode.None))
+        {
+            displayMode = DisplayMode.SatelliteOnly;
+        }
+
         currentDisplayGroupName = ""; // 清空分组名，表示非分组显示
 
         // 更新年份筛选条件（如果传入的区间与当前不同则更新）
@@ -1143,12 +1157,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (!string.IsNullOrEmpty(country))
         {
             // 只显示指定国家
-            SetCountryFilter(true, new string[] { country });
+            SetCountryFilter(true, country.Split(',').ToList());
         }
         else
         {
             // 不启用国家筛选
-            SetCountryFilter(false);
+            SetCountryFilter(false, "");
         }
 
         // 构建当前显示轨道列表，只包含筛选后的卫星，并且轨道数据存在

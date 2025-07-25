@@ -8620,8 +8620,8 @@ MonoBehaviour:
   pitch: 2
   pitchSensitivity: 0.25
   pitchClamp: 1
-  pitchMin: -2
-  pitchMax: 40
+  pitchMin: -90
+  pitchMax: 90
   yaw: 0
   yawSensitivity: 0.25
   yawClamp: 0

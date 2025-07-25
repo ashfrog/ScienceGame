@@ -35,7 +35,7 @@ public class MouseRoteReceiver : MonoBehaviour
 
     public Sprite[] sprites_Introduce;   //介绍图组
     public Image img_Introduce;  //图片介绍组件
-    public GameObject WeiXingGuangDian;  //卫星光点
+    //public GameObject WeiXingGuangDian;  //卫星光点
     public GameObject[] cars;
     public GameObject oribit; //卫星轨道模型
     public GameObject[] moons; //卫星光点组
@@ -92,6 +92,8 @@ public class MouseRoteReceiver : MonoBehaviour
 
 
     private float defaultCameraFieldofView;
+
+    string countrys = "CN,US,UK"; //逗号分割的国家缩写
 
 
     // Start is called before the first frame update
@@ -263,10 +265,13 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ReturnP1_1();
                                     break;
                                 case "星座展示"://1-2 卫星星座展示
+                                    leanPitchYaw.PitchMin = -90f;
+                                    leanPitchYaw.PitchMax = 90f;
                                     print(cmd + " " + cmdparam);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
                                     tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                                     orbitTabSwitcher.SwitchTab(0);
+                                    satelliteOrbitRenderer.SetBaseSatelliteScale(50);
                                     satelliteOrbitRenderer.SetDisplayGroup("伽利略星座");
                                     //for (int i = 1; i < moons.Length; i++)
                                     //{
@@ -282,6 +287,9 @@ public class MouseRoteReceiver : MonoBehaviour
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
+                                    leanPitchYaw.PitchMin = 10f;
+                                    leanPitchYaw.PitchMax = 90f;
+                                    leanPitchYaw.Pitch = 10f;
                                     print(cmd + " " + cmdparam);
                                     StopDoTween();
                                     camObj.fieldOfView = defaultCameraFieldofView;
@@ -297,6 +305,8 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ReturnP1_1();
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
+                                    leanPitchYaw.PitchMin = -90f;
+                                    leanPitchYaw.PitchMax = 90f;
                                     print(cmd + " " + cmdparam);
                                     //Panel_level1_1_3.SetActive(true);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_3);
@@ -311,32 +321,42 @@ public class MouseRoteReceiver : MonoBehaviour
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
+                                    leanPitchYaw.PitchMin = 10f;
+                                    leanPitchYaw.PitchMax = 90f;
+                                    leanPitchYaw.Pitch = 10f;
                                     print(cmd + " " + cmdparam);
                                     StopDoTween();
+                                    satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                                     //Panel_level1_1_3.SetActive(true);
                                     //Panel_卫星在空姿态.SetActive(false);
 
-                                    WeiXingGuangDian.SetActive(true);
+                                    //WeiXingGuangDian.SetActive(true);
                                     //ReturnP1_1();
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比
+                                    leanPitchYaw.PitchMin = -90f;
+                                    leanPitchYaw.PitchMax = 90f;
                                     print(cmd + " " + cmdparam);
                                     //Panel_level1_1_3.SetActive(false);
                                     //Panel_卫星在空姿态.SetActive(true);
-                                    WeiXingGuangDian.SetActive(false);
+                                    //WeiXingGuangDian.SetActive(false);
                                     //obj = theEarth;
                                     break;
                                 case "在空姿态返回":// 1-3返回 1
+                                    leanPitchYaw.PitchMin = 10f;
+                                    leanPitchYaw.PitchMax = 90f;
+                                    leanPitchYaw.Pitch = 10f;
                                     print(cmd + " " + cmdparam);
                                     StopDoTween();
                                     //Panel_level1_1_3.SetActive(false);
                                     tabSwitcher_Obj.Hide();
                                     theEarth.transform.localPosition = new Vector3(0, 0, 0); //重置地球位置
                                     camObj.fieldOfView = defaultCameraFieldofView; //重置相机视角
-                                    for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
-                                    {
-                                        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
-                                    }
+                                    satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
+                                    //for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
+                                    //{
+                                    //    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
+                                    //}
                                     ReturnP1_1();
                                     //Panel_LoopVideo.SetActive(true);
                                     //MainPageLoop();
@@ -442,80 +462,103 @@ public class MouseRoteReceiver : MonoBehaviour
                     case OrderTypeEnum.Reload:            //星座对比
                         {
                             Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
-                            int index1 = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
-                            for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
-                            {
-                                WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
-                            }
-                            if (index1 > 6 && index1 <= 13)
-                            {
-                                WeiXingGuangDian.transform.GetChild(1).gameObject.SetActive(true);
-                            }
-                            if (index1 > 13 && index1 <= 16)
-                            {
-                                for (int i = 0; i <= 2; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
-                            if (index1 == 17)
-                            {
-                                for (int i = 0; i <= 3; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
-                            if (index1 == 18)
-                            {
-                                for (int i = 0; i <= 4; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
-                            if (index1 == 19)
-                            {
-                                for (int i = 0; i <= 5; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
-                            if (index1 == 20)
-                            {
-                                for (int i = 0; i <= 6; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
-                            if (index1 == 21)
-                            {
-                                for (int i = 0; i <= 7; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
-                            if (index1 == 22)
-                            {
-                                for (int i = 0; i <= 8; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
-                            if (index1 == 23)
-                            {
-                                for (int i = 0; i <= 9; i++)
-                                {
-                                    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
-                                }
-                            }
+                            int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                            satelliteOrbitRenderer.SetDisplayAll(year - 10, year, countrys);
+                            //satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
+                            //for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
+                            //{
+                            //    WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(false);
+                            //}
+                            //if (index1 > 6 && index1 <= 13)
+                            //{
+                            //    WeiXingGuangDian.transform.GetChild(1).gameObject.SetActive(true);
+                            //}
+                            //if (index1 > 13 && index1 <= 16)
+                            //{
+                            //    for (int i = 0; i <= 2; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
+                            //if (index1 == 17)
+                            //{
+                            //    for (int i = 0; i <= 3; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
+                            //if (index1 == 18)
+                            //{
+                            //    for (int i = 0; i <= 4; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
+                            //if (index1 == 19)
+                            //{
+                            //    for (int i = 0; i <= 5; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
+                            //if (index1 == 20)
+                            //{
+                            //    for (int i = 0; i <= 6; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
+                            //if (index1 == 21)
+                            //{
+                            //    for (int i = 0; i <= 7; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
+                            //if (index1 == 22)
+                            //{
+                            //    for (int i = 0; i <= 8; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
+                            //if (index1 == 23)
+                            //{
+                            //    for (int i = 0; i <= 9; i++)
+                            //    {
+                            //        WeiXingGuangDian.transform.GetChild(i).gameObject.SetActive(true);
+                            //    }
+                            //}
                         }
+                        break;
+                    case OrderTypeEnum.DrawOrbit:
+                        bool drawOrbit = JsonConvert.DeserializeObject<bool>(Encoding.UTF8.GetString(info.Body));
+                        if (drawOrbit)
+                        {
+                            satelliteOrbitRenderer.SetDisplayMode(DisplayMode.Both);
+                        }
+                        else
+                        {
+                            satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
+                        }
+                        break;
+                    case OrderTypeEnum.CountryFilterChange:
+                        countrys = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+                        satelliteOrbitRenderer.SetCountryFilter(true, countrys);
                         break;
                     case OrderTypeEnum.WeiXingDot:
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                         {
                             int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                             Debug.Log(year);
+                            ResetZ(60);
+                            wxTabSwitcher.SwitchTab(-1);
+                            theEarth.SetActive(true);
+
+                            satelliteOrbitRenderer.SetBaseSatelliteScale(20);
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             satelliteOrbitRenderer.SetDisplayAll(1970, year);
+                            litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
                             //for (int i = 0; i < WeiXingGuangDian.transform.childCount; i++)
                             //{
                             //    int value = Mathf.CeilToInt(progressValue * 10);
@@ -550,6 +593,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                         break;
                     case OrderTypeEnum.WeiXingView: //卫星视图 卫星展示
+                        satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                         string weixingraw = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
 

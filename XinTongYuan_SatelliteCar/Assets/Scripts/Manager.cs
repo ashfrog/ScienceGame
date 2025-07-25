@@ -136,10 +136,11 @@ public class Manager : MonoBehaviour
         Destroy(_stickyHeaderTable.headerRow);
         _satelliteDataReader.initialize(index);
     }
-    public void OnYear(int index)
+    public void OnYear(int year)
     {
+        int index = (year - 1978) / 2; // 计算索引
         img_year.sprite = years[index];
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, index);
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, year);
     }
 
     //public void OnCarModel()  //汽车模型

@@ -32,6 +32,11 @@ public enum OrderTypeEnum
     Str = 20,
 
     /// <summary>
+    /// 绘制卫星轨道
+    /// </summary>
+    DrawOrbit = 21,
+
+    /// <summary>
     /// 旋转增量
     /// </summary>
     Rotate = 30,
@@ -117,6 +122,11 @@ public enum OrderTypeEnum
     GetCurMovieName = 408,
 
     TabControl = 500,
+
+    /// <summary>
+    /// 国家筛选器变更
+    /// </summary>
+    CountryFilterChange = 501,
 
     /// <summary>
     /// 播放地屏视频
