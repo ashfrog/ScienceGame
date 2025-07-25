@@ -512,25 +512,26 @@ public class MouseRoteReceiver : MonoBehaviour
                     case OrderTypeEnum.WeiXingDot:
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                         {
-                            float progressValue = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(info.Body));
-                            Debug.Log(progressValue);
-
-                            for (int i = 0; i < WeiXingGuangDian.transform.childCount; i++)
-                            {
-                                int value = Mathf.CeilToInt(progressValue * 10);
-                                Transform item = WeiXingGuangDian.transform.GetChild(i);
-                                if (item != null)
-                                {
-                                    if (value <= i)
-                                    {
-                                        item.gameObject.SetActive(false);
-                                    }
-                                    else
-                                    {
-                                        item.gameObject.SetActive(true);
-                                    }
-                                }
-                            }
+                            int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                            Debug.Log(year);
+                            satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
+                            satelliteOrbitRenderer.SetDisplayAll(1970, year);
+                            //for (int i = 0; i < WeiXingGuangDian.transform.childCount; i++)
+                            //{
+                            //    int value = Mathf.CeilToInt(progressValue * 10);
+                            //    Transform item = WeiXingGuangDian.transform.GetChild(i);
+                            //    if (item != null)
+                            //    {
+                            //        if (value <= i)
+                            //        {
+                            //            item.gameObject.SetActive(false);
+                            //        }
+                            //        else
+                            //        {
+                            //            item.gameObject.SetActive(true);
+                            //        }
+                            //    }
+                            //}
                         }
                         break;
                     case OrderTypeEnum.SetPlayMovie://汽车模型浏览
