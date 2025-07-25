@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 14.75466, g: 14.75118, b: 13.618759, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5036,9 +5036,15 @@ MonoBehaviour:
   - CN
   - RU
   displayMode: 0
+  keepConstantVisualSize: 1
+  referenceFOV: 60
+  minScale: 0.01
+  maxScale: 0.05
+  baseSatelliteScale: 50
   maxDisplayOrbits: 1000
   maxDisplaySatellites: 2000
   printSelectcatalogNumber: 0
+  objCamera: {fileID: 963194227}
   selectName: 3
 --- !u!4 &941347486
 Transform:

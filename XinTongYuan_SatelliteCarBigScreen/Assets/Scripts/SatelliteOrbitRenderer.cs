@@ -80,6 +80,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     // 当前显示星座的名称
     private string currentDisplayGroupName = "";
 
+    [Header("卫星视觉设置")]
+    public bool keepConstantVisualSize = true; // 是否保持恒定视觉大小
+    public float referenceFOV = 60f; // 参考FOV，在此FOV下卫星显示为原始大小
+    public float minScale = 0.001f; // 最小缩放比例
+    public float maxScale = 10f; // 最大缩放比例
+    public float baseSatelliteScale = 1f; // 基础卫星缩放系数
 
     // 核心数据 - 预解析的数据，避免重复解析
     private List<SatelliteData> allSatellites = new List<SatelliteData>();
@@ -119,6 +125,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     [SerializeField]
     bool printSelectcatalogNumber = false;
+
+    [SerializeField]
+    private Camera objCamera;
 
     void Start()
     {
@@ -166,6 +175,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             RenderSatellites();
         }
+        referenceFOV = objCamera.fieldOfView;
     }
 
     // 获取可用国家列表的方法
@@ -827,18 +837,22 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return TransformToECI(orbitalPos, orbit) * orbitScale;
     }
 
-    // SatelliteOrbitRenderer.cs (仅返回修改部分)
-
     void RenderSatellites()
     {
         if (currentSatellitePositions.Count == 0) return;
 
-        const int batchSize = 1023; // Unity顶点属性数组最大实例数
+        const int batchSize = 1023;
         var matrices = new Matrix4x4[batchSize];
         var propertyBlock = new MaterialPropertyBlock();
 
-        // 预取摄像机朝向
-        Quaternion camRot = Camera.main ? Camera.main.transform.rotation : Quaternion.identity;
+        // 获取摄像机信息
+        Camera cam = Camera.main;
+        if (cam == null) return;
+
+        Vector3 camPos = cam.transform.position;
+        Quaternion camRot = cam.transform.rotation;
+        float currentFOV = cam.fieldOfView;
+
         int i = 0;
         foreach (var kvp in currentSatellitePositions)
         {
@@ -848,14 +862,33 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             if (!catalogToSatellite.TryGetValue(satNumber, out var satellite))
                 continue;
 
+            // 基于FOV和距离计算缩放比例以保持恒定视觉大小
+            Vector3 scale = Vector3.one * baseSatelliteScale;
+            if (keepConstantVisualSize)
+            {
+                float distance = Vector3.Distance(camPos, position);
+
+                // FOV缩放因子：FOV越小（放大），卫星应该越大
+                float fovScaleFactor = referenceFOV / currentFOV;
+
+                // 距离缩放因子：基于透视投影，距离越远卫星应该越大以保持视觉大小
+                float distanceScaleFactor = distance / 100f; // 100为基准距离
+
+                // 综合缩放因子
+                float totalScaleFactor = fovScaleFactor * distanceScaleFactor;
+                totalScaleFactor = Mathf.Clamp(totalScaleFactor, minScale, maxScale);
+
+                scale = Vector3.one * baseSatelliteScale * totalScaleFactor;
+            }
+
+            matrices[i] = Matrix4x4.TRS(position, camRot, scale);
+
             // 按国家着色
             Color[] countryColors = GetCountryColors(satellite.country);
             Color satelliteColor = countryColors[satNumber % countryColors.Length];
 
-            matrices[i] = Matrix4x4.TRS(position, camRot, Vector3.one);
-
-            // 设置本批颜色
-            if (i == 0)
+            // 设置本批颜色（这里可以优化为按颜色分批）
+            if (i == 0 || i % 100 == 0) // 每100个卫星更新一次颜色，减少性能开销
             {
                 propertyBlock.SetColor("_UnlitColor", satelliteColor);
                 propertyBlock.SetColor("_EmissiveColor", satelliteColor);
@@ -871,6 +904,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 i = 0;
             }
         }
+
         // 绘制最后不足一批的卫星
         if (i > 0)
         {
@@ -878,6 +912,17 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
+    public void SetConstantVisualSize(bool enabled, float refFOV = 60f)
+    {
+        keepConstantVisualSize = enabled;
+        referenceFOV = refFOV;
+        Debug.Log($"卫星恒定视觉大小: {(enabled ? "开启" : "关闭")}, 参考FOV: {refFOV}°");
+    }
+    public void SetBaseSatelliteScale(float scale)
+    {
+        baseSatelliteScale = Mathf.Clamp(scale, 0.01f, 100f);
+        Debug.Log($"基础卫星缩放设置为: {baseSatelliteScale}");
+    }
     void CreateOrbitMeshes(List<int> satelliteNumbers)
     {
         // 只创建新的轨道mesh，不销毁现有的（增量更新）
@@ -1043,9 +1088,23 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
 
-        // 新增筛选快捷键
-        if (Input.GetKeyDown(KeyCode.Y)) ToggleYearFilter();
-        if (Input.GetKeyDown(KeyCode.C)) ToggleCountryFilter();
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            SetConstantVisualSize(!keepConstantVisualSize, referenceFOV);
+        }
+
+        // 调整基础卫星大小
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            if (Input.GetKeyDown(KeyCode.Equals)) // Ctrl + =
+            {
+                SetBaseSatelliteScale(baseSatelliteScale * 1.2f);
+            }
+            if (Input.GetKeyDown(KeyCode.Minus)) // Ctrl + -
+            {
+                SetBaseSatelliteScale(baseSatelliteScale / 1.2f);
+            }
+        }
     }
 
     // 切换年份筛选
