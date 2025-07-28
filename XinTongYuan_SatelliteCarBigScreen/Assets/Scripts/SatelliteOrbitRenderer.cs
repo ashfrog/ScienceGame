@@ -650,6 +650,15 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         Debug.Log($"国家筛选{(enabled ? "已启用" : "已禁用")}: {string.Join(", ", selectedCountries)}");
     }
+
+    /// <summary>
+    /// 刷新卫星显示
+    /// </summary>
+    public void RefreshData()
+    {
+        SetDisplayAll(filterMinYear, filterMaxYear, string.Join(",", selectedCountries));
+    }
+
     public void SetCountryFilter(bool enabled, string country = "")
     {
         SetCountryFilter(enabled, country.Split(',').ToList());
