@@ -135,6 +135,8 @@ public class Manager : MonoBehaviour
     {
         Destroy(_stickyHeaderTable.headerRow);
         _satelliteDataReader.initialize(index);
+        Debug.Log(index);
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.ShowGroup, index);
     }
     public void OnYear(int year)
     {

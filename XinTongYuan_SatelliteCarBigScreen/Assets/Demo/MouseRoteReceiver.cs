@@ -73,6 +73,19 @@ public class MouseRoteReceiver : MonoBehaviour
         一网卫星
     }
 
+    public enum ExelSheetGroup
+    {
+        北斗星座,
+        GPS星座,
+        国网星座,
+        千帆星座,
+        星链星座,
+        一网卫星,
+        伽利略星座,
+        格洛纳斯星座,
+    }
+
+
     public enum EarthGroup
     {
         北斗一号, 北斗二号, 北斗三号, 全球定位系统1, 全球定位系统2, 伽俐略, 千帆, 星链, 一网, 格洛纳斯A, 格洛纳斯B
@@ -459,11 +472,23 @@ public class MouseRoteReceiver : MonoBehaviour
                         }
 
                         break;
+                    case OrderTypeEnum.ShowGroup:          //卫星姿态选星座exelsheet
+                        {
+                            int exelsheetindex = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                            satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ExelSheetGroup), exelsheetindex), DisplayMode.SatelliteOnly);
+                            ResetZ(ExelSheetGroupIndexToConstellationGroupIndex(exelsheetindex));
+                            wxTabSwitcher.SwitchTab(-1);
+                            theEarth.SetActive(true);
+                            litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
+                        }
+
+                        break;
                     case OrderTypeEnum.Reload:            //星座对比
                         {
                             Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                             int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                             satelliteOrbitRenderer.SetDisplayAll(year - 10, year, countrys);
+                            litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                             //satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             //for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
                             //{
@@ -824,5 +849,26 @@ public class MouseRoteReceiver : MonoBehaviour
                 break;
         }
         leanPitchYaw.Camera.DOFieldOfView(z, 1f);
+    }
+
+    /// <summary>
+    /// ExelSheetGroup 的枚举值转换成字符串，然后在 ConstellationGroup 中查找相同名称的枚举，并返回其索引。
+    /// </summary>
+    /// <param name="exelIndex"></param>
+    /// <returns></returns>
+    public static int ExelSheetGroupIndexToConstellationGroupIndex(int exelIndex)
+    {
+        string exelName = Enum.GetName(typeof(ExelSheetGroup), exelIndex);
+        Array constellationValues = Enum.GetValues(typeof(ConstellationGroup));
+        for (int i = 0; i < constellationValues.Length; i++)
+        {
+            string constellationName = Enum.GetName(typeof(ConstellationGroup), i);
+            if (constellationName == exelName)
+            {
+                return i;
+            }
+        }
+        // 如果没找到，返回 -1
+        return -1;
     }
 }

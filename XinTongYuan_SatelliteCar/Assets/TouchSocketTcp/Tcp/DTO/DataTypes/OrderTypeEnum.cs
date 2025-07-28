@@ -63,6 +63,8 @@ public enum OrderTypeEnum
     VolumnUp = 105,
     VolumnDown = 106,
 
+    ShowGroup = 110,
+
     /// <summary>
     /// 获取当前播放进度
     /// </summary>

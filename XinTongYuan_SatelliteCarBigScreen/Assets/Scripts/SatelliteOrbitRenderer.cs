@@ -1222,12 +1222,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     /// 根据星座名映射表展示选中卫星编号列表卫星和轨道
     /// </summary>
     /// <param name="groupName">组名 星座卫星群</param>
-    public void SetDisplayGroup(string groupName)
+    public void SetDisplayGroup(string groupName, DisplayMode displayMode = DisplayMode.Both)
     {
         if (tleSelDic.ContainsKey(groupName))
         {
             currentDisplayGroupName = groupName; // 记录当前显示的组名
-            SetDisplayMode(DisplayMode.Both);
+            SetDisplayMode(displayMode);
             currentSatellitePositions.Clear();  //清空卫星点
             List<int> allOrbits = tleSelDic[groupName].sel;
 
