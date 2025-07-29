@@ -300,8 +300,6 @@ public class MouseRoteReceiver : MonoBehaviour
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
-                                    leanPitchYaw.PitchMin = 10f;
-                                    leanPitchYaw.PitchMax = 90f;
                                     leanPitchYaw.Pitch = 10f;
                                     print(cmd + " " + cmdparam);
                                     StopDoTween();
@@ -318,8 +316,6 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ReturnP1_1();
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
-                                    leanPitchYaw.PitchMin = -90f;
-                                    leanPitchYaw.PitchMax = 90f;
                                     print(cmd + " " + cmdparam);
                                     //Panel_level1_1_3.SetActive(true);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_3);
@@ -334,8 +330,6 @@ public class MouseRoteReceiver : MonoBehaviour
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
-                                    leanPitchYaw.PitchMin = 10f;
-                                    leanPitchYaw.PitchMax = 90f;
                                     leanPitchYaw.Pitch = 10f;
                                     print(cmd + " " + cmdparam);
                                     StopDoTween();
@@ -347,17 +341,16 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //ReturnP1_1();
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比
-                                    leanPitchYaw.PitchMin = -90f;
-                                    leanPitchYaw.PitchMax = 90f;
                                     print(cmd + " " + cmdparam);
+                                    leanPitchYaw.Pitch = 10f;
+                                    leanPitchYaw.Camera.DOFieldOfView(35f, 1f);
+                                    wxTabSwitcher.SwitchTab(-1);
                                     //Panel_level1_1_3.SetActive(false);
                                     //Panel_卫星在空姿态.SetActive(true);
                                     //WeiXingGuangDian.SetActive(false);
                                     //obj = theEarth;
                                     break;
                                 case "在空姿态返回":// 1-3返回 1
-                                    leanPitchYaw.PitchMin = 10f;
-                                    leanPitchYaw.PitchMax = 90f;
                                     leanPitchYaw.Pitch = 10f;
                                     print(cmd + " " + cmdparam);
                                     StopDoTween();
@@ -378,6 +371,9 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "汽车":
                                     print(cmd + " " + cmdparam);
+                                    leanPitchYaw.PitchMin = 10f;
+                                    leanPitchYaw.PitchMax = 90f;
+                                    leanPitchYaw.Pitch = 10f;
                                     tabSwitcher_Obj.Hide();
                                     //tabSwitcher_UI.SwitchTab(TabUILabel.P汽车百年进化论);
                                     //video_car.SetActive(true);
@@ -585,6 +581,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             satelliteOrbitRenderer.SetDisplayAll(1970, year);
                             litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
+                            litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                             //for (int i = 0; i < WeiXingGuangDian.transform.childCount; i++)
                             //{
                             //    int value = Mathf.CeilToInt(progressValue * 10);
@@ -643,25 +640,25 @@ public class MouseRoteReceiver : MonoBehaviour
                             }
                             else if (name.Contains("全球定位"))
                             {
-                                int id = weixingindex % 2;
-                                if (id == 0)
+
+                                if (name.Contains("A"))
                                 {
                                     wxTabSwitcher.SwitchTab(EarthGroup.全球定位系统1);
                                 }
-                                else
+                                else if (name.Contains("B"))
                                 {
                                     wxTabSwitcher.SwitchTab(EarthGroup.全球定位系统2);
                                 }
                             }
-                            else if (name.Contains(EarthGroup.北斗一号.ToString()))
+                            else if (name.Contains("北斗一号A"))
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.北斗一号);
                             }
-                            else if (name.Contains(EarthGroup.北斗三号.ToString()))
+                            else if (name.Contains("北斗一号C"))
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.北斗三号);
                             }
-                            else if (name.Contains(EarthGroup.北斗二号.ToString()))
+                            else if (name.Contains("北斗一号B"))
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.北斗二号);
                             }
@@ -780,6 +777,7 @@ public class MouseRoteReceiver : MonoBehaviour
         tabSwitcher_UI.Hide();
         litVCR1.OpenVideoByFileName("待机循环动画.mp4");
         litVCR2.OpenVideoByFileName("地屏循环地球.mp4");
+        satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
     }
 
     private void ShowCarMode()
