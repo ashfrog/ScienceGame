@@ -782,7 +782,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(currentDisplayGroupName))
         {
-            SetDisplayGroup(currentDisplayGroupName);
+            SetDisplayGroup(currentDisplayGroupName, displayMode);
         }
     }
 
