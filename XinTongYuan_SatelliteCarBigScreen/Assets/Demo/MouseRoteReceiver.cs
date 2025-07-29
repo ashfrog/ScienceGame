@@ -345,6 +345,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     leanPitchYaw.Pitch = 10f;
                                     leanPitchYaw.Camera.DOFieldOfView(35f, 1f);
                                     wxTabSwitcher.SwitchTab(-1);
+                                    satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                                     //Panel_level1_1_3.SetActive(false);
                                     //Panel_卫星在空姿态.SetActive(true);
                                     //WeiXingGuangDian.SetActive(false);
@@ -557,10 +558,12 @@ public class MouseRoteReceiver : MonoBehaviour
                         if (drawOrbit)
                         {
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.Both);
+                            leanPitchYaw.Camera.DOFieldOfView(37f, 1f);
                         }
                         else
                         {
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
+                            leanPitchYaw.Camera.DOFieldOfView(30f, 1f);
                         }
                         break;
                     case OrderTypeEnum.CountryFilterChange:
@@ -573,7 +576,7 @@ public class MouseRoteReceiver : MonoBehaviour
                         {
                             int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                             Debug.Log(year);
-                            ResetZ(60);
+                            ResetZ(0);
                             wxTabSwitcher.SwitchTab(-1);
                             theEarth.SetActive(true);
 
