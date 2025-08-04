@@ -131,9 +131,14 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     [SerializeField]
     private Camera objCamera;
 
+    float orbitAlpha = 0.1f;
+    float scaleSateliteWhenShowBoth = 1.5f; //同时显示卫星和轨道的时候放大卫星
+
     void Start()
     {
         SetMaxDisplay(Settings.ini.Game.MaxDisplayOrbits, Settings.ini.Game.MaxDisplaySatellite);
+        scaleSateliteWhenShowBoth = Settings.ini.Game.ScaleSateliteWhenShowBoth;
+        orbitAlpha = Settings.ini.Game.OrbitAlpha;
         maxOrbitsPerBatch = Settings.ini.Game.MaxOrbitsPerBatch;
         InitializeMaterials();
         CreateSatelliteMesh();
@@ -852,6 +857,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return TransformToECI(orbitalPos, orbit) * orbitScale;
     }
 
+
     void RenderSatellites()
     {
         if (currentSatellitePositions.Count == 0) return;
@@ -894,6 +900,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 totalScaleFactor = Mathf.Clamp(totalScaleFactor, minScale, maxScale);
 
                 scale = Vector3.one * baseSatelliteScale * totalScaleFactor;
+            }
+
+            if (displayMode == DisplayMode.Both)
+            {
+                scale = scale * scaleSateliteWhenShowBoth; // 当显示轨道和卫星时，增加卫星大小
             }
 
             matrices[i] = Matrix4x4.TRS(position, camRot, scale);
@@ -1061,6 +1072,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 {
                     Color[] countryColors = GetCountryColors(satellite.country);
                     Color orbitColor = countryColors[satNumber % countryColors.Length];
+                    orbitColor.a = orbitAlpha;
 
                     propertyBlock.SetColor("_UnlitColor", orbitColor);
                     propertyBlock.SetColor("_EmissiveColor", orbitColor);

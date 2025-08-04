@@ -38,7 +38,7 @@ public class MouseRoteReceiver : MonoBehaviour
     //public GameObject WeiXingGuangDian;  //卫星光点
     public GameObject[] cars;
     public GameObject oribit; //卫星轨道模型
-    public GameObject[] moons; //卫星光点组
+
     public GameObject theEarth; //地球模型
 
     [SerializeField]
@@ -50,7 +50,7 @@ public class MouseRoteReceiver : MonoBehaviour
 
     public enum TabUILabel //需要Inspector中TabSwitcher的allTabTypes保持一致
     {
-        P1_1, P1_1_1, P1_1_2, P1_1_3, P1_2, P1_2_1, P1_2_2, P1_2_3, panel_level2_1_1, panel_level2_1_2, panel_level2_1_3, panel_level2_1_4, panel_level2_1_5, Panel_卫星展示
+        P1_1, P1_1_1, P1_1_2, P1_1_3, P1_2, P1_2_1, P1_2_2, P1_2_3, panel_level2_1_1, panel_level2_1_2, panel_level2_1_3, panel_level2_1_4, panel_level2_1_5, Panel_卫星展示, Panel_内外星座对比
     }
     public TabSwitcher tabSwitcher_UI;
     public enum TabObjLabel
@@ -284,18 +284,10 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
                                     tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                                     orbitTabSwitcher.SwitchTab(0);
-                                    satelliteOrbitRenderer.SetBaseSatelliteScale(50);
+                                    satelliteOrbitRenderer.SetBaseSatelliteScale(30);
                                     satelliteOrbitRenderer.SetDisplayGroup("伽利略星座");
-                                    //for (int i = 1; i < moons.Length; i++)
-                                    //{
-                                    //    moons[i].SetActive(false);
-                                    //}
-                                    //tabSwitcher_Obj.SwitchTab(TabObjLabel.地球);
-                                    //Panel_level1_1_2.SetActive(true);
-                                    //obj = theEarth;
-                                    //oribit.gameObject.SetActive(true);
-                                    //Panel_LoopVideo.SetActive(false);
-                                    //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "循环地屏2.mp4");
+
+
                                     litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
@@ -308,10 +300,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_Obj.Hide();
                                     oribit.gameObject.SetActive(false);
                                     satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
-                                    for (int i = 0; i < moons.Length; i++)
-                                    {
-                                        moons[i].SetActive(true);
-                                    }
+
                                     //MainPageLoop();
                                     ReturnP1_1();
                                     break;
@@ -336,16 +325,18 @@ public class MouseRoteReceiver : MonoBehaviour
                                     satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                                     //Panel_level1_1_3.SetActive(true);
                                     //Panel_卫星在空姿态.SetActive(false);
-
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_3);
                                     //WeiXingGuangDian.SetActive(true);
                                     //ReturnP1_1();
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.Panel_内外星座对比);
                                     print(cmd + " " + cmdparam);
                                     leanPitchYaw.Pitch = 10f;
                                     leanPitchYaw.Camera.DOFieldOfView(35f, 1f);
                                     wxTabSwitcher.SwitchTab(-1);
                                     satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
+                                    satelliteOrbitRenderer.SetBaseSatelliteScale(20f);
                                     //Panel_level1_1_3.SetActive(false);
                                     //Panel_卫星在空姿态.SetActive(true);
                                     //WeiXingGuangDian.SetActive(false);
@@ -460,11 +451,6 @@ public class MouseRoteReceiver : MonoBehaviour
                             satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ConstellationGroup), index));
                             img_Introduce.sprite = sprites_Introduce[index];
 
-                            //for (int i = 0; i < moons.Length; i++)
-                            //{
-                            //    moons[i].SetActive(false);
-                            //}
-                            //moons[index].SetActive(true);
                             ResetZ(index);
                         }
 

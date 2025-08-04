@@ -112,6 +112,18 @@ public class GameSettings : BaseSettings
         set => WriteValue("MaxDisplaySatellite", value.ToString());
     }
 
+    public float ScaleSateliteWhenShowBoth
+    {
+        get => ReadFloat("ScaleSateliteWhenShowBoth", 2f);
+        set => WriteValue("ScaleSateliteWhenShowBoth", value.ToString());
+    }
+
+    public float OrbitAlpha
+    {
+        get => ReadFloat("OrbitAlpha", 0.2f);
+        set => WriteValue("OrbitAlpha", value.ToString());
+    }
+
     public int MaxOrbitsPerBatch
     {
         get => ReadInt("MaxOrbitsPerBatch", 1000);
