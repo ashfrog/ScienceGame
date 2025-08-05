@@ -912,11 +912,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Color satelliteColor = countryColors[satNumber % countryColors.Length];
 
             // 设置本批颜色（这里可以优化为按颜色分批）
-            if (i == 0 || i % 100 == 0) // 每100个卫星更新一次颜色，减少性能开销
+            if (i == 0 || i % 10 == 0) // 每100个卫星更新一次颜色，减少性能开销
             {
                 propertyBlock.SetColor("_UnlitColor", satelliteColor);
                 propertyBlock.SetColor("_EmissiveColor", satelliteColor);
-                propertyBlock.SetFloat("_EmissiveIntensity", 2.0f);
+                propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
             }
 
             i++;
