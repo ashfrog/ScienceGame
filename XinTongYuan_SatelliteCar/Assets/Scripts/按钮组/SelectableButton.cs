@@ -10,6 +10,7 @@ public class SelectableButton : MonoBehaviour
     public Sprite selectedSprite;
     public Sprite unselectedSprite;
     public Sprite displaySprite; // The sprite to display when this button is selected
+    public Sprite displaySprite2; // The sprite to display when this button is selected
     public GameObject uiToShow; // The UI element to show when this button is selected
     public List<GameObject> uiToHideList; // The list of UI elements to hide when this button is selected
 

@@ -860,11 +860,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         if (currentSatellitePositions.Count == 0) return;
 
-        const int batchSize = 1023;
-        var matrices = new Matrix4x4[batchSize];
-        var propertyBlock = new MaterialPropertyBlock();
-
-        // 获取摄像机信息
         Camera cam = Camera.main;
         if (cam == null) return;
 
@@ -872,7 +867,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         Quaternion camRot = cam.transform.rotation;
         float currentFOV = cam.fieldOfView;
 
-        int i = 0;
+        // 按颜色分组卫星
+        var colorGroups = new Dictionary<Color, List<(Vector3 position, Matrix4x4 matrix)>>();
+
         foreach (var kvp in currentSatellitePositions)
         {
             int satNumber = kvp.Key;
@@ -881,59 +878,71 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             if (!catalogToSatellite.TryGetValue(satNumber, out var satellite))
                 continue;
 
-            // 基于FOV和距离计算缩放比例以保持恒定视觉大小
-            Vector3 scale = Vector3.one * baseSatelliteScale;
-            if (keepConstantVisualSize)
-            {
-                float distance = Vector3.Distance(camPos, position);
+            // 计算缩放
+            Vector3 scale = CalculateScale(camPos, position, currentFOV);
+            Matrix4x4 matrix = Matrix4x4.TRS(position, camRot, scale);
 
-                // FOV缩放因子：FOV越小（放大），卫星应该越大
-                float fovScaleFactor = referenceFOV / currentFOV;
-
-                // 距离缩放因子：基于透视投影，距离越远卫星应该越大以保持视觉大小
-                float distanceScaleFactor = distance / 100f; // 100为基准距离
-
-                // 综合缩放因子
-                float totalScaleFactor = fovScaleFactor * distanceScaleFactor;
-                totalScaleFactor = Mathf.Clamp(totalScaleFactor, minScale, maxScale);
-
-                scale = Vector3.one * baseSatelliteScale * totalScaleFactor;
-            }
-
-            if (displayMode == DisplayMode.Both)
-            {
-                scale = scale * scaleSateliteWhenShowBoth; // 当显示轨道和卫星时，增加卫星大小
-            }
-
-            matrices[i] = Matrix4x4.TRS(position, camRot, scale);
-
-            // 按国家着色
+            // 获取颜色
             Color[] countryColors = GetCountryColors(satellite.country);
             Color satelliteColor = countryColors[satNumber % countryColors.Length];
 
-            // 设置本批颜色（这里可以优化为按颜色分批）
-            if (i == 0 || i % 10 == 0) // 每100个卫星更新一次颜色，减少性能开销
-            {
-                propertyBlock.SetColor("_UnlitColor", satelliteColor);
-                propertyBlock.SetColor("_EmissiveColor", satelliteColor);
-                propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
-            }
+            // 按颜色分组
+            if (!colorGroups.ContainsKey(satelliteColor))
+                colorGroups[satelliteColor] = new List<(Vector3, Matrix4x4)>();
 
-            i++;
-
-            // 满一批或最后一批
-            if (i == batchSize)
-            {
-                Graphics.DrawMeshInstanced(satelliteMesh, 0, satelliteMaterial, matrices, batchSize, propertyBlock);
-                i = 0;
-            }
+            colorGroups[satelliteColor].Add((position, matrix));
         }
 
-        // 绘制最后不足一批的卫星
-        if (i > 0)
+        // 为每种颜色分批渲染
+        const int batchSize = 1023;
+        var matrices = new Matrix4x4[batchSize];
+        var propertyBlock = new MaterialPropertyBlock();
+
+        foreach (var colorGroup in colorGroups)
         {
-            Graphics.DrawMeshInstanced(satelliteMesh, 0, satelliteMaterial, matrices, i, propertyBlock);
+            Color color = colorGroup.Key;
+            var satellites = colorGroup.Value;
+
+            // 设置该颜色组的材质属性
+            propertyBlock.SetColor("_UnlitColor", color);
+            propertyBlock.SetColor("_EmissiveColor", color);
+            propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
+
+            // 分批渲染该颜色组的卫星
+            for (int i = 0; i < satellites.Count; i += batchSize)
+            {
+                int count = Mathf.Min(batchSize, satellites.Count - i);
+
+                for (int j = 0; j < count; j++)
+                {
+                    matrices[j] = satellites[i + j].matrix;
+                }
+
+                Graphics.DrawMeshInstanced(satelliteMesh, 0, satelliteMaterial, matrices, count, propertyBlock);
+            }
         }
+    }
+
+    private Vector3 CalculateScale(Vector3 camPos, Vector3 position, float currentFOV)
+    {
+        Vector3 scale = Vector3.one * baseSatelliteScale;
+
+        if (keepConstantVisualSize)
+        {
+            float distance = Vector3.Distance(camPos, position);
+            float fovScaleFactor = referenceFOV / currentFOV;
+            float distanceScaleFactor = distance / 100f;
+            float totalScaleFactor = fovScaleFactor * distanceScaleFactor;
+            totalScaleFactor = Mathf.Clamp(totalScaleFactor, minScale, maxScale);
+            scale = Vector3.one * baseSatelliteScale * totalScaleFactor;
+        }
+
+        if (displayMode == DisplayMode.Both)
+        {
+            scale = scale * scaleSateliteWhenShowBoth;
+        }
+
+        return scale;
     }
 
     public void SetConstantVisualSize(bool enabled, float refFOV = 60f)

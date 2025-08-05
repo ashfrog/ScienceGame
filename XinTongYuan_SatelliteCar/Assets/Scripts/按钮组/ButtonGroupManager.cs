@@ -6,6 +6,7 @@ public class ButtonGroupManager : MonoBehaviour
 {
     public List<SelectableButton> buttons;
     public Image displayImage;
+    public Image displayImage2;
     public int defaultSelectedIndex = 0; // Index of the default selected button
 
     void Start()
@@ -66,6 +67,10 @@ public class ButtonGroupManager : MonoBehaviour
         if (displayImage != null)
         {
             displayImage.sprite = selectedButton.displaySprite;
+        }
+        if (displayImage2 != null)
+        {
+            displayImage2.sprite = selectedButton.displaySprite2;
         }
 
         // Show and hide UI elements for the selected button
