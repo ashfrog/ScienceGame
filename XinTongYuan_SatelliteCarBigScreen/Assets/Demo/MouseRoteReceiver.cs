@@ -34,7 +34,9 @@ public class MouseRoteReceiver : MonoBehaviour
     public LitVCR litVCR2;
 
     public Sprite[] sprites_Introduce;   //介绍图组
+    public Sprite[] sprites_Introduce2;   //介绍图组2
     public Image img_Introduce;  //图片介绍组件
+    public Image img_Introduce2;  //图片介绍组件2
     //public GameObject WeiXingGuangDian;  //卫星光点
     public GameObject[] cars;
     public GameObject oribit; //卫星轨道模型
@@ -315,7 +317,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //Panel_LoopVideo.SetActive(false);
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     ResetZ(4);
-                                    litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
+                                    litVCR1.OpenVideoByFileName("卫星待机循环动画.mp4");
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
@@ -450,7 +452,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             orbitTabSwitcher.SwitchTab(index);
                             satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ConstellationGroup), index));
                             img_Introduce.sprite = sprites_Introduce[index];
-
+                            img_Introduce2.sprite = sprites_Introduce2[index];
                             ResetZ(index);
                         }
 
@@ -569,7 +571,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             satelliteOrbitRenderer.SetBaseSatelliteScale(20);
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             satelliteOrbitRenderer.SetDisplayAll(1970, year);
-                            litVCR1.OpenVideoByFileName("待机循环粒子背景.mp4");
+                            litVCR1.OpenVideoByFileName("卫星待机循环动画.mp4");
                             litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                             //for (int i = 0; i < WeiXingGuangDian.transform.childCount; i++)
                             //{
