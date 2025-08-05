@@ -160,8 +160,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         LoadSelectionGroups();
     }
 
-    private float logMinYear;
-    private float logMaxYear;
     void Update()
     {
         HandleInput();
