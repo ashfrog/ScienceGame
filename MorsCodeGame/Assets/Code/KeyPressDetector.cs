@@ -567,7 +567,7 @@ public class KeyPressDetector : MonoBehaviour
 
         if (morseCodeObjects.Length == 0)
         {
-            Debug.LogWarning("没有找到摩尔斯码物体");
+            //Debug.LogWarning("没有找到摩尔斯码物体");
             return null;
         }
 

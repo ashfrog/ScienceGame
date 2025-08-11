@@ -77,13 +77,13 @@ public class PrinterControl : MonoBehaviour
             {
                 // 双击
                 waitingForSecondClick = false;
-                OnDoubleClick();
             }
             else
             {
                 // 可能是单击，开始计时
                 waitingForSecondClick = true;
                 lastPressTime = Time.time;
+                OnClick();
             }
         }
 
@@ -109,7 +109,7 @@ public class PrinterControl : MonoBehaviour
         tabSwitcher.SwitchTab(0);
     }
 
-    void OnDoubleClick()
+    void OnClick()
     {
         Debug.Log("K键双击事件");
 
