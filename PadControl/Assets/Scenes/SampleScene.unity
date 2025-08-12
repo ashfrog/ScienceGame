@@ -978,15 +978,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: messageInterval
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: offCmd.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.data[0]
@@ -994,7 +994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: onCmd.Array.data[1]
-      value: 0E 06 00 02 00 01
+      value: BE EF 03 06 00 BA D2 01 00 00 60 01 00
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: offCmd.Array.data[0]
@@ -1002,7 +1002,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: offCmd.Array.data[1]
-      value: 0E 06 00 01 00 00
+      value: BE EF 03 06 00 2A D3 01 00 00 60 00 00
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
@@ -20128,11 +20128,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: messageInterval
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: onCmd.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: ignoreBindInGroup
@@ -20140,7 +20140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: offCmd.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: showConfirmDialog
@@ -20152,7 +20152,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: onCmd.Array.data[1]
-      value: '0D 06 00 07 00 01 '
+      value: BE EF 03 06 00 BA D2 01 00 00 60 01 00
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: offCmd.Array.data[0]
@@ -20160,7 +20160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: offCmd.Array.data[1]
-      value: '0D 06 00 07 00 00 '
+      value: BE EF 03 06 00 2A D3 01 00 00 60 00 00
       objectReference: {fileID: 0}
     - target: {fileID: 1352911894819501574, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
       propertyPath: BindControls.Array.size
@@ -34635,7 +34635,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 517570309}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
