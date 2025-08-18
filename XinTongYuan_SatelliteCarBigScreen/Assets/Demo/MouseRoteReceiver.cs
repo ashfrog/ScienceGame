@@ -277,12 +277,13 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "发射展示返回"://1-1返回 
                                     //MainPageLoop();
+                                    Debug.Log(cmdstr);
                                     ReturnP1_1();
                                     break;
                                 case "星座展示"://1-2 卫星星座展示
                                     leanPitchYaw.PitchMin = -90f;
                                     leanPitchYaw.PitchMax = 90f;
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
                                     tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                                     orbitTabSwitcher.SwitchTab(0);
@@ -295,7 +296,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座展示返回"://1-2 返回 选项界面
                                     leanPitchYaw.Pitch = 10f;
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     StopDoTween();
                                     camObj.fieldOfView = defaultCameraFieldofView;
                                     //Panel_level1_1_2.SetActive(false);
@@ -307,7 +308,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ReturnP1_1();
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     //Panel_level1_1_3.SetActive(true);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_3);
                                     tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星光点);
@@ -322,7 +323,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
                                     leanPitchYaw.Pitch = 10f;
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     StopDoTween();
                                     satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                                     //Panel_level1_1_3.SetActive(true);
@@ -333,7 +334,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比
                                     tabSwitcher_UI.SwitchTab(TabUILabel.Panel_内外星座对比);
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     leanPitchYaw.Pitch = 10f;
                                     leanPitchYaw.Camera.DOFieldOfView(35f, 1f);
                                     wxTabSwitcher.SwitchTab(-1);
@@ -346,7 +347,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     break;
                                 case "在空姿态返回":// 1-3返回 1
                                     leanPitchYaw.Pitch = 10f;
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     StopDoTween();
                                     //Panel_level1_1_3.SetActive(false);
                                     tabSwitcher_Obj.Hide();
@@ -364,7 +365,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //mediaPlayer_2.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "汽车百年进化论地屏.mp4");
                                     break;
                                 case "汽车":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     leanPitchYaw.PitchMin = 10f;
                                     leanPitchYaw.PitchMax = 90f;
                                     leanPitchYaw.Pitch = 10f;
@@ -382,11 +383,11 @@ public class MouseRoteReceiver : MonoBehaviour
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "汽车返回":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     MainPageLoop();
                                     break;
                                 case "汽车模型":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     //Panel_level1_2_1.SetActive(true);
                                     //Panel_level1_2_2.SetActive(false);
                                     //panel_level1_2_3.SetActive(false);
@@ -396,11 +397,11 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ShowCarMode();
                                     break;
                                 case "汽车模型返回":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     ShowCarMode();
                                     break;
                                 case "汽车街景":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     int.TryParse(cmdparam, out curCarIndex);
                                     ShowCarUI();
                                     ShowCarMode();
@@ -408,7 +409,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     leanPitchYaw.Pitch = 0f;
                                     break;
                                 case "汽车街景返回":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     for (int i = 0; i < cars.Length; i++)
                                     {
                                         cars[i].SetActive(false);
@@ -417,13 +418,13 @@ public class MouseRoteReceiver : MonoBehaviour
                                     litVCR1.OpenVideoByFileName("天屏屏保.mp4");
                                     break;
                                 case "汽车内饰":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     //Panel_level1_2_1.SetActive(false);
                                     //Panel_level1_2_2.SetActive(false);
                                     //panel_level1_2_3.SetActive(true);
                                     break;
                                 case "汽车内饰返回":
-                                    print(cmd + " " + cmdparam);
+                                    Debug.Log(cmdstr);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_2);
                                     carTabSwitcher.Hide();
                                     //media_Loop.OpenVideoFromFile(MediaPlayer.FileLocation.RelativeToStreamingAssetsFolder, "天屏汽车循环.mp4");
