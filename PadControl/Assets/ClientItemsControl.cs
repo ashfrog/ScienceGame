@@ -146,29 +146,28 @@ public class ClientItemsControl : MonoBehaviour
     public void On()
     {
         // 执行绑定的控件
-        StartCoroutine(ExecuteBindsWithInterval(true));
+        StartCoroutine(ExecuteBindsWithInterval(true, false));
     }
 
     public void Off()
     {
         // 执行绑定的控件
-        StartCoroutine(ExecuteBindsWithInterval(false));
+        StartCoroutine(ExecuteBindsWithInterval(false, false));
     }
 
     /// <summary>
     /// 用于处理DeviceIPNO等不同的指令
     /// </summary>
     /// <param name="on">是否为开启操作</param>
-    private IEnumerator ExecuteBindsWithInterval(bool on)
+    private IEnumerator ExecuteBindsWithInterval(bool on, bool useDelay)
     {
-        if (enqueDelay > 0)
+        if (useDelay && enqueDelay > 0)
         {
             yield return new WaitForSeconds(enqueDelay);
         }
 
         if (on)
         {
-            // 将所有指令添加到全局队列
             foreach (var cmd in onCmd)
             {
                 AddCommandToQueue(cmd);
@@ -176,10 +175,39 @@ public class ClientItemsControl : MonoBehaviour
         }
         else
         {
-            // 将所有指令添加到全局队列
             foreach (var cmd in offCmd)
             {
                 AddCommandToQueue(cmd);
+            }
+        }
+
+
+
+        foreach (var bindControlObj in BindControls)
+        {
+            var itemsControls = bindControlObj.GetComponentsInChildren<ClientItemsControl>(true);
+            if (itemsControls != null)
+            {
+                foreach (var itemsControl in itemsControls)
+                {
+                    var control = itemsControl;
+
+                    if (control.fhClientController == null)
+                    {
+                        control.fhClientController = fhClientController;
+                    }
+
+                    // 递归调用时 useDelay 设为 true
+                    if (control.gameObject.activeInHierarchy)
+                    {
+                        control.StartCoroutine(control.ExecuteBindsWithInterval(on, true));
+                    }
+                    else
+                    {
+                        // 或用全局跑协程
+                        CommandQueueManager.Instance.StartCoroutine(control.ExecuteBindsWithInterval(on, true));
+                    }
+                }
             }
         }
         // 收集所有控件的所有指令，添加到全局队列
