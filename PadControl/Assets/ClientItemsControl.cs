@@ -75,6 +75,9 @@ public class ClientItemsControl : MonoBehaviour
     [SerializeField]
     private float enqueDelay;
 
+    [SerializeField]
+    private bool offOnly;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -165,7 +168,10 @@ public class ClientItemsControl : MonoBehaviour
         {
             yield return new WaitForSeconds(enqueDelay);
         }
-
+        if (offOnly)
+        {
+            on = false; // 如果设置了 offOnly，则强制关闭状态
+        }
         if (on)
         {
             foreach (var cmd in onCmd)

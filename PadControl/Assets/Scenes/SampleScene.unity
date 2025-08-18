@@ -630,6 +630,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &17865407
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,6 +972,10 @@ PrefabInstance:
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: deviceIPNO
       value: 1030
+      objectReference: {fileID: 0}
+    - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
+      propertyPath: enqueDelay
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 2948378527529384964, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
       propertyPath: appendCRC16
@@ -1656,6 +1661,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &64843780
 GameObject:
   m_ObjectHideFlags: 0
@@ -5440,6 +5446,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &276510229
 GameObject:
   m_ObjectHideFlags: 0
@@ -7932,6 +7939,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &415174933
 GameObject:
   m_ObjectHideFlags: 0
@@ -10496,6 +10504,42 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8082719750814409689, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
   m_PrefabInstance: {fileID: 559547019}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &559547021 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8082719750814409670, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
+  m_PrefabInstance: {fileID: 559547019}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &559547022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559547021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cde020e397061ac44b62dca60908a165, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fhClientController: {fileID: 0}
+  deviceIPNO: 0
+  orderType: 20
+  btnOn: {fileID: 0}
+  btnOnBinds: []
+  btnOff: {fileID: 0}
+  btnOffBinds: []
+  onCmd: []
+  offCmd: []
+  isHexCmd: 0
+  appendCRC16: 0
+  messageInterval: 0.1
+  BindControls:
+  - {fileID: 2026552896}
+  - {fileID: 221333561}
+  showConfirmDialog: 0
+  ignoreBindInGroup: 0
+  enqueDelay: 30
+  offOnly: 1
 --- !u!1001 &562214102
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17934,6 +17978,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &815247191
 GameObject:
   m_ObjectHideFlags: 0
@@ -18706,6 +18751,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1001 &859498470
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22364,6 +22410,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1001 &996387322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26311,6 +26358,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!114 &1150018795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26343,6 +26391,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 1
+  offOnly: 0
 --- !u!114 &1150018796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26392,6 +26441,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!114 &1150018797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26421,6 +26471,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1001 &1154341860
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27404,6 +27455,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!114 &1199643427 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8082719750889514306, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
@@ -27449,6 +27501,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1208675189
 GameObject:
   m_ObjectHideFlags: 0
@@ -27904,6 +27957,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1228200623
 GameObject:
   m_ObjectHideFlags: 0
@@ -34559,6 +34613,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1463508589
 GameObject:
   m_ObjectHideFlags: 0
@@ -35259,6 +35314,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1522637631
 GameObject:
   m_ObjectHideFlags: 0
@@ -35668,6 +35724,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1564669809
 GameObject:
   m_ObjectHideFlags: 0
@@ -39507,6 +39564,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1675351876
 GameObject:
   m_ObjectHideFlags: 0
@@ -41244,6 +41302,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1726977031
 GameObject:
   m_ObjectHideFlags: 0
@@ -41731,6 +41790,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!114 &1733554824 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 61653827740258977, guid: 6e15cc6aa4988364793007e0436a80a0, type: 3}
@@ -44428,6 +44488,7 @@ MonoBehaviour:
   showConfirmDialog: 0
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1790862920
 GameObject:
   m_ObjectHideFlags: 0
@@ -47244,6 +47305,7 @@ MonoBehaviour:
   showConfirmDialog: 1
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &1908836885
 GameObject:
   m_ObjectHideFlags: 0
@@ -51709,42 +51771,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8082719750814409689, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
   m_PrefabInstance: {fileID: 2029580248}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2029807635 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8082719750814409670, guid: 97e68d8b210265647a7912a204d9f206, type: 3}
-  m_PrefabInstance: {fileID: 1877316876}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2029807639
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029807635}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cde020e397061ac44b62dca60908a165, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fhClientController: {fileID: 0}
-  deviceIPNO: 0
-  orderType: 20
-  btnOn: {fileID: 0}
-  btnOnBinds: []
-  btnOff: {fileID: 0}
-  btnOffBinds:
-  - {fileID: 2058283203}
-  onCmd: []
-  offCmd: []
-  isHexCmd: 0
-  appendCRC16: 0
-  messageInterval: 0.1
-  BindControls:
-  - {fileID: 2026552896}
-  - {fileID: 221333561}
-  showConfirmDialog: 0
-  ignoreBindInGroup: 0
-  enqueDelay: 1
 --- !u!1 &2037663223
 GameObject:
   m_ObjectHideFlags: 0
@@ -53717,6 +53743,7 @@ MonoBehaviour:
   showConfirmDialog: 1
   ignoreBindInGroup: 0
   enqueDelay: 0
+  offOnly: 0
 --- !u!1 &2144889382
 GameObject:
   m_ObjectHideFlags: 0
