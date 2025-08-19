@@ -522,6 +522,11 @@ PrefabInstance:
       propertyPath: seperation
       value: 1.17
       objectReference: {fileID: 0}
+    - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
+        type: 3}
+      propertyPath: textFormat.customFormat
+      value: "\u7C7B\u522B: {category}\\n\u6570\u503C: {value}\\n\u7D22\u5F15: {index}"
+      objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454193, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: outerDepth
@@ -3250,7 +3255,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0.89
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 32
@@ -5422,7 +5427,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 1
+  m_Depth: 2
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 213
@@ -5882,6 +5887,7 @@ GameObject:
   - component: {fileID: 1030713628}
   - component: {fileID: 1030713627}
   - component: {fileID: 1030713626}
+  - component: {fileID: 1030713629}
   m_Layer: 0
   m_Name: "Camera1 const 3D \u56FE\u8868"
   m_TagString: MainCamera
@@ -5901,7 +5907,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23c1ce4fb46143f46bc5cb5224c934f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clearColorMode: 0
+  clearColorMode: 2
   backgroundColorHDR: {r: 0, g: 0, b: 0, a: 0}
   clearDepth: 1
   volumeLayerMask:
@@ -6042,10 +6048,10 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 1
+  m_Depth: 3
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 2
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 651c19451354d8a43a91daac28a8ec8b, type: 2}
   m_TargetDisplay: 0
@@ -6072,6 +6078,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1030713629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030713625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5344c4024765afe4ebfe1f672b51a4a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameObjects:
+  - {fileID: 1711925911}
+  - {fileID: 1338000339}
+  - {fileID: 507864421}
+  - {fileID: 196024698}
+  - {fileID: 255211729}
+  delayTime: 0.5
 --- !u!1 &1041464287
 GameObject:
   m_ObjectHideFlags: 0
@@ -7361,7 +7386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1338000340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8941,7 +8966,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1711925912
 Transform:
   m_ObjectHideFlags: 0
