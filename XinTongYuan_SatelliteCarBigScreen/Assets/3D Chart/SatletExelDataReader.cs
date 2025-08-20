@@ -24,9 +24,20 @@ public class SatletExelDataReader : MonoBehaviour
 
     Dictionary<string, string> pieCategoryColor;
 
-    void Start()
+    private void OnEnable()
     {
         initialize(Application.streamingAssetsPath + "/卫星轨道数据.xlsx", 1);
+        Hide();
+    }
+    void Start()
+    {
+
+    }
+
+    DataTable table;
+
+    private void initialize(string filePath, int sheetindex)
+    {
         string pieCategoryColorStr = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "PieCategoryColor.json"));
         pieCategoryColor = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(pieCategoryColorStr);
         foreach (var key in pieCategoryColor.Keys.ToList()) //统一添加#开头 给unity解析16进制颜色
@@ -37,13 +48,6 @@ public class SatletExelDataReader : MonoBehaviour
                 pieCategoryColor[key] = "#" + value;
             }
         }
-        Hide();
-    }
-
-    DataTable table;
-
-    private void initialize(string filePath, int sheetindex)
-    {
         DataSet result = ReadExcel(filePath);
 
         if (result != null)
