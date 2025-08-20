@@ -14,6 +14,7 @@ using Lean.Common;
 using System.IO;
 using TMPro;
 using System.Linq;
+using ChartAndGraph;
 
 public class MouseRoteReceiver : MonoBehaviour
 {
@@ -110,6 +111,8 @@ public class MouseRoteReceiver : MonoBehaviour
 
     string countrys = "CN,US,UK"; //逗号分割的国家缩写
 
+    [SerializeField]
+    SatletExelDataReader satletExelDataReader;
 
     // Start is called before the first frame update
     void Start()
@@ -308,6 +311,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     ReturnP1_1();
                                     break;
                                 case "星座对比"://1-3 卫星在空姿态
+                                    satletExelDataReader.Show();
                                     Debug.Log(cmdstr);
                                     //Panel_level1_1_3.SetActive(true);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_3);
@@ -322,6 +326,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                                     break;
                                 case "星座对比返回"://1-3-1返回 （1-3卫星在空姿态）
+                                    satletExelDataReader.Hide();
                                     leanPitchYaw.Pitch = 10f;
                                     Debug.Log(cmdstr);
                                     StopDoTween();
@@ -474,6 +479,8 @@ public class MouseRoteReceiver : MonoBehaviour
                             Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                             int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                             satelliteOrbitRenderer.SetDisplayAll(year - 10, year, countrys);
+                            satletExelDataReader.ShowPieCharts(year);
+
                             litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                             //satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             //for (int i = 1; i < WeiXingGuangDian.transform.childCount; i++)
@@ -720,6 +727,7 @@ public class MouseRoteReceiver : MonoBehaviour
             catch (Exception ex)
             {
                 Debug.Log("ID:" + client.ID + "  " + ex.Message);
+                Debug.LogException(ex);
             }
         });
     }
