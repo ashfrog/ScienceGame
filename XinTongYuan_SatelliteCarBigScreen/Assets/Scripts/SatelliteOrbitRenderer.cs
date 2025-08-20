@@ -134,6 +134,10 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     float orbitAlpha = 0.1f;
     float scaleSateliteWhenShowBoth = 1.5f; //同时显示卫星和轨道的时候放大卫星
 
+    [Header("分组颜色设置")]
+    public Dictionary<string, Color[]> groupColorGroups; // 用于分组颜色
+    private Color[] currentGroupColors = null;           // 当前组颜色缓存
+
     void Start()
     {
         SetMaxDisplay(Settings.ini.Game.MaxDisplayOrbits, Settings.ini.Game.MaxDisplaySatellite);
@@ -144,6 +148,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         CreateSatelliteMesh();
         LoadSatelliteData();
         LoadCountryColorGroups();
+        LoadGroupColorGroups();
         ParseSatelliteData();
 
         if (printSelectcatalogNumber)
@@ -157,7 +162,22 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
 
         PreprocessSatelliteData(); // 预处理所有数据
+
         LoadSelectionGroups();
+    }
+
+    void LoadGroupColorGroups()
+    {
+        try
+        {
+            string filePath = Path.Combine(Application.streamingAssetsPath, "groupcolor.json");
+            groupColorGroups = LoadCountryGroupsColor(filePath); // 复用已有的加载方法
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"加载分组颜色组失败: {ex.Message}");
+            groupColorGroups = new Dictionary<string, Color[]>();
+        }
     }
 
     void Update()
@@ -883,7 +903,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Matrix4x4 matrix = Matrix4x4.TRS(position, camRot, scale);
 
             // 获取颜色
-            Color[] countryColors = GetCountryColors(satellite.country);
+            Color[] countryColors = GetCurrentColors(satellite.country);
             Color satelliteColor = countryColors[satNumber % countryColors.Length];
 
             // 按颜色分组
@@ -1066,7 +1086,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
 
         // 获取当前显示组的颜色组
-        Color[] groupColors = GetCountryColors(currentDisplayGroupName);
+        Color[] groupColors = GetCurrentColors(currentDisplayGroupName);
 
         for (int i = 0; i < batch.Count; i++)
         {
@@ -1077,7 +1097,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
                 if (catalogToSatellite.TryGetValue(satNumber, out var satellite))
                 {
-                    Color[] countryColors = GetCountryColors(satellite.country);
+                    Color[] countryColors = GetCurrentColors(satellite.country);
                     Color orbitColor = countryColors[satNumber % countryColors.Length];
                     orbitColor.a = orbitAlpha;
 
@@ -1246,6 +1266,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             SetDisplayMode(displayMode);
             currentSatellitePositions.Clear();  //清空卫星点
             List<int> allOrbits = tleSelDic[groupName].sel;
+            // 新增：分组颜色赋值
+            if (groupColorGroups != null && groupColorGroups.ContainsKey(groupName))
+                currentGroupColors = groupColorGroups[groupName];
+            else
+                currentGroupColors = null;
 
             // 限制轨道数量以优化性能
             if (allOrbits.Count > maxDisplayOrbits)
@@ -1288,7 +1313,17 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Debug.LogWarning($"未找到卫星群: {groupName}");
         }
     }
-
+    private Color[] GetCurrentColors(string country)
+    {
+        // 优先使用分组颜色
+        if (!string.IsNullOrEmpty(currentDisplayGroupName) && currentGroupColors != null)
+            return currentGroupColors;
+        // 其次国家色
+        if (!string.IsNullOrEmpty(country) && countryGroupColorGroups.ContainsKey(country))
+            return countryGroupColorGroups[country];
+        // 默认白色
+        return new Color[] { Color.white };
+    }
 
     /// <summary>
     /// 加载国家轨道颜色组字典
