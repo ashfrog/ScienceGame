@@ -24,14 +24,23 @@ public class PrinterControl : MonoBehaviour
     public static string exefolder = System.AppDomain.CurrentDomain.BaseDirectory;
 #endif
 
+    Coroutine countdownCoroutine; // 新增：用于保存协程句柄
+
     private void OnEnable()
     {
-        curT = 0f;
         cardCamera.depth = 1;
         string PrintVar = PlayerPrefs.GetString("PrintKey");
         cardTextGenerator.SetCardText(PrintVar);
+        SecondText.gameObject.SetActive(true);
+        // 保证每次 OnEnable 都重置 waitT
+        waitT = Settings.ini.Game.ResetTime;
 
-        StartCoroutine(CountDown());
+        // 停止旧协程，避免重叠
+        if (countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+        }
+        countdownCoroutine = StartCoroutine(CountDown());
     }
 
     IEnumerator CountDown()
@@ -49,70 +58,35 @@ public class PrinterControl : MonoBehaviour
         SecondText.gameObject.SetActive(false);
     }
 
-    private void Start()
-    {
-        Settings.ini.Game.ResetTime = Settings.ini.Game.ResetTime;
-        waitT = Settings.ini.Game.ResetTime;
-    }
-
     private void OnDisable()
     {
         cardCamera.depth = -1;
+        // 停止倒计时协程
+        if (countdownCoroutine != null)
+        {
+            StopCoroutine(countdownCoroutine);
+            countdownCoroutine = null;
+        }
     }
 
     // 双击最大间隔时间
     public float doubleClickThreshold = 0.3f;
 
-    private float lastPressTime = -1f;
-    private bool waitingForSecondClick = false;
-
-    float curT = 0;
     float waitT = 8f;
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
         {
-            if (waitingForSecondClick && (Time.time - lastPressTime) < doubleClickThreshold)
-            {
-                // 双击
-                waitingForSecondClick = false;
-            }
-            else
-            {
-                // 可能是单击，开始计时
-                waitingForSecondClick = true;
-                lastPressTime = Time.time;
-                OnClick();
-            }
+            OnClick();
         }
 
-        // 超过双击间隔，判定为单击
-        if (waitingForSecondClick && (Time.time - lastPressTime) >= doubleClickThreshold)
-        {
-            waitingForSecondClick = false;
-            OnSingleClick();
-        }
-
-        curT += Time.deltaTime;
-        if (curT > waitT)
-        {
-            curT = 0f;
-            tabSwitcher.SwitchTab(0);
-        }
-    }
-
-    void OnSingleClick()
-    {
-        Debug.Log("K键单击事件");
-        // 这里写单击执行的逻辑
-        tabSwitcher.SwitchTab(0);
     }
 
     void OnClick()
     {
         Debug.Log("K键双击事件");
-
+        SecondText.gameObject.SetActive(false);
         string cardPath = Path.Combine(Settings.ini.Game.SaveCardDirectory, System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".jpg");
         cardTextGenerator.GenerateAndSaveCard(cardPath);
         String printPhotoExePath = Path.Combine(exefolder, "Printer", "PrintPhoto.exe");
