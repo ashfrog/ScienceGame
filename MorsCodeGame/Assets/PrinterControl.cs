@@ -56,6 +56,7 @@ public class PrinterControl : MonoBehaviour
         }
 
         SecondText.gameObject.SetActive(false);
+        tabSwitcher.SwitchTab(0);
     }
 
     private void OnDisable()
@@ -68,9 +69,6 @@ public class PrinterControl : MonoBehaviour
             countdownCoroutine = null;
         }
     }
-
-    // 双击最大间隔时间
-    public float doubleClickThreshold = 0.3f;
 
     float waitT = 8f;
 
