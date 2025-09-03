@@ -9,6 +9,15 @@ public class ButtonGroupManager : MonoBehaviour
     public Image displayImage2;
     public int defaultSelectedIndex = 0; // Index of the default selected button
 
+
+    public void SetUnselected()
+    {
+        foreach (SelectableButton button in buttons)
+        {
+            button.SetUnselectedState();
+        }
+    }
+
     void Start()
     {
         InitializeButtons();
@@ -19,6 +28,7 @@ public class ButtonGroupManager : MonoBehaviour
     {
         // Set the default selected button when the object is enabled
         SetDefaultSelectedButton();
+        SetUnselected();
     }
 
     void InitializeButtons()

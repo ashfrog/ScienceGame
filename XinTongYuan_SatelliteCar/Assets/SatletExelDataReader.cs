@@ -27,7 +27,7 @@ public class SatletExelDataReader : MonoBehaviour
     private void OnEnable()
     {
         initialize(Application.streamingAssetsPath + "/卫星轨道数据.xlsx", 1);
-        Hide();
+        //Hide();
     }
     void Start()
     {
@@ -119,12 +119,15 @@ public class SatletExelDataReader : MonoBehaviour
                     pieChartGroup.DataSource.Clear();
                     foreach (var category in groupData.Keys)
                     {
-                        Material mat = new Material(material);
-                        if (ColorUtility.TryParseHtmlString(pieCategoryColor[category], out UnityEngine.Color color))
+                        if (material != null)
                         {
-                            mat.color = color;
+                            Material mat = new Material(material);
+                            if (ColorUtility.TryParseHtmlString(pieCategoryColor[category], out UnityEngine.Color color))
+                            {
+                                mat.color = color;
+                            }
+                            pieChartGroup.DataSource.AddCategory(category, mat);
                         }
-                        pieChartGroup.DataSource.AddCategory(category, mat);
                     }
                 }
                 if (pieChartCountry != null && pieChartCountry.DataSource != null)
@@ -157,10 +160,11 @@ public class SatletExelDataReader : MonoBehaviour
             }
         }
 
-
+        //pieChartGroup.gameObject.SetActive(false); //动画效果生效
+        //pieChartGroup.gameObject.SetActive(true);
         pieChartGroup.GetComponent<PieAnimation>().Animate();
-
-
+        //pieChartCountry.gameObject.SetActive(false);
+        //pieChartCountry.gameObject.SetActive(true);
         pieChartCountry.GetComponent<PieAnimation>().Animate();
     }
 
@@ -179,8 +183,14 @@ public class SatletExelDataReader : MonoBehaviour
         pieChartCountry.gameObject.SetActive(false);
         yearText1.gameObject.SetActive(false);
         yearText2.gameObject.SetActive(false);
-        text1.gameObject.SetActive(false);
-        text2.gameObject.SetActive(false);
+        if (text1 != null)
+        {
+            text1.gameObject.SetActive(false);
+        }
+        if (text2 != null)
+        {
+            text2.gameObject.SetActive(false);
+        }
     }
 
     string GetCategory(string fullName)

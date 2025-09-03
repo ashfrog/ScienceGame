@@ -12,7 +12,7 @@ public class Manager : MonoBehaviour
     public static Manager _ins;
     public MediaPlayer media;
     float volumeStep = 0.1f;
-    public Slider slider;
+    public SliderClickListener slider;
     public Image progress, img_year;
     public SatelliteDataReader _satelliteDataReader;
     public StickyHeaderTable _stickyHeaderTable;
@@ -26,7 +26,8 @@ public class Manager : MonoBehaviour
     [SerializeField]
     public TabSwitcher tabSwitcher;
 
-
+    [SerializeField]
+    SatletExelDataReader exelPieDataReader;
 
     private void Awake()
     {
@@ -34,7 +35,7 @@ public class Manager : MonoBehaviour
     }
     void Start()
     {
-        slider.onValueChanged.AddListener(OnSliderValueChanged);
+        slider.SlicerClicked += OnSliderValueChanged;
 
         progress.fillAmount = 0.1f;
         buttons[0].gameObject.SetActive(true);
@@ -140,8 +141,10 @@ public class Manager : MonoBehaviour
     }
     public void OnYear(int year)
     {
+        Debug.Log("year:" + year);
         int index = (year - 1978) / 2; // 计算索引
         img_year.sprite = years[index];
+        exelPieDataReader.ShowPieCharts(year);
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, year);
     }
 
