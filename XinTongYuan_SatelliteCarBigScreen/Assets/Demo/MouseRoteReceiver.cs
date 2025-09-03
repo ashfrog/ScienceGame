@@ -350,6 +350,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //Panel_卫星在空姿态.SetActive(true);
                                     //WeiXingGuangDian.SetActive(false);
                                     //obj = theEarth;
+                                    theEarth.SetActive(true);
                                     break;
                                 case "在空姿态返回":// 1-3返回 1
                                     leanPitchYaw.Pitch = 10f;
