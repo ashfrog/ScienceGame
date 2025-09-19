@@ -34,6 +34,16 @@ public enum OrderTypeEnum
     Str = 20,
 
     /// <summary>
+    /// 根据key获取服务端解说词
+    /// </summary>
+    GetContent = 21,
+
+    /// <summary>
+    /// 返回服务端解说词
+    /// </summary>
+    Content = 22,
+
+    /// <summary>
     /// 旋转增量
     /// </summary>
     Rotate = 30,

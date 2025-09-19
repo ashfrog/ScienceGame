@@ -90,7 +90,7 @@ public class ClientItemsControl : MonoBehaviour
                 if (showConfirmDialog)
                 {
                     ConfirmationDialogExtensions.ShowConfirmationDialog(
-                        "提示",
+                        "开启操作确认",
                         $"开启{controlText.text}",
                         () => On(), // 确认回调
                         null       // 取消回调（可选）
@@ -110,7 +110,7 @@ public class ClientItemsControl : MonoBehaviour
                 if (showConfirmDialog)
                 {
                     ConfirmationDialogExtensions.ShowConfirmationDialog(
-                        "提示",
+                        "关闭操作确认",
                         $"关闭{controlText.text}",
                         () => Off(), // 确认回调
                         null        // 取消回调（可选）

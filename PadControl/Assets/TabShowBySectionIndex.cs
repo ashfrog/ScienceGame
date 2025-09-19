@@ -53,12 +53,12 @@ public class TabShowBySectionIndex : MonoBehaviour
         {
             if (Settings.ini.Game.SectionIndex == 0)
             { // 更新Tab页面显示状态
-                tabSwitcher.SwitchTab(2);
+                tabSwitcher.SwitchTab(1);
             }
             else
             {
                 // 更新Tab页面显示状态
-                tabSwitcher.SwitchTab(1);
+                tabSwitcher.SwitchTab(0);
             }
         }
         else

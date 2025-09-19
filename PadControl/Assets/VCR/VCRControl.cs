@@ -211,6 +211,12 @@ public class VCRControl : MonoBehaviour, IVCRControl
                 && FHClientController.ins.fhTcpClient.IsOnline();
             yield return null;
         }
+
+        if (FHClientController.ins != null && FHClientController.ins.fhTcpClient != null)
+        {
+            FHClientController.ins.fhTcpClient.FHTcpClientReceive += FHTcpClientReceive;
+        }
+
         if (EnableRepeatRequest)
         {
             InvokeRepeating(nameof(RepeatRequest), 0, 1f);
@@ -218,11 +224,6 @@ public class VCRControl : MonoBehaviour, IVCRControl
             GetVolumn();
             GetLoopMode();
         }
-        if (FHClientController.ins != null && FHClientController.ins.fhTcpClient != null)
-        {
-            FHClientController.ins.fhTcpClient.FHTcpClientReceive += FHTcpClientReceive;
-        }
-
     }
 
     private void HideUrlScrollView()
