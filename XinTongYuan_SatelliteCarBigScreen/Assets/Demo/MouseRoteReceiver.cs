@@ -631,6 +631,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             string name = weixingraws[0]; //卫星名称
                             text_WX.SetText(name);
                             int weixingindex = int.Parse(weixingraws[1]);
+                            wxTabSwitcher.Hide();
                             if (name.Contains(EarthGroup.一网.ToString()))
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.一网);
