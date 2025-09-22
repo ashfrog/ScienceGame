@@ -20,6 +20,7 @@ using File = System.IO.File;
 using Directory = System.IO.Directory;
 using Input = UnityEngine.Input;
 using Vuplex.WebView;
+using System.Threading.Tasks;
 
 //-----------------------------------------------------------------------------
 // Copyright 2015-2018 RenderHeads Ltd.  All rights reserverd.
@@ -793,15 +794,28 @@ public class LitVCR : MonoBehaviour
         if (canvasWebViewPrefab == null)
         {
             canvasWebViewPrefab = GameObject.Find("CanvasWebViewPrefab").GetComponent<CanvasWebViewPrefab>();
+
         }
 
         // Wait for the prefab to initialize because its WebView property is null until then.
         // https://developer.vuplex.com/webview/WebViewPrefab#WaitUntilInitialized
         await canvasWebViewPrefab.WaitUntilInitialized();
-
+        canvasWebViewPrefab.WebView.LoadProgressChanged -= OnLoadProgressChanged;
+        canvasWebViewPrefab.WebView.LoadProgressChanged += OnLoadProgressChanged;
+        canvasWebViewPrefab.WebView.PageLoadFailed -= OnLoadFailed;
+        canvasWebViewPrefab.WebView.PageLoadFailed += OnLoadFailed;
         canvasWebViewPrefab.WebView.LoadUrl(url);
     }
-
+    void OnLoadProgressChanged(object sender, ProgressChangedEventArgs e)
+    {
+        Debug.Log("加载进度: " + e.Progress);
+    }
+    async void OnLoadFailed(object sender, EventArgs e)
+    {
+        Debug.LogError("网页加载失败");
+        await Task.Delay(5000); // 延迟5秒再重试
+        canvasWebViewPrefab.WebView.Reload();
+    }
     private void SetMask(MaskableGraphic grath, int videoindex)
     {
         if (enablemask)
