@@ -579,6 +579,7 @@ public class LitVCR : MonoBehaviour
     {
         Settings.ini.Graphics.EnableMask = Settings.ini.Graphics.EnableMask;
         Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
+        //Settings.ini.Game.ReloadUrlAfterDelay = Settings.ini.Game.ReloadUrlAfterDelay;
         enablemask = Settings.ini.Graphics.EnableMask;
         autoResetTime = Settings.ini.Game.AutoResetTime;
         if (enablemask)
@@ -623,6 +624,20 @@ public class LitVCR : MonoBehaviour
             if (LoadingPlayer)
             {
                 LoadingPlayer.Events.AddListener(OnVideoEvent);
+            }
+        }
+
+        StartCoroutine(ReloadUrlAfterDelay());
+    }
+
+    IEnumerator ReloadUrlAfterDelay()
+    {
+        yield return new WaitForSeconds(Settings.ini.Game.ReloadUrlAfterDelay);
+        if (canvasWebViewPrefab != null && canvasWebViewPrefab.WebView != null)
+        {
+            if (IsWebUrl(videoPaths[videoindex]))
+            {
+                LoadUrlWhenReady(videoPaths[videoindex]);
             }
         }
     }

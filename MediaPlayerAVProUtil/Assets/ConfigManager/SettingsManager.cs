@@ -101,6 +101,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("AutoResetTime", value.ToString());
     }
 
+    public float ReloadUrlAfterDelay
+    {
+        get => ReadFloat("ReloadUrlAfterDelay", 5f);
+        set => WriteValue("ReloadUrlAfterDelay", value.ToString());
+    }
+
     public int VideoIndex
     {
         get => ReadInt("VideoIndex", 0);
