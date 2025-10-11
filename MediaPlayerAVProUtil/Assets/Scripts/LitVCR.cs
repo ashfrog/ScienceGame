@@ -579,7 +579,7 @@ public class LitVCR : MonoBehaviour
     {
         Settings.ini.Graphics.EnableMask = Settings.ini.Graphics.EnableMask;
         Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
-        //Settings.ini.Game.ReloadUrlAfterDelay = Settings.ini.Game.ReloadUrlAfterDelay;
+        Settings.ini.Game.ReloadUrlAfterDelay = Settings.ini.Game.ReloadUrlAfterDelay;
         enablemask = Settings.ini.Graphics.EnableMask;
         autoResetTime = Settings.ini.Game.AutoResetTime;
         if (enablemask)
@@ -632,14 +632,19 @@ public class LitVCR : MonoBehaviour
 
     IEnumerator ReloadUrlAfterDelay()
     {
-        yield return new WaitForSeconds(Settings.ini.Game.ReloadUrlAfterDelay);
-        if (canvasWebViewPrefab != null && canvasWebViewPrefab.WebView != null)
+        float delaytime = Settings.ini.Game.ReloadUrlAfterDelay;
+        if (delaytime > 0)
         {
-            if (IsWebUrl(videoPaths[videoindex]))
+            yield return new WaitForSeconds(Settings.ini.Game.ReloadUrlAfterDelay);
+            if (canvasWebViewPrefab != null && canvasWebViewPrefab.WebView != null)
             {
-                LoadUrlWhenReady(videoPaths[videoindex]);
+                if (IsWebUrl(videoPaths[videoindex]))
+                {
+                    LoadUrlWhenReady(videoPaths[videoindex]);
+                }
             }
         }
+        yield return null;
     }
 
     private Texture2D lastTextureRef;
