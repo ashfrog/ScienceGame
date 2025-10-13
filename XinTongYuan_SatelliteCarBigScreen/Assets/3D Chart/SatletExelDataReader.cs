@@ -64,11 +64,11 @@ public class SatletExelDataReader : MonoBehaviour
         yearText2.text = yearText1.text;
         if (year > 2020)
         {
-            pieChartCountry.SpacingAngle = 6;
+            pieChartCountry.SpacingAngle = 14;
         }
         else
         {
-            pieChartCountry.SpacingAngle = 0;
+            pieChartCountry.SpacingAngle = 6;
         }
         pieChartGroup.SpacingAngle = pieChartCountry.SpacingAngle;
 
@@ -150,6 +150,7 @@ public class SatletExelDataReader : MonoBehaviour
                 foreach (var kvp in countryData)
                 {
                     float percent = totalCountry > 0 ? kvp.Value / totalCountry : 0;
+                    Debug.Log("percent: " + percent * 100);
                     pieChartCountry.DataSource.SetValue(kvp.Key, percent * 100);
                 }
 

@@ -520,7 +520,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: fontSize
-      value: 30
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -535,7 +535,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: fractionDigits
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -870,7 +870,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -880,7 +880,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: AnimationTime
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -890,7 +890,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: AnimateOnEnable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -1104,6 +1104,11 @@ PrefabInstance:
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: seperation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
+        type: 3}
+      propertyPath: fractionDigits
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
@@ -1524,7 +1529,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -1534,7 +1539,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: AnimationTime
-      value: 1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -1544,7 +1549,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: AnimateOnEnable
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454199, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}

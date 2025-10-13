@@ -5436,7 +5436,7 @@ MonoBehaviour:
     Breadth: 0
     Depth: 0
   alignment: 1
-  fractionDigits: 0
+  fractionDigits: 1
 --- !u!114 &392260572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8237,7 +8237,7 @@ MonoBehaviour:
     Breadth: 0
     Depth: 0
   alignment: 1
-  fractionDigits: 0
+  fractionDigits: 1
 --- !u!114 &603662347
 MonoBehaviour:
   m_ObjectHideFlags: 0
