@@ -962,8 +962,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         // 可选：防止过大过小
         scale = Mathf.Clamp(scale, minScale, maxScale);
 
-        Debug.Log(scale);
-
         // 如果显示Both模式可乘以scaleSateliteWhenShowBoth
         if (displayMode == DisplayMode.Both)
             scale *= scaleSateliteWhenShowBoth;

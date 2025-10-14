@@ -115,10 +115,11 @@ public class SatletExelDataReader : MonoBehaviour
                 // ==== 先清空，再添加新分类 ====
                 if (pieChartGroup != null && pieChartGroup.DataSource != null)
                 {
+                    // 添加分类时只保留 value > 0 的分类
                     pieChartGroup.DataSource.Clear();
                     foreach (var category in groupData.Keys)
                     {
-                        if (material != null)
+                        if (groupData[category] > 0) // 只添加有值的
                         {
                             Material mat = new Material(material);
                             if (ColorUtility.TryParseHtmlString(pieCategoryColor[category], out UnityEngine.Color color))
@@ -134,39 +135,44 @@ public class SatletExelDataReader : MonoBehaviour
                     pieChartCountry.DataSource.Clear();
                     foreach (var country in countryData.Keys)
                     {
-                        Material mat = new Material(material);
-                        if (ColorUtility.TryParseHtmlString(pieCategoryColor[country], out UnityEngine.Color color))
+                        if (countryData[country] > 0)
                         {
-                            mat.color = color;
+                            Material mat = new Material(material);
+                            if (ColorUtility.TryParseHtmlString(pieCategoryColor[country], out UnityEngine.Color color))
+                            {
+                                mat.color = color;
+                            }
+                            pieChartCountry.DataSource.AddCategory(country, mat);
                         }
-                        pieChartCountry.DataSource.AddCategory(country, mat);
                     }
                 }
 
                 // ==== 设置数据 ====
                 foreach (var kvp in groupData)
                 {
-                    float percent = totalGroup > 0 ? kvp.Value / totalGroup : 0;
-
-
-                    pieChartGroup.DataSource.SetValue(kvp.Key, percent * 100);
+                    if (kvp.Value > 0)
+                    {
+                        float percent = totalGroup > 0 ? kvp.Value / totalGroup : 0;
+                        pieChartGroup.DataSource.SetValue(kvp.Key, percent * 100);
+                    }
                 }
                 foreach (var kvp in countryData)
                 {
-                    float percent = totalCountry > 0 ? kvp.Value / totalCountry : 0;
-
-                    pieChartCountry.DataSource.SetValue(kvp.Key, percent * 100);
+                    if (kvp.Value > 0)
+                    {
+                        float percent = totalCountry > 0 ? kvp.Value / totalCountry : 0;
+                        pieChartCountry.DataSource.SetValue(kvp.Key, percent * 100);
+                    }
                 }
 
                 break;
             }
         }
 
-        //pieChartGroup.gameObject.SetActive(false); //动画效果生效
-        //pieChartGroup.gameObject.SetActive(true);
+
         pieChartGroup.GetComponent<PieAnimation>().Animate();
-        //pieChartCountry.gameObject.SetActive(false);
-        //pieChartCountry.gameObject.SetActive(true);
+
+
         pieChartCountry.GetComponent<PieAnimation>().Animate();
     }
 
