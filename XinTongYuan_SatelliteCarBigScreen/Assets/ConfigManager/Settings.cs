@@ -112,6 +112,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("MaxDisplaySatellite", value.ToString());
     }
 
+    public bool ShowOrbitWhenPie
+    {
+        get => ReadBool("ShowOrbitWhenPie", false);
+        set => WriteValue("ShowOrbitWhenPie", value.ToString());
+    }
+
     public float ScaleSateliteWhenShowBoth
     {
         get => ReadFloat("ScaleSateliteWhenShowBoth", 2f);

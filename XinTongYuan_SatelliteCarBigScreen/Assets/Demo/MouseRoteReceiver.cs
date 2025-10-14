@@ -120,7 +120,7 @@ public class MouseRoteReceiver : MonoBehaviour
         string filnames1 = litVCR1.ReloadFileList();
         string filnames2 = litVCR2.ReloadFileList();
         defaultCameraFieldofView = camObj.fieldOfView;
-
+        Settings.ini.Game.ShowOrbitWhenPie = Settings.ini.Game.ShowOrbitWhenPie;
         StartCoroutine(WaitForTcpServiceInitialization());
         MainPageLoop();
         //Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
@@ -344,7 +344,14 @@ public class MouseRoteReceiver : MonoBehaviour
                                     leanPitchYaw.Pitch = 10f;
                                     leanPitchYaw.Camera.DOFieldOfView(35f, 1f);
                                     wxTabSwitcher.SwitchTab(-1);
-                                    satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
+                                    if (Settings.ini.Game.ShowOrbitWhenPie)
+                                    {
+                                        satelliteOrbitRenderer.SetDisplayMode(DisplayMode.OrbitOnly);
+                                    }
+                                    else
+                                    {
+                                        satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
+                                    }
                                     satelliteOrbitRenderer.SetBaseSatelliteScale(20f);
                                     //Panel_level1_1_3.SetActive(false);
                                     //Panel_卫星在空姿态.SetActive(true);
@@ -480,7 +487,14 @@ public class MouseRoteReceiver : MonoBehaviour
                         {
                             Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);
                             int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
-                            satelliteOrbitRenderer.SetDisplayAll(year - 10, year, countrys);
+                            if (Settings.ini.Game.ShowOrbitWhenPie)
+                            {
+                                satelliteOrbitRenderer.SetDisplayAll(year - 10, year, countrys);
+                            }
+                            else
+                            {
+                                satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
+                            }
                             satletExelDataReader.ShowPieCharts(year);
 
                             litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");

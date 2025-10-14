@@ -5468,7 +5468,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   meshSegements: 360
-  startAngle: -5.56
+  startAngle: -20
   angleSpan: 360
   spacingAngle: 0
   radius: 100
@@ -8269,7 +8269,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   meshSegements: 360
-  startAngle: -5.56
+  startAngle: 25
   angleSpan: 360
   spacingAngle: 0
   radius: 100
