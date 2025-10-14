@@ -290,7 +290,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
                                     tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                                     orbitTabSwitcher.SwitchTab(0);
-                                    satelliteOrbitRenderer.SetBaseSatelliteScale(30);
+                                    //satelliteOrbitRenderer.SetBaseSatelliteScale(30);
                                     satelliteOrbitRenderer.SetDisplayGroup("伽利略星座");
 
 
@@ -352,7 +352,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     {
                                         satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                                     }
-                                    satelliteOrbitRenderer.SetBaseSatelliteScale(20f);
+                                    //satelliteOrbitRenderer.SetBaseSatelliteScale(20f);
                                     //Panel_level1_1_3.SetActive(false);
                                     //Panel_卫星在空姿态.SetActive(true);
                                     //WeiXingGuangDian.SetActive(false);
@@ -592,7 +592,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             wxTabSwitcher.SwitchTab(-1);
                             theEarth.SetActive(true);
 
-                            satelliteOrbitRenderer.SetBaseSatelliteScale(20);
+                            //satelliteOrbitRenderer.SetBaseSatelliteScale(20);
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             satelliteOrbitRenderer.SetDisplayAll(1970, year);
                             litVCR1.OpenVideoByFileName("卫星待机循环动画.mp4");

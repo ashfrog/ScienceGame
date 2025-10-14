@@ -945,24 +945,30 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     private Vector3 CalculateScale(Vector3 camPos, Vector3 position, float currentFOV)
     {
-        Vector3 scale = Vector3.one * baseSatelliteScale;
+        // 固定屏幕像素大小
+        float pixelDiameter = 12f; // 你希望卫星点在屏幕上有多少像素，可以调整此值
+        Camera cam = objCamera != null ? objCamera : Camera.main;
+        float distance = Vector3.Distance(camPos, position);
+        float screenHeight = (float)Screen.height;
+        float fovRad = cam.fieldOfView * Mathf.Deg2Rad;
 
-        if (keepConstantVisualSize)
-        {
-            float distance = Vector3.Distance(camPos, position);
-            float fovScaleFactor = referenceFOV / currentFOV;
-            float distanceScaleFactor = distance / 100f;
-            float totalScaleFactor = fovScaleFactor * distanceScaleFactor;
-            totalScaleFactor = Mathf.Clamp(totalScaleFactor, minScale, maxScale);
-            scale = Vector3.one * baseSatelliteScale * totalScaleFactor;
-        }
+        // 计算世界空间下所需直径
+        float worldDiameter = 2f * distance * Mathf.Tan(0.5f * fovRad) * (pixelDiameter / screenHeight);
 
+        // 你的卫星Mesh默认直径是 satelliteSize * 2
+        float meshDiameter = satelliteSize * 2f;
+        float scale = worldDiameter / meshDiameter;
+
+        // 可选：防止过大过小
+        scale = Mathf.Clamp(scale, minScale, maxScale);
+
+        Debug.Log(scale);
+
+        // 如果显示Both模式可乘以scaleSateliteWhenShowBoth
         if (displayMode == DisplayMode.Both)
-        {
-            scale = scale * scaleSateliteWhenShowBoth;
-        }
+            scale *= scaleSateliteWhenShowBoth;
 
-        return scale;
+        return Vector3.one * baseSatelliteScale * scale;
     }
 
     public void SetConstantVisualSize(bool enabled, float refFOV = 60f)
@@ -1152,11 +1158,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Equals)) // Ctrl + =
             {
-                SetBaseSatelliteScale(baseSatelliteScale * 1.2f);
+                //SetBaseSatelliteScale(baseSatelliteScale * 1.2f);
             }
             if (Input.GetKeyDown(KeyCode.Minus)) // Ctrl + -
             {
-                SetBaseSatelliteScale(baseSatelliteScale / 1.2f);
+                //SetBaseSatelliteScale(baseSatelliteScale / 1.2f);
             }
         }
     }

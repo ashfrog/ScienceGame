@@ -6405,8 +6405,8 @@ MonoBehaviour:
   keepConstantVisualSize: 1
   referenceFOV: 60
   minScale: 0.01
-  maxScale: 0.05
-  baseSatelliteScale: 30
+  maxScale: 2
+  baseSatelliteScale: 0.8
   maxDisplayOrbits: 1000
   maxDisplaySatellites: 2000
   printSelectcatalogNumber: 0
