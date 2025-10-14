@@ -585,7 +585,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454193, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: startAngle
-      value: 0
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454193, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -5596,6 +5596,11 @@ PrefabInstance:
     - target: {fileID: 6078240760340782082, guid: a21da37f970e8d04898137a11bd396e2,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6099303954591857681, guid: a21da37f970e8d04898137a11bd396e2,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6100512472923507464, guid: a21da37f970e8d04898137a11bd396e2,
