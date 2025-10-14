@@ -23,9 +23,22 @@ public class SatletExelDataReader : MonoBehaviour
     public Text text2;
 
     Dictionary<string, string> pieCategoryColor;
+    Dictionary<string, float> groupweight;
 
     private void OnEnable()
     {
+        try
+        {
+            string groupweightStr = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "groupweight.json"));
+            groupweight = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, float>>(groupweightStr);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Error reading groupweight.json: " + ex.Message);
+            groupweight = new Dictionary<string, float>();
+        }
+
+
         initialize(Application.streamingAssetsPath + "/卫星轨道数据.xlsx", 1);
         Hide();
     }
@@ -145,13 +158,26 @@ public class SatletExelDataReader : MonoBehaviour
                 foreach (var kvp in groupData)
                 {
                     float percent = totalGroup > 0 ? kvp.Value / totalGroup : 0;
-                    pieChartGroup.DataSource.SetValue(kvp.Key, percent * 100);
+
+                    float weight = 1;
+                    if (groupweight.TryGetValue(kvp.Key, out float value))
+                    {
+                        weight = value;
+                    }
+
+                    pieChartGroup.DataSource.SetValue(kvp.Key, percent * 100 * weight);
                 }
                 foreach (var kvp in countryData)
                 {
                     float percent = totalCountry > 0 ? kvp.Value / totalCountry : 0;
-                    Debug.Log("percent: " + percent * 100);
-                    pieChartCountry.DataSource.SetValue(kvp.Key, percent * 100);
+
+                    float weight = 1;
+                    if (groupweight.TryGetValue(kvp.Key, out float value))
+                    {
+                        weight = value;
+                    }
+
+                    pieChartCountry.DataSource.SetValue(kvp.Key, percent * 100 * weight);
                 }
 
                 break;
