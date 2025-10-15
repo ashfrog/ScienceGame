@@ -127,10 +127,15 @@ public class SatletExelDataReader : MonoBehaviour
                             {
                                 mat.color = color;
                             }
-                            pieChartGroup.DataSource.AddCategory(category, mat);
+
+                            if (!pieChartGroup.DataSource.HasCategory(category))
+                            {
+                                pieChartGroup.DataSource.AddCategory(category, mat);
+                            }
                         }
                     }
                 }
+
                 if (pieChartCountry != null && pieChartCountry.DataSource != null)
                 {
                     pieChartCountry.DataSource.Clear();
@@ -143,7 +148,10 @@ public class SatletExelDataReader : MonoBehaviour
                             {
                                 mat.color = color;
                             }
-                            pieChartCountry.DataSource.AddCategory(country, mat);
+                            if (!pieChartCountry.DataSource.HasCategory(country))
+                            {
+                                pieChartCountry.DataSource.AddCategory(country, mat);
+                            }
                         }
                     }
                 }

@@ -977,7 +977,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     }
     public void SetBaseSatelliteScale(float scale)
     {
-        baseSatelliteScale = Mathf.Clamp(scale, 0.01f, 100f);
+        baseSatelliteScale = Mathf.Clamp(scale, 0.1f, 1f);
         Debug.Log($"基础卫星缩放设置为: {baseSatelliteScale}");
     }
     void CreateOrbitMeshes(List<int> satelliteNumbers)
@@ -1156,11 +1156,11 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Equals)) // Ctrl + =
             {
-                //SetBaseSatelliteScale(baseSatelliteScale * 1.2f);
+                SetBaseSatelliteScale(baseSatelliteScale += 0.1f);
             }
             if (Input.GetKeyDown(KeyCode.Minus)) // Ctrl + -
             {
-                //SetBaseSatelliteScale(baseSatelliteScale / 1.2f);
+                SetBaseSatelliteScale(baseSatelliteScale -= 0.1f);
             }
         }
     }
