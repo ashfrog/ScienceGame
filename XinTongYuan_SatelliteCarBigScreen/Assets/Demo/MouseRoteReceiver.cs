@@ -579,9 +579,9 @@ public class MouseRoteReceiver : MonoBehaviour
                         }
                         break;
                     case OrderTypeEnum.CountryFilterChange:
-                        countrys = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
-                        satelliteOrbitRenderer.SetCountryFilter(true, countrys);
-                        satelliteOrbitRenderer.RefreshData();
+                        //countrys = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body));
+                        //satelliteOrbitRenderer.SetCountryFilter(true, countrys);
+                        //satelliteOrbitRenderer.RefreshData();
                         break;
                     case OrderTypeEnum.WeiXingDot:
                         Debug.Log((OrderTypeEnum)info.OrderType + "  " + (DataTypeEnum)info.DataType);

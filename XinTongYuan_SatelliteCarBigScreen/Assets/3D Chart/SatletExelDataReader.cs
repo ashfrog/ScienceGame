@@ -60,6 +60,8 @@ public class SatletExelDataReader : MonoBehaviour
 
     public void ShowPieCharts(int year)
     {
+        pieChartGroup.DataSource.StartBatch();
+        pieChartCountry.DataSource.StartBatch();
         yearText1.text = year.ToString();
         yearText2.text = yearText1.text;
         if (year > 2020)
@@ -183,6 +185,9 @@ public class SatletExelDataReader : MonoBehaviour
 
 
         pieChartCountry.GetComponent<PieAnimation>().Animate();
+
+        pieChartGroup.DataSource.EndBatch();
+        pieChartCountry.DataSource.EndBatch();
     }
 
     public void Show()
