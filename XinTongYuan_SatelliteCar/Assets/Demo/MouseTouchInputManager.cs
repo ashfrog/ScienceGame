@@ -14,6 +14,11 @@ public class MouseTouchInputManager : MonoBehaviour
 
     private Camera mainCamera;
 
+    /// <summary>
+    /// 放禁止触控物体
+    /// </summary>
+    public GameObject[] disableTouchObjs;
+
     void Start()
     {
         mainCamera = Camera.main;
@@ -29,6 +34,13 @@ public class MouseTouchInputManager : MonoBehaviour
                 // Check if the mouse position is within the touchArea
                 if (IsPointInTouchArea(Input.mousePosition))
                 {
+                    foreach (var obj in disableTouchObjs)
+                    {
+                        if (obj.activeInHierarchy)
+                        {
+                            return;
+                        }
+                    }
                     // Left mouse button pressed down
                     isDragging = true;
                     previousPosition = Input.mousePosition;

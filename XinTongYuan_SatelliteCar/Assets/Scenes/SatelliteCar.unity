@@ -19358,6 +19358,8 @@ MonoBehaviour:
   sensitivity: 1
   clientController: {fileID: 1642404122}
   touchArea: {fileID: 7330988}
+  disableTouchObjs:
+  - {fileID: 510464425}
 --- !u!114 &1642404122
 MonoBehaviour:
   m_ObjectHideFlags: 0
