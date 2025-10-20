@@ -169,10 +169,10 @@ public class Manager : MonoBehaviour
     {
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.LoadUrl, index);
     }
-    public void OnChangeUI(RectTransform rt) //改变可旋转区域的UI
-    {
-        _mouseTouchInputManager.touchArea = rt;
-    }
+    //public void OnChangeUI(RectTransform rt) //改变可旋转区域的UI
+    //{
+    //    _mouseTouchInputManager.touchArea = rt;
+    //}
 }
 public enum TabUIMainType
 {

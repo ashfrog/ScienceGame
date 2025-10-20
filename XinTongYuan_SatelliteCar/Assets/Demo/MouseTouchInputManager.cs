@@ -24,7 +24,7 @@ public class MouseTouchInputManager : MonoBehaviour
         // Handle mouse input
         if (Input.GetMouseButtonDown(0))
         {
-            if (touchArea.transform.parent.gameObject.activeSelf)
+            //if (touchArea.transform.parent.gameObject.activeSelf)
             {
                 // Check if the mouse position is within the touchArea
                 if (IsPointInTouchArea(Input.mousePosition))
