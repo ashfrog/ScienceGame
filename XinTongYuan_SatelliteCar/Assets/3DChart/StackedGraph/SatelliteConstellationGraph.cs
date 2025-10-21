@@ -2,6 +2,7 @@
 using ChartAndGraph;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -24,28 +25,23 @@ public class SatelliteConstellationGraph : MonoBehaviour
     [SerializeField]
     private ChartItemEffect PointHoverPrefab;
 
-    private Dictionary<string, string> countryColor;
+    private Dictionary<string, string> countryCategoryColor;
 
     // 卫星星座数据
     private readonly string[] categories = new string[]
     {
-        "c6",
-        "c2",
-        "c3",
-        "c4",
-        "c5",
+        "中国",
+        "美国",
+        "欧洲",
+        "俄罗斯",
+        "英国",
     };
 
     // 年份数据
-    //private readonly int[] years = new int[]
-    //{
-    //    1,2,3,4,5,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,
-    //    1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,
-    //    2018,2019,2020,2021,2022,2023,2024,2025
-    //};
+
     private readonly int[] years = new int[]
     {
-        1,2,3,4,5
+        1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997
     };
 
     // 卫星数量数据 [年份索引, 星座索引]
@@ -57,20 +53,21 @@ public class SatelliteConstellationGraph : MonoBehaviour
         {50,31,32,24,56}, //2024
         {50,31,32,200,98}  //2025
     };
-
+    DataTable dataTable_country;
     void Start()
     {
         string countryColorStr = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "CountryColor.json"));
-        countryColor = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(countryColorStr);
-        foreach (var key in countryColor.Keys.ToList()) //统一添加#开头 给unity解析16进制颜色
+        countryCategoryColor = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(countryColorStr);
+        foreach (var key in countryCategoryColor.Keys.ToList()) //统一添加#开头 给unity解析16进制颜色
         {
-            var value = countryColor[key];
+            var value = countryCategoryColor[key];
             if (!value.StartsWith("#"))
             {
-                countryColor[key] = "#" + value;
+                countryCategoryColor[key] = "#" + value;
             }
         }
-
+        var dataset = SatelliteDataReader.ReadExcel(Path.Combine(Application.streamingAssetsPath, "卫星年份数量.xlsx"));
+        dataTable_country = dataset.Tables[0];
         graphManager = GetComponent<StackedGraphManager2>();
         if (graphManager == null || graphManager.Chart == null)
         {

@@ -42,7 +42,7 @@ public class SatelliteDataReader : MonoBehaviour
         }
     }
 
-    DataSet ReadExcel(string filePath)
+    public static DataSet ReadExcel(string filePath)
     {
         try
         {
