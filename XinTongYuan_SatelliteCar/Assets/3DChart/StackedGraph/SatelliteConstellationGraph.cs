@@ -41,15 +41,15 @@ public class SatelliteConstellationGraph : MonoBehaviour
 
     private readonly int[] years = new int[]
     {
-        1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997
+        1,2,3,5,20
     };
 
     // 卫星数量数据 [年份索引, 星座索引]
     private readonly int[,] satelliteData = new int[,]
     {
-        {4,1,8,7,0}, //2021
+        {400,1,8,7,0}, //2021
         {4,3,2,6,0}, //2022
-        {4,31,28,26,0}, //2023
+        {4,3100,28,26,0}, //2023
         {50,31,32,24,56}, //2024
         {50,31,32,200,98}  //2025
     };
@@ -85,7 +85,6 @@ public class SatelliteConstellationGraph : MonoBehaviour
         // 加载初始数据
         LoadSatelliteData();
     }
-
     // 初始化图表分类
     private void InitializeCategories()
     {
@@ -103,7 +102,15 @@ public class SatelliteConstellationGraph : MonoBehaviour
             Material lineMaterial = new Material(lineMat);
             Material graphMaterial = new Material(graphMat);
             Material pointMaterial = new Material(pointMat);
-            graphManager.Chart.DataSource.AddCategory(cat, lineMaterial, 2, new MaterialTiling(), graphMaterial, false, pointMaterial, 10);
+
+            Color fromcolor = Color.white;
+            fromcolor.a = 0.3f;
+            graphMaterial.SetColor("_ColorFrom", fromcolor);
+            Color tocolor = ColorUtility.TryParseHtmlString(countryCategoryColor[cat], out Color graphColor2) ? graphColor2 : Color.white;
+            tocolor.a = 0.5f;
+            graphMaterial.SetColor("_ColorTo", tocolor);
+            graphManager.Chart.DataSource.AddCategory(cat, lineMaterial, 2, new MaterialTiling(), graphMaterial, false, pointMaterial, 20);
+
             graphManager.Chart.DataSource.Set2DCategoryPrefabs(cat, LineHoverPrefab, PointHoverPrefab);
         }
 
