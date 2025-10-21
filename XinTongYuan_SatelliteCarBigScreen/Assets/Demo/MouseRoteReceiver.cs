@@ -665,6 +665,10 @@ public class MouseRoteReceiver : MonoBehaviour
                                 {
                                     wxTabSwitcher.SwitchTab(EarthGroup.全球定位系统2);
                                 }
+                                else //默认
+                                {
+                                    wxTabSwitcher.SwitchTab(EarthGroup.全球定位系统1);
+                                }
                             }
                             else if (name.Contains("北斗一号A"))
                             {
@@ -678,7 +682,15 @@ public class MouseRoteReceiver : MonoBehaviour
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.北斗二号);
                             }
+                            else if (name.Contains("北斗"))//默认
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.北斗一号);
+                            }
                             else if (name.Contains(EarthGroup.千帆.ToString()))
+                            {
+                                wxTabSwitcher.SwitchTab(EarthGroup.千帆);
+                            }
+                            else if (name.Contains("多媒体卫星"))
                             {
                                 wxTabSwitcher.SwitchTab(EarthGroup.千帆);
                             }
