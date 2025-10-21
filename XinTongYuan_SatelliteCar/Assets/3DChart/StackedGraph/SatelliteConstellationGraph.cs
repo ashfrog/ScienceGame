@@ -41,7 +41,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
 
     private readonly int[] years = new int[]
     {
-        1,2,3,5,20
+        1,2,3,4,5
     };
 
     // 卫星数量数据 [年份索引, 星座索引]
@@ -116,6 +116,12 @@ public class SatelliteConstellationGraph : MonoBehaviour
 
         // 验证分类
         graphManager.VerifyCategories();
+
+        graphManager.Chart.HorizontalValueToStringMap.Add(1, "2018");
+        graphManager.Chart.HorizontalValueToStringMap.Add(2, "2020");
+        graphManager.Chart.HorizontalValueToStringMap.Add(3, "2021");
+        graphManager.Chart.HorizontalValueToStringMap.Add(4, "中国");
+        graphManager.Chart.HorizontalValueToStringMap.Add(5, "美国");
 
         Debug.Log("已添加分类数量: " + graphManager.Chart.DataSource.CategoryNames.Count());
     }

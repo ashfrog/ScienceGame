@@ -417,7 +417,7 @@ RectTransform:
   m_GameObject: {fileID: 483293485}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 50022475}
@@ -426,8 +426,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: -53.08728}
-  m_SizeDelta: {x: -8.8885, y: -199.5164}
+  m_AnchoredPosition: {x: 30.97998, y: -73.33457}
+  m_SizeDelta: {x: -80.43999, y: -240.01085}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &483293487
 MonoBehaviour:
@@ -461,8 +461,8 @@ MonoBehaviour:
       m_Calls: []
   horizontalPanning: 1
   verticalPanning: 0
-  heightRatio: 880.4836
-  widthRatio: 1911.1115
+  heightRatio: 839.98914
+  widthRatio: 1839.56
   PointClicked:
     m_PersistentCalls:
       m_Calls: []
@@ -699,12 +699,12 @@ MonoBehaviour:
     Automatic: 1
     Value: 0
   mainDivisions:
-    messure: 0
-    unitsPerDivision: 0
+    messure: 1
+    unitsPerDivision: 3
     total: 3
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
-      EnableTiling: 1
+      EnableTiling: 0
       TileFactor: 11.52
     markBackLength:
       Automatic: 1
@@ -732,7 +732,7 @@ MonoBehaviour:
     total: 3
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
-      EnableTiling: 1
+      EnableTiling: 0
       TileFactor: 11.52
     markBackLength:
       Automatic: 1
@@ -775,7 +775,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 483293485}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5eb3e26fd06b41d4baa022120f5cd617, type: 3}
   m_Name: 
