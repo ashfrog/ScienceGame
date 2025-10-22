@@ -18025,9 +18025,9 @@ MonoBehaviour:
     prefix: 
     suffix: 
     customFormat: 
-  fontSize: 14
+  fontSize: 12
   fontSharpness: 1
-  seperation: 21.9
+  seperation: 22
   location:
     Breadth: 0
     Depth: 0
@@ -18067,8 +18067,8 @@ MonoBehaviour:
     Value: 0
   mainDivisions:
     messure: 0
-    unitsPerDivision: 8
-    total: 8
+    unitsPerDivision: 1
+    total: 12
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
       EnableTiling: 0
@@ -18255,7 +18255,7 @@ MonoBehaviour:
     automaticVerticallView: 1
     automaticcHorizontaViewGap: 0
     automaticHorizontalView: 0
-    horizontalViewSize: 8
+    horizontalViewSize: 12
     horizontalViewOrigin: 0
     verticalViewSize: 10
     verticalViewOrigin: 0
