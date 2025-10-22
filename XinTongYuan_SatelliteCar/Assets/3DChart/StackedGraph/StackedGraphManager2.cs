@@ -139,52 +139,36 @@ public class StackedGraphManager2 : MonoBehaviour
             throw new ArgumentException("x and y size should match");
         mXValues.Clear();
         mXValues.AddRange(x);
-        mAccumilated.Clear();
-        mAccumilated.AddRange(Enumerable.Repeat(0.0, mXValues.Count));
-        int categoryIndex = Chart.DataSource.CategoryNames.Count() - 1;
 
-        foreach (string name in Chart.DataSource.CategoryNames.Reverse())
+        int categoryIndex = 0;
+        foreach (string name in Chart.DataSource.CategoryNames)
         {
             var entry = mData[name];
-
-
-            if (entry.mEnabled)
-            {
-                for (int i = 0; i < x.Length; i++)
-                    mAccumilated[i] += y[i, categoryIndex];
-            }
             entry.mYValues.Clear();
             entry.mVectors.Clear();
             for (int i = 0; i < mXValues.Count; i++)
             {
-                entry.mYValues.Add(y[i, categoryIndex]);
-                entry.mVectors.Add(new DoubleVector2(mXValues[i], mAccumilated[i]));
+                double yVal = y[i, categoryIndex];
+                entry.mYValues.Add(yVal);
+                entry.mVectors.Add(new DoubleVector2(mXValues[i], yVal));  // 只用原始y值
             }
-
             entry.mFeed.SetData(entry.mVectors);
-            categoryIndex--;
+            categoryIndex++;
         }
     }
     void ApplyData()
     {
-        mAccumilated.Clear();
-        mAccumilated.AddRange(Enumerable.Repeat(0.0, mXValues.Count));
-        int categoryIndex = Chart.DataSource.CategoryNames.Count() - 1;
-
-        foreach (string name in Chart.DataSource.CategoryNames.Reverse())
+        int categoryIndex = 0;
+        foreach (string name in Chart.DataSource.CategoryNames)
         {
             var entry = mData[name];
             entry.mVectors.Clear();
-            if (entry.mEnabled)
-            {
-                for (int i = 0; i < mXValues.Count; i++)
-                    mAccumilated[i] += entry.mYValues[i];
-            }
-            entry.mVectors.Clear();
             for (int i = 0; i < mXValues.Count; i++)
-                entry.mVectors.Add(new DoubleVector2(mXValues[i], mAccumilated[i]));
+            {
+                entry.mVectors.Add(new DoubleVector2(mXValues[i], entry.mYValues[i]));
+            }
             entry.mFeed.SetData(entry.mVectors);
-            categoryIndex--;
+            categoryIndex++;
         }
     }
     public void AddPointRealtime(double x, double[] y, double slideTime = 0.0)
