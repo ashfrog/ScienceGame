@@ -28,16 +28,6 @@ public class SatelliteConstellationGraph : MonoBehaviour
 
     private Dictionary<string, string> countryCategoryColor;
 
-    // 卫星星座第一行分类
-    private readonly string[] categories = new string[]
-    {
-        "中国",
-        "美国",
-        "欧洲",
-        "俄罗斯",
-        "英国",
-    };
-
     DataTable dataTable_country;
 
     // 加载全部数据相关
@@ -76,12 +66,34 @@ public class SatelliteConstellationGraph : MonoBehaviour
         PrepareSatelliteDataForRealtime();
         ShowAllData();
     }
+    private void OnEnable()
+    {
+        graphManager = GetComponent<StackedGraphManager2>();
+        if (graphManager == null || graphManager.Chart == null)
+        {
+            Debug.LogError("请确保物体上挂载了StackedGraphManager2组件并正确设置了Chart引用");
+            return;
+        }
+        ResetPos();
+    }
+    public void ResetPos()
+    {
+        // 重置x轴位置
+        graphManager.Chart.HorizontalScrolling = 0;
+    }
 
     private void InitializeCategories()
     {
         // 清除现有分类
         foreach (var cat in graphManager.Chart.DataSource.CategoryNames.ToList())
             graphManager.Chart.DataSource.RemoveCategory(cat);
+
+        List<string> categories = new List<string>();
+        for (int col = 1; col < dataTable_country.Columns.Count; col++)
+        {
+            Debug.Log($"列{col}: {dataTable_country.Columns[col].ColumnName}");
+            categories.Add(dataTable_country.Columns[col].ColumnName);
+        }
 
         // 添加新分类
         foreach (var cat in categories)
@@ -133,10 +145,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
                 yData[i, j - 1] = Convert.ToDouble(row[j]);
         }
 
-        for (int col = 0; col < dataTable_country.Columns.Count; col++)
-        {
-            Debug.Log($"列{col}: {dataTable_country.Columns[col].ColumnName}");
-        }
+
     }
 
     // 一次性显示全部年份
