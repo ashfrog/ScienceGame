@@ -192,18 +192,14 @@ public class StackedGraphManager2 : MonoBehaviour
         VerifyCategories();
         mXValues.Add(x);
         int categoryIndex = Chart.DataSource.CategoryNames.Count() - 1;
-        double accumilated = 0.0;
         foreach (string name in Chart.DataSource.CategoryNames.Reverse())
         {
             var entry = mData[name];
             double yValue = 0.0;
             if (categoryIndex < y.Length)
                 yValue = y[categoryIndex];
-            if (entry.mEnabled)
-                accumilated += yValue;
-            //entry.mVectors.Add(new DoubleVector2(x,yValue)); // this happens in AppendRealtimeWithDownSampling
             entry.mYValues.Add(yValue);
-            entry.mFeed.AppendPointRealtime(x, accumilated, slideTime);
+            entry.mFeed.AppendPointRealtime(x, yValue, slideTime);
             categoryIndex--;
         }
 

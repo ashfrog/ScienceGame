@@ -62,6 +62,32 @@ public class SatelliteDataReader : MonoBehaviour
         }
     }
 
+    public static DataSet ReadExcel(string filePath, bool useHeaderRow)
+    {
+        try
+        {
+            using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
+            {
+                using (var reader = ExcelReaderFactory.CreateReader(stream))
+                {
+                    var dataset = reader.AsDataSet(new ExcelDataSetConfiguration()
+                    {
+                        ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                        {
+                            UseHeaderRow = true // 关键
+                        }
+                    });
+                    return dataset;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error reading Excel file: " + e.Message);
+            return null;
+        }
+    }
+
     void CreateDataRow(DataRow row, int i)
     {
 

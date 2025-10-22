@@ -57,7 +57,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
             if (!value.StartsWith("#"))
                 countryCategoryColor[key] = "#" + value;
         }
-        var dataset = SatelliteDataReader.ReadExcel(Path.Combine(Application.streamingAssetsPath, "卫星年份数量.xlsx"));
+        var dataset = SatelliteDataReader.ReadExcel(Path.Combine(Application.streamingAssetsPath, "卫星年份数量.xlsx"), true);
         dataTable_country = dataset.Tables[0];
         graphManager = GetComponent<StackedGraphManager2>();
         if (graphManager == null || graphManager.Chart == null)
@@ -97,7 +97,6 @@ public class SatelliteConstellationGraph : MonoBehaviour
             SetMat(cat, graphMaterial);
             SetMat(cat, pointMaterial);
             graphManager.Chart.DataSource.AddCategory(cat, lineMaterial, 5, new MaterialTiling(), graphMaterial, false, pointMaterial, 40);
-
             graphManager.Chart.DataSource.Set2DCategoryPrefabs(cat, LineHoverPrefab, PointHoverPrefab);
         }
 
@@ -126,15 +125,20 @@ public class SatelliteConstellationGraph : MonoBehaviour
         xData = new double[dataCount];
         yData = new double[dataCount, categoryCount];
 
-        for (int i = 1; i <= dataCount; i++)
+        for (int i = 0; i < dataCount; i++) //行
         {
             DataRow row = dataTable_country.Rows[i];
             int year = Convert.ToInt32(row[0]);
-            xData[i - 1] = i - 1; // 用索引做x
-            graphManager.Chart.HorizontalValueToStringMap[i - 1] = year.ToString();
+            xData[i] = i; // 用索引做x
+            graphManager.Chart.HorizontalValueToStringMap[i] = year.ToString();
 
-            for (int j = 1; j <= categoryCount; j++)
-                yData[i - 1, j - 1] = Convert.ToDouble(row[j]);
+            for (int j = 1; j <= categoryCount; j++) //列
+                yData[i, j - 1] = Convert.ToDouble(row[j]);
+        }
+
+        for (int col = 0; col < dataTable_country.Columns.Count; col++)
+        {
+            Debug.Log($"列{col}: {dataTable_country.Columns[col].ColumnName}");
         }
     }
 
