@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static ChartAndGraph.GraphChartBase;
 
 public class Manager : MonoBehaviour
 {
@@ -146,6 +147,11 @@ public class Manager : MonoBehaviour
         img_year.sprite = years[index];
         exelPieDataReader.ShowPieCharts(year);
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, year);
+    }
+
+    public void OnGraphSelect(GraphEventArgs e)
+    {
+        Debug.Log(e.Category);
     }
 
     //public void OnCarModel()  //汽车模型

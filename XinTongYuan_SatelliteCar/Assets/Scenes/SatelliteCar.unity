@@ -17972,8 +17972,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 242.83142, y: -187.70288}
-  m_SizeDelta: {x: 1370.5325, y: 375.4057}
+  m_AnchoredPosition: {x: 180.53064, y: -207.49469}
+  m_SizeDelta: {x: 1398.3074, y: 335.8221}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1442324711
 MonoBehaviour:
@@ -18067,8 +18067,8 @@ MonoBehaviour:
     Value: 0
   mainDivisions:
     messure: 0
-    unitsPerDivision: 1
-    total: 10
+    unitsPerDivision: 8
+    total: 8
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
       EnableTiling: 0
@@ -18220,17 +18220,29 @@ MonoBehaviour:
   horizontalScrolling: 0
   autoScrollVertically: 1
   verticalScrolling: 0
-  raycastTarget: 0
+  raycastTarget: 1
   MousePan:
     m_PersistentCalls:
       m_Calls: []
   horizontalPanning: 1
   verticalPanning: 1
-  heightRatio: 375.4057
-  widthRatio: 1370.5325
+  heightRatio: 335.8221
+  widthRatio: 1398.3074
   PointClicked:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 565227706}
+        m_TargetAssemblyTypeName: Manager, Assembly-CSharp
+        m_MethodName: OnGraphSelect
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   PointHovered:
     m_PersistentCalls:
       m_Calls: []
@@ -18243,7 +18255,7 @@ MonoBehaviour:
     automaticVerticallView: 1
     automaticcHorizontaViewGap: 0
     automaticHorizontalView: 0
-    horizontalViewSize: 10
+    horizontalViewSize: 8
     horizontalViewOrigin: 0
     verticalViewSize: 10
     verticalViewOrigin: 0
