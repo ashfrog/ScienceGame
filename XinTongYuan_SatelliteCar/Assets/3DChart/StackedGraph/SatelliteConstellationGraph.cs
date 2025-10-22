@@ -40,8 +40,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
 
     DataTable dataTable_country;
 
-    // 实时绘制相关
-    private int currentYearIndex = 0; // 当前追加到哪一年
+    // 加载全部数据相关
     private double[] xData; // 年份数据
     private double[,] yData; // 卫星数量数据
     private int categoryCount; // 分类数
@@ -73,11 +72,9 @@ public class SatelliteConstellationGraph : MonoBehaviour
         graphManager.Chart.PointHovered.AddListener(GraphHovered);
         graphManager.Chart.NonHovered.AddListener(NonHovered);
 
-        // 加载初始数据（只显示第一年）
-        graphManager.Chart.AutoScrollHorizontally = true;
+        // 一次性加载所有数据
         PrepareSatelliteDataForRealtime();
-        ShowFirstYear();
-        StartCoroutine(AnimateYears(0.05f));
+        ShowAllData();
     }
 
     private void InitializeCategories()
@@ -142,46 +139,13 @@ public class SatelliteConstellationGraph : MonoBehaviour
         }
     }
 
-    // 显示第一年
-    private void ShowFirstYear()
+    // 一次性显示全部年份
+    private void ShowAllData()
     {
-        double[] initX = new double[] { xData[0] };
-        double[,] initY = new double[1, categoryCount];
-        for (int c = 0; c < categoryCount; c++)
-            initY[0, c] = yData[0, c];
-
-        graphManager.InitialData(initX, initY);
-        currentYearIndex = 1; // 下一年
+        graphManager.InitialData(xData, yData);
     }
 
-    // 实时追加一年的数据
-    public void AddNextYearData()
-    {
-        if (currentYearIndex >= dataCount)
-            return;
-        graphManager.AddPointRealtime(xData[currentYearIndex], GetYArray(currentYearIndex));
-        currentYearIndex++;
-    }
-
-    // 取某一年所有分类的 y 数据
-    private double[] GetYArray(int idx)
-    {
-        double[] arr = new double[categoryCount];
-        for (int c = 0; c < categoryCount; c++)
-            arr[c] = yData[idx, c];
-        return arr;
-    }
-
-    // 支持自动动画
-    public IEnumerator AnimateYears(float interval = 1f)
-    {
-        while (currentYearIndex < dataCount)
-        {
-            AddNextYearData();
-            yield return new WaitForSeconds(interval);
-        }
-        graphManager.Chart.AutoScrollHorizontally = false;
-    }
+    // 支持自动动画的相关方法已不再使用
 
     public void ToggleCategory(string name)
     {
