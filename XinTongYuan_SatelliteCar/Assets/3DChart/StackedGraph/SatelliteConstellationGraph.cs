@@ -38,22 +38,15 @@ public class SatelliteConstellationGraph : MonoBehaviour
         "英国",
     };
 
-    //x轴 年份标签索引
-    private readonly int[] yearsid = new int[]
-    {
-        0,1,2,3,4
-    };
-
-    // 卫星数量数据 [年份索引, 星座索引] 需要从Excel读取，这里只是示例数据
-    private readonly int[,] satelliteData = new int[,]
-    {
-        {0,4,0,0,0}, //1978
-        {4,3,2,6,0}, //1980
-        {4,3100,28,26,0}, //1981
-        {50,31,32,24,56}, //1982
-        {50,31,32,200,98}  //1983
-    };
     DataTable dataTable_country;
+
+    // 实时绘制相关
+    private int currentYearIndex = 0; // 当前追加到哪一年
+    private double[] xData; // 年份数据
+    private double[,] yData; // 卫星数量数据
+    private int categoryCount; // 分类数
+    private int dataCount; // 年份数
+
     void Start()
     {
         string countryColorStr = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "CountryColor.json"));
@@ -62,9 +55,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
         {
             var value = countryCategoryColor[key];
             if (!value.StartsWith("#"))
-            {
                 countryCategoryColor[key] = "#" + value;
-            }
         }
         var dataset = SatelliteDataReader.ReadExcel(Path.Combine(Application.streamingAssetsPath, "卫星年份数量.xlsx"));
         dataTable_country = dataset.Tables[0];
@@ -82,17 +73,17 @@ public class SatelliteConstellationGraph : MonoBehaviour
         graphManager.Chart.PointHovered.AddListener(GraphHovered);
         graphManager.Chart.NonHovered.AddListener(NonHovered);
 
-        // 加载初始数据
-        LoadSatelliteData();
+        // 加载初始数据（只显示第一年）
+        PrepareSatelliteDataForRealtime();
+        ShowFirstYear();
+        StartCoroutine(AnimateYears(0.01f));
     }
-    // 初始化图表分类
+
     private void InitializeCategories()
     {
         // 清除现有分类
         foreach (var cat in graphManager.Chart.DataSource.CategoryNames.ToList())
-        {
             graphManager.Chart.DataSource.RemoveCategory(cat);
-        }
 
         // 添加新分类
         foreach (var cat in categories)
@@ -101,12 +92,9 @@ public class SatelliteConstellationGraph : MonoBehaviour
             Material graphMaterial = new Material(graphMat);
             Material pointMaterial = new Material(pointMat);
 
-            Color fromcolor = Color.white;
-            fromcolor.a = 0.3f;
-            graphMaterial.SetColor("_ColorFrom", fromcolor);
-            Color tocolor = ColorUtility.TryParseHtmlString(countryCategoryColor[cat], out Color graphColor2) ? graphColor2 : Color.white;
-            tocolor.a = 0.5f;
-            graphMaterial.SetColor("_ColorTo", tocolor);
+            SetMat(cat, lineMaterial);
+            SetMat(cat, graphMaterial);
+            SetMat(cat, pointMaterial);
             graphManager.Chart.DataSource.AddCategory(cat, lineMaterial, 2, new MaterialTiling(), graphMaterial, false, pointMaterial, 20);
 
             graphManager.Chart.DataSource.Set2DCategoryPrefabs(cat, LineHoverPrefab, PointHoverPrefab);
@@ -115,64 +103,93 @@ public class SatelliteConstellationGraph : MonoBehaviour
         // 验证分类
         graphManager.VerifyCategories();
 
-        // x轴标签映射
-        graphManager.Chart.HorizontalValueToStringMap.Add(0, "1978");
-        graphManager.Chart.HorizontalValueToStringMap.Add(1, "1979");
-        graphManager.Chart.HorizontalValueToStringMap.Add(2, "1980");
-        graphManager.Chart.HorizontalValueToStringMap.Add(3, "1981");
-        graphManager.Chart.HorizontalValueToStringMap.Add(4, "1982");
+        // 清空x轴标签映射，稍后动态设置
+        graphManager.Chart.HorizontalValueToStringMap.Clear();
     }
 
-    // dataTable_country 已经从 Excel 读取
-    // 表头：A1=年份, B1=中国, C1=美国, D1=欧洲, E1=俄罗斯, F1=英国
-    // 下面是动态读取 category 和数据的代码
-
-    private void LoadSatelliteData()
+    private void SetMat(string cat, Material mat)
     {
-        // 读取 categories（国家名），从第二列开始
-        int categoryCount = dataTable_country.Columns.Count - 1;
-        string[] categories = new string[categoryCount];
-        for (int i = 0; i < categoryCount; i++)
-        {
-            categories[i] = dataTable_country.Columns[i + 1].ColumnName;
-        }
+        Color fromcolor = Color.white;
+        fromcolor.a = 0.3f;
+        mat.SetColor("_ColorFrom", fromcolor);
+        Color tocolor = ColorUtility.TryParseHtmlString(countryCategoryColor[cat], out Color graphColor2) ? graphColor2 : Color.white;
+        tocolor.a = 0.5f;
+        mat.SetColor("_ColorTo", tocolor);
+    }
 
-        int dataCount = dataTable_country.Rows.Count;
-        double[] xData = new double[dataCount];
-        double[,] yData = new double[dataCount, categoryCount];
+    // 预处理原始表格数据到 xData/yData
+    private void PrepareSatelliteDataForRealtime()
+    {
+        categoryCount = dataTable_country.Columns.Count - 1;
+        dataCount = dataTable_country.Rows.Count - 1; // 跳过表头
+        xData = new double[dataCount];
+        yData = new double[dataCount, categoryCount];
 
-        for (int i = 1; i < dataCount; i++)
+        for (int i = 1; i <= dataCount; i++)
         {
             DataRow row = dataTable_country.Rows[i];
-            // x轴用年份
             int year = Convert.ToInt32(row[0]);
-            xData[i] = i; // 也可以用 year
-            graphManager.Chart.HorizontalValueToStringMap[i] = year.ToString();
+            xData[i - 1] = i - 1; // 用索引做x
+            graphManager.Chart.HorizontalValueToStringMap[i - 1] = year.ToString();
 
-            for (int j = 1; j < categoryCount; j++)
-            {
-                yData[i, j] = Convert.ToDouble(row[j + 1]);
-            }
+            for (int j = 1; j <= categoryCount; j++)
+                yData[i - 1, j - 1] = Convert.ToDouble(row[j]);
         }
+    }
 
-        graphManager.InitialData(xData, yData);
+    // 显示第一年
+    private void ShowFirstYear()
+    {
+        double[] initX = new double[] { xData[0] };
+        double[,] initY = new double[1, categoryCount];
+        for (int c = 0; c < categoryCount; c++)
+            initY[0, c] = yData[0, c];
+
+        graphManager.InitialData(initX, initY);
+        currentYearIndex = 1; // 下一年
+    }
+
+    // 实时追加一年的数据
+    public void AddNextYearData()
+    {
+        if (currentYearIndex >= dataCount)
+            return;
+        graphManager.AddPointRealtime(xData[currentYearIndex], GetYArray(currentYearIndex));
+        currentYearIndex++;
+    }
+
+    // 取某一年所有分类的 y 数据
+    private double[] GetYArray(int idx)
+    {
+        double[] arr = new double[categoryCount];
+        for (int c = 0; c < categoryCount; c++)
+            arr[c] = yData[idx, c];
+        return arr;
+    }
+
+    // 支持自动动画
+    public IEnumerator AnimateYears(float interval = 1f)
+    {
+        while (currentYearIndex < dataCount)
+        {
+            AddNextYearData();
+            yield return new WaitForSeconds(interval);
+        }
     }
 
     public void ToggleCategory(string name)
     {
         if (graphManager != null)
-        {
             graphManager.ToggleCategoryEnabled(name);
-        }
     }
 
     public void GraphHovered(GraphChartBase.GraphEventArgs args)
     {
         if (infoText == null) return;
-
         var point = graphManager.GetPointValue(args.Category, args.Index);
         infoText.text = string.Format("{0} 年 - {1}: {2} 颗卫星",
-            (int)point.x, args.Category, point.y);
+            graphManager.Chart.HorizontalValueToStringMap.ContainsKey((int)point.x) ? graphManager.Chart.HorizontalValueToStringMap[(int)point.x] : ((int)point.x).ToString(),
+            args.Category, point.y);
     }
 
     public void NonHovered()
