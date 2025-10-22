@@ -520,7 +520,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 75.563965, y: -47.658684}
-  m_SizeDelta: {x: 3719.6355, y: 872.3975}
+  m_SizeDelta: {x: 1800.8596, y: 872.3975}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &483293487
 MonoBehaviour:
@@ -555,7 +555,7 @@ MonoBehaviour:
   horizontalPanning: 1
   verticalPanning: 1
   heightRatio: 872.3975
-  widthRatio: 3719.6355
+  widthRatio: 1800.8596
   PointClicked:
     m_PersistentCalls:
       m_Calls: []
