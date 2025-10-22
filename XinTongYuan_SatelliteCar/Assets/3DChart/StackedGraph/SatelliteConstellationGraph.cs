@@ -74,9 +74,10 @@ public class SatelliteConstellationGraph : MonoBehaviour
         graphManager.Chart.NonHovered.AddListener(NonHovered);
 
         // 加载初始数据（只显示第一年）
+        graphManager.Chart.AutoScrollHorizontally = true;
         PrepareSatelliteDataForRealtime();
         ShowFirstYear();
-        StartCoroutine(AnimateYears(0.01f));
+        StartCoroutine(AnimateYears(0.05f));
     }
 
     private void InitializeCategories()
@@ -95,7 +96,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
             SetMat(cat, lineMaterial);
             SetMat(cat, graphMaterial);
             SetMat(cat, pointMaterial);
-            graphManager.Chart.DataSource.AddCategory(cat, lineMaterial, 2, new MaterialTiling(), graphMaterial, false, pointMaterial, 20);
+            graphManager.Chart.DataSource.AddCategory(cat, lineMaterial, 5, new MaterialTiling(), graphMaterial, false, pointMaterial, 40);
 
             graphManager.Chart.DataSource.Set2DCategoryPrefabs(cat, LineHoverPrefab, PointHoverPrefab);
         }
@@ -110,7 +111,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
     private void SetMat(string cat, Material mat)
     {
         Color fromcolor = Color.white;
-        fromcolor.a = 0.3f;
+        fromcolor.a = 0.2f;
         mat.SetColor("_ColorFrom", fromcolor);
         Color tocolor = ColorUtility.TryParseHtmlString(countryCategoryColor[cat], out Color graphColor2) ? graphColor2 : Color.white;
         tocolor.a = 0.5f;
@@ -175,6 +176,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
             AddNextYearData();
             yield return new WaitForSeconds(interval);
         }
+        graphManager.Chart.AutoScrollHorizontally = false;
     }
 
     public void ToggleCategory(string name)

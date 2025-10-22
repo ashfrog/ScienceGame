@@ -519,8 +519,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 75.5639, y: 28.321632}
-  m_SizeDelta: {x: 3719.6355, y: 1024.3582}
+  m_AnchoredPosition: {x: 75.563965, y: -47.658684}
+  m_SizeDelta: {x: 3719.6355, y: 872.3975}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &483293487
 MonoBehaviour:
@@ -540,50 +540,38 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   keepOrthoSize: 0
-  paperEffectText: 1
+  paperEffectText: 0
   vRSpaceText: 0
   vRSpaceScale: 0.1
   maintainLabelSize: 1
-  autoScrollHorizontally: 0
+  autoScrollHorizontally: 1
   horizontalScrolling: 0
   autoScrollVertically: 1
   verticalScrolling: 0
-  raycastTarget: 1
+  raycastTarget: 0
   MousePan:
     m_PersistentCalls:
       m_Calls: []
   horizontalPanning: 1
-  verticalPanning: 0
-  heightRatio: 1024.3582
+  verticalPanning: 1
+  heightRatio: 872.3975
   widthRatio: 3719.6355
   PointClicked:
     m_PersistentCalls:
       m_Calls: []
   PointHovered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 802219867}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   NonHovered:
     m_PersistentCalls:
       m_Calls: []
-  itemFormat: <?x>:<?y>
+  itemFormat: '<?category>: <?y>'
   Data:
     automaticVerticalViewGap: 0
     automaticVerticallView: 1
     automaticcHorizontaViewGap: 0
     automaticHorizontalView: 0
-    horizontalViewSize: 20
+    horizontalViewSize: 10
     horizontalViewOrigin: 0
     verticalViewSize: 10
     verticalViewOrigin: 0
@@ -793,8 +781,8 @@ MonoBehaviour:
     Value: 0
   mainDivisions:
     messure: 1
-    unitsPerDivision: 3
-    total: 3
+    unitsPerDivision: 1
+    total: 10
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
       EnableTiling: 0
@@ -820,9 +808,9 @@ MonoBehaviour:
     textSeperation: -17.28
     alignment: 2
   subDivisions:
-    messure: 0
-    unitsPerDivision: 0
-    total: 3
+    messure: 1
+    unitsPerDivision: 1
+    total: 1
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
       EnableTiling: 0
@@ -859,8 +847,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70c1abbbcf5655346b75bc72dd74a703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimationTime: 3
-  ModifyRange: 1
+  AnimationTime: 1
+  ModifyRange: 0
 --- !u!114 &483293491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1269,7 +1257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817e801b7bac56f4e943aee48cce86ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RealtimeDownSampleCount: 100
+  RealtimeDownSampleCount: 10
   DownSampleToPoints: 50
   Chart: {fileID: 483293487}
 --- !u!114 &802219872

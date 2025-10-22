@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class StackedGraphManager2 : MonoBehaviour
 {
-    public int RealtimeDownSampleCount = 10;
-    public int DownSampleToPoints = 100;
+    public int RealtimeDownSampleCount = 1000;
+    public int DownSampleToPoints = 1000;
 
     public GraphChart Chart;
 
