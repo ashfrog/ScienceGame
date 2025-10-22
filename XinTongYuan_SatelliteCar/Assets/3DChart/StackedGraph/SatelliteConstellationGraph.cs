@@ -1,5 +1,6 @@
 #define Graph_And_Chart_PRO
 using ChartAndGraph;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -27,7 +28,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
 
     private Dictionary<string, string> countryCategoryColor;
 
-    // 卫星星座数据
+    // 卫星星座第一行分类
     private readonly string[] categories = new string[]
     {
         "中国",
@@ -37,21 +38,20 @@ public class SatelliteConstellationGraph : MonoBehaviour
         "英国",
     };
 
-    // 年份数据
-
-    private readonly int[] years = new int[]
+    //x轴 年份标签索引
+    private readonly int[] yearsid = new int[]
     {
-        1,2,3,4,5
+        0,1,2,3,4
     };
 
-    // 卫星数量数据 [年份索引, 星座索引]
+    // 卫星数量数据 [年份索引, 星座索引] 需要从Excel读取，这里只是示例数据
     private readonly int[,] satelliteData = new int[,]
     {
-        {400,1,8,7,0}, //2021
-        {4,3,2,6,0}, //2022
-        {4,3100,28,26,0}, //2023
-        {50,31,32,24,56}, //2024
-        {50,31,32,200,98}  //2025
+        {0,4,0,0,0}, //1978
+        {4,3,2,6,0}, //1980
+        {4,3100,28,26,0}, //1981
+        {50,31,32,24,56}, //1982
+        {50,31,32,200,98}  //1983
     };
     DataTable dataTable_country;
     void Start()
@@ -94,8 +94,6 @@ public class SatelliteConstellationGraph : MonoBehaviour
             graphManager.Chart.DataSource.RemoveCategory(cat);
         }
 
-
-
         // 添加新分类
         foreach (var cat in categories)
         {
@@ -117,32 +115,46 @@ public class SatelliteConstellationGraph : MonoBehaviour
         // 验证分类
         graphManager.VerifyCategories();
 
-        graphManager.Chart.HorizontalValueToStringMap.Add(1, "2018");
-        graphManager.Chart.HorizontalValueToStringMap.Add(2, "2020");
-        graphManager.Chart.HorizontalValueToStringMap.Add(3, "2021");
-        graphManager.Chart.HorizontalValueToStringMap.Add(4, "中国");
-        graphManager.Chart.HorizontalValueToStringMap.Add(5, "美国");
-
-        Debug.Log("已添加分类数量: " + graphManager.Chart.DataSource.CategoryNames.Count());
+        // x轴标签映射
+        graphManager.Chart.HorizontalValueToStringMap.Add(0, "1978");
+        graphManager.Chart.HorizontalValueToStringMap.Add(1, "1979");
+        graphManager.Chart.HorizontalValueToStringMap.Add(2, "1980");
+        graphManager.Chart.HorizontalValueToStringMap.Add(3, "1981");
+        graphManager.Chart.HorizontalValueToStringMap.Add(4, "1982");
     }
 
-    // 加载卫星数据到图表
+    // dataTable_country 已经从 Excel 读取
+    // 表头：A1=年份, B1=中国, C1=美国, D1=欧洲, E1=俄罗斯, F1=英国
+    // 下面是动态读取 category 和数据的代码
+
     private void LoadSatelliteData()
     {
-        int dataCount = years.Length;
-        double[] xData = years.Select(y => (double)y).ToArray();
-        double[,] yData = new double[dataCount, categories.Length];
-
-        // 填充数据
-        for (int i = 0; i < dataCount; i++)
+        // 读取 categories（国家名），从第二列开始
+        int categoryCount = dataTable_country.Columns.Count - 1;
+        string[] categories = new string[categoryCount];
+        for (int i = 0; i < categoryCount; i++)
         {
-            for (int j = 0; j < categories.Length; j++)
+            categories[i] = dataTable_country.Columns[i + 1].ColumnName;
+        }
+
+        int dataCount = dataTable_country.Rows.Count;
+        double[] xData = new double[dataCount];
+        double[,] yData = new double[dataCount, categoryCount];
+
+        for (int i = 1; i < dataCount; i++)
+        {
+            DataRow row = dataTable_country.Rows[i];
+            // x轴用年份
+            int year = Convert.ToInt32(row[0]);
+            xData[i] = i; // 也可以用 year
+            graphManager.Chart.HorizontalValueToStringMap[i] = year.ToString();
+
+            for (int j = 1; j < categoryCount; j++)
             {
-                yData[i, j] = satelliteData[i, j];
+                yData[i, j] = Convert.ToDouble(row[j + 1]);
             }
         }
 
-        // 设置图表数据
         graphManager.InitialData(xData, yData);
     }
 
