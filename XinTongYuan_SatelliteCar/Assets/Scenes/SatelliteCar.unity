@@ -17973,7 +17973,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 180.53064, y: -207.49469}
-  m_SizeDelta: {x: 1398.3074, y: 335.8221}
+  m_SizeDelta: {x: 1586.4163, y: 335.8221}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1442324711
 MonoBehaviour:
@@ -18223,11 +18223,23 @@ MonoBehaviour:
   raycastTarget: 1
   MousePan:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 921844425}
+        m_TargetAssemblyTypeName: SatelliteConstellationGraph, Assembly-CSharp
+        m_MethodName: OnMousePan
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   horizontalPanning: 1
   verticalPanning: 1
   heightRatio: 335.8221
-  widthRatio: 1398.3074
+  widthRatio: 1586.4163
   PointClicked:
     m_PersistentCalls:
       m_Calls:

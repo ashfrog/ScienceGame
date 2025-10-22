@@ -153,6 +153,10 @@ public class SatelliteConstellationGraph : MonoBehaviour
             graphManager.ToggleCategoryEnabled(name);
     }
 
+    public void OnMousePan()
+    {
+    }
+
     public void GraphHovered(GraphChartBase.GraphEventArgs args)
     {
         if (infoText == null) return;
