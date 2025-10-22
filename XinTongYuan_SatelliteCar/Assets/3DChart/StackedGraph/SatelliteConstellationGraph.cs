@@ -36,6 +36,24 @@ public class SatelliteConstellationGraph : MonoBehaviour
     private int categoryCount; // 分类数
     private int dataCount; // 年份数
 
+    public int getYearByX(int id)
+    {
+        const int defaultYear = 2024;
+        if (dataTable_country == null || dataTable_country.Rows.Count == 0)
+            return defaultYear; // 或抛异常
+
+        object value = dataTable_country.Rows[id].ItemArray[0];
+
+        // 推荐做法：防止DBNull和类型不匹配
+        if (value == null || value == DBNull.Value)
+            return defaultYear; // 或抛异常
+
+        if (int.TryParse(value.ToString(), out int year))
+            return year;
+        else
+            return defaultYear; // 或抛异常
+    }
+
     void Start()
     {
         string countryColorStr = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "CountryColor.json"));

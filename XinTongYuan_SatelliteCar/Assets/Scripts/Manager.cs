@@ -30,6 +30,9 @@ public class Manager : MonoBehaviour
     [SerializeField]
     SatletExelDataReader exelPieDataReader;
 
+    [SerializeField]
+    SatelliteConstellationGraph satelliteConstellationGraph;
+
     private void Awake()
     {
         _ins = this;
@@ -152,6 +155,8 @@ public class Manager : MonoBehaviour
     public void OnGraphSelect(GraphEventArgs e)
     {
         Debug.Log(e.Category);
+        int year = satelliteConstellationGraph.getYearByX(e.Index);
+        OnYear(year);
     }
 
     //public void OnCarModel()  //汽车模型
