@@ -16,7 +16,7 @@ public partial class LargeDataFeed : MonoBehaviour, IComparer<DoubleVector2>
     GraphChartBase graph;
     double mCurrentPageSizeFactor = double.NegativeInfinity;
     public bool LoadExample = true;
-    public bool ControlViewPortion = false;
+    public bool ControlViewPortion = true;
     double? mSlideEndThreshold = null;
     int mStart = 0;
     [HideInInspector]
@@ -161,7 +161,7 @@ public partial class LargeDataFeed : MonoBehaviour, IComparer<DoubleVector2>
         }
         if (show)
             --end;
-        for (int i = start; i <= end; i++)
+        for (int i = start; i < end; i++)
         {
             double y = mData[i].y;
             minY = Math.Min(y, minY);

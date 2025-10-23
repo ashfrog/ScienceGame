@@ -18239,8 +18239,8 @@ MonoBehaviour:
         m_CallState: 2
   horizontalPanning: 1
   verticalPanning: 1
-  heightRatio: 335.8221
-  widthRatio: 1586.4163
+  heightRatio: 1
+  widthRatio: 1
   PointClicked:
     m_PersistentCalls:
       m_Calls:
@@ -24012,7 +24012,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1442324710}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2030018352
 GameObject:
