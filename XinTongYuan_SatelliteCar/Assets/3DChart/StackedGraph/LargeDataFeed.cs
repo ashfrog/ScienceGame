@@ -317,6 +317,7 @@ public partial class LargeDataFeed : MonoBehaviour, IComparer<DoubleVector2>
             graph.DataSource.HorizontalViewOrigin = 0;
             int start, end;
             findPointsForPage(pagePosition, out start, out end); // get the page edges
+            Debug.Log(start + "  " + end);
             graph.DataSource.ClearCategory(Category); // clear the cateogry
             mStart = start;
             if (DownSampleToPoints <= 0)

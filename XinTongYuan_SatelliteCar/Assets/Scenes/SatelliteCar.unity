@@ -18069,7 +18069,7 @@ MonoBehaviour:
   mainDivisions:
     messure: 0
     unitsPerDivision: 1
-    total: 12
+    total: 10
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
       EnableTiling: 0
@@ -18268,7 +18268,7 @@ MonoBehaviour:
     automaticVerticallView: 1
     automaticcHorizontaViewGap: 0
     automaticHorizontalView: 0
-    horizontalViewSize: 12
+    horizontalViewSize: 10
     horizontalViewOrigin: 0
     verticalViewSize: 10
     verticalViewOrigin: 0

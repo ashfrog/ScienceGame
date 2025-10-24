@@ -25,7 +25,7 @@ public class SatletExelDataReader : MonoBehaviour
 
     private void OnEnable()
     {
-        initialize(Application.streamingAssetsPath + "/卫星轨道数据.xlsx", 1);
+        initialize();
         //Hide();
     }
     void Start()
@@ -35,7 +35,7 @@ public class SatletExelDataReader : MonoBehaviour
 
     DataTable table;
 
-    private void initialize(string filePath, int sheetindex)
+    private void initialize()
     {
         string pieCategoryColorStr = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "PieCategoryColor.json"));
         pieCategoryColor = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(pieCategoryColorStr);
@@ -47,11 +47,11 @@ public class SatletExelDataReader : MonoBehaviour
                 pieCategoryColor[key] = "#" + value;
             }
         }
-        DataSet result = ReadExcel(filePath);
+        DataSet result = ReadExcel(Application.streamingAssetsPath + "/历年卫星星座数量.xlsx");
 
         if (result != null)
         {
-            table = result.Tables[sheetindex];
+            table = result.Tables[0];
             // Example: Find year 2020 and show in pie chart
             ShowPieCharts(2024);
         }
