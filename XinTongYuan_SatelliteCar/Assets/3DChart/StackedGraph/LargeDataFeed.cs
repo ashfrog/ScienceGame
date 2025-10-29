@@ -233,7 +233,7 @@ public partial class LargeDataFeed : MonoBehaviour, IComparer<DoubleVector2>
             if (graph.HorizontalScrolling > maxScroll)
                 graph.HorizontalScrolling = maxScroll;
         }
-
+        Debug.Log(graph.HorizontalScrolling);
         if (graph != null)
         {
 
@@ -246,7 +246,7 @@ public partial class LargeDataFeed : MonoBehaviour, IComparer<DoubleVector2>
             if (graph.HorizontalScrolling < pageStartThreshold || graph.HorizontalScrolling > pageEndThreshold || currentZoom >= graph.DataSource.HorizontalViewSize * 2f)
             {
                 currentZoom = graph.DataSource.HorizontalViewSize;
-                mCurrentPageSizeFactor = PageSizeFactor * 0.9f;
+                mCurrentPageSizeFactor = PageSizeFactor * 0.6f;
                 LoadPage(graph.HorizontalScrolling);
             }
             if (ControlViewPortion)
