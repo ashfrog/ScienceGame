@@ -94,7 +94,7 @@ public class MorseCodeGenerator : MonoBehaviour
 
     public void SetScrollSpeed(float speed)
     {
-        this.scrollSpeed = speed;
+        this.scrollSpeed = speed * 0.6f;
     }
 
     void Start()
