@@ -182,7 +182,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void Update()
     {
-        HandleInput();
+        //HandleInput();
 
         if (displayMode == DisplayMode.None)
         {
@@ -1128,41 +1128,41 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     int endy = 2025;
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS星座");
-        if (Input.GetKeyDown(KeyCode.S)) SetDisplayGroup("格洛纳斯星座");
-        if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链星座");
-        if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("伽利略星座");
-        if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("北斗星座");
-        if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆星座");
-        if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网星座");
-        if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网卫星");
-        if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(starty += 5, endy += 5, "");
-        if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(starty -= 5, endy -= 5, "");
+        //if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS星座");
+        //if (Input.GetKeyDown(KeyCode.S)) SetDisplayGroup("格洛纳斯星座");
+        //if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链星座");
+        //if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("伽利略星座");
+        //if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("北斗星座");
+        //if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆星座");
+        //if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网星座");
+        //if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网卫星");
+        //if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(starty += 5, endy += 5, "");
+        //if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(starty -= 5, endy -= 5, "");
 
 
-        // 显示模式切换
-        if (Input.GetKeyDown(KeyCode.Alpha0)) SetDisplayMode(DisplayMode.None);
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SetDisplayMode(DisplayMode.OrbitOnly);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
+        //// 显示模式切换
+        //if (Input.GetKeyDown(KeyCode.Alpha0)) SetDisplayMode(DisplayMode.None);
+        //if (Input.GetKeyDown(KeyCode.Alpha1)) SetDisplayMode(DisplayMode.OrbitOnly);
+        //if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
+        //if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
 
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            SetConstantVisualSize(!keepConstantVisualSize, referenceFOV);
-        }
+        //if (Input.GetKeyDown(KeyCode.V))
+        //{
+        //    SetConstantVisualSize(!keepConstantVisualSize, referenceFOV);
+        //}
 
-        // 调整基础卫星大小
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            if (Input.GetKeyDown(KeyCode.Equals)) // Ctrl + =
-            {
-                SetBaseSatelliteScale(baseSatelliteScale += 0.1f);
-            }
-            if (Input.GetKeyDown(KeyCode.Minus)) // Ctrl + -
-            {
-                SetBaseSatelliteScale(baseSatelliteScale -= 0.1f);
-            }
-        }
+        //// 调整基础卫星大小
+        //if (Input.GetKey(KeyCode.LeftControl))
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Equals)) // Ctrl + =
+        //    {
+        //        SetBaseSatelliteScale(baseSatelliteScale += 0.1f);
+        //    }
+        //    if (Input.GetKeyDown(KeyCode.Minus)) // Ctrl + -
+        //    {
+        //        SetBaseSatelliteScale(baseSatelliteScale -= 0.1f);
+        //    }
+        //}
     }
 
     // 切换年份筛选

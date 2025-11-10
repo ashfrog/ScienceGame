@@ -489,7 +489,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             int year = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                             if (Settings.ini.Game.ShowOrbitWhenPie)
                             {
-                                satelliteOrbitRenderer.SetDisplayAll(year - 10, year, countrys);
+                                satelliteOrbitRenderer.SetDisplayAll(year - 5, year, countrys);
                             }
                             else
                             {
