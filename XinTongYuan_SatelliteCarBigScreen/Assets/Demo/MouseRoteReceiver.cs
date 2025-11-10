@@ -495,7 +495,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             {
                                 satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                             }
-                            satletExelDataReader.ShowPieCharts(year);
+                            satletExelDataReader.ShowYear(year);
 
                             litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                             //satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
