@@ -148,7 +148,7 @@ public class Manager : MonoBehaviour
         Debug.Log("year:" + year);
         int index = (year - 1978) / 2; // 计算索引
         img_year.sprite = years[index];
-        exelPieDataReader.ShowPieCharts(year);
+        exelPieDataReader.ShowYear(year);
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, year);
     }
 

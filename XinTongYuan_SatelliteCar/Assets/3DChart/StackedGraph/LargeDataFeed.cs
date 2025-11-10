@@ -233,7 +233,7 @@ public partial class LargeDataFeed : MonoBehaviour, IComparer<DoubleVector2>
             if (graph.HorizontalScrolling > maxScroll)
                 graph.HorizontalScrolling = maxScroll;
         }
-        Debug.Log(graph.HorizontalScrolling);
+
         if (graph != null)
         {
 
