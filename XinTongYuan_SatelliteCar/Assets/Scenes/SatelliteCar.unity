@@ -2042,7 +2042,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -332, y: 183}
-  m_SizeDelta: {x: 329, y: 525}
+  m_SizeDelta: {x: 426.8, y: 553.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &164738353
 MonoBehaviour:
@@ -6841,8 +6841,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -665, y: -109}
-  m_SizeDelta: {x: 324, y: 479}
+  m_AnchoredPosition: {x: -665, y: -80.22946}
+  m_SizeDelta: {x: 426.8, y: 553.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &514252400
 MonoBehaviour:
@@ -7892,6 +7892,13 @@ MonoBehaviour:
   yearText2: {fileID: 727858777}
   text1: {fileID: 0}
   text2: {fileID: 0}
+  groupExcelFile: "\u5386\u5E74\u536B\u661F\u661F\u5EA7\u5728\u8F68\u6570\u91CF.xlsx"
+  groupSheetIndex: 0
+  groupStripChineseBrackets: 1
+  countryExcelFile: "\u5386\u5E74\u5404\u56FD\u536B\u661F\u5728\u8F68\u6570\u91CF.xlsx"
+  countrySheetIndex: 0
+  countryStripChineseBrackets: 0
+  pieCategoryColorJson: PieCategoryColor.json
 --- !u!1 &566927276
 GameObject:
   m_ObjectHideFlags: 0
@@ -8442,7 +8449,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &612953379
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21255,7 +21262,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 670, y: -133}
-  m_SizeDelta: {x: 324, y: 469}
+  m_SizeDelta: {x: 426.8, y: 553.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1755537587
 MonoBehaviour:
@@ -21533,7 +21540,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 335.4, y: 145}
-  m_SizeDelta: {x: 331, y: 519}
+  m_SizeDelta: {x: 426.8, y: 553.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1785542101
 MonoBehaviour:
@@ -22245,7 +22252,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 2.8, y: -174}
-  m_SizeDelta: {x: 325, y: 451}
+  m_SizeDelta: {x: 426.8, y: 553.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1838693296
 MonoBehaviour:
