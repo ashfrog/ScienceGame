@@ -943,26 +943,29 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
+    [Header("多近的距离会受影响，越大受影响范围更广")]
+    public float satelliteNearAdjustBias = 1.5f;    // 越大补偿区越宽
+    [Header("决定近距离缩小的速率，越大近处越小")]
+    public float satelliteNearAdjustPower = 1.30f;  // 越大缩小幅度越大（1.0-2.0间可调）
+
     private Vector3 CalculateScale(Vector3 camPos, Vector3 position, float currentFOV)
     {
-        // 固定屏幕像素大小
-        float pixelDiameter = 12f; // 你希望卫星点在屏幕上有多少像素，可以调整此值
+        float pixelDiameter = 12f;
         Camera cam = objCamera != null ? objCamera : Camera.main;
         float distance = Vector3.Distance(camPos, position);
         float screenHeight = (float)Screen.height;
         float fovRad = cam.fieldOfView * Mathf.Deg2Rad;
 
-        // 计算世界空间下所需直径
         float worldDiameter = 2f * distance * Mathf.Tan(0.5f * fovRad) * (pixelDiameter / screenHeight);
-
-        // 你的卫星Mesh默认直径是 satelliteSize * 2
         float meshDiameter = satelliteSize * 2f;
         float scale = worldDiameter / meshDiameter;
 
-        // 可选：防止过大过小
+        // 距离近时额外缩放（越近缩得越狠并可微调）
+        float nearComp = Mathf.Pow(distance / (distance + satelliteNearAdjustBias), satelliteNearAdjustPower);
+        scale *= nearComp; // <-- 这里叠加自适应缩放
+
         scale = Mathf.Clamp(scale, minScale, maxScale);
 
-        // 如果显示Both模式可乘以scaleSateliteWhenShowBoth
         if (displayMode == DisplayMode.Both)
             scale *= scaleSateliteWhenShowBoth;
 
@@ -1128,41 +1131,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     int endy = 2025;
     void HandleInput()
     {
-        //if (Input.GetKeyDown(KeyCode.A)) SetDisplayGroup("GPS星座");
-        //if (Input.GetKeyDown(KeyCode.S)) SetDisplayGroup("格洛纳斯星座");
-        //if (Input.GetKeyDown(KeyCode.D)) SetDisplayGroup("星链星座");
-        //if (Input.GetKeyDown(KeyCode.F)) SetDisplayGroup("伽利略星座");
-        //if (Input.GetKeyDown(KeyCode.G)) SetDisplayGroup("北斗星座");
-        //if (Input.GetKeyDown(KeyCode.H)) SetDisplayGroup("千帆星座");
-        //if (Input.GetKeyDown(KeyCode.J)) SetDisplayGroup("国网星座");
-        //if (Input.GetKeyDown(KeyCode.K)) SetDisplayGroup("一网卫星");
-        //if (Input.GetKeyDown(KeyCode.UpArrow)) SetDisplayAll(starty += 5, endy += 5, "");
-        //if (Input.GetKeyDown(KeyCode.DownArrow)) SetDisplayAll(starty -= 5, endy -= 5, "");
-
-
-        //// 显示模式切换
-        //if (Input.GetKeyDown(KeyCode.Alpha0)) SetDisplayMode(DisplayMode.None);
-        //if (Input.GetKeyDown(KeyCode.Alpha1)) SetDisplayMode(DisplayMode.OrbitOnly);
-        //if (Input.GetKeyDown(KeyCode.Alpha2)) SetDisplayMode(DisplayMode.SatelliteOnly);
-        //if (Input.GetKeyDown(KeyCode.Alpha3)) SetDisplayMode(DisplayMode.Both);
-
-        //if (Input.GetKeyDown(KeyCode.V))
-        //{
-        //    SetConstantVisualSize(!keepConstantVisualSize, referenceFOV);
-        //}
-
-        //// 调整基础卫星大小
-        //if (Input.GetKey(KeyCode.LeftControl))
-        //{
-        //    if (Input.GetKeyDown(KeyCode.Equals)) // Ctrl + =
-        //    {
-        //        SetBaseSatelliteScale(baseSatelliteScale += 0.1f);
-        //    }
-        //    if (Input.GetKeyDown(KeyCode.Minus)) // Ctrl + -
-        //    {
-        //        SetBaseSatelliteScale(baseSatelliteScale -= 0.1f);
-        //    }
-        //}
     }
 
     // 切换年份筛选

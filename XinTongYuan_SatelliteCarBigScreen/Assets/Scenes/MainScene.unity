@@ -6413,6 +6413,8 @@ MonoBehaviour:
   printSelectcatalogNumber: 0
   objCamera: {fileID: 963194227}
   selectName: 3
+  satelliteNearAdjustBias: 2
+  satelliteNearAdjustPower: 2.5
 --- !u!4 &941347486
 Transform:
   m_ObjectHideFlags: 0
@@ -7613,6 +7615,13 @@ MonoBehaviour:
   yearText2: {fileID: 877483696}
   text1: {fileID: 1596750031}
   text2: {fileID: 1692869804}
+  groupExcelFile: "\u5386\u5E74\u536B\u661F\u661F\u5EA7\u5728\u8F68\u6570\u91CF.xlsx"
+  groupSheetIndex: 0
+  groupStripChineseBrackets: 1
+  countryExcelFile: "\u5386\u5E74\u5404\u56FD\u536B\u661F\u5728\u8F68\u6570\u91CF.xlsx"
+  countrySheetIndex: 0
+  countryStripChineseBrackets: 0
+  pieCategoryColorJson: PieCategoryColor.json
 --- !u!1 &1110667037
 GameObject:
   m_ObjectHideFlags: 0
