@@ -6891,7 +6891,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &510464426
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18268,8 +18268,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 180.53064, y: -207.49469}
-  m_SizeDelta: {x: 1586.4163, y: 335.8221}
+  m_AnchoredPosition: {x: 223.05762, y: -207.49469}
+  m_SizeDelta: {x: 1543.9325, y: 335.8221}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1442324711
 MonoBehaviour:
@@ -18286,7 +18286,7 @@ MonoBehaviour:
   m_Material: {fileID: 2100000, guid: fa0b3a0e33fedd249b4527b6027ba69e, type: 2}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: -20, y: -20, z: -20, w: -20}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -18461,7 +18461,7 @@ MonoBehaviour:
     fontSize: 36
     fontSharpness: 3
     textDepth: 0
-    textSeperation: -35.5
+    textSeperation: -62.7
     alignment: 1
   subDivisions:
     messure: 0
@@ -18489,7 +18489,7 @@ MonoBehaviour:
     fontSize: 36
     fontSharpness: 3
     textDepth: 0
-    textSeperation: -35.5
+    textSeperation: -62.7
     alignment: 1
 --- !u!114 &1442324717
 MonoBehaviour:
@@ -18535,7 +18535,7 @@ MonoBehaviour:
   horizontalPanning: 1
   verticalPanning: 1
   heightRatio: 335.8221
-  widthRatio: 1586.4163
+  widthRatio: 1543.9325
   PointClicked:
     m_PersistentCalls:
       m_Calls:

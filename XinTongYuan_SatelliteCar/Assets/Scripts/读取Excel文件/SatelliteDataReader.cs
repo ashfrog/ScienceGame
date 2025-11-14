@@ -28,7 +28,7 @@ public class SatelliteDataReader : MonoBehaviour
 
         if (result != null)
         {
-            DataTable table = result.Tables[index];
+            DataTable table = result.Tables[0];//只读取第一张sheet
 
             for (int i = 0; i < table.Rows.Count; i++) // 从1开始跳过标题行
             {
