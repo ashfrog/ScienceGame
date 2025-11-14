@@ -12,6 +12,10 @@ using UnityEngine.UI;
 public class SatelliteConstellationGraph : MonoBehaviour
 {
     public Text infoText;
+    public Text pageInfoText; // 显示页码信息，例如 "第 1/5 页"
+    public Button prevPageButton;
+    public Button nextPageButton;
+
     private StackedGraphManager graphManager;
 
     [SerializeField]
@@ -36,29 +40,35 @@ public class SatelliteConstellationGraph : MonoBehaviour
     private int categoryCount; // 分类数
     private int dataCount; // 年份数
 
+    // 分页相关
+    [SerializeField]
+    private int dataPointsPerPage = 10; // 每页显示的数据点数量
+    private int currentPage = 0;
+    private int totalPages = 0;
+
     public int getYearByX(int id)
     {
+        int tabRawId = currentPage * dataPointsPerPage + id;
         const int defaultYear = 2024;
         if (dataTable_country == null || dataTable_country.Rows.Count == 0)
-            return defaultYear; // 或抛异常
+            return defaultYear;
 
-        object value = dataTable_country.Rows[id].ItemArray[0];
+        object value = dataTable_country.Rows[tabRawId].ItemArray[0];
 
-        // 推荐做法：防止DBNull和类型不匹配
         if (value == null || value == DBNull.Value)
-            return defaultYear; // 或抛异常
+            return defaultYear;
 
         if (int.TryParse(value.ToString(), out int year))
             return year;
         else
-            return defaultYear; // 或抛异常
+            return defaultYear;
     }
 
     void Start()
     {
         string countryColorStr = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "CountryColor.json"));
         countryCategoryColor = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(countryColorStr);
-        foreach (var key in countryCategoryColor.Keys.ToList()) //统一添加#开头 给unity解析16进制颜色
+        foreach (var key in countryCategoryColor.Keys.ToList())
         {
             var value = countryCategoryColor[key];
             if (!value.StartsWith("#"))
@@ -80,10 +90,23 @@ public class SatelliteConstellationGraph : MonoBehaviour
         graphManager.Chart.PointHovered.AddListener(GraphHovered);
         graphManager.Chart.NonHovered.AddListener(NonHovered);
 
-        // 一次性加载所有数据
+        // 设置翻页按钮事件
+        if (prevPageButton != null)
+            prevPageButton.onClick.AddListener(PreviousPage);
+        if (nextPageButton != null)
+            nextPageButton.onClick.AddListener(NextPage);
+
+        // 加载所有数据
         PrepareSatelliteDataForRealtime();
-        ShowAllData();
+
+        // 计算总页数
+        totalPages = Mathf.CeilToInt((float)dataCount / dataPointsPerPage);
+
+        // 显示第一页
+        ShowCurrentPage();
+        UpdatePageInfo();
     }
+
     private void OnEnable()
     {
         graphManager = GetComponent<StackedGraphManager>();
@@ -94,15 +117,14 @@ public class SatelliteConstellationGraph : MonoBehaviour
         }
         ResetPos();
     }
+
     public void ResetPos()
     {
-        // 重置x轴位置
         graphManager.Chart.HorizontalScrolling = 0;
     }
 
     private void InitializeCategories()
     {
-        // 清除现有分类
         foreach (var cat in graphManager.Chart.DataSource.CategoryNames.ToList())
             graphManager.Chart.DataSource.RemoveCategory(cat);
 
@@ -113,7 +135,6 @@ public class SatelliteConstellationGraph : MonoBehaviour
             categories.Add(dataTable_country.Columns[col].ColumnName);
         }
 
-        // 添加新分类
         foreach (var cat in categories)
         {
             Material lineMaterial = new Material(lineMat);
@@ -127,10 +148,6 @@ public class SatelliteConstellationGraph : MonoBehaviour
             graphManager.Chart.DataSource.Set2DCategoryPrefabs(cat, LineHoverPrefab, PointHoverPrefab);
         }
 
-        // 验证分类
-        //graphManager.VerifyCategories();
-
-        // 清空x轴标签映射，稍后动态设置
         graphManager.Chart.HorizontalValueToStringMap.Clear();
     }
 
@@ -144,35 +161,104 @@ public class SatelliteConstellationGraph : MonoBehaviour
         mat.SetColor("_ColorTo", tocolor);
     }
 
-    // 预处理原始表格数据到 xData/yData
     private void PrepareSatelliteDataForRealtime()
     {
         categoryCount = dataTable_country.Columns.Count - 1;
-        dataCount = dataTable_country.Rows.Count - 1; // 跳过表头
+        dataCount = dataTable_country.Rows.Count - 1;
         xData = new double[dataCount];
         yData = new double[dataCount, categoryCount];
 
-        for (int i = 0; i < dataCount; i++) //行
+        for (int i = 0; i < dataCount; i++)
         {
             DataRow row = dataTable_country.Rows[i];
             int year = Convert.ToInt32(row[0]);
-            xData[i] = i; // 用索引做x
+            xData[i] = i;
             graphManager.Chart.HorizontalValueToStringMap[i] = year.ToString();
 
-            for (int j = 1; j <= categoryCount; j++) //列
+            for (int j = 1; j <= categoryCount; j++)
                 yData[i, j - 1] = Convert.ToDouble(row[j]);
         }
-
-
     }
 
-    // 一次性显示全部年份
-    private void ShowAllData()
+    // 显示当前页的数据
+    private void ShowCurrentPage()
     {
-        graphManager.InitialData(xData, yData);
+        int startIndex = currentPage * dataPointsPerPage;
+        int endIndex = Mathf.Min(startIndex + dataPointsPerPage, dataCount);
+        int pageDataCount = endIndex - startIndex;
+
+        // 创建当前页的数据数组
+        double[] pageXData = new double[pageDataCount];
+        double[,] pageYData = new double[pageDataCount, categoryCount];
+
+        // 复制当前页的数据
+        for (int i = 0; i < pageDataCount; i++)
+        {
+            int sourceIndex = startIndex + i;
+            pageXData[i] = i; // 使用页内索引
+
+            // 更新x轴标签映射（使用页内索引对应实际年份）
+            if (graphManager.Chart.HorizontalValueToStringMap.ContainsKey(sourceIndex))
+            {
+                string yearLabel = graphManager.Chart.HorizontalValueToStringMap[sourceIndex];
+                graphManager.Chart.HorizontalValueToStringMap[i] = yearLabel;
+            }
+
+            for (int j = 0; j < categoryCount; j++)
+                pageYData[i, j] = yData[sourceIndex, j];
+        }
+
+        graphManager.InitialData(pageXData, pageYData);
+        ResetPos();
     }
 
-    // 支持自动动画的相关方法已不再使用
+    // 上一页
+    public void PreviousPage()
+    {
+        if (currentPage > 0)
+        {
+            currentPage--;
+            ShowCurrentPage();
+            UpdatePageInfo();
+        }
+    }
+
+    // 下一页
+    public void NextPage()
+    {
+        if (currentPage < totalPages - 1)
+        {
+            currentPage++;
+            ShowCurrentPage();
+            UpdatePageInfo();
+        }
+    }
+
+    // 更新页码信息
+    private void UpdatePageInfo()
+    {
+        if (pageInfoText != null)
+        {
+            pageInfoText.text = $"第 {currentPage + 1}/{totalPages} 页";
+        }
+
+        // 更新按钮状态
+        if (prevPageButton != null)
+            prevPageButton.interactable = currentPage > 0;
+        if (nextPageButton != null)
+            nextPageButton.interactable = currentPage < totalPages - 1;
+    }
+
+    // 跳转到指定页
+    public void GoToPage(int pageIndex)
+    {
+        if (pageIndex >= 0 && pageIndex < totalPages)
+        {
+            currentPage = pageIndex;
+            ShowCurrentPage();
+            UpdatePageInfo();
+        }
+    }
 
     public void ToggleCategory(string name)
     {

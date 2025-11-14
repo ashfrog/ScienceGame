@@ -152,11 +152,18 @@ public class Manager : MonoBehaviour
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, year);
     }
 
+    int lastSelYear = 0;
     public void OnGraphSelect(GraphEventArgs e)
     {
         Debug.Log(e.Category);
         int year = satelliteConstellationGraph.getYearByX(e.Index);
-        OnYear(year);
+
+        if (lastSelYear != year)
+        {
+            lastSelYear = year;
+            OnYear(year);
+        }
+
     }
 
     //public void OnCarModel()  //汽车模型
