@@ -127,14 +127,14 @@ public class Manager : MonoBehaviour
         // 直接通过索引访问fillAmounts数组
         int index = (year - 1980) / 5;
         progress.fillAmount = fillAmounts[index];
-        buttons[0].gameObject.SetActive(year >= 1978); //GPS
-        buttons[1].gameObject.SetActive(year >= 1982); //格洛纳斯
-        buttons[2].gameObject.SetActive(year >= 2000); //北斗
-        buttons[3].gameObject.SetActive(year >= 2005); //伽利略
-        buttons[4].gameObject.SetActive(year >= 2019); //一网
-        buttons[5].gameObject.SetActive(year >= 2019); //星链
-        buttons[6].gameObject.SetActive(year >= 2024); //千帆
-        buttons[7].gameObject.SetActive(year >= 2024); //国网
+        //buttons[0].gameObject.SetActive(year >= 1978); //GPS
+        //buttons[1].gameObject.SetActive(year >= 1982); //格洛纳斯
+        //buttons[2].gameObject.SetActive(year >= 2000); //北斗
+        //buttons[3].gameObject.SetActive(year >= 2005); //伽利略
+        //buttons[4].gameObject.SetActive(year >= 2019); //一网
+        //buttons[5].gameObject.SetActive(year >= 2019); //星链
+        //buttons[6].gameObject.SetActive(year >= 2024); //千帆
+        //buttons[7].gameObject.SetActive(year >= 2024); //国网
 
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.WeiXingDot, year);
     }
