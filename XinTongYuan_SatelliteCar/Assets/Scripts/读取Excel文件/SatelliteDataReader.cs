@@ -23,12 +23,12 @@ public class SatelliteDataReader : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        string filePath = Application.streamingAssetsPath + "/历年卫星星座在轨数量.xlsx";
+        string filePath = Application.streamingAssetsPath + "/所有星座.xlsx";
         DataSet result = ReadExcel(filePath);
 
         if (result != null)
         {
-            DataTable table = result.Tables[0];//只读取第一张sheet
+            DataTable table = result.Tables[index];
 
             for (int i = 0; i < table.Rows.Count; i++) // 从1开始跳过标题行
             {

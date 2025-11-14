@@ -43,6 +43,8 @@ public class Manager : MonoBehaviour
 
         progress.fillAmount = 0.1f;
         buttons[0].gameObject.SetActive(true);
+
+        satelliteConstellationGraph.onYear += TapHoverYear;
     }
 
     // Update is called once per frame
@@ -148,6 +150,12 @@ public class Manager : MonoBehaviour
         Debug.Log("year:" + year);
         int index = (year - 1978) / 2; // 计算索引
         img_year.sprite = years[index];
+        exelPieDataReader.ShowYear(year);
+        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, year);
+    }
+
+    public void TapHoverYear(int year)
+    {
         exelPieDataReader.ShowYear(year);
         _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.Reload, year);
     }

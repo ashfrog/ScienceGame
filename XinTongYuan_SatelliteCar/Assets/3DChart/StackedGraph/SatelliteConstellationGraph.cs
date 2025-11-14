@@ -16,6 +16,8 @@ public class SatelliteConstellationGraph : MonoBehaviour
     public Button prevPageButton;
     public Button nextPageButton;
 
+    public Action<int> onYear;
+
     private StackedGraphManager graphManager;
 
     [SerializeField]
@@ -125,27 +127,29 @@ public class SatelliteConstellationGraph : MonoBehaviour
 
     private void InitializeCategories()
     {
+        // 移除所有旧的
         foreach (var cat in graphManager.Chart.DataSource.CategoryNames.ToList())
             graphManager.Chart.DataSource.RemoveCategory(cat);
 
-        List<string> categories = new List<string>();
+        // 重新建立categoriesList，严格和表头列顺一致
+        categoriesList.Clear();
+        categoryNameToColIndex.Clear();
         for (int col = 1; col < dataTable_country.Columns.Count; col++)
         {
-            Debug.Log($"列{col}: {dataTable_country.Columns[col].ColumnName}");
-            categories.Add(dataTable_country.Columns[col].ColumnName);
-        }
+            string catName = dataTable_country.Columns[col].ColumnName;
+            categoriesList.Add(catName);
+            categoryNameToColIndex[catName] = col - 1;
 
-        foreach (var cat in categories)
-        {
             Material lineMaterial = new Material(lineMat);
             Material graphMaterial = new Material(graphMat);
             Material pointMaterial = new Material(pointMat);
 
-            SetMat(cat, lineMaterial);
-            SetMat(cat, graphMaterial);
-            SetMat(cat, pointMaterial);
-            graphManager.Chart.DataSource.AddCategory(cat, lineMaterial, 5, new MaterialTiling(), graphMaterial, false, pointMaterial, 40);
-            graphManager.Chart.DataSource.Set2DCategoryPrefabs(cat, LineHoverPrefab, PointHoverPrefab);
+            SetMat(catName, lineMaterial);
+            SetMat(catName, graphMaterial);
+            SetMat(catName, pointMaterial);
+
+            graphManager.Chart.DataSource.AddCategory(catName, lineMaterial, 5, new MaterialTiling(), graphMaterial, false, pointMaterial, 40);
+            graphManager.Chart.DataSource.Set2DCategoryPrefabs(catName, LineHoverPrefab, PointHoverPrefab);
         }
 
         graphManager.Chart.HorizontalValueToStringMap.Clear();
@@ -164,7 +168,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
     private void PrepareSatelliteDataForRealtime()
     {
         categoryCount = dataTable_country.Columns.Count - 1;
-        dataCount = dataTable_country.Rows.Count - 1;
+        dataCount = dataTable_country.Rows.Count;
         xData = new double[dataCount];
         yData = new double[dataCount, categoryCount];
 
@@ -178,8 +182,20 @@ public class SatelliteConstellationGraph : MonoBehaviour
             for (int j = 1; j <= categoryCount; j++)
                 yData[i, j - 1] = Convert.ToDouble(row[j]);
         }
+        for (int i = 0; i < dataCount; i++)
+        {
+            DataRow row = dataTable_country.Rows[i];
+            string debugRow = $"{row[0]}: ";
+            for (int j = 1; j <= categoryCount; j++)
+                debugRow += $"{row[j]},";
+            Debug.Log(debugRow);
+        }
     }
 
+
+    private List<string> categoriesList = new List<string>();
+    // 用于名字到yData列索引的映射
+    private Dictionary<string, int> categoryNameToColIndex = new Dictionary<string, int>();
     // 显示当前页的数据
     private void ShowCurrentPage()
     {
@@ -208,7 +224,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
                 pageYData[i, j] = yData[sourceIndex, j];
         }
 
-        graphManager.InitialData(pageXData, pageYData);
+        graphManager.InitialData(pageXData, pageYData, categoriesList, categoryNameToColIndex);
         ResetPos();
     }
 
@@ -274,9 +290,17 @@ public class SatelliteConstellationGraph : MonoBehaviour
     {
         if (infoText == null) return;
         var point = graphManager.GetPointValue(args.Category, args.Index);
-        infoText.text = string.Format("{0} 年 - {1}: {2} 颗卫星",
-            graphManager.Chart.HorizontalValueToStringMap.ContainsKey((int)point.x) ? graphManager.Chart.HorizontalValueToStringMap[(int)point.x] : ((int)point.x).ToString(),
+        string yearStr = graphManager.Chart.HorizontalValueToStringMap.ContainsKey((int)point.x) ? graphManager.Chart.HorizontalValueToStringMap[(int)point.x] : ((int)point.x).ToString();
+        infoText.text = string.Format("{0} 年 - {1}: {2} 颗卫星", yearStr
+            ,
             args.Category, point.y);
+
+        if (int.TryParse(yearStr, out int year))
+        {
+            onYear?.Invoke(year);
+        }
+
+
     }
 
     public void NonHovered()
