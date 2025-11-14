@@ -23,7 +23,7 @@ public class SatelliteDataReader : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        string filePath = Application.streamingAssetsPath + "/所有星座.xlsx";
+        string filePath = Application.streamingAssetsPath + "/历年卫星星座在轨数量.xlsx";
         DataSet result = ReadExcel(filePath);
 
         if (result != null)

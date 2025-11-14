@@ -11610,8 +11610,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 921844424}
-  - component: {fileID: 921844426}
   - component: {fileID: 921844425}
+  - component: {fileID: 921844427}
   m_Layer: 0
   m_Name: DataInitializer
   m_TagString: Untagged
@@ -11652,7 +11652,7 @@ MonoBehaviour:
   pointMat: {fileID: 2100000, guid: ebb54d1636b926a4ba4403bba1cc1dc6, type: 2}
   LineHoverPrefab: {fileID: 11494010, guid: 03f590f99c8285244a7299bf1058a4fb, type: 3}
   PointHoverPrefab: {fileID: 11475216, guid: 57ee497f5c86d764fa20628075109b20, type: 3}
---- !u!114 &921844426
+--- !u!114 &921844427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -11661,11 +11661,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 921844423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 817e801b7bac56f4e943aee48cce86ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 6b8aeb1ab592de245a470cee8d4cc343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RealtimeDownSampleCount: 10
-  DownSampleToPoints: 50
+  DownSampleToPoints: 100
   Chart: {fileID: 1442324717}
 --- !u!1 &928000190
 GameObject:
@@ -18074,9 +18074,9 @@ MonoBehaviour:
     Automatic: 1
     Value: 0
   mainDivisions:
-    messure: 0
+    messure: 1
     unitsPerDivision: 1
-    total: 10
+    total: 20
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
       EnableTiling: 0
@@ -18224,7 +18224,7 @@ MonoBehaviour:
   vRSpaceText: 0
   vRSpaceScale: 0.1
   maintainLabelSize: 1
-  autoScrollHorizontally: 0
+  autoScrollHorizontally: 1
   horizontalScrolling: 0
   autoScrollVertically: 1
   verticalScrolling: 0
@@ -18274,7 +18274,7 @@ MonoBehaviour:
     automaticVerticalViewGap: 0
     automaticVerticallView: 1
     automaticcHorizontaViewGap: 0
-    automaticHorizontalView: 0
+    automaticHorizontalView: 1
     horizontalViewSize: 10
     horizontalViewOrigin: 0
     verticalViewSize: 10

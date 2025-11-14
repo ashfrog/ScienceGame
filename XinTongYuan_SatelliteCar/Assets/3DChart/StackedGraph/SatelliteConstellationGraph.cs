@@ -12,7 +12,7 @@ using UnityEngine.UI;
 public class SatelliteConstellationGraph : MonoBehaviour
 {
     public Text infoText;
-    private StackedGraphManager2 graphManager;
+    private StackedGraphManager graphManager;
 
     [SerializeField]
     private Material lineMat;
@@ -64,9 +64,9 @@ public class SatelliteConstellationGraph : MonoBehaviour
             if (!value.StartsWith("#"))
                 countryCategoryColor[key] = "#" + value;
         }
-        var dataset = SatelliteDataReader.ReadExcel(Path.Combine(Application.streamingAssetsPath, "卫星年份数量.xlsx"), true);
+        var dataset = SatelliteDataReader.ReadExcel(Path.Combine(Application.streamingAssetsPath, "历年各国卫星在轨数量.xlsx"), true);
         dataTable_country = dataset.Tables[0];
-        graphManager = GetComponent<StackedGraphManager2>();
+        graphManager = GetComponent<StackedGraphManager>();
         if (graphManager == null || graphManager.Chart == null)
         {
             Debug.LogError("请确保物体上挂载了StackedGraphManager2组件并正确设置了Chart引用");
@@ -86,7 +86,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
     }
     private void OnEnable()
     {
-        graphManager = GetComponent<StackedGraphManager2>();
+        graphManager = GetComponent<StackedGraphManager>();
         if (graphManager == null || graphManager.Chart == null)
         {
             Debug.LogError("请确保物体上挂载了StackedGraphManager2组件并正确设置了Chart引用");
@@ -128,7 +128,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
         }
 
         // 验证分类
-        graphManager.VerifyCategories();
+        //graphManager.VerifyCategories();
 
         // 清空x轴标签映射，稍后动态设置
         graphManager.Chart.HorizontalValueToStringMap.Clear();
