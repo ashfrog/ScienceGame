@@ -465,7 +465,8 @@ public class MouseRoteReceiver : MonoBehaviour
                             int index = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
                             tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                             orbitTabSwitcher.SwitchTab(index);
-                            satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ConstellationGroup), index));
+                            DisplayMode displayMode = index != 6 ? DisplayMode.Both : DisplayMode.SatelliteOnly;
+                            satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ConstellationGroup), index), displayMode);
                             img_Introduce.sprite = sprites_Introduce[index];
                             img_Introduce2.sprite = sprites_Introduce2[index];
                             ResetZ(index);

@@ -6407,11 +6407,12 @@ MonoBehaviour:
   referenceFOV: 60
   minScale: 0.01
   maxScale: 2
-  baseSatelliteScale: 0.8
+  baseSatelliteScale: 1
   maxDisplayOrbits: 1000
   maxDisplaySatellites: 2000
   printSelectcatalogNumber: 0
   objCamera: {fileID: 963194227}
+  scaleSateliteWhenShowBoth: 1.2
   selectName: 3
   satelliteNearAdjustBias: 2
   satelliteNearAdjustPower: 2.5

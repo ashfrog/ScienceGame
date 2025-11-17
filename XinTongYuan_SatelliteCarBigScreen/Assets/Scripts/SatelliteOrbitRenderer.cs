@@ -132,7 +132,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     private Camera objCamera;
 
     float orbitAlpha = 0.1f;
-    float scaleSateliteWhenShowBoth = 1.5f; //同时显示卫星和轨道的时候放大卫星
+    [Header("同时显示卫星和轨道的时候放大卫星")]
+    public float scaleSateliteWhenShowBoth = 1.5f; //同时显示卫星和轨道的时候放大卫星
 
     [Header("分组颜色设置")]
     public Dictionary<string, Color[]> groupColorGroups; // 用于分组颜色
