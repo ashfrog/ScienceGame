@@ -7,6 +7,7 @@ using UnityEngine;
 
 using File = System.IO.File;
 using Input = UnityEngine.Input;
+
 /// <summary>
 /// https://app.keeptrack.space
 /// </summary>
@@ -19,18 +20,22 @@ public class SatelliteData
     public int catalogNumber;
     public int cachedYear;
 
-    // TLE轨道参数
+    // TLE轨道参数（从第二行解析）
     public float inclination;
     public float raan;
     public float eccentricity;
     public float argPerigee;
     public float meanAnomaly;
-    public float meanMotion;
+    public float meanMotion;          // revs per day
 
-    //国家
+    // 国家 / 其它信息
     public string country;
     public string bus;
     public string stableDate;
+
+    // NEW: 历元
+    public DateTime epochUtc;
+    public bool epochParsed;
 }
 
 [System.Serializable]
@@ -47,10 +52,10 @@ public class OrbitElements
 
 public enum DisplayMode
 {
-    None,           // 不显示任何内容
-    OrbitOnly,      // 仅显示轨道
-    SatelliteOnly,  // 仅显示卫星点
-    Both            // 显示轨道和卫星点
+    None,
+    OrbitOnly,
+    SatelliteOnly,
+    Both
 }
 
 public class SatelliteOrbitRenderer : MonoBehaviour
@@ -69,9 +74,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public bool enableCountryFilter = false;
     public int filterMinYear = 1970;
     public int filterMaxYear = 2025;
-    public List<String> selectedCountries = new List<string> { "US", "CN", "RU" }; // 默认选择的国家
+    public List<string> selectedCountries = new List<string> { "US", "CN", "RU" };
 
-    // 添加筛选后的卫星数据缓存
     private List<SatelliteData> filteredSatellites = new List<SatelliteData>();
 
     [Header("显示模式")]
@@ -79,65 +83,65 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     [Header("国家颜色设置")]
     public Dictionary<string, Color[]> countryGroupColorGroups;
-    // 当前显示星座的名称
     private string currentDisplayGroupName = "";
 
     [Header("卫星视觉设置")]
-    public bool keepConstantVisualSize = true; // 是否保持恒定视觉大小
-    public float referenceFOV = 60f; // 参考FOV，在此FOV下卫星显示为原始大小
-    public float minScale = 0.001f; // 最小缩放比例
-    public float maxScale = 10f; // 最大缩放比例
-    public float baseSatelliteScale = 1f; // 基础卫星缩放系数
-
-    // 核心数据 - 预解析的数据，避免重复解析
-    private List<SatelliteData> allSatellites = new List<SatelliteData>();
-    private Dictionary<int, OrbitElements> allOrbitElements = new Dictionary<int, OrbitElements>(); // 存储所有轨道元素
-    private Dictionary<int, SatelliteData> catalogToSatellite = new Dictionary<int, SatelliteData>(); // catalog号到卫星的映射
-
-    // 筛选后的数据缓存
-    private HashSet<int> filteredCatalogNumbers = new HashSet<int>(); // 筛选后的catalog号集合
-    private Dictionary<int, int> catalogToYear = new Dictionary<int, int>(); // catalog号到年份的映射，预计算
-    private Dictionary<string, HashSet<int>> countryToCatalogs = new Dictionary<string, HashSet<int>>(); // 国家到catalog号的映射
-
+    public bool keepConstantVisualSize = true;
+    public float referenceFOV = 60f;
+    public float minScale = 0.001f;
+    public float maxScale = 10f;
+    public float baseSatelliteScale = 1f;
 
     // 核心数据
-    private Dictionary<int, OrbitElements> orbitElements = new Dictionary<int, OrbitElements>();
+    private List<SatelliteData> allSatellites = new List<SatelliteData>();
+    private Dictionary<int, OrbitElements> allOrbitElements = new Dictionary<int, OrbitElements>();
+    private Dictionary<int, SatelliteData> catalogToSatellite = new Dictionary<int, SatelliteData>();
 
-    // 渲染优化
+    // 筛选缓存
+    private HashSet<int> filteredCatalogNumbers = new HashSet<int>();
+    private Dictionary<int, int> catalogToYear = new Dictionary<int, int>();
+    private Dictionary<string, HashSet<int>> countryToCatalogs = new Dictionary<string, HashSet<int>>();
+
+    // 渲染缓存
+    private Dictionary<int, OrbitElements> orbitElements = new Dictionary<int, OrbitElements>();
     private Dictionary<int, Mesh> orbitMeshes = new Dictionary<int, Mesh>();
     private Dictionary<int, Vector3> currentSatellitePositions = new Dictionary<int, Vector3>();
     private Mesh satelliteMesh;
 
-    // 当前显示的轨道
     private List<int> currentDisplayedOrbits = new List<int>();
-    private HashSet<int> currentDisplayedOrbitsSet = new HashSet<int>(); // 用于快速查找
+    private HashSet<int> currentDisplayedOrbitsSet = new HashSet<int>();
     Dictionary<string, TleSel> tleSelDic;
 
-    // 在类的顶部添加时间偏移字典
-    private Dictionary<int, float> satelliteTimeOffsets = new Dictionary<int, float>();
+    // 旧的时间偏移（均匀分布）已废弃
+    // private Dictionary<int, float> satelliteTimeOffsets = new Dictionary<int, float>();
 
     [Header("性能优化")]
-    public int maxDisplayOrbits = 200; // 最大显示轨道数量
+    public int maxDisplayOrbits = 200;
+    public int maxDisplaySatellites = 2000;
 
-    public int maxDisplaySatellites = 2000;//最大显示卫星数量
-
-    // 用于避免重复GC的缓存列表
     private List<int> tempCatalogList = new List<int>(5000);
     private List<int> tempDisplayList = new List<int>(1000);
 
-    [SerializeField]
-    bool printSelectcatalogNumber = false;
-
-    [SerializeField]
-    private Camera objCamera;
+    [SerializeField] bool printSelectcatalogNumber = false;
+    [SerializeField] private Camera objCamera;
 
     float orbitAlpha = 0.1f;
-    [Header("同时显示卫星和轨道的时候放大卫星")]
-    public float scaleSateliteWhenShowBoth = 1.5f; //同时显示卫星和轨道的时候放大卫星
+    [Header("同时显示卫星和轨道时卫星放大系数")]
+    public float scaleSateliteWhenShowBoth = 1.5f;
 
     [Header("分组颜色设置")]
-    public Dictionary<string, Color[]> groupColorGroups; // 用于分组颜色
-    private Color[] currentGroupColors = null;           // 当前组颜色缓存
+    public Dictionary<string, Color[]> groupColorGroups;
+    private Color[] currentGroupColors = null;
+
+    // NEW: 时间控制
+    [Header("实时传播设置")]
+    public bool useSystemTime = true;          // 使用真实系统UTC时间
+    public float timeScale = 1f;               // 仿真时间缩放（>1 加速）
+    public bool useSgp4Propagation = true;     // 使用（简化）SGP4传播，否则使用 Kepler 简化
+    private double accumulatedSimSeconds = 0;  // 当不用系统时间时，内部累计
+
+    // NEW: 传播缓存（每颗卫星一个轻量对象）
+    private Dictionary<int, Propagator> propagators = new Dictionary<int, Propagator>();
 
     void Start()
     {
@@ -145,6 +149,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         scaleSateliteWhenShowBoth = Settings.ini.Game.ScaleSateliteWhenShowBoth;
         orbitAlpha = Settings.ini.Game.OrbitAlpha;
         maxOrbitsPerBatch = Settings.ini.Game.MaxOrbitsPerBatch;
+
         InitializeMaterials();
         CreateSatelliteMesh();
         LoadSatelliteData();
@@ -162,7 +167,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Debug.Log(selectsatelite);
         }
 
-        PreprocessSatelliteData(); // 预处理所有数据
+        PreprocessSatelliteData();
+        BuildPropagators(); // NEW: 基于解析数据建立传播器
 
         LoadSelectionGroups();
     }
@@ -172,7 +178,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         try
         {
             string filePath = Path.Combine(Application.streamingAssetsPath, "groupcolor.json");
-            groupColorGroups = LoadCountryGroupsColor(filePath); // 复用已有的加载方法
+            groupColorGroups = LoadCountryGroupsColor(filePath);
         }
         catch (Exception ex)
         {
@@ -183,37 +189,42 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
     void Update()
     {
-        //HandleInput();
-
-        if (displayMode == DisplayMode.None)
-        {
-            return;
-        }
+        if (displayMode == DisplayMode.None) return;
 
         UpdateSatellitePositions();
 
         if (displayMode == DisplayMode.OrbitOnly || displayMode == DisplayMode.Both)
-        {
             RenderOrbitsWithInstancing();
-        }
 
         if (displayMode == DisplayMode.SatelliteOnly || displayMode == DisplayMode.Both)
-        {
             RenderSatellites();
-        }
-        referenceFOV = objCamera.fieldOfView;
+
+        referenceFOV = objCamera != null ? objCamera.fieldOfView : referenceFOV;
     }
 
-    // 获取可用国家列表的方法
+    // NEW: 构建传播器
+    void BuildPropagators()
+    {
+        propagators.Clear();
+        foreach (var sat in catalogToSatellite.Values)
+        {
+            if (!sat.epochParsed) continue;
+            if (!orbitElements.ContainsKey(sat.catalogNumber)) continue;
+
+            var orbit = orbitElements[sat.catalogNumber];
+            var prop = new Propagator(sat, orbit);
+            propagators[sat.catalogNumber] = prop;
+        }
+        Debug.Log($"传播器构建完成: {propagators.Count} 个");
+    }
+
     public string[] GetAvailableCountries()
     {
         HashSet<string> countries = new HashSet<string>();
         foreach (var satellite in allSatellites)
         {
             if (!string.IsNullOrEmpty(satellite.country))
-            {
                 countries.Add(satellite.country);
-            }
         }
         return countries.ToArray();
     }
@@ -251,14 +262,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         satelliteMesh = new Mesh();
 
-        int latitudeSegments = 16;   // 纬度分段数
-        int longitudeSegments = 24;  // 经度分段数
+        int latitudeSegments = 12;
+        int longitudeSegments = 18;
         float radius = satelliteSize;
 
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
 
-        // 生成球体顶点
         for (int lat = 0; lat <= latitudeSegments; lat++)
         {
             float theta = lat * Mathf.PI / latitudeSegments;
@@ -278,7 +288,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             }
         }
 
-        // 生成三角形索引
         for (int lat = 0; lat < latitudeSegments; lat++)
         {
             for (int lon = 0; lon < longitudeSegments; lon++)
@@ -302,20 +311,16 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         satelliteMesh.RecalculateBounds();
     }
 
-    /// <summary>
-    /// 辅助筛选星座卫星工具
-    /// </summary>
     public enum SelectName
     {
-        QIANFAN, //千帆
-        BEIDOU, //北斗
-        ONEWEB, //一网
-        HULIANGWANG,//国网
-        CZ, //国家航天局卫星
+        QIANFAN,
+        BEIDOU,
+        ONEWEB,
+        HULIANGWANG,
+        CZ,
     }
 
-    [SerializeField]
-    SelectName selectName;
+    [SerializeField] SelectName selectName;
 
     void LoadSatelliteData()
     {
@@ -323,19 +328,21 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             string filePath = Path.Combine(Application.streamingAssetsPath, "tle.json");
             string jsonData = File.ReadAllText(filePath);
-            allSatellites = Newtonsoft.Json.JsonConvert.DeserializeObject<List<SatelliteData>>(jsonData);
+            allSatellites = JsonConvert.DeserializeObject<List<SatelliteData>>(jsonData);
 
             if (printSelectcatalogNumber)
             {
                 if (!String.IsNullOrEmpty(selectName.ToString()))
                 {
                     allSatellites = allSatellites.Where(s => s.name != null && s.name.StartsWith(selectName.ToString())).ToList();
-                    Debug.Log($"筛选出包含 '{selectName.ToString()}' 的卫星: {allSatellites.Count} 个");
+                    Debug.Log($"筛选出包含 '{selectName}' 的卫星: {allSatellites.Count} 个");
                 }
-                else
-                {
-                    Debug.Log("未指定特定的bus名称，加载所有卫星数据");
-                }
+            }
+
+            // NEW: 解析历元
+            foreach (var sat in allSatellites)
+            {
+                ParseEpochFromTLELine1(sat);
             }
         }
         catch (Exception e)
@@ -360,22 +367,21 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         try
         {
-            String tleseldicfile = Path.Combine(Application.streamingAssetsPath, "tlesel.json");
+            string tleseldicfile = Path.Combine(Application.streamingAssetsPath, "tlesel.json");
             string tleseldicstr = File.ReadAllText(tleseldicfile);
-            tleSelDic = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, TleSel>>(tleseldicstr);
+            tleSelDic = JsonConvert.DeserializeObject<Dictionary<string, TleSel>>(tleseldicstr);
         }
         catch (Exception e)
         {
             Debug.LogError($"加载选择组失败: {e.Message}");
         }
     }
-    // 预处理所有卫星数据 - 一次性解析和验证
+
     void PreprocessSatelliteData()
     {
         int validCount = 0;
         int invalidCount = 0;
 
-        // 清空映射表
         catalogToSatellite.Clear();
         catalogToYear.Clear();
         countryToCatalogs.Clear();
@@ -393,23 +399,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
             if (ValidateSatelliteData(satellite))
             {
-                // 计算轨道元素并缓存
                 var orbit = CalculateOrbitElements(satellite);
                 allOrbitElements[satellite.catalogNumber] = orbit;
                 catalogToSatellite[satellite.catalogNumber] = satellite;
 
-                // 预计算年份
                 int year = ParseYearFromDate(satellite.stableDate);
                 catalogToYear[satellite.catalogNumber] = year;
                 satellite.cachedYear = year;
 
-                // 建立国家到catalog的映射
                 if (!string.IsNullOrEmpty(satellite.country))
                 {
                     if (!countryToCatalogs.ContainsKey(satellite.country))
-                    {
                         countryToCatalogs[satellite.country] = new HashSet<int>();
-                    }
                     countryToCatalogs[satellite.country].Add(satellite.catalogNumber);
                 }
 
@@ -421,71 +422,79 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             }
         }
 
-        // 初始化筛选结果为所有有效卫星
         RefreshFilteredData();
-
         Debug.Log($"预处理完成: 有效 {validCount} 个, 无效 {invalidCount} 个");
     }
 
-    // 解析日期中的年份
     private int ParseYearFromDate(string dateStr)
     {
-        if (string.IsNullOrEmpty(dateStr) || dateStr.Length < 4)
-        {
-            return 1970; // 默认年份
-        }
-
+        if (string.IsNullOrEmpty(dateStr) || dateStr.Length < 4) return 1970;
         string yearStr = dateStr.Substring(0, 4);
-        if (int.TryParse(yearStr, out int year))
-        {
-            return year;
-        }
-        return 1970; // 解析失败时的默认年份
+        if (int.TryParse(yearStr, out int year)) return year;
+        return 1970;
     }
+
     private int ParseCatalogNumber(string catalogStr)
     {
-        if (string.IsNullOrEmpty(catalogStr))
-            return 0;
-
+        if (string.IsNullOrEmpty(catalogStr)) return 0;
         catalogStr = catalogStr.Trim();
-
-        if (int.TryParse(catalogStr, out int result))
-        {
-            return result;
-        }
+        if (int.TryParse(catalogStr, out int result)) return result;
 
         int value = 0;
         for (int i = 0; i < catalogStr.Length; i++)
         {
             char c = catalogStr[i];
             int digitValue;
+            if (char.IsDigit(c)) digitValue = c - '0';
+            else if (char.IsLetter(c)) digitValue = char.ToUpper(c) - 'A' + 10;
+            else return 0;
+            value = value * 36 + digitValue;
+        }
+        return value;
+    }
 
-            if (char.IsDigit(c))
+    // NEW: 解析历元 (TLE 第一行: Columns 19-32: YYDDD.DDDDDDDD)
+    void ParseEpochFromTLELine1(SatelliteData sat)
+    {
+        if (string.IsNullOrEmpty(sat.tle1) || sat.tle1.Length < 32)
+        {
+            sat.epochParsed = false;
+            return;
+        }
+        try
+        {
+            string epochStr = sat.tle1.Substring(18, 14).Trim(); // YYDDD.DDDDDDDD
+            // 前两位年
+            string yy = epochStr.Substring(0, 2);
+            string dddFrac = epochStr.Substring(2); // DDD.DDDDDDDD
+
+            if (int.TryParse(yy, out int yearTwo) && double.TryParse(dddFrac, out double dayOfYear))
             {
-                digitValue = c - '0';
-            }
-            else if (char.IsLetter(c))
-            {
-                digitValue = char.ToUpper(c) - 'A' + 10;
+                int year = (yearTwo < 57) ? (2000 + yearTwo) : (1900 + yearTwo); // 常规TLE规则
+                DateTime start = new DateTime(year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                double intDay = Math.Floor(dayOfYear);
+                double frac = dayOfYear - intDay;
+                DateTime epoch = start.AddDays(intDay - 1).AddSeconds(frac * 86400.0);
+                sat.epochUtc = epoch;
+                sat.epochParsed = true;
             }
             else
             {
-                Debug.LogWarning($"无效的catalog number字符: '{c}' in '{catalogStr}'");
-                return 0;
+                sat.epochParsed = false;
             }
-
-            value = value * 36 + digitValue;
         }
-
-        return value;
+        catch
+        {
+            sat.epochParsed = false;
+        }
     }
 
     void ParseTLE2(SatelliteData satellite)
     {
         string tle2 = satellite.tle2;
-        if (tle2.Length < 69)
+        if (string.IsNullOrEmpty(tle2) || tle2.Length < 69)
         {
-            Debug.LogWarning($"TLE第二行长度不足: {satellite.name} - 长度: {tle2.Length}");
+            Debug.LogWarning($"TLE第二行长度不足: {satellite.name} - 长度: {tle2?.Length}");
             return;
         }
 
@@ -503,135 +512,64 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             satellite.argPerigee = ParseFloat(tle2.Substring(34, 8), "argPerigee");
             satellite.meanAnomaly = ParseFloat(tle2.Substring(43, 8), "meanAnomaly");
             satellite.meanMotion = ParseFloat(tle2.Substring(52, 11), "meanMotion");
-
-
-            //Debug.Log($"成功解析卫星: {satellite.name} (Catalog: {satellite.catalogNumber})");
         }
         catch (Exception e)
         {
             Debug.LogError($"解析TLE失败: {satellite.name} - {e.Message}");
-            Debug.LogError($"TLE第二行: {tle2}");
         }
     }
 
     private float ParseFloat(string valueStr, string fieldName)
     {
         valueStr = valueStr.Trim();
-
-        if (float.TryParse(valueStr, out float result))
-        {
-            return result;
-        }
-        else
-        {
-            Debug.LogWarning($"无法解析{fieldName}: '{valueStr}'，使用默认值0");
-            return 0f;
-        }
+        if (float.TryParse(valueStr, out float result)) return result;
+        return 0f;
     }
 
     private bool ValidateSatelliteData(SatelliteData satellite)
     {
-        if (satellite.catalogNumber <= 0)
-        {
-            Debug.LogWarning($"无效的catalog number: {satellite.catalogNumber} for {satellite.name}");
-            return false;
-        }
-
-        if (satellite.inclination < 0 || satellite.inclination > 180)
-        {
-            Debug.LogWarning($"无效的倾角: {satellite.inclination}° for {satellite.name}");
-            return false;
-        }
-
-        if (satellite.eccentricity < 0 || satellite.eccentricity >= 1)
-        {
-            Debug.LogWarning($"无效的偏心率: {satellite.eccentricity} for {satellite.name}");
-            return false;
-        }
-
-        if (satellite.meanMotion <= 0)
-        {
-            Debug.LogWarning($"无效的平均运动: {satellite.meanMotion} for {satellite.name}");
-            return false;
-        }
-
+        if (satellite.catalogNumber <= 0) return false;
+        if (satellite.inclination < 0 || satellite.inclination > 180) return false;
+        if (satellite.eccentricity < 0 || satellite.eccentricity >= 1) return false;
+        if (satellite.meanMotion <= 0) return false;
         return true;
     }
 
     void ParseSatelliteData()
     {
-        int validCount = 0;
-        int invalidCount = 0;
-        int filteredOutCount = 0;
-
-        // 首先应用筛选条件
         filteredSatellites = ApplyFilters(allSatellites);
-
         foreach (var satellite in filteredSatellites)
         {
-            if (string.IsNullOrEmpty(satellite.tle2))
-            {
-                Debug.LogWarning($"卫星 {satellite.name} 缺少TLE第二行数据");
-                invalidCount++;
-                continue;
-            }
-
+            if (string.IsNullOrEmpty(satellite.tle2)) continue;
             ParseTLE2(satellite);
-
             if (ValidateSatelliteData(satellite))
             {
                 var orbit = CalculateOrbitElements(satellite);
                 orbitElements[satellite.catalogNumber] = orbit;
-                validCount++;
-            }
-            else
-            {
-                invalidCount++;
             }
         }
-
-        filteredOutCount = allSatellites.Count - filteredSatellites.Count;
-        Debug.Log($"卫星数据解析完成: 有效 {validCount} 个, 无效 {invalidCount} 个, 筛选排除 {filteredOutCount} 个");
     }
+
     private List<SatelliteData> ApplyFilters(List<SatelliteData> satellites)
     {
         List<SatelliteData> filtered = new List<SatelliteData>();
-
         foreach (var satellite in satellites)
         {
-            // 年份筛选
             if (enableYearFilter)
             {
                 string yearStr = satellite.stableDate?.Substring(0, 4);
-
-                if (string.IsNullOrEmpty(yearStr))
-                {
-                    continue;
-                }
-                if (!int.TryParse(yearStr, out int year))
-                {
-                    Debug.Log("提取前4位日期失败:" + satellite.stableDate);
-                    continue;
-                }
-                if (year < filterMinYear || year > filterMaxYear)
-                {
-                    continue;
-                }
+                if (string.IsNullOrEmpty(yearStr)) continue;
+                if (!int.TryParse(yearStr, out int year)) continue;
+                if (year < filterMinYear || year > filterMaxYear) continue;
             }
-
-            // 国家筛选
             if (enableCountryFilter)
             {
                 if (string.IsNullOrEmpty(satellite.country) ||
                     !selectedCountries.Contains(satellite.country))
-                {
                     continue;
-                }
             }
-
             filtered.Add(satellite);
         }
-
         return filtered;
     }
 
@@ -639,13 +577,10 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         bool wasEnabled = enableYearFilter;
         enableYearFilter = enabled;
-
         if (enabled)
         {
             if (!wasEnabled || minYear != filterMinYear || maxYear != filterMaxYear)
-            {
                 UpdateYearFilter(minYear, maxYear);
-            }
         }
         else if (wasEnabled)
         {
@@ -654,27 +589,16 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             RefreshFilteredData();
             RefreshCurrentDisplay();
         }
-
-        Debug.Log($"年份筛选{(enabled ? "已启用" : "已禁用")}: {minYear} - {maxYear}");
     }
 
     public void SetCountryFilter(bool enabled, List<string> countries = null)
     {
         enableCountryFilter = enabled;
-        if (countries != null)
-        {
-            selectedCountries = countries;
-        }
-
+        if (countries != null) selectedCountries = countries;
         RefreshFilteredData();
         RefreshCurrentDisplay();
-
-        Debug.Log($"国家筛选{(enabled ? "已启用" : "已禁用")}: {string.Join(", ", selectedCountries)}");
     }
 
-    /// <summary>
-    /// 刷新卫星显示
-    /// </summary>
     public void RefreshData()
     {
         SetDisplayAll(filterMinYear, filterMaxYear, string.Join(",", selectedCountries));
@@ -685,55 +609,35 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         SetCountryFilter(enabled, country.Split(',').ToList());
     }
 
-    // 快速筛选方法 - 基于预计算的映射
     private void RefreshFilteredData()
     {
         filteredCatalogNumbers.Clear();
-
         foreach (var kvp in catalogToSatellite)
         {
             int catalogNumber = kvp.Key;
             var satellite = kvp.Value;
+            bool pass = true;
 
-            bool passFilter = true;
-
-            // 年份筛选
             if (enableYearFilter)
             {
                 int year = catalogToYear[catalogNumber];
-                if (year < filterMinYear || year > filterMaxYear)
-                {
-                    passFilter = false;
-                }
+                if (year < filterMinYear || year > filterMaxYear) pass = false;
             }
 
-            // 国家筛选
-            if (passFilter && enableCountryFilter)
+            if (pass && enableCountryFilter)
             {
                 if (string.IsNullOrEmpty(satellite.country) || !selectedCountries.Contains(satellite.country))
-                {
-                    passFilter = false;
-                }
+                    pass = false;
             }
 
-            if (passFilter)
-            {
-                filteredCatalogNumbers.Add(catalogNumber);
-            }
+            if (pass) filteredCatalogNumbers.Add(catalogNumber);
         }
-
-        Debug.Log($"筛选后的卫星数量: {filteredCatalogNumbers.Count}");
     }
 
-    // 增量更新年份筛选 - 支持平滑增减年份
     public void UpdateYearFilter(int minYear, int maxYear)
     {
-        int oldMinYear = filterMinYear;
-        int oldMaxYear = filterMaxYear;
-
         filterMinYear = minYear;
         filterMaxYear = maxYear;
-
         if (!enableYearFilter)
         {
             enableYearFilter = true;
@@ -742,154 +646,92 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             return;
         }
 
-        // 如果是扩大年份范围，增量添加
-        if (minYear <= oldMinYear && maxYear >= oldMaxYear)
-        {
-            // 添加新的年份范围内的卫星
-            foreach (var kvp in catalogToYear)
-            {
-                int catalogNumber = kvp.Key;
-                int year = kvp.Value;
-
-                if (!filteredCatalogNumbers.Contains(catalogNumber) &&
-                    year >= minYear && year <= maxYear)
-                {
-                    var satellite = catalogToSatellite[catalogNumber];
-
-                    // 检查国家筛选
-                    bool passCountryFilter = true;
-                    if (enableCountryFilter)
-                    {
-                        if (string.IsNullOrEmpty(satellite.country) || !selectedCountries.Contains(satellite.country))
-                        {
-                            passCountryFilter = false;
-                        }
-                    }
-
-                    if (passCountryFilter)
-                    {
-                        filteredCatalogNumbers.Add(catalogNumber);
-                    }
-                }
-            }
-        }
-        // 如果是缩小年份范围，移除不符合的卫星
-        else if (minYear >= oldMinYear && maxYear <= oldMaxYear)
-        {
-            tempCatalogList.Clear();
-            foreach (int catalogNumber in filteredCatalogNumbers)
-            {
-                int year = catalogToYear[catalogNumber];
-                if (year < minYear || year > maxYear)
-                {
-                    tempCatalogList.Add(catalogNumber);
-                }
-            }
-
-            foreach (int catalogNumber in tempCatalogList)
-            {
-                filteredCatalogNumbers.Remove(catalogNumber);
-            }
-        }
-        else
-        {
-            // 复杂的范围变化，重新计算
-            RefreshFilteredData();
-        }
-
+        // 简化处理：直接刷新
+        RefreshFilteredData();
         RefreshCurrentDisplay();
-        Debug.Log($"年份筛选更新: {minYear} - {maxYear}, 当前卫星数量: {filteredCatalogNumbers.Count}");
     }
 
-    // 刷新当前显示的轨道
     private void RefreshCurrentDisplay()
     {
         if (!string.IsNullOrEmpty(currentDisplayGroupName))
-        {
             SetDisplayGroup(currentDisplayGroupName, displayMode);
-        }
     }
 
     OrbitElements CalculateOrbitElements(SatelliteData satellite)
     {
         var orbit = new OrbitElements();
-
         double mu = 3.986004418e14;
         double n = satellite.meanMotion * 2 * Math.PI / 86400.0;
         orbit.semiMajorAxis = (float)Math.Pow(mu / (n * n), 1.0 / 3.0);
-
         orbit.eccentricity = satellite.eccentricity;
         orbit.inclination = satellite.inclination * Mathf.Deg2Rad;
         orbit.raan = satellite.raan * Mathf.Deg2Rad;
         orbit.argPerigee = satellite.argPerigee * Mathf.Deg2Rad;
         orbit.meanAnomaly = satellite.meanAnomaly * Mathf.Deg2Rad;
         orbit.meanMotion = satellite.meanMotion;
-
         return orbit;
     }
 
-    // 修改 UpdateSatellitePositions 方法，使用时间偏移
+    // NEW: 利用真实时间或仿真时间更新卫星位置（SGP4/Kepler）
     void UpdateSatellitePositions()
     {
-        float currentTime = Time.time;
+        double deltaSeconds;
+        if (useSystemTime)
+        {
+            DateTime utcNow = DateTime.UtcNow;
+            // 系统时间 + 缩放（缩放>1表示加速流逝）
+            // 为保持一致，这里直接用当前真实时刻传播，不额外缩放真实世界时间；若需“时间加速”可改成：
+            // deltaSeconds = (utcNow - sat.epochUtc).TotalSeconds * timeScale
+        }
+
+        if (!useSystemTime)
+        {
+            accumulatedSimSeconds += Time.deltaTime * timeScale;
+        }
+
+        currentSatellitePositions.Clear();
 
         foreach (int satNumber in currentDisplayedOrbits)
         {
-            if (orbitElements.ContainsKey(satNumber))
+            if (!catalogToSatellite.TryGetValue(satNumber, out var sat)) continue;
+            if (!orbitElements.ContainsKey(satNumber)) continue;
+            if (!sat.epochParsed) continue;
+            if (!propagators.ContainsKey(satNumber)) continue;
+
+            DateTime nowUtc = useSystemTime ? DateTime.UtcNow : sat.epochUtc.AddSeconds(accumulatedSimSeconds);
+            double minutesSinceEpoch = (nowUtc - sat.epochUtc).TotalMinutes;
+
+            Vector3 eci;
+            if (useSgp4Propagation)
             {
-                var orbit = orbitElements[satNumber];
-                // 使用时间偏移让卫星在轨道上分散
-                float offsetTime = currentTime;
-                if (satelliteTimeOffsets.ContainsKey(satNumber))
-                {
-                    offsetTime += satelliteTimeOffsets[satNumber];
-                }
-                Vector3 position = CalculateSatellitePosition(orbit, offsetTime);
-                currentSatellitePositions[satNumber] = position;
+                eci = propagators[satNumber].PropagateSgp4(minutesSinceEpoch);
             }
+            else
+            {
+                eci = propagators[satNumber].PropagateKepler(minutesSinceEpoch);
+            }
+
+            currentSatellitePositions[satNumber] = eci * orbitScale;
         }
     }
-    // 添加设置最大轨道数量的公共方法
+
     public void SetMaxDisplay(int maxOrbits, int maxSatellites)
     {
         maxDisplayOrbits = Mathf.Clamp(maxOrbits, 10, 10000);
-
         maxDisplaySatellites = Mathf.Clamp(maxSatellites, 10, 30000);
-
-        Debug.Log($"最大显示轨道数量设置为: {maxDisplayOrbits}");
     }
-
-    // 简化的卫星位置计算方法
-    Vector3 CalculateSatellitePosition(OrbitElements orbit, float time)
-    {
-        // 简化的卫星位置计算（实际应用中需要更精确的算法）
-        float meanAnomalyNow = orbit.meanAnomaly + orbit.meanMotion * time * 2 * Mathf.PI / 86400f;
-        float trueAnomaly = meanAnomalyNow; // 简化，实际需要解开普勒方程
-
-        float r = orbit.semiMajorAxis * (1 - orbit.eccentricity * orbit.eccentricity) /
-                 (1 + orbit.eccentricity * Mathf.Cos(trueAnomaly));
-
-        float x = r * Mathf.Cos(trueAnomaly);
-        float y = r * Mathf.Sin(trueAnomaly);
-
-        Vector3 orbitalPos = new Vector3(x, y, 0);
-        return TransformToECI(orbitalPos, orbit) * orbitScale;
-    }
-
 
     void RenderSatellites()
     {
         if (currentSatellitePositions.Count == 0) return;
-
-        Camera cam = Camera.main;
+        Camera cam = objCamera != null ? objCamera : Camera.main;
         if (cam == null) return;
 
         Vector3 camPos = cam.transform.position;
         Quaternion camRot = cam.transform.rotation;
         float currentFOV = cam.fieldOfView;
 
-        // 按颜色分组卫星
-        var colorGroups = new Dictionary<Color, List<(Vector3 position, Matrix4x4 matrix)>>();
+        var colorGroups = new Dictionary<Color, List<Matrix4x4>>();
 
         foreach (var kvp in currentSatellitePositions)
         {
@@ -899,55 +741,41 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             if (!catalogToSatellite.TryGetValue(satNumber, out var satellite))
                 continue;
 
-            // 计算缩放
             Vector3 scale = CalculateScale(camPos, position, currentFOV);
             Matrix4x4 matrix = Matrix4x4.TRS(position, camRot, scale);
 
-            // 获取颜色
-            Color[] countryColors = GetCurrentColors(satellite.country);
-            Color satelliteColor = countryColors[satNumber % countryColors.Length];
+            Color[] colors = GetCurrentColors(satellite.country);
+            Color color = colors[satNumber % colors.Length];
 
-            // 按颜色分组
-            if (!colorGroups.ContainsKey(satelliteColor))
-                colorGroups[satelliteColor] = new List<(Vector3, Matrix4x4)>();
-
-            colorGroups[satelliteColor].Add((position, matrix));
+            if (!colorGroups.ContainsKey(color))
+                colorGroups[color] = new List<Matrix4x4>();
+            colorGroups[color].Add(matrix);
         }
 
-        // 为每种颜色分批渲染
         const int batchSize = 1023;
-        var matrices = new Matrix4x4[batchSize];
         var propertyBlock = new MaterialPropertyBlock();
 
-        foreach (var colorGroup in colorGroups)
+        foreach (var group in colorGroups)
         {
-            Color color = colorGroup.Key;
-            var satellites = colorGroup.Value;
-
-            // 设置该颜色组的材质属性
-            propertyBlock.SetColor("_UnlitColor", color);
-            propertyBlock.SetColor("_EmissiveColor", color);
+            var matrices = group.Value;
+            Color c = group.Key;
+            propertyBlock.SetColor("_UnlitColor", c);
+            propertyBlock.SetColor("_EmissiveColor", c);
             propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
 
-            // 分批渲染该颜色组的卫星
-            for (int i = 0; i < satellites.Count; i += batchSize)
+            for (int i = 0; i < matrices.Count; i += batchSize)
             {
-                int count = Mathf.Min(batchSize, satellites.Count - i);
-
-                for (int j = 0; j < count; j++)
-                {
-                    matrices[j] = satellites[i + j].matrix;
-                }
-
-                Graphics.DrawMeshInstanced(satelliteMesh, 0, satelliteMaterial, matrices, count, propertyBlock);
+                int count = Mathf.Min(batchSize, matrices.Count - i);
+                Matrix4x4[] batch = new Matrix4x4[count];
+                matrices.CopyTo(i, batch, 0, count);
+                Graphics.DrawMeshInstanced(satelliteMesh, 0, satelliteMaterial, batch, count, propertyBlock);
             }
         }
     }
 
-    [Header("多近的距离会受影响，越大受影响范围更广")]
-    public float satelliteNearAdjustBias = 1.5f;    // 越大补偿区越宽
-    [Header("决定近距离缩小的速率，越大近处越小")]
-    public float satelliteNearAdjustPower = 1.30f;  // 越大缩小幅度越大（1.0-2.0间可调）
+    [Header("近距离视觉缩放补偿")]
+    public float satelliteNearAdjustBias = 1.5f;
+    public float satelliteNearAdjustPower = 1.30f;
 
     private Vector3 CalculateScale(Vector3 camPos, Vector3 position, float currentFOV)
     {
@@ -961,10 +789,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         float meshDiameter = satelliteSize * 2f;
         float scale = worldDiameter / meshDiameter;
 
-        // 距离近时额外缩放（越近缩得越狠并可微调）
         float nearComp = Mathf.Pow(distance / (distance + satelliteNearAdjustBias), satelliteNearAdjustPower);
-        scale *= nearComp; // <-- 这里叠加自适应缩放
-
+        scale *= nearComp;
         scale = Mathf.Clamp(scale, minScale, maxScale);
 
         if (displayMode == DisplayMode.Both)
@@ -977,16 +803,15 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         keepConstantVisualSize = enabled;
         referenceFOV = refFOV;
-        Debug.Log($"卫星恒定视觉大小: {(enabled ? "开启" : "关闭")}, 参考FOV: {refFOV}°");
     }
+
     public void SetBaseSatelliteScale(float scale)
     {
-        baseSatelliteScale = Mathf.Clamp(scale, 0.1f, 1f);
-        Debug.Log($"基础卫星缩放设置为: {baseSatelliteScale}");
+        baseSatelliteScale = Mathf.Clamp(scale, 0.1f, 5f);
     }
+
     void CreateOrbitMeshes(List<int> satelliteNumbers)
     {
-        // 只创建新的轨道mesh，不销毁现有的（增量更新）
         foreach (int satNumber in satelliteNumbers)
         {
             if (!orbitMeshes.ContainsKey(satNumber) && allOrbitElements.ContainsKey(satNumber))
@@ -997,7 +822,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             }
         }
 
-        // 清理不再需要的mesh
         tempCatalogList.Clear();
         foreach (var kvp in orbitMeshes)
         {
@@ -1006,6 +830,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 tempCatalogList.Add(kvp.Key);
             }
         }
+        // 这里可以选择清理不在显示列表中的mesh（可选）
     }
 
     Mesh CreateOrbitMesh(OrbitElements orbit)
@@ -1017,6 +842,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         for (int i = 0; i <= orbitSegments; i++)
         {
             float trueAnomaly = (float)i / orbitSegments * 2 * Mathf.PI;
+
             float r = orbit.semiMajorAxis * (1 - orbit.eccentricity * orbit.eccentricity) /
                      (1 + orbit.eccentricity * Mathf.Cos(trueAnomaly));
 
@@ -1037,7 +863,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         mesh.vertices = vertices;
         mesh.SetIndices(indices, MeshTopology.Lines, 0);
         mesh.RecalculateBounds();
-
         return mesh;
     }
 
@@ -1065,13 +890,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return new Vector3(x3, z3, y3);
     }
 
-    /// <summary>
-    /// 绘制轨道
-    /// </summary>
     void RenderOrbitsWithInstancing()
     {
         if (currentDisplayedOrbits.Count == 0) return;
-
         for (int i = 0; i < currentDisplayedOrbits.Count; i += maxOrbitsPerBatch)
         {
             int batchSize = Mathf.Min(maxOrbitsPerBatch, currentDisplayedOrbits.Count - i);
@@ -1080,115 +901,58 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 批量绘制轨道
-    /// </summary>
-    /// <param name="batch"></param>
     void RenderOrbitBatch(List<int> batch)
     {
         var matrices = new Matrix4x4[batch.Count];
-
         for (int i = 0; i < batch.Count; i++)
-        {
             matrices[i] = Matrix4x4.identity;
-        }
-
-        // 获取当前显示组的颜色组
-        Color[] groupColors = GetCurrentColors(currentDisplayGroupName);
 
         for (int i = 0; i < batch.Count; i++)
         {
             int satNumber = batch[i];
-            if (orbitMeshes.ContainsKey(satNumber))
+            if (!orbitMeshes.ContainsKey(satNumber)) continue;
+
+            var propertyBlock = new MaterialPropertyBlock();
+
+            if (catalogToSatellite.TryGetValue(satNumber, out var satellite))
             {
-                var propertyBlock = new MaterialPropertyBlock();
+                Color[] countryColors = GetCurrentColors(satellite.country);
+                Color orbitColor = countryColors[satNumber % countryColors.Length];
+                orbitColor.a = orbitAlpha;
 
-                if (catalogToSatellite.TryGetValue(satNumber, out var satellite))
-                {
-                    Color[] countryColors = GetCurrentColors(satellite.country);
-                    Color orbitColor = countryColors[satNumber % countryColors.Length];
-                    orbitColor.a = orbitAlpha;
+                propertyBlock.SetColor("_UnlitColor", orbitColor);
+                propertyBlock.SetColor("_EmissiveColor", orbitColor);
+                propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
 
-                    propertyBlock.SetColor("_UnlitColor", orbitColor);
-                    propertyBlock.SetColor("_EmissiveColor", orbitColor);
-                    propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
-
-                    Graphics.DrawMesh(orbitMeshes[satNumber], matrices[i], orbitMaterial, 0, null, 0, propertyBlock);
-                }
+                Graphics.DrawMesh(orbitMeshes[satNumber], matrices[i], orbitMaterial, 0, null, 0, propertyBlock);
             }
         }
     }
 
-    // 获取组颜色的辅助方法
     private Color[] GetCountryColors(string country)
     {
         if (!string.IsNullOrEmpty(country) && countryGroupColorGroups.ContainsKey(country))
             return countryGroupColorGroups[country];
-
-        // 如果没有找到对应的国家颜色组，返回白色数组作为默认颜色
         return new Color[] { Color.white };
     }
-    int starty = 1980;
-    int endy = 2025;
-    void HandleInput()
-    {
-    }
 
-    // 切换年份筛选
-    private void ToggleYearFilter()
-    {
-        SetYearFilter(!enableYearFilter, filterMinYear, filterMaxYear);
-    }
-
-    // 切换国家筛选
-    private void ToggleCountryFilter()
-    {
-        SetCountryFilter(!enableCountryFilter, selectedCountries);
-    }
-    /// <summary>
-    /// 筛选所有符合年限以及国家的卫星数据
-    /// </summary>
-    /// <param name="startYear"></param>
-    /// <param name="endYear"></param>
-    /// <param name="country">为空则不过滤国家，否则只显示指定国家</param>
     public void SetDisplayAll(int startYear = 1980, int endYear = 2025, string country = "")
     {
-        if (displayMode.Equals(DisplayMode.None))
-        {
+        if (displayMode == DisplayMode.None)
             displayMode = DisplayMode.SatelliteOnly;
-        }
 
-        currentDisplayGroupName = ""; // 清空分组名，表示非分组显示
+        currentDisplayGroupName = "";
+        SetYearFilter(true, startYear, endYear);
 
-        // 更新年份筛选条件（如果传入的区间与当前不同则更新）
-        if (filterMinYear != startYear || filterMaxYear != endYear || !enableYearFilter)
-        {
-            SetYearFilter(true, startYear, endYear);
-        }
-        else
-        {
-            // 仅刷新筛选结果
-            RefreshFilteredData();
-        }
-
-        // 新增：处理国家筛选参数
         if (!string.IsNullOrEmpty(country))
-        {
-            // 只显示指定国家
             SetCountryFilter(true, country.Split(',').ToList());
-        }
         else
-        {
-            // 不启用国家筛选
             SetCountryFilter(false, "");
-        }
 
-        // 构建当前显示轨道列表，只包含筛选后的卫星，并且轨道数据存在
         currentDisplayedOrbits = filteredCatalogNumbers
             .Where(catalogNum => allOrbitElements.ContainsKey(catalogNum))
             .ToList();
 
-        // 性能限制：卫星数量超出最大值时均匀采样
         if (currentDisplayedOrbits.Count > maxDisplaySatellites)
         {
             List<int> selectedOrbits = new List<int>();
@@ -1197,112 +961,66 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             {
                 int index = Mathf.RoundToInt(i * step);
                 if (index < currentDisplayedOrbits.Count)
-                {
                     selectedOrbits.Add(currentDisplayedOrbits[index]);
-                }
             }
             currentDisplayedOrbits = selectedOrbits;
-            Debug.Log($"筛选后卫星数超限: 仅显示 {currentDisplayedOrbits.Count}/{filteredCatalogNumbers.Count}");
         }
 
-        // 更新Set以便后续清理Mesh用
         currentDisplayedOrbitsSet = new HashSet<int>(currentDisplayedOrbits);
-
-        // 清空当前卫星位置缓存
         currentSatellitePositions.Clear();
 
-        // 为每个卫星计算时间偏移，让它们在轨道上均匀分布
-        satelliteTimeOffsets.Clear();
-        int count = currentDisplayedOrbits.Count;
-        for (int i = 0; i < count; i++)
-        {
-            int satNumber = currentDisplayedOrbits[i];
-            float timeOffset = (float)i / count * 86400f;
-            satelliteTimeOffsets[satNumber] = timeOffset;
-        }
-
-        // 创建轨道Mesh
         CreateOrbitMeshes(currentDisplayedOrbits);
-
-        Debug.Log($"显示全部（不分组）: {currentDisplayedOrbits.Count} 条卫星，年份 {startYear}-{endYear}，国家{(string.IsNullOrEmpty(country) ? "全部" : country)}");
     }
 
-    /// <summary>
-    /// 根据星座名映射表展示选中卫星编号列表卫星和轨道
-    /// </summary>
-    /// <param name="groupName">组名 星座卫星群</param>
-    public void SetDisplayGroup(string groupName, DisplayMode displayMode = DisplayMode.Both)
+    public void SetDisplayGroup(string groupName, DisplayMode mode = DisplayMode.Both)
     {
-        if (tleSelDic.ContainsKey(groupName))
+        if (tleSelDic == null || !tleSelDic.ContainsKey(groupName))
         {
-            currentDisplayGroupName = groupName; // 记录当前显示的组名
-            SetDisplayMode(displayMode);
-            currentSatellitePositions.Clear();  //清空卫星点
-            List<int> allOrbits = tleSelDic[groupName].sel;
-            // 新增：分组颜色赋值
-            if (groupColorGroups != null && groupColorGroups.ContainsKey(groupName))
-                currentGroupColors = groupColorGroups[groupName];
-            else
-                currentGroupColors = null;
+            Debug.LogWarning($"未找到卫星群: {groupName}");
+            return;
+        }
 
-            // 限制轨道数量以优化性能
-            if (allOrbits.Count > maxDisplayOrbits)
+        currentDisplayGroupName = groupName;
+        SetDisplayMode(mode);
+        currentSatellitePositions.Clear();
+
+        List<int> allOrbits = tleSelDic[groupName].sel;
+
+        if (groupColorGroups != null && groupColorGroups.ContainsKey(groupName))
+            currentGroupColors = groupColorGroups[groupName];
+        else
+            currentGroupColors = null;
+
+        if (allOrbits.Count > maxDisplayOrbits)
+        {
+            List<int> selected = new List<int>();
+            float step = (float)allOrbits.Count / maxDisplayOrbits;
+            for (int i = 0; i < maxDisplayOrbits; i++)
             {
-                // 均匀采样选择轨道，而不是只取前N个
-                List<int> selectedOrbits = new List<int>();
-                float step = (float)allOrbits.Count / maxDisplayOrbits;
-
-                for (int i = 0; i < maxDisplayOrbits; i++)
-                {
-                    int index = Mathf.RoundToInt(i * step);
-                    if (index < allOrbits.Count)
-                    {
-                        selectedOrbits.Add(allOrbits[index]);
-                    }
-                }
-                currentDisplayedOrbits = selectedOrbits;
-                Debug.Log($"限制显示 {groupName} 卫星群: {currentDisplayedOrbits.Count}/{allOrbits.Count} 个轨道");
+                int idx = Mathf.RoundToInt(i * step);
+                if (idx < allOrbits.Count)
+                    selected.Add(allOrbits[idx]);
             }
-            else
-            {
-                currentDisplayedOrbits = allOrbits;
-                Debug.Log($"显示 {groupName} 卫星群: {currentDisplayedOrbits.Count} 颗卫星的轨道");
-            }
-
-            // 为每个卫星计算时间偏移，让它们在轨道上均匀分布
-            satelliteTimeOffsets.Clear();
-            for (int i = 0; i < currentDisplayedOrbits.Count; i++)
-            {
-                int satNumber = currentDisplayedOrbits[i];
-                // 计算该卫星在轨道上的均匀分布位置
-                float timeOffset = (float)i / currentDisplayedOrbits.Count * 86400f; // 在一个轨道周期内均匀分布
-                satelliteTimeOffsets[satNumber] = timeOffset;
-            }
-
-            CreateOrbitMeshes(currentDisplayedOrbits);
+            currentDisplayedOrbits = selected;
         }
         else
         {
-            Debug.LogWarning($"未找到卫星群: {groupName}");
+            currentDisplayedOrbits = allOrbits;
         }
+
+        currentDisplayedOrbitsSet = new HashSet<int>(currentDisplayedOrbits);
+        CreateOrbitMeshes(currentDisplayedOrbits);
     }
+
     private Color[] GetCurrentColors(string country)
     {
-        // 优先使用分组颜色
         if (!string.IsNullOrEmpty(currentDisplayGroupName) && currentGroupColors != null)
             return currentGroupColors;
-        // 其次国家色
         if (!string.IsNullOrEmpty(country) && countryGroupColorGroups.ContainsKey(country))
             return countryGroupColorGroups[country];
-        // 默认白色
         return new Color[] { Color.white };
     }
 
-    /// <summary>
-    /// 加载国家轨道颜色组字典
-    /// </summary>
-    /// <param name="filePath"></param>
-    /// <returns></returns>
     public static Dictionary<string, Color[]> LoadCountryGroupsColor(string filePath) =>
         JsonConvert.DeserializeObject<Dictionary<string, string[]>>(File.ReadAllText(filePath))
         .ToDictionary(
@@ -1312,14 +1030,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 .ToArray()
         );
 
-
-    /// <summary>
-    /// 隐藏-卫星-轨道-both 模式切换开关
-    /// <param name="mode"></param>
     public void SetDisplayMode(DisplayMode mode)
     {
         displayMode = mode;
-        Debug.Log($"显示模式切换为: {mode}");
     }
 
     void OnDestroy()
@@ -1339,5 +1052,109 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         public float pitch;
         public float yaw;
         public float fov;
+    }
+
+    // ===============================
+    // NEW: 传播器（简化版 SGP4/Kepler）
+    // ===============================
+    private class Propagator
+    {
+        private SatelliteData sat;
+        private OrbitElements orbit;
+
+        // 常量
+        private const double mu = 3.986004418e14;     // 地球引力常数 (m^3/s^2)
+
+        public Propagator(SatelliteData s, OrbitElements o)
+        {
+            sat = s;
+            orbit = o;
+        }
+
+        // 简化 Kepler 传播：只用 meanMotion -> 平均角速度
+        public Vector3 PropagateKepler(double minutesSinceEpoch)
+        {
+            double M0 = orbit.meanAnomaly; // 初始平均近点角 (rad)
+            double n = sat.meanMotion * 2.0 * Math.PI / 86400.0; // rad/s
+            double t = minutesSinceEpoch * 60.0; // seconds
+
+            double M = M0 + n * t;
+            M = NormalizeRadians(M);
+
+            // 解开 Kepler 方程求偏近点角 E
+            double E = SolveKepler(M, orbit.eccentricity);
+
+            // 真近点角 ν
+            double cosE = Math.Cos(E);
+            double sinE = Math.Sin(E);
+            double sqrtOneMinusESq = Math.Sqrt(1 - orbit.eccentricity * orbit.eccentricity);
+            double nu = Math.Atan2(sqrtOneMinusESq * sinE, cosE - orbit.eccentricity);
+
+            // 距离 r
+            double a = orbit.semiMajorAxis;
+            double r = a * (1 - orbit.eccentricity * cosE);
+
+            // 在轨道平面（Perifocal坐标系）
+            double xOrb = r * Math.Cos(nu);
+            double yOrb = r * Math.Sin(nu);
+            double zOrb = 0;
+
+            Vector3 perifocal = new Vector3((float)xOrb, (float)yOrb, (float)zOrb);
+            return TransformPerifocalToECI(perifocal, orbit);
+        }
+
+        // 简化 SGP4 入口（此处仍用 Kepler，留接口以后替换）
+        public Vector3 PropagateSgp4(double minutesSinceEpoch)
+        {
+            // 可在此处接入真正的 SGP4 库调用
+            return PropagateKepler(minutesSinceEpoch);
+        }
+
+        private double NormalizeRadians(double ang)
+        {
+            ang %= (2.0 * Math.PI);
+            if (ang < 0) ang += 2.0 * Math.PI;
+            return ang;
+        }
+
+        // 牛顿迭代解 Kepler：M = E - e sinE
+        private double SolveKepler(double M, double e)
+        {
+            double E = M; // 初值
+            const int maxIter = 15;
+            for (int i = 0; i < maxIter; i++)
+            {
+                double f = E - e * Math.Sin(E) - M;
+                double fp = 1 - e * Math.Cos(E);
+                double d = f / fp;
+                E -= d;
+                if (Math.Abs(d) < 1e-10) break;
+            }
+            return E;
+        }
+
+        private Vector3 TransformPerifocalToECI(Vector3 perifocal, OrbitElements o)
+        {
+            float cosArgP = Mathf.Cos(o.argPerigee);
+            float sinArgP = Mathf.Sin(o.argPerigee);
+            float cosInc = Mathf.Cos(o.inclination);
+            float sinInc = Mathf.Sin(o.inclination);
+            float cosRaan = Mathf.Cos(o.raan);
+            float sinRaan = Mathf.Sin(o.raan);
+
+            float x1 = perifocal.x * cosArgP - perifocal.y * sinArgP;
+            float y1 = perifocal.x * sinArgP + perifocal.y * cosArgP;
+            float z1 = perifocal.z;
+
+            float x2 = x1;
+            float y2 = y1 * cosInc - z1 * sinInc;
+            float z2 = y1 * sinInc + z1 * cosInc;
+
+            float x3 = x2 * cosRaan - y2 * sinRaan;
+            float y3 = x2 * sinRaan + y2 * cosRaan;
+            float z3 = z2;
+
+            return new Vector3(x3, z3, y3);
+        }
     }
 }
