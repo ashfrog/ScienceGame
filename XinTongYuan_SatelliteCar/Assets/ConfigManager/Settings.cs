@@ -105,6 +105,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("ProjectorZ", value.ToString());
     }
 
+    public float IncreateWaitTime
+    {
+        get => ReadFloat("IncreateWaitTime", 0.1f);
+        set => WriteValue("IncreateWaitTime", value.ToString());
+    }
+
     public float PanelY
     {
         get => ReadFloat("PanelY", 1f);
