@@ -11,6 +11,7 @@ public class SatelliteDataReader : MonoBehaviour
     public Transform contentParent; // 用于放置预制体的父对象
     public Sprite s;
     public FHClientController fHClientController;
+    public Toggle togglePlay;
     void Start()
     {
         //initialize(0);
@@ -109,6 +110,10 @@ public class SatelliteDataReader : MonoBehaviour
         {
             Debug.Log("click " + i);
             fHClientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.WeiXingView, row[0].ToString() + "|" + index);
+            if (togglePlay != null)
+            {
+                togglePlay.isOn = false; //暂停
+            }
         });
         if (i % 2 != 0)
         {

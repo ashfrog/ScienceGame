@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ExcelDataReader;
 using ChartAndGraph;
+using TMPro;
 
 public class SatletExelDataReader : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class SatletExelDataReader : MonoBehaviour
     [Header("Colors")] public string pieCategoryColorJson = "PieCategoryColor.json";
 
     Dictionary<string, string> colorMap = new(); DataTable groupTable, countryTable;
+
+
 
     void OnEnable()
     {

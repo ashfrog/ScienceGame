@@ -598,11 +598,13 @@ public class MouseRoteReceiver : MonoBehaviour
                             Debug.Log(year);
                             ResetZ(0);
                             wxTabSwitcher.SwitchTab(-1);
+                            tabSwitcher_UI.SwitchTab(TabUILabel.Panel_卫星展示);
                             theEarth.SetActive(true);
 
                             satelliteOrbitRenderer.SetBaseSatelliteScale(0.5f);
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             satelliteOrbitRenderer.SetDisplayAll(1970, year);
+                            titleText.text = $"1970-{year}各国卫星发射记录";
                             litVCR1.OpenVideoByFileName("卫星待机循环动画.mp4");
                             litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                             //for (int i = 0; i < WeiXingGuangDian.transform.childCount; i++)
