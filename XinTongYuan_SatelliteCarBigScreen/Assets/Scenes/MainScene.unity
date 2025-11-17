@@ -6424,7 +6424,7 @@ MonoBehaviour:
   maxTimeScale: 32768
   selectName: 0
   satelliteNearAdjustBias: 2
-  satelliteNearAdjustPower: 2.5
+  satelliteNearAdjustPower: 5
 --- !u!4 &941347486
 Transform:
   m_ObjectHideFlags: 0

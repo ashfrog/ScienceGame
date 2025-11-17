@@ -31,7 +31,7 @@ public class SliderClickListener : MonoBehaviour, IPointerDownHandler
     {
         // 你的处理逻辑
         groupManager.SetUnselected();
-        Debug.Log(slider.value);
+        //Debug.Log(slider.value);
         SlicerClicked?.Invoke(slider.value);
     }
 }

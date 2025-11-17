@@ -8,6 +8,9 @@ public class ResetSliderValue : MonoBehaviour
     [SerializeField]
     float value = 0.1f;
 
+    [SerializeField]
+    Toggle togglePlay;
+
     float increateWaitTime = 0.1f;
 
     Slider slider;
@@ -20,20 +23,20 @@ public class ResetSliderValue : MonoBehaviour
         slider = GetComponent<Slider>();
         slider.value = value;
         increateWaitTime = Settings.ini.Game.IncreateWaitTime;
-
-        if (c != null)
-        {
-            StopCoroutine(c);
-        }
-        c = StartCoroutine(AutoIncreate());
     }
 
-    public IEnumerator AutoIncreate()
+    private float curt = 0;
+
+    private void Update()
     {
-        while (slider.value < 1)
+        curt += Time.deltaTime;
+        if (curt >= increateWaitTime)
         {
-            yield return new WaitForSeconds(increateWaitTime);
-            slider.value += 0.002f;
+            curt = 0;
+            if (togglePlay.isOn && slider.value < 1) //选中表示正在播放
+            {
+                slider.value += 0.002f;
+            }
         }
     }
 }

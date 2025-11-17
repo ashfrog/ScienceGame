@@ -8,7 +8,7 @@ public class ButtonGroupManager : MonoBehaviour
     public Image displayImage;
     public Image displayImage2;
     public int defaultSelectedIndex = 0; // Index of the default selected button
-
+    public Toggle togglePlay;
 
     public void SetUnselected()
     {
@@ -53,6 +53,10 @@ public class ButtonGroupManager : MonoBehaviour
 
     public void OnButtonSelected(SelectableButton selectedButton)
     {
+        if (togglePlay != null)
+        {
+            togglePlay.isOn = false; //暂停
+        }
         foreach (var button in buttons)
         {
             if (button != selectedButton)

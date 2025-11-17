@@ -4296,6 +4296,7 @@ MonoBehaviour:
   displayImage: {fileID: 342836151}
   displayImage2: {fileID: 892253600}
   defaultSelectedIndex: 0
+  togglePlay: {fileID: 0}
 --- !u!1 &329654723
 GameObject:
   m_ObjectHideFlags: 0
@@ -5767,6 +5768,7 @@ MonoBehaviour:
   displayImage: {fileID: 0}
   displayImage2: {fileID: 0}
   defaultSelectedIndex: 0
+  togglePlay: {fileID: 0}
 --- !u!222 &398299950
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -14072,6 +14074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   value: 0.05
+  togglePlay: {fileID: 1858460258}
 --- !u!114 &1006647171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15304,6 +15307,7 @@ MonoBehaviour:
   displayImage: {fileID: 0}
   displayImage2: {fileID: 0}
   defaultSelectedIndex: -1
+  togglePlay: {fileID: 1858460258}
 --- !u!1 &1088213395
 GameObject:
   m_ObjectHideFlags: 0
@@ -15698,7 +15702,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u56FD\u5185\u5916\u536B\u661F\u661F\u5EA7\u56FE\u8868"
+  m_text: "\u56FD\u5185\u5916\u5178\u578B\u536B\u661F\u661F\u5EA7\u5BF9\u6BD4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a18973ff5eae19349877a5a4d0e12183, type: 2}
   m_sharedMaterial: {fileID: 906130005759224899, guid: a18973ff5eae19349877a5a4d0e12183,
@@ -23154,7 +23158,7 @@ GameObject:
   - component: {fileID: 1858460258}
   - component: {fileID: 1858460259}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: TogglePlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23229,7 +23233,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!114 &1858460259
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -114,19 +114,20 @@ public class Manager : MonoBehaviour
     }
 
 
-    public static readonly float[] fillAmounts = new float[] { 0.08f, 0.17f, 0.29f, 0.38f, 0.5f, 0.58f, 0.7f, 0.8f, 0.9f, 1f };
+    //public static readonly float[] fillAmounts = new float[] { 0.08f, 0.17f, 0.29f, 0.38f, 0.5f, 0.58f, 0.7f, 0.8f, 0.9f, 1f };
+    private int lastyear;
     public void OnSliderValueChanged(float value)  //时间刻度进度条
     {
         // value 换算到 [1980,2025] 5年一个节点 上
         float between = 2025 - 1980;
         double mapped = 1980 + value * between;
-        // 四舍五入到最近的5年节点
-        int year = (int)(Math.Round((mapped - 1980) / 5.0) * 5 + 1980);
-        print(year);
+        // 四舍五入到最近的1年节点
+        int year = (int)(Math.Round((mapped - 1980) / 1.0) * 1 + 1980);
+
 
         // 直接通过索引访问fillAmounts数组
-        int index = (year - 1980) / 5;
-        progress.fillAmount = fillAmounts[index];
+        //int index = (year - 1980) / 5;
+        //progress.fillAmount = fillAmounts[index];
         //buttons[0].gameObject.SetActive(year >= 1978); //GPS
         //buttons[1].gameObject.SetActive(year >= 1982); //格洛纳斯
         //buttons[2].gameObject.SetActive(year >= 2000); //北斗
@@ -135,8 +136,12 @@ public class Manager : MonoBehaviour
         //buttons[5].gameObject.SetActive(year >= 2019); //星链
         //buttons[6].gameObject.SetActive(year >= 2024); //千帆
         //buttons[7].gameObject.SetActive(year >= 2024); //国网
-
-        _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.WeiXingDot, year);
+        if (lastyear != year)
+        {
+            print(year);
+            _mouseTouchInputManager.clientController.Send(DataTypeEnum.LG20001, OrderTypeEnum.WeiXingDot, year);
+            lastyear = year;
+        }
     }
     public void OnSatellite(int index) //在空姿态卫星按钮
     {
