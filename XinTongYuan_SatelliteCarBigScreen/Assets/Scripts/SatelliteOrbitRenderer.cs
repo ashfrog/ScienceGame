@@ -180,6 +180,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         BuildPropagators(); // NEW: 基于解析数据建立传播器
 
         LoadSelectionGroups();
+
+        timeScale = Settings.ini.Game.TimeScale;
     }
 
     void LoadGroupColorGroups()
@@ -248,6 +250,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public void SetTimeScale(float scale)
     {
         timeScale = Mathf.Clamp(scale, minTimeScale, maxTimeScale);
+        Settings.ini.Game.TimeScale = timeScale;
     }
 
     public string[] GetAvailableCountries()

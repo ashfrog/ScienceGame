@@ -290,7 +290,7 @@ public class MouseRoteReceiver : MonoBehaviour
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_2);
                                     tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星轨道);
                                     orbitTabSwitcher.SwitchTab(0);
-                                    satelliteOrbitRenderer.SetBaseSatelliteScale(0.8f);
+                                    satelliteOrbitRenderer.SetBaseSatelliteScale(1f);
                                     satelliteOrbitRenderer.SetDisplayGroup("伽利略星座");
 
 
@@ -479,6 +479,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ExelSheetGroup), exelsheetindex), DisplayMode.SatelliteOnly);
                             ResetZ(ExelSheetGroupIndexToConstellationGroupIndex(exelsheetindex));
                             wxTabSwitcher.SwitchTab(-1);
+                            satelliteOrbitRenderer.SetBaseSatelliteScale(1f);
                             theEarth.SetActive(true);
                             litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
                         }
@@ -593,7 +594,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             wxTabSwitcher.SwitchTab(-1);
                             theEarth.SetActive(true);
 
-                            satelliteOrbitRenderer.SetBaseSatelliteScale(1f);
+                            satelliteOrbitRenderer.SetBaseSatelliteScale(0.5f);
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             satelliteOrbitRenderer.SetDisplayAll(1970, year);
                             litVCR1.OpenVideoByFileName("卫星待机循环动画.mp4");
