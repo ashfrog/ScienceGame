@@ -593,7 +593,7 @@ public class MouseRoteReceiver : MonoBehaviour
                             wxTabSwitcher.SwitchTab(-1);
                             theEarth.SetActive(true);
 
-                            satelliteOrbitRenderer.SetBaseSatelliteScale(0.5f);
+                            satelliteOrbitRenderer.SetBaseSatelliteScale(1f);
                             satelliteOrbitRenderer.SetDisplayMode(DisplayMode.SatelliteOnly);
                             satelliteOrbitRenderer.SetDisplayAll(1970, year);
                             litVCR1.OpenVideoByFileName("卫星待机循环动画.mp4");

@@ -140,6 +140,15 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public bool useSgp4Propagation = true;     // 使用（简化）SGP4传播，否则使用 Kepler 简化
     private double accumulatedSimSeconds = 0;  // 当不用系统时间时，内部累计
 
+    // NEW: 运行时倍率控制
+    [Header("时间倍率控制（运行时按键：[ 减速, ] 加速）")]
+    public bool allowKeyboardTimeControls = true;
+    public KeyCode slowerKey = KeyCode.LeftBracket;     // [
+    public KeyCode fasterKey = KeyCode.RightBracket;    // ]
+    public float timeScaleStep = 2f;                    // 每次倍率变化的倍数（×/÷）
+    public float minTimeScale = 0.0625f;
+    public float maxTimeScale = 32768f;
+
     // NEW: 传播缓存（每颗卫星一个轻量对象）
     private Dictionary<int, Propagator> propagators = new Dictionary<int, Propagator>();
 
@@ -191,6 +200,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         if (displayMode == DisplayMode.None) return;
 
+        HandleTimeControls();       // NEW: 监听运行时倍率调整
+
         UpdateSatellitePositions();
 
         if (displayMode == DisplayMode.OrbitOnly || displayMode == DisplayMode.Both)
@@ -216,6 +227,27 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             propagators[sat.catalogNumber] = prop;
         }
         Debug.Log($"传播器构建完成: {propagators.Count} 个");
+    }
+
+    // NEW: 运行时倍率调整（键盘）
+    void HandleTimeControls()
+    {
+        if (!allowKeyboardTimeControls) return;
+
+        if (Input.GetKeyDown(slowerKey))
+        {
+            SetTimeScale(timeScale / timeScaleStep);
+        }
+        if (Input.GetKeyDown(fasterKey))
+        {
+            SetTimeScale(timeScale * timeScaleStep);
+        }
+    }
+
+    // NEW: 对外设置倍率
+    public void SetTimeScale(float scale)
+    {
+        timeScale = Mathf.Clamp(scale, minTimeScale, maxTimeScale);
     }
 
     public string[] GetAvailableCountries()
@@ -675,15 +707,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     // NEW: 利用真实时间或仿真时间更新卫星位置（SGP4/Kepler）
     void UpdateSatellitePositions()
     {
-        double deltaSeconds;
-        if (useSystemTime)
-        {
-            DateTime utcNow = DateTime.UtcNow;
-            // 系统时间 + 缩放（缩放>1表示加速流逝）
-            // 为保持一致，这里直接用当前真实时刻传播，不额外缩放真实世界时间；若需“时间加速”可改成：
-            // deltaSeconds = (utcNow - sat.epochUtc).TotalSeconds * timeScale
-        }
-
+        // 仿真时间：用累计秒数 × 倍率推进
         if (!useSystemTime)
         {
             accumulatedSimSeconds += Time.deltaTime * timeScale;
@@ -698,8 +722,18 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             if (!sat.epochParsed) continue;
             if (!propagators.ContainsKey(satNumber)) continue;
 
-            DateTime nowUtc = useSystemTime ? DateTime.UtcNow : sat.epochUtc.AddSeconds(accumulatedSimSeconds);
-            double minutesSinceEpoch = (nowUtc - sat.epochUtc).TotalMinutes;
+            double minutesSinceEpoch;
+
+            if (useSystemTime)
+            {
+                // 系统时间也支持倍率：相对于历元的真实流逝分钟 × timeScale
+                minutesSinceEpoch = (DateTime.UtcNow - sat.epochUtc).TotalMinutes * timeScale;
+            }
+            else
+            {
+                // 累计仿真分钟
+                minutesSinceEpoch = accumulatedSimSeconds / 60.0;
+            }
 
             Vector3 eci;
             if (useSgp4Propagation)

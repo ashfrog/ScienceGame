@@ -6413,7 +6413,16 @@ MonoBehaviour:
   printSelectcatalogNumber: 0
   objCamera: {fileID: 963194227}
   scaleSateliteWhenShowBoth: 1.2
-  selectName: 3
+  useSystemTime: 1
+  timeScale: 1
+  useSgp4Propagation: 1
+  allowKeyboardTimeControls: 1
+  slowerKey: 91
+  fasterKey: 93
+  timeScaleStep: 2
+  minTimeScale: 0.0625
+  maxTimeScale: 32768
+  selectName: 0
   satelliteNearAdjustBias: 2
   satelliteNearAdjustPower: 2.5
 --- !u!4 &941347486
@@ -10373,7 +10382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   delay: 0
-  speed: 5
+  speed: 2
   acceleration: 1
   idleTime: 0
   strength: 0
