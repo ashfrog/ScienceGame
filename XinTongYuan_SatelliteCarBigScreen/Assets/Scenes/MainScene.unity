@@ -7587,6 +7587,7 @@ MonoBehaviour:
   theEarth: {fileID: 917317442}
   text_WX: {fileID: 1662992736}
   satelliteOrbitRenderer: {fileID: 941347485}
+  titleText: {fileID: 1662992736}
   tabSwitcher_UI: {fileID: 1642463619}
   tabSwitcher_Obj: {fileID: 1131064997}
   carTabSwitcher: {fileID: 1863080028}

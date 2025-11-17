@@ -50,6 +50,9 @@ public class MouseRoteReceiver : MonoBehaviour
     [SerializeField]
     SatelliteOrbitRenderer satelliteOrbitRenderer;
 
+    [SerializeField]
+    TMP_Text titleText;
+
 
     public enum TabUILabel //需要Inspector中TabSwitcher的allTabTypes保持一致
     {
@@ -120,7 +123,7 @@ public class MouseRoteReceiver : MonoBehaviour
         string filnames1 = litVCR1.ReloadFileList();
         string filnames2 = litVCR2.ReloadFileList();
         defaultCameraFieldofView = camObj.fieldOfView;
-        Settings.ini.Game.ShowOrbitWhenPie = Settings.ini.Game.ShowOrbitWhenPie;
+        //Settings.ini.Game.ShowOrbitWhenPie = Settings.ini.Game.ShowOrbitWhenPie;
         StartCoroutine(WaitForTcpServiceInitialization());
         MainPageLoop();
         //Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
@@ -476,7 +479,10 @@ public class MouseRoteReceiver : MonoBehaviour
                     case OrderTypeEnum.ShowGroup:          //卫星姿态选星座exelsheet
                         {
                             int exelsheetindex = JsonConvert.DeserializeObject<int>(Encoding.UTF8.GetString(info.Body));
+                            Debug.Log("卫星姿态选星座exelsheet:" + exelsheetindex);
                             satelliteOrbitRenderer.SetDisplayGroup(Enum.GetName(typeof(ExelSheetGroup), exelsheetindex), DisplayMode.SatelliteOnly);
+                            tabSwitcher_UI.SwitchTab(TabUILabel.Panel_卫星展示);
+                            titleText.text = Enum.GetName(typeof(ExelSheetGroup), exelsheetindex);
                             ResetZ(ExelSheetGroupIndexToConstellationGroupIndex(exelsheetindex));
                             wxTabSwitcher.SwitchTab(-1);
                             satelliteOrbitRenderer.SetBaseSatelliteScale(1f);
@@ -847,7 +853,7 @@ public class MouseRoteReceiver : MonoBehaviour
     /// <param name="index"></param>
     private void ResetZ(int index)
     {
-        float z = 50;
+        float z = 45;
         switch (index)
         {
             case 0:
@@ -857,7 +863,7 @@ public class MouseRoteReceiver : MonoBehaviour
                 z = 45f;
                 break;
             case 2:
-                z = 10f;
+                z = 12f;
                 break;
             case 3:
                 z = 58f;
@@ -869,10 +875,10 @@ public class MouseRoteReceiver : MonoBehaviour
                 z = 45f;
                 break;
             case 6:
-                z = 10f;
+                z = 11f;
                 break;
             case 7:
-                z = 10f;
+                z = 12f;
                 break;
             default:
                 break;
