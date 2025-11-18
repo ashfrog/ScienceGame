@@ -4626,7 +4626,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -116.29999}
-  m_SizeDelta: {x: 600, y: 50}
+  m_SizeDelta: {x: 1200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &643559517
 MonoBehaviour:
@@ -4648,7 +4648,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u56FD\u5185\u5916\u536B\u661F\u661F\u5EA7\u56FE\u8868"
+  m_text: "\u56FD\u5185\u5916\u5178\u578B\u536B\u661F\u661F\u5EA7\u5728\u8F68\u6570\u91CF"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ce4cb4b9137e19a48a4a7d93cab6893c, type: 2}
   m_sharedMaterial: {fileID: 8024447619570181479, guid: ce4cb4b9137e19a48a4a7d93cab6893c,
@@ -6420,8 +6420,6 @@ MonoBehaviour:
   slowerKey: 91
   fasterKey: 93
   timeScaleStep: 2
-  minTimeScale: 0.0625
-  maxTimeScale: 32768
   selectName: 0
   satelliteNearAdjustBias: 2
   satelliteNearAdjustPower: 5

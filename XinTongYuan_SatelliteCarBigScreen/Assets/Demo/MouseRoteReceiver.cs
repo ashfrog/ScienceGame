@@ -274,10 +274,13 @@ public class MouseRoteReceiver : MonoBehaviour
                             {
                                 case "卫星":
                                     print(cmd + " " + cmdparam);
+                                    tabSwitcher_Obj.Hide();
+                                    tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_1);
                                     litVCR1.OpenVideoByFileName("卫星产业系统展示.mp4", true, true, () =>
                                     {
                                         ReturnP1_1();
                                     });
+                                    litVCR2.OpenVideoByFileName("地屏循环地球.mp4");
                                     break;
                                 case "发射展示":  //1-1 卫星发射展示
                                     print(cmd + " " + cmdparam);
