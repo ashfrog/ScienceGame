@@ -17,7 +17,7 @@ using UnityEditor;
 public class SatelliteLaunchCountExporter : MonoBehaviour
 {
     // 统计的国家顺序
-    private static readonly string[] TargetCountries = { "CN", "I-ESA", "RU", "US", "UK" };
+    private static readonly string[] TargetCountries = { "CN", "US", "I-ESA", "RU", "UK" };
 
     // 可选的国家别名映射（如源数据里可能把 ESA 标成 "ESA"，这里统一为 "I-ESA"）
     private static readonly Dictionary<string, string> CountryAliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -84,6 +84,10 @@ public class SatelliteLaunchCountExporter : MonoBehaviour
         // 统计
         foreach (var sat in sats)
         {
+            // 剔除不是卫星（碎片 / 火箭体等）的条目
+            if (IsDebrisName(sat.name))
+                continue;
+
             // 归一化国家代码
             string country = NormalizeCountry(sat.country);
 
@@ -179,6 +183,64 @@ public class SatelliteLaunchCountExporter : MonoBehaviour
         {
             sat.epochParsed = false;
         }
+    }
+
+    // 判定是否为碎片 / 非主要卫星（可根据需要继续扩展关键字列表）
+    // 说明：
+    // - 常见碎片标记包含 "DEB"
+    // - 火箭级/火箭体: "R/B", "RB", "RKT", "STAGE"
+    // - 其它可能的非主要载荷： "ADAPTER", "DUMMY"
+    // - 使用大写比较，防止大小写差异
+    private static bool IsDebrisName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return true; // 没名字基本当作无效
+        string upper = name.ToUpperInvariant();
+
+        // 可根据实际数据再增减
+        string[] debrisKeywords =
+        {
+            " DEB",     // 碎片
+            "DEB ",     // 前缀情况
+            "DEB-",     // 组合
+            "R/B",      // 火箭体
+            " RB",      // 火箭体简写
+            "STAGE",    // 级段
+            "ADAPTER",  // 适配器
+            "DUMMY",    // 假载荷
+            "FRAGMENT", // 碎片
+            "SL14",     // 俄火箭体常见编码
+            "ATLAS",    // 有时标记火箭级
+            "ARIANE",   // 火箭级相关
+            "CENTAUR",  // 火箭级
+            "STARLINK DEBRIS", // 特定集合
+        };
+
+        // 精确匹配：若名称以这些典型碎片后缀结尾也去除
+        string[] suffixes =
+        {
+            " DEB",
+            " R/B",
+            " RB",
+        };
+
+        foreach (var kw in debrisKeywords)
+        {
+            if (upper.Contains(kw))
+                return true;
+        }
+
+        foreach (var suf in suffixes)
+        {
+            if (upper.EndsWith(suf))
+                return true;
+        }
+
+        // 若名称长度极短且不含数字，通常无效
+        if (upper.Length <= 3 && !upper.Any(char.IsDigit))
+            return true;
+
+        return false;
     }
 
     // 与项目中相同的结构，确保 JSON 字段能够正确反序列化
