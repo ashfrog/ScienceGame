@@ -15,6 +15,15 @@ public class FHClientController : MonoBehaviour
     [SerializeField]
     private GameObject offLineStatue;
 
+    [SerializeField]
+    private Button speedUpBtn;
+
+    [SerializeField]
+    private Button speedDownBtn;
+
+    [SerializeField]
+    private Text speedText;
+
     DataTypeEnum dataTypeEnum = DataTypeEnum.LG20001;
 
     public Action<DTOInfo> receiveData;
@@ -95,6 +104,15 @@ public class FHClientController : MonoBehaviour
             volumnSlider.PointerUp.AddListener(VolumnSeek);
             movieSlider.PointerUp.AddListener(MovieSeek0);
             movieSlider.PointerDown.AddListener(MovieSliderPointerDown);
+
+            speedUpBtn.onClick.AddListener(() =>
+            {
+                Send(dataTypeEnum, OrderTypeEnum.SpeedUp, "");
+            });
+            speedDownBtn.onClick.AddListener(() =>
+            {
+                Send(dataTypeEnum, OrderTypeEnum.SpeedDown, "");
+            });
         }
 
         Loom.RunAsync(() =>
@@ -112,7 +130,7 @@ public class FHClientController : MonoBehaviour
         fhTcpClient.FHTcpClientReceive = ReceiveData;
         fhTcpClient.Connected += ((client) =>
         {
-
+            Send(dataTypeEnum, OrderTypeEnum.Speed, "");
         });
 
         if (offLineStatue != null)
@@ -216,6 +234,11 @@ public class FHClientController : MonoBehaviour
                     case OrderTypeEnum.GetVolumn:
                         float volumn = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
                         volumnSlider.value = volumn;
+                        break;
+
+                    case OrderTypeEnum.Speed:
+                        float speed = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
+                        speedText.text = speed.ToString();
                         break;
                 }
             }

@@ -238,12 +238,22 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         if (Input.GetKeyDown(slowerKey))
         {
-            SetTimeScale(timeScale / timeScaleStep);
+            SpeedDown();
         }
         if (Input.GetKeyDown(fasterKey))
         {
-            SetTimeScale(timeScale * timeScaleStep);
+            SpeedUp();
         }
+    }
+
+    public void SpeedUp()
+    {
+        SetTimeScale(timeScale * timeScaleStep);
+    }
+
+    public void SpeedDown()
+    {
+        SetTimeScale(timeScale / timeScaleStep);
     }
 
     // NEW: 对外设置倍率

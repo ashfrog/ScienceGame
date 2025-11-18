@@ -65,6 +65,10 @@ public enum OrderTypeEnum
 
     ShowGroup = 110,
 
+    Speed = 200,
+    SpeedUp = 201,
+    SpeedDown = 202,
+
     /// <summary>
     /// 获取当前播放进度
     /// </summary>

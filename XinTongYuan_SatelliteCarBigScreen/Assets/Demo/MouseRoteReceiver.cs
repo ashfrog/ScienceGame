@@ -232,6 +232,18 @@ public class MouseRoteReceiver : MonoBehaviour
                         litVCR1.VolumnDown();
                         litVCR2.VolumnDown();
                         break;
+                    case OrderTypeEnum.Speed:
+                        tcpService.Send(sc, OrderTypeEnum.Speed, Settings.ini.Game.TimeScale);
+                        break;
+                    case OrderTypeEnum.SpeedUp:
+                        satelliteOrbitRenderer.SpeedUp();
+                        tcpService.Send(sc, OrderTypeEnum.Speed, Settings.ini.Game.TimeScale);
+                        break;
+
+                    case OrderTypeEnum.SpeedDown:
+                        satelliteOrbitRenderer.SpeedDown();
+                        tcpService.Send(sc, OrderTypeEnum.Speed, Settings.ini.Game.TimeScale);
+                        break;
                     case OrderTypeEnum.Rotate:
                         {
                             string v2 = JsonConvert.DeserializeObject<String>(Encoding.UTF8.GetString(info.Body)); //v2
