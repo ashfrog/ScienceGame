@@ -23218,7 +23218,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1794657164}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 565227707}
+        m_TargetAssemblyTypeName: TabSwitcher, Assembly-CSharp
+        m_MethodName: SwitchTab
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: "Panel_\u536B\u661F\u5728\u7A7A\u59FF\u6001"
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1794657164
 MonoBehaviour:
   m_ObjectHideFlags: 0
