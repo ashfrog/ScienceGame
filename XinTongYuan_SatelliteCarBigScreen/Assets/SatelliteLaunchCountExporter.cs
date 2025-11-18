@@ -17,7 +17,7 @@ using UnityEditor;
 public class SatelliteLaunchCountExporter : MonoBehaviour
 {
     // 统计的国家顺序
-    private static readonly string[] TargetCountries = { "CN", "US", "I-ESA", "RU", "UK" };
+    private static readonly string[] TargetCountries = { "CN", "I-ESA", "RU", "US", "UK" };
 
     // 可选的国家别名映射（如源数据里可能把 ESA 标成 "ESA"，这里统一为 "I-ESA"）
     private static readonly Dictionary<string, string> CountryAliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
@@ -113,7 +113,7 @@ public class SatelliteLaunchCountExporter : MonoBehaviour
         // 标题行（中文要求）
         sb.AppendLine("CN I-ESA RU US UK 这5个国家 按照年份从1970年到2025年的卫星发射数量表");
         // 表头（Tab 分割）
-        sb.AppendLine("Year\tCN\tI-ESA\tRU\tUS\tUK");
+        sb.AppendLine("Year\t中国\t欧洲\t俄罗斯\t美国\t英国");
 
         for (int y = StartYear; y <= EndYear; y++)
         {
