@@ -18603,7 +18603,7 @@ MonoBehaviour:
   mainDivisions:
     messure: 1
     unitsPerDivision: 1
-    total: 20
+    total: 10
     material: {fileID: 2100000, guid: bdb13d53e3b6bb549950dfa33b36f965, type: 2}
     materialTiling:
       EnableTiling: 0
