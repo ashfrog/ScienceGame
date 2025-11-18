@@ -112,9 +112,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     private HashSet<int> currentDisplayedOrbitsSet = new HashSet<int>();
     Dictionary<string, TleSel> tleSelDic;
 
-    // 旧的时间偏移（均匀分布）已废弃
-    // private Dictionary<int, float> satelliteTimeOffsets = new Dictionary<int, float>();
-
     [Header("性能优化")]
     public int maxDisplayOrbits = 200;
     public int maxDisplaySatellites = 2000;
@@ -138,7 +135,16 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public bool useSystemTime = true;          // 使用真实系统UTC时间
     public float timeScale = 1f;               // 仿真时间缩放（>1 加速）
     public bool useSgp4Propagation = true;     // 使用（简化）SGP4传播，否则使用 Kepler 简化
-    private double accumulatedSimSeconds = 0;  // 当不用系统时间时，内部累计
+
+    // 已有变量（非系统时间模式下使用）
+    private double accumulatedSimSeconds = 0;
+
+    // OPT: 改进时间连续性（解决 timeScale 调节闪烁）
+    private DateTime lastRealUtc;                        // 上一帧真实UTC
+    private double simulationElapsedMinutes = 0;         // 系统时间模式：启动后累计的仿真分钟（受 timeScale）
+    private double simulationElapsedMinutesSim = 0;      // 非系统时间模式：累计仿真分钟
+    private Dictionary<int, double> initialEpochOffsets = new Dictionary<int, double>(); // 每颗卫星启动时距其历元的初始分钟差
+    private bool timeAnchored = false;                   // 标记是否完成锚定
 
     // NEW: 运行时倍率控制
     [Header("时间倍率控制（运行时按键：[ 减速, ] 加速）")]
@@ -178,7 +184,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         PreprocessSatelliteData();
         BuildPropagators(); // NEW: 基于解析数据建立传播器
-
+        AnchorTimeInitialization(); // OPT: 初始锚定
         LoadSelectionGroups();
 
         timeScale = Settings.ini.Game.TimeScale;
@@ -231,6 +237,37 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         Debug.Log($"传播器构建完成: {propagators.Count} 个");
     }
 
+    // OPT: 时间锚定（仅在首次或重新加载后）
+    void AnchorTimeInitialization()
+    {
+        initialEpochOffsets.Clear();
+        foreach (var kv in catalogToSatellite)
+        {
+            var sat = kv.Value;
+            if (!sat.epochParsed) continue;
+            // 记录启动时真实 UTC 与历元的分钟差，不再随 timeScale 调节回溯改变
+            initialEpochOffsets[sat.catalogNumber] = (DateTime.UtcNow - sat.epochUtc).TotalMinutes;
+        }
+        lastRealUtc = DateTime.UtcNow;
+        simulationElapsedMinutes = 0;
+        simulationElapsedMinutesSim = 0;
+        timeAnchored = true;
+    }
+
+    // OPT: 如果需要重置仿真时间（例如重新开始）
+    public void ResetSimulationTimeAnchor()
+    {
+        simulationElapsedMinutes = 0;
+        simulationElapsedMinutesSim = 0;
+        lastRealUtc = DateTime.UtcNow;
+    }
+
+    // OPT: 当切换到系统时间模式时重新锚定当前真实时间基准（不改变 initialEpochOffsets）
+    public void ResetSystemTimeAnchor()
+    {
+        lastRealUtc = DateTime.UtcNow;
+    }
+
     // NEW: 运行时倍率调整（键盘）
     void HandleTimeControls()
     {
@@ -256,11 +293,15 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         SetTimeScale(timeScale / timeScaleStep);
     }
 
-    // NEW: 对外设置倍率
+    // NEW: 对外设置倍率 (OPT: 不回溯历史, 仅影响后续增量)
     public void SetTimeScale(float scale)
     {
-        timeScale = Mathf.Clamp(scale, minTimeScale, maxTimeScale);
+        float newScale = Mathf.Clamp(scale, minTimeScale, maxTimeScale);
+        timeScale = newScale;
         Settings.ini.Game.TimeScale = timeScale;
+        // 不重算 initialEpochOffsets，避免卫星位置跳变
+        // 可选择刷新 lastRealUtc 以避免首帧过大增量
+        lastRealUtc = DateTime.UtcNow;
     }
 
     public string[] GetAvailableCountries()
@@ -375,9 +416,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             string jsonData = File.ReadAllText(filePath);
             allSatellites = JsonConvert.DeserializeObject<List<SatelliteData>>(jsonData);
 
-            // =========================================
-            // 优先剔除不是卫星的碎片、火箭体等 (根据名称关键字)
-            // =========================================
             int beforeCount = allSatellites.Count;
             allSatellites = allSatellites
                 .Where(s => !IsDebrisName(s.name))
@@ -407,38 +445,30 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
-    // 判定是否为碎片 / 非主要卫星（可根据需要继续扩展关键字列表）
-    // 说明：
-    // - 常见碎片标记包含 "DEB"
-    // - 火箭级/火箭体: "R/B", "RB", "RKT", "STAGE"
-    // - 其它可能的非主要载荷： "ADAPTER", "DUMMY"
-    // - 使用大写比较，防止大小写差异
     private bool IsDebrisName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            return true; // 没名字基本当作无效
+            return true;
         string upper = name.ToUpperInvariant();
 
-        // 可根据实际数据再增减
         string[] debrisKeywords =
         {
-            " DEB",     // 碎片
-            "DEB ",     // 前缀情况
-            "DEB-",     // 组合
-            "R/B",      // 火箭体
-            " RB",      // 火箭体简写
-            "STAGE",    // 级段
-            "ADAPTER",  // 适配器
-            "DUMMY",    // 假载荷
-            "FRAGMENT", // 碎片
-            "SL14",     // 俄火箭体常见编码
-            "ATLAS",    // 有时标记火箭级
-            "ARIANE",   // 火箭级相关
-            "CENTAUR",  // 火箭级
-            "STARLINK DEBRIS", // 特定集合
+            " DEB",
+            "DEB ",
+            "DEB-",
+            "R/B",
+            " RB",
+            "STAGE",
+            "ADAPTER",
+            "DUMMY",
+            "FRAGMENT",
+            "SL14",
+            "ATLAS",
+            "ARIANE",
+            "CENTAUR",
+            "STARLINK DEBRIS",
         };
 
-        // 精确匹配：若名称以这些典型碎片后缀结尾也去除
         string[] suffixes =
         {
             " DEB",
@@ -458,7 +488,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 return true;
         }
 
-        // 若名称长度极短且不含数字，通常无效
         if (upper.Length <= 3 && !upper.Any(char.IsDigit))
             return true;
 
@@ -567,7 +596,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return value;
     }
 
-    // NEW: 解析历元 (TLE 第一行: Columns 19-32: YYDDD.DDDDDDDD)
+    // NEW: 解析历元
     void ParseEpochFromTLELine1(SatelliteData sat)
     {
         if (string.IsNullOrEmpty(sat.tle1) || sat.tle1.Length < 32)
@@ -578,13 +607,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         try
         {
             string epochStr = sat.tle1.Substring(18, 14).Trim(); // YYDDD.DDDDDDDD
-            // 前两位年
             string yy = epochStr.Substring(0, 2);
             string dddFrac = epochStr.Substring(2); // DDD.DDDDDDDD
 
             if (int.TryParse(yy, out int yearTwo) && double.TryParse(dddFrac, out double dayOfYear))
             {
-                int year = (yearTwo < 57) ? (2000 + yearTwo) : (1900 + yearTwo); // 常规TLE规则
+                int year = (yearTwo < 57) ? (2000 + yearTwo) : (1900 + yearTwo);
                 DateTime start = new DateTime(year, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                 double intDay = Math.Floor(dayOfYear);
                 double frac = dayOfYear - intDay;
@@ -760,7 +788,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             return;
         }
 
-        // 简化处理：直接刷新
         RefreshFilteredData();
         RefreshCurrentDisplay();
     }
@@ -786,13 +813,31 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return orbit;
     }
 
-    // NEW: 利用真实时间或仿真时间更新卫星位置（SGP4/Kepler）
+    // NEW & OPT: 利用稳定时间推进更新卫星位置，避免 timeScale 调节产生跳变
     void UpdateSatellitePositions()
     {
-        // 仿真时间：用累计秒数 × 倍率推进
-        if (!useSystemTime)
+        if (!timeAnchored)
         {
+            AnchorTimeInitialization();
+        }
+
+        // 统一时间增量计算
+        if (useSystemTime)
+        {
+            DateTime now = DateTime.UtcNow;
+            double realDeltaSeconds = (now - lastRealUtc).TotalSeconds;
+            // OPT: 限制异常暂停后首帧过大时间步（防止大跨度跳闪）
+            realDeltaSeconds = Math.Min(realDeltaSeconds, 0.25);
+            lastRealUtc = now;
+
+            simulationElapsedMinutes += (realDeltaSeconds * timeScale) / 60.0;
+        }
+        else
+        {
+            // 旧 accumulatedSimSeconds 仍保留，但使用更直观的分钟累计
             accumulatedSimSeconds += Time.deltaTime * timeScale;
+            double frameMinutes = (Time.deltaTime * timeScale) / 60.0;
+            simulationElapsedMinutesSim += frameMinutes;
         }
 
         currentSatellitePositions.Clear();
@@ -803,18 +848,20 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             if (!orbitElements.ContainsKey(satNumber)) continue;
             if (!sat.epochParsed) continue;
             if (!propagators.ContainsKey(satNumber)) continue;
+            if (!initialEpochOffsets.ContainsKey(satNumber)) continue;
 
+            double baseMinutesSinceEpoch = initialEpochOffsets[satNumber];
             double minutesSinceEpoch;
 
             if (useSystemTime)
             {
-                // 系统时间也支持倍率：相对于历元的真实流逝分钟 × timeScale
-                minutesSinceEpoch = (DateTime.UtcNow - sat.epochUtc).TotalMinutes * timeScale;
+                // 系统时间模式：启动基准 + 累计仿真分钟（受倍率）
+                minutesSinceEpoch = baseMinutesSinceEpoch + simulationElapsedMinutes;
             }
             else
             {
-                // 累计仿真分钟
-                minutesSinceEpoch = accumulatedSimSeconds / 60.0;
+                // 仿真模式：仅使用内部累计（不依赖真实UTC的绝对值）
+                minutesSinceEpoch = simulationElapsedMinutesSim;
             }
 
             Vector3 eci;
@@ -946,7 +993,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
                 tempCatalogList.Add(kvp.Key);
             }
         }
-        // 这里可以选择清理不在显示列表中的mesh（可选）
     }
 
     Mesh CreateOrbitMesh(OrbitElements orbit)
@@ -1086,6 +1132,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         currentSatellitePositions.Clear();
 
         CreateOrbitMeshes(currentDisplayedOrbits);
+        // OPT: 重新锚定初始时间（避免重新加载后跳变）
+        AnchorTimeInitialization();
     }
 
     public void SetDisplayGroup(string groupName, DisplayMode mode = DisplayMode.Both)
@@ -1126,6 +1174,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         currentDisplayedOrbitsSet = new HashSet<int>(currentDisplayedOrbits);
         CreateOrbitMeshes(currentDisplayedOrbits);
+        // OPT: 保持时间连续，不重算 initialEpochOffsets（不调用 AnchorTimeInitialization），防止切组闪烁
     }
 
     private Color[] GetCurrentColors(string country)
@@ -1178,7 +1227,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         private SatelliteData sat;
         private OrbitElements orbit;
 
-        // 常量
         private const double mu = 3.986004418e14;     // 地球引力常数 (m^3/s^2)
 
         public Propagator(SatelliteData s, OrbitElements o)
@@ -1187,30 +1235,25 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             orbit = o;
         }
 
-        // 简化 Kepler 传播：只用 meanMotion -> 平均角速度
         public Vector3 PropagateKepler(double minutesSinceEpoch)
         {
-            double M0 = orbit.meanAnomaly; // 初始平均近点角 (rad)
+            double M0 = orbit.meanAnomaly;
             double n = sat.meanMotion * 2.0 * Math.PI / 86400.0; // rad/s
-            double t = minutesSinceEpoch * 60.0; // seconds
+            double t = minutesSinceEpoch * 60.0;
 
             double M = M0 + n * t;
             M = NormalizeRadians(M);
 
-            // 解开 Kepler 方程求偏近点角 E
             double E = SolveKepler(M, orbit.eccentricity);
 
-            // 真近点角 ν
             double cosE = Math.Cos(E);
             double sinE = Math.Sin(E);
             double sqrtOneMinusESq = Math.Sqrt(1 - orbit.eccentricity * orbit.eccentricity);
             double nu = Math.Atan2(sqrtOneMinusESq * sinE, cosE - orbit.eccentricity);
 
-            // 距离 r
             double a = orbit.semiMajorAxis;
             double r = a * (1 - orbit.eccentricity * cosE);
 
-            // 在轨道平面（Perifocal坐标系）
             double xOrb = r * Math.Cos(nu);
             double yOrb = r * Math.Sin(nu);
             double zOrb = 0;
@@ -1219,10 +1262,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             return TransformPerifocalToECI(perifocal, orbit);
         }
 
-        // 简化 SGP4 入口（此处仍用 Kepler，留接口以后替换）
         public Vector3 PropagateSgp4(double minutesSinceEpoch)
         {
-            // 可在此处接入真正的 SGP4 库调用
             return PropagateKepler(minutesSinceEpoch);
         }
 
@@ -1233,10 +1274,9 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             return ang;
         }
 
-        // 牛顿迭代解 Kepler：M = E - e sinE
         private double SolveKepler(double M, double e)
         {
-            double E = M; // 初值
+            double E = M;
             const int maxIter = 15;
             for (int i = 0; i < maxIter; i++)
             {
