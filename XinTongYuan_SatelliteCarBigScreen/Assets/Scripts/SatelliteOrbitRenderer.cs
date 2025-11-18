@@ -365,6 +365,17 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             string jsonData = File.ReadAllText(filePath);
             allSatellites = JsonConvert.DeserializeObject<List<SatelliteData>>(jsonData);
 
+            // =========================================
+            // 优先剔除不是卫星的碎片、火箭体等 (根据名称关键字)
+            // =========================================
+            int beforeCount = allSatellites.Count;
+            allSatellites = allSatellites
+                .Where(s => !IsDebrisName(s.name))
+                .ToList();
+            int removed = beforeCount - allSatellites.Count;
+            if (removed > 0)
+                Debug.Log($"已剔除疑似碎片 / 火箭体等非主要卫星对象 {removed} 个 (原始 {beforeCount} -> 过滤后 {allSatellites.Count})");
+
             if (printSelectcatalogNumber)
             {
                 if (!String.IsNullOrEmpty(selectName.ToString()))
@@ -384,6 +395,64 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             Debug.LogError($"加载卫星数据失败: {e.Message}");
         }
+    }
+
+    // 判定是否为碎片 / 非主要卫星（可根据需要继续扩展关键字列表）
+    // 说明：
+    // - 常见碎片标记包含 "DEB"
+    // - 火箭级/火箭体: "R/B", "RB", "RKT", "STAGE"
+    // - 其它可能的非主要载荷： "ADAPTER", "DUMMY"
+    // - 使用大写比较，防止大小写差异
+    private bool IsDebrisName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return true; // 没名字基本当作无效
+        string upper = name.ToUpperInvariant();
+
+        // 可根据实际数据再增减
+        string[] debrisKeywords =
+        {
+            " DEB",     // 碎片
+            "DEB ",     // 前缀情况
+            "DEB-",     // 组合
+            "R/B",      // 火箭体
+            " RB",      // 火箭体简写
+            "STAGE",    // 级段
+            "ADAPTER",  // 适配器
+            "DUMMY",    // 假载荷
+            "FRAGMENT", // 碎片
+            "SL14",     // 俄火箭体常见编码
+            "ATLAS",    // 有时标记火箭级
+            "ARIANE",   // 火箭级相关
+            "CENTAUR",  // 火箭级
+            "STARLINK DEBRIS", // 特定集合
+        };
+
+        // 精确匹配：若名称以这些典型碎片后缀结尾也去除
+        string[] suffixes =
+        {
+            " DEB",
+            " R/B",
+            " RB",
+        };
+
+        foreach (var kw in debrisKeywords)
+        {
+            if (upper.Contains(kw))
+                return true;
+        }
+
+        foreach (var suf in suffixes)
+        {
+            if (upper.EndsWith(suf))
+                return true;
+        }
+
+        // 若名称长度极短且不含数字，通常无效
+        if (upper.Length <= 3 && !upper.Any(char.IsDigit))
+            return true;
+
+        return false;
     }
 
     void LoadCountryColorGroups()
