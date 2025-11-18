@@ -89,9 +89,14 @@ public class SatletExelDataReader : MonoBehaviour
 
     public void Show()
     {
-        if (pieChartGroup) pieChartGroup.gameObject.SetActive(true); if (pieChartCountry) pieChartCountry.gameObject.SetActive(true);
-        if (yearText1) yearText1.gameObject.SetActive(true); if (yearText2) yearText2.gameObject.SetActive(true);
-        if (text1) text1.gameObject.SetActive(true); if (text2) text2.gameObject.SetActive(true);
+        if (pieChartGroup) pieChartGroup.gameObject.SetActive(true);
+        if (yearText2) yearText2.gameObject.SetActive(true);
+        if (text2) text2.gameObject.SetActive(true);
+
+
+        //if (pieChartCountry) pieChartCountry.gameObject.SetActive(true);
+        //if (text1) text1.gameObject.SetActive(true);
+        //if (yearText1) yearText1.gameObject.SetActive(true);
     }
     public void Hide()
     {
