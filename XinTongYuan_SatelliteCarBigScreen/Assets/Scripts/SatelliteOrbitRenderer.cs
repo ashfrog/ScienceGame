@@ -146,8 +146,8 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public KeyCode slowerKey = KeyCode.LeftBracket;     // [
     public KeyCode fasterKey = KeyCode.RightBracket;    // ]
     public float timeScaleStep = 2f;                    // 每次倍率变化的倍数（×/÷）
-    public float minTimeScale = 0.0625f;
-    public float maxTimeScale = 32768f;
+    float minTimeScale = 1f;
+    float maxTimeScale = 2048f;
 
     // NEW: 传播缓存（每颗卫星一个轻量对象）
     private Dictionary<int, Propagator> propagators = new Dictionary<int, Propagator>();
