@@ -37,7 +37,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
     DataTable dataTable_country;
 
     // 加载全部数据相关
-    private double[] xData; // 年份数据
+    private double[] xData; // 年份数据（索引）
     private double[,] yData; // 卫星数量数据
     private int categoryCount; // 分类数
     private int dataCount; // 年份数
@@ -152,6 +152,7 @@ public class SatelliteConstellationGraph : MonoBehaviour
             graphManager.Chart.DataSource.Set2DCategoryPrefabs(catName, LineHoverPrefab, PointHoverPrefab);
         }
 
+        // 清除任何旧的 x 轴映射
         graphManager.Chart.HorizontalValueToStringMap.Clear();
     }
 
@@ -177,11 +178,13 @@ public class SatelliteConstellationGraph : MonoBehaviour
             DataRow row = dataTable_country.Rows[i];
             int year = Convert.ToInt32(row[0]);
             xData[i] = i;
-            graphManager.Chart.HorizontalValueToStringMap[i] = year.ToString();
 
+            // 不在这里写入 HorizontalValueToStringMap，避免后续分页时被当做“来源”而被破坏
             for (int j = 1; j <= categoryCount; j++)
                 yData[i, j - 1] = Convert.ToDouble(row[j]);
         }
+
+        // 可选：输出调试信息
         for (int i = 0; i < dataCount; i++)
         {
             DataRow row = dataTable_country.Rows[i];
@@ -207,18 +210,18 @@ public class SatelliteConstellationGraph : MonoBehaviour
         double[] pageXData = new double[pageDataCount];
         double[,] pageYData = new double[pageDataCount, categoryCount];
 
+        // 先清空 x 轴标签映射，避免残留或覆盖问题
+        graphManager.Chart.HorizontalValueToStringMap.Clear();
+
         // 复制当前页的数据
         for (int i = 0; i < pageDataCount; i++)
         {
             int sourceIndex = startIndex + i;
             pageXData[i] = i; // 使用页内索引
 
-            // 更新x轴标签映射（使用页内索引对应实际年份）
-            if (graphManager.Chart.HorizontalValueToStringMap.ContainsKey(sourceIndex))
-            {
-                string yearLabel = graphManager.Chart.HorizontalValueToStringMap[sourceIndex];
-                graphManager.Chart.HorizontalValueToStringMap[i] = yearLabel;
-            }
+            // 直接从数据表获取年份，写入当前页的 x 轴映射
+            string yearLabel = dataTable_country.Rows[sourceIndex][0].ToString();
+            graphManager.Chart.HorizontalValueToStringMap[i] = yearLabel;
 
             for (int j = 0; j < categoryCount; j++)
                 pageYData[i, j] = yData[sourceIndex, j];
@@ -290,17 +293,21 @@ public class SatelliteConstellationGraph : MonoBehaviour
     {
         if (infoText == null) return;
         var point = graphManager.GetPointValue(args.Category, args.Index);
-        string yearStr = graphManager.Chart.HorizontalValueToStringMap.ContainsKey((int)point.x) ? graphManager.Chart.HorizontalValueToStringMap[(int)point.x] : ((int)point.x).ToString();
-        infoText.text = string.Format("{0} 年 - {1}: {2} 颗卫星", yearStr
-            ,
-            args.Category, point.y);
+
+        // 更稳妥：用当前页 + 页内索引 计算全局行号，从数据表直接取年份
+        int sourceIndex = currentPage * dataPointsPerPage + (int)point.x;
+        string yearStr = (sourceIndex >= 0 && sourceIndex < dataCount)
+            ? dataTable_country.Rows[sourceIndex][0].ToString()
+            : (graphManager.Chart.HorizontalValueToStringMap.ContainsKey((int)point.x)
+                ? graphManager.Chart.HorizontalValueToStringMap[(int)point.x]
+                : ((int)point.x).ToString());
+
+        infoText.text = string.Format("{0} 年 - {1}: {2} 颗卫星", yearStr, args.Category, point.y);
 
         if (int.TryParse(yearStr, out int year))
         {
             onYear?.Invoke(year);
         }
-
-
     }
 
     public void NonHovered()
