@@ -121,11 +121,7 @@ public class FHClientController : MonoBehaviour
 
             colorByPlaneGroups_toggle.onValueChanged.AddListener((isOn) =>
             {
-                if (!msgtrigger)
-                {
-                    Send(dataTypeEnum, OrderTypeEnum.SetColorByPlaneGroups, isOn);
-                }
-                msgtrigger = false;
+                Send(dataTypeEnum, OrderTypeEnum.SetColorByPlaneGroups, isOn);
             });
         }
 
