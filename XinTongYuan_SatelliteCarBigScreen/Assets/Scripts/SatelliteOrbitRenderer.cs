@@ -35,13 +35,13 @@ public class SatelliteData
 [System.Serializable]
 public class OrbitElements
 {
-    public float semiMajorAxis;
+    public float semiMajorAxis;   // meters
     public float eccentricity;
-    public float inclination;
-    public float raan;
-    public float argPerigee;
-    public float meanAnomaly;
-    public float meanMotion;
+    public float inclination;     // radians
+    public float raan;            // radians
+    public float argPerigee;      // radians
+    public float meanAnomaly;     // radians
+    public float meanMotion;      // revs/day
 }
 
 public enum DisplayMode
@@ -107,9 +107,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public int maxDisplayOrbits = 200;
     public int maxDisplaySatellites = 2000;
 
-    private List<int> tempCatalogList = new List<int>(5000);
-    private List<int> tempDisplayList = new List<int>(1000);
-
     [SerializeField] bool printSelectcatalogNumber = false;
     [SerializeField] private Camera objCamera;
 
@@ -117,7 +114,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     [Header("同时显示卫星和轨道时卫星放大系数")]
     public float scaleSateliteWhenShowBoth = 1.5f;
 
-    [Header("分组颜色设置")]
+    [Header("分组颜色设置 (星座/自定义分组)")]
     public Dictionary<string, Color[]> groupColorGroups;
     private Color[] currentGroupColors = null;
 
@@ -127,7 +124,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public bool useSgp4Propagation = true;
     private double accumulatedSimSeconds = 0;
 
-    // OPT: 改进连续时间
     private DateTime lastRealUtc;
     private double simulationElapsedMinutes = 0;
     private double simulationElapsedMinutesSim = 0;
@@ -143,6 +139,35 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     float maxTimeScale = 2048f;
 
     private Dictionary<int, Propagator> propagators = new Dictionary<int, Propagator>();
+
+    // ===== 轨道方向分组颜色 =====
+    [Header("轨道方向分组颜色")]
+    public bool colorByPlaneGroups = true;
+
+    [Tooltip("分组法向量角阈值 (度)。值越小分组越细。")]
+    public float planeGroupAngleDeg = 5f;
+
+    [Tooltip("初始调色板。超过长度自动生成 HSV 颜色。")]
+    public Color[] planeGroupBaseColors = new Color[]
+    {
+        new Color(0.9f,0.3f,0.3f), // red
+        new Color(0.3f,0.8f,0.3f), // green
+        new Color(0.3f,0.5f,0.9f), // blue
+        new Color(0.9f,0.7f,0.3f), // yellow
+        new Color(0.8f,0.3f,0.8f), // purple
+        new Color(0.3f,0.9f,0.9f), // cyan
+        new Color(0.9f,0.5f,0.2f), // orange
+        new Color(0.5f,0.9f,0.4f), // lime
+    };
+
+    private Dictionary<int, int> catalogToPlaneGroup = new Dictionary<int, int>();
+    private List<Vector3> planeGroupNormals = new List<Vector3>();
+    private List<int> planeGroupCounts = new List<int>();
+    private List<Color> planeGroupColors = new List<Color>();
+
+    [Header("近距离视觉缩放补偿")]
+    public float satelliteNearAdjustBias = 1.5f;
+    public float satelliteNearAdjustPower = 1.30f;
 
     void Start()
     {
@@ -166,12 +191,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Debug.Log(selectsatelite);
         }
 
-        PreprocessSatelliteData();
+        PreprocessSatelliteData(); // 构建轨道面分组
         BuildPropagators();
-        AnchorTimeInitialization(); // 初次锚定
+        AnchorTimeInitialization();
         LoadSelectionGroups();
 
         timeScale = Settings.ini.Game.TimeScale;
+        colorByPlaneGroups = Settings.ini.Game.ColorByPlaneGroups;
     }
 
     void LoadGroupColorGroups()
@@ -193,7 +219,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         if (displayMode == DisplayMode.None) return;
 
         HandleTimeControls();
-
         UpdateSatellitePositions();
 
         if (displayMode == DisplayMode.OrbitOnly || displayMode == DisplayMode.Both)
@@ -258,7 +283,13 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     {
         timeScale = Mathf.Clamp(scale, minTimeScale, maxTimeScale);
         Settings.ini.Game.TimeScale = timeScale;
-        lastRealUtc = DateTime.UtcNow; // 避免首帧大步
+        lastRealUtc = DateTime.UtcNow;
+    }
+
+    public void SetColorByPlaneGroups(bool c)
+    {
+        colorByPlaneGroups = c;
+        Settings.ini.Game.ColorByPlaneGroups = c;
     }
 
     public string[] GetAvailableCountries()
@@ -428,6 +459,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         catalogToYear.Clear();
         countryToCatalogs.Clear();
         allOrbitElements.Clear();
+        catalogToPlaneGroup.Clear();
 
         foreach (var satellite in allSatellites)
         {
@@ -435,24 +467,29 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             ParseTLE2(satellite);
             if (ValidateSatelliteData(satellite))
             {
-                allOrbitElements[satellite.catalogNumber] = CalculateOrbitElements(satellite);
+                var orbit = CalculateOrbitElements(satellite);
+                allOrbitElements[satellite.catalogNumber] = orbit;
                 catalogToSatellite[satellite.catalogNumber] = satellite;
                 int year = ParseYearFromDate(satellite.stableDate);
                 catalogToYear[satellite.catalogNumber] = year;
                 satellite.cachedYear = year;
+
                 if (!string.IsNullOrEmpty(satellite.country))
                 {
                     if (!countryToCatalogs.ContainsKey(satellite.country))
                         countryToCatalogs[satellite.country] = new HashSet<int>();
                     countryToCatalogs[satellite.country].Add(satellite.catalogNumber);
                 }
+
                 validCount++;
             }
             else invalidCount++;
         }
 
         RefreshFilteredData();
-        Debug.Log($"预处理完成: 有效 {validCount} 无效 {invalidCount}");
+        RebuildOrbitPlaneGroups(); // 构建轨道面分组
+
+        Debug.Log($"预处理完成: 有效 {validCount} 无效 {invalidCount} 分组数:{planeGroupNormals.Count}");
     }
 
     private int ParseYearFromDate(string dateStr)
@@ -660,7 +697,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         var orbit = new OrbitElements();
         double mu = 3.986004418e14;
         double n = s.meanMotion * 2 * Math.PI / 86400.0;
-        orbit.semiMajorAxis = (float)Math.Pow(mu / (n * n), 1.0 / 3.0);
+        orbit.semiMajorAxis = (float)Math.Pow(mu / (n * n), 1.0 / 3.0); // meters
         orbit.eccentricity = s.eccentricity;
         orbit.inclination = s.inclination * Mathf.Deg2Rad;
         orbit.raan = s.raan * Mathf.Deg2Rad;
@@ -670,7 +707,125 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return orbit;
     }
 
-    // FIX: 移除频繁锚定导致闪烁；即时更新位置
+    // ===== 轨道方向分组 =====
+    public void RecalculatePlaneGroups() => RebuildOrbitPlaneGroups();
+
+    private void RebuildOrbitPlaneGroups()
+    {
+        planeGroupNormals.Clear();
+        planeGroupCounts.Clear();
+        planeGroupColors.Clear();
+        catalogToPlaneGroup.Clear();
+
+        float thresholdRad = Mathf.Max(1e-3f, planeGroupAngleDeg) * Mathf.Deg2Rad;
+
+        foreach (var kv in allOrbitElements)
+        {
+            int catalog = kv.Key;
+            OrbitElements o = kv.Value;
+            Vector3 normal = ComputeOrbitNormal(o); // hemisphere normalized
+
+            int bestGroup = -1;
+            float bestAngle = float.MaxValue;
+
+            for (int g = 0; g < planeGroupNormals.Count; g++)
+            {
+                float dot = Mathf.Clamp(Vector3.Dot(normal, planeGroupNormals[g]), -1f, 1f);
+                float angle = Mathf.Acos(Mathf.Abs(dot)); // unsigned angle
+                if (angle < thresholdRad && angle < bestAngle)
+                {
+                    bestAngle = angle;
+                    bestGroup = g;
+                }
+            }
+
+            if (bestGroup == -1)
+            {
+                planeGroupNormals.Add(normal);
+                planeGroupCounts.Add(1);
+                bestGroup = planeGroupNormals.Count - 1;
+            }
+            else
+            {
+                Vector3 rep = planeGroupNormals[bestGroup];
+                float sign = Mathf.Sign(Vector3.Dot(normal, rep));
+                Vector3 aligned = normal * sign;
+                int cnt = planeGroupCounts[bestGroup];
+                planeGroupNormals[bestGroup] = (rep * cnt + aligned).normalized;
+                planeGroupCounts[bestGroup] = cnt + 1;
+            }
+
+            catalogToPlaneGroup[catalog] = bestGroup;
+        }
+
+        // 稳定排序：按 phi->theta 排序
+        var order = Enumerable.Range(0, planeGroupNormals.Count)
+            .Select(idx =>
+            {
+                Vector3 n = planeGroupNormals[idx];
+                float theta = Mathf.Acos(Mathf.Clamp(n.z, -1f, 1f));
+                float phi = Mathf.Atan2(n.y, n.x);
+                return new { idx, theta, phi };
+            })
+            .OrderBy(x => x.phi)
+            .ThenBy(x => x.theta)
+            .ToList();
+
+        Dictionary<int, int> remap = new Dictionary<int, int>();
+        var newNormals = new List<Vector3>(order.Count);
+        var newCounts = new List<int>(order.Count);
+        for (int newIdx = 0; newIdx < order.Count; newIdx++)
+        {
+            int oldIdx = order[newIdx].idx;
+            remap[oldIdx] = newIdx;
+            newNormals.Add(planeGroupNormals[oldIdx]);
+            newCounts.Add(planeGroupCounts[oldIdx]);
+        }
+        planeGroupNormals = newNormals;
+        planeGroupCounts = newCounts;
+
+        List<int> cats = new List<int>(catalogToPlaneGroup.Keys);
+        foreach (var cat in cats)
+        {
+            int old = catalogToPlaneGroup[cat];
+            catalogToPlaneGroup[cat] = remap[old];
+        }
+
+        GeneratePlaneGroupColors();
+    }
+
+    private Vector3 ComputeOrbitNormal(OrbitElements o)
+    {
+        float i = o.inclination;
+        float raan = o.raan;
+        float si = Mathf.Sin(i);
+        float ci = Mathf.Cos(i);
+        float so = Mathf.Sin(raan);
+        float co = Mathf.Cos(raan);
+        Vector3 n = new Vector3(si * so, -si * co, ci);
+        n.Normalize();
+        if (n.z < 0f) n = -n;
+        return n;
+    }
+
+    private void GeneratePlaneGroupColors()
+    {
+        planeGroupColors.Clear();
+        int groupCount = planeGroupNormals.Count;
+        int baseCount = planeGroupBaseColors != null ? planeGroupBaseColors.Length : 0;
+
+        for (int g = 0; g < groupCount; g++)
+        {
+            if (g < baseCount)
+                planeGroupColors.Add(planeGroupBaseColors[g]);
+            else
+            {
+                float hue = (float)g / groupCount;
+                planeGroupColors.Add(Color.HSVToRGB(hue, 0.75f, 0.95f));
+            }
+        }
+    }
+
     void UpdateSatellitePositions()
     {
         if (!timeAnchored) AnchorTimeInitialization();
@@ -690,8 +845,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
 
         if (currentDisplayedOrbits.Count == 0) return;
-
-        // 不再清空后等待下一帧
         currentSatellitePositions.Clear();
 
         foreach (int satNumber in currentDisplayedOrbits)
@@ -715,11 +868,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
-    // FIX: 提供立即刷新方法（避免调用者在同一帧看到空白）
-    private void ForceImmediatePositionUpdate()
-    {
-        UpdateSatellitePositions();
-    }
+    private void ForceImmediatePositionUpdate() => UpdateSatellitePositions();
 
     public void SetMaxDisplay(int maxOrbits, int maxSatellites)
     {
@@ -775,10 +924,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             }
         }
     }
-
-    [Header("近距离视觉缩放补偿")]
-    public float satelliteNearAdjustBias = 1.5f;
-    public float satelliteNearAdjustPower = 1.30f;
 
     private Vector3 CalculateScale(Vector3 camPos, Vector3 position, float currentFOV)
     {
@@ -887,6 +1032,29 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
+    private Color GetOrbitPlaneColor(int satNumber)
+    {
+        if (!catalogToPlaneGroup.ContainsKey(satNumber))
+            return Color.white;
+        int groupIdx = catalogToPlaneGroup[satNumber];
+        if (groupIdx < 0 || groupIdx >= planeGroupColors.Count)
+            return Color.white;
+        return planeGroupColors[groupIdx];
+    }
+
+    private Color ResolveOrbitColor(int satNumber)
+    {
+        if (colorByPlaneGroups)
+            return GetOrbitPlaneColor(satNumber);
+
+        if (catalogToSatellite.TryGetValue(satNumber, out var sat))
+        {
+            Color[] countryColors = GetCurrentColors(sat.country);
+            return countryColors[satNumber % countryColors.Length];
+        }
+        return Color.white;
+    }
+
     void RenderOrbitBatch(List<int> batch)
     {
         var matrices = new Matrix4x4[batch.Count];
@@ -897,17 +1065,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             int satNumber = batch[i];
             if (!orbitMeshes.ContainsKey(satNumber)) continue;
             var propertyBlock = new MaterialPropertyBlock();
-
-            if (catalogToSatellite.TryGetValue(satNumber, out var sat))
-            {
-                Color[] countryColors = GetCurrentColors(sat.country);
-                Color orbitColor = countryColors[satNumber % countryColors.Length];
-                orbitColor.a = orbitAlpha;
-                propertyBlock.SetColor("_UnlitColor", orbitColor);
-                propertyBlock.SetColor("_EmissiveColor", orbitColor);
-                propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
-                Graphics.DrawMesh(orbitMeshes[satNumber], matrices[i], orbitMaterial, 0, null, 0, propertyBlock);
-            }
+            Color orbitColor = ResolveOrbitColor(satNumber);
+            orbitColor.a = orbitAlpha;
+            propertyBlock.SetColor("_UnlitColor", orbitColor);
+            propertyBlock.SetColor("_EmissiveColor", orbitColor);
+            propertyBlock.SetFloat("_EmissiveIntensity", 1.0f);
+            Graphics.DrawMesh(orbitMeshes[satNumber], matrices[i], orbitMaterial, 0, null, 0, propertyBlock);
         }
     }
 
@@ -918,7 +1081,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         return new Color[] { Color.white };
     }
 
-    // FIX: 去除 AnchorTimeInitialization 与 Clear 导致的闪烁；增加即时刷新
     public void SetDisplayAll(int startYear = 1980, int endYear = 2025, string country = "", bool allowAnchorReset = false)
     {
         if (displayMode == DisplayMode.None)
@@ -949,17 +1111,12 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
 
         currentDisplayedOrbitsSet = new HashSet<int>(currentDisplayedOrbits);
-
         CreateOrbitMeshes(currentDisplayedOrbits);
 
-        // 不清空位置，直接更新
         if (allowAnchorReset)
-        {
-            // 可选：只有在确实重载大量数据时重锚
             AnchorTimeInitialization();
-        }
 
-        ForceImmediatePositionUpdate(); // 关键：避免出现空帧
+        ForceImmediatePositionUpdate();
     }
 
     public void SetDisplayGroup(string groupName, DisplayMode mode = DisplayMode.Both)
@@ -996,8 +1153,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
 
         currentDisplayedOrbitsSet = new HashSet<int>(currentDisplayedOrbits);
         CreateOrbitMeshes(currentDisplayedOrbits);
-
-        // 不重锚时间，保持连续
         ForceImmediatePositionUpdate();
     }
 

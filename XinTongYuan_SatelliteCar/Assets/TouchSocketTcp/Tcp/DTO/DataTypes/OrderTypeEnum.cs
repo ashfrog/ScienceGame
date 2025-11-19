@@ -65,10 +65,18 @@ public enum OrderTypeEnum
 
     ShowGroup = 110,
 
-
     Speed = 200,
     SpeedUp = 201,
     SpeedDown = 202,
+
+    SetColorByPlaneGroups = 210,
+    GetColorByPlaneGroups = 211,
+
+
+    /// <summary>
+    /// 获取视频列表
+    /// </summary>
+    GetFileList = 301,
 
     /// <summary>
     /// 获取当前播放进度
@@ -79,10 +87,7 @@ public enum OrderTypeEnum
     /// </summary>
     SetMovSeek = 502,
 
-    /// <summary>
-    /// 获取视频列表
-    /// </summary>
-    GetFileList = 301,
+
 
     /// <summary>
     /// 获取网页列表

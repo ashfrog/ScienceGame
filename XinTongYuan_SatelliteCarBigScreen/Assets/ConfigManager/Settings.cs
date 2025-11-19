@@ -118,6 +118,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("TimeScale", value.ToString());
     }
 
+    public bool ColorByPlaneGroups
+    {
+        get => ReadBool("ColorByPlaneGroups", true);
+        set => WriteValue("ColorByPlaneGroups", value.ToString());
+    }
+
     public bool ShowOrbitWhenPie
     {
         get => ReadBool("ShowOrbitWhenPie", false);

@@ -233,13 +233,22 @@ public class MouseRoteReceiver : MonoBehaviour
                         litVCR2.VolumnDown();
                         break;
                     case OrderTypeEnum.Speed:
-                        tcpService.Send(sc, OrderTypeEnum.Speed, Settings.ini.Game.TimeScale);
+                        float timeScale = Settings.ini.Game.TimeScale;
+                        tcpService.Send(sc, OrderTypeEnum.Speed, timeScale);
+                        Debug.Log("Get Speed_TimeScale:" + timeScale);
                         break;
                     case OrderTypeEnum.SpeedUp:
                         satelliteOrbitRenderer.SpeedUp();
                         tcpService.Send(sc, OrderTypeEnum.Speed, Settings.ini.Game.TimeScale);
                         break;
-
+                    case OrderTypeEnum.SetColorByPlaneGroups:
+                        bool c = JsonConvert.DeserializeObject<bool>(Encoding.UTF8.GetString(info.Body));
+                        satelliteOrbitRenderer.SetColorByPlaneGroups(c);
+                        break;
+                    case OrderTypeEnum.GetColorByPlaneGroups:
+                        tcpService.Send(sc, OrderTypeEnum.GetColorByPlaneGroups, Settings.ini.Game.ColorByPlaneGroups);
+                        Debug.Log("GetColorByPlaneGroups:" + Settings.ini.Game.ColorByPlaneGroups);
+                        break;
                     case OrderTypeEnum.SpeedDown:
                         satelliteOrbitRenderer.SpeedDown();
                         tcpService.Send(sc, OrderTypeEnum.Speed, Settings.ini.Game.TimeScale);

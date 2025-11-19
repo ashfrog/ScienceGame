@@ -24,6 +24,10 @@ public class FHClientController : MonoBehaviour
     [SerializeField]
     private Text speedText;
 
+    [SerializeField]
+    private Toggle colorByPlaneGroups_toggle;
+    bool msgtrigger = false;
+
     DataTypeEnum dataTypeEnum = DataTypeEnum.LG20001;
 
     public Action<DTOInfo> receiveData;
@@ -88,6 +92,7 @@ public class FHClientController : MonoBehaviour
     private void Start()
     {
         ipHost = File.ReadAllText(Application.streamingAssetsPath + @"\ipHost.txt");
+
         fhTcpClient = new FHTcpClient();
 
         fhTcpClient.InitConfig(ipHost);
@@ -113,6 +118,15 @@ public class FHClientController : MonoBehaviour
             {
                 Send(dataTypeEnum, OrderTypeEnum.SpeedDown, "");
             });
+
+            colorByPlaneGroups_toggle.onValueChanged.AddListener((isOn) =>
+            {
+                if (!msgtrigger)
+                {
+                    Send(dataTypeEnum, OrderTypeEnum.SetColorByPlaneGroups, isOn);
+                }
+                msgtrigger = false;
+            });
         }
 
         Loom.RunAsync(() =>
@@ -130,12 +144,24 @@ public class FHClientController : MonoBehaviour
         fhTcpClient.FHTcpClientReceive = ReceiveData;
         fhTcpClient.Connected += ((client) =>
         {
-            Send(dataTypeEnum, OrderTypeEnum.Speed, "");
+
         });
 
         if (offLineStatue != null)
         {
             StartCoroutine(OfflineStatueView());
+        }
+    }
+
+    IEnumerator delayGetState()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            yield return new WaitForSeconds(2);
+            Send(dataTypeEnum, OrderTypeEnum.GetColorByPlaneGroups, "");
+            Debug.Log("Send GetColorByPlaneGroups");
+            Send(dataTypeEnum, OrderTypeEnum.Speed, "");
+            Debug.Log("Send GetSpeed");
         }
     }
 
@@ -160,8 +186,6 @@ public class FHClientController : MonoBehaviour
                 {
                     Debug.Log((OrderTypeEnum)dTOInfo.OrderType + "  " + (DataTypeEnum)dTOInfo.DataType);
                 }
-
-
 
                 switch ((OrderTypeEnum)dTOInfo.OrderType)
                 {
@@ -238,7 +262,14 @@ public class FHClientController : MonoBehaviour
 
                     case OrderTypeEnum.Speed:
                         float speed = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
+                        Debug.Log("Speed:" + speed);
                         speedText.text = speed.ToString();
+                        break;
+                    case OrderTypeEnum.GetColorByPlaneGroups:
+                        msgtrigger = true;
+                        bool c = JsonConvert.DeserializeObject<bool>(Encoding.UTF8.GetString(dTOInfo.Body));
+                        Debug.Log("GetColorByPlaneGroups:" + c);
+                        colorByPlaneGroups_toggle.isOn = c;
                         break;
                 }
             }
@@ -267,11 +298,13 @@ public class FHClientController : MonoBehaviour
         {
             yield return null;
         }
+        Debug.Log("连接成功!");
         if (EnableRepeatRequest)
         {
             repeatRequestTime = Settings.ini.Game.RepeatRequestTime;
             InvokeRepeating(nameof(RepeatRequest), 0, repeatRequestTime);
             GetVolumn();
+            StartCoroutine(delayGetState());
         }
     }
     private void OnDisable()
