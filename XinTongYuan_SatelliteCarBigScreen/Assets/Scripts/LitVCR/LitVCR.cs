@@ -525,8 +525,9 @@ public class LitVCR : MonoBehaviour
         _loadingPlayer = _mediaPlayerB;
 
         //Settings.ini.Path.MediaPath = Settings.ini.Path.MediaPath;
-        if (!Directory.Exists(Settings.ini.Path.MediaPath))
+        if (!Directory.Exists(Settings.ini.Path.MediaPath)) //如果以前配置的路径不存在 则重新指定为 streamingAssetsPath\媒体文件 默认路径
         {
+            Settings.ini.Path.MediaPath = Path.Combine(Application.streamingAssetsPath, "媒体文件");
             Directory.CreateDirectory(Settings.ini.Path.MediaPath);
         }
 

@@ -841,6 +841,7 @@ public class MouseRoteReceiver : MonoBehaviour
         litVCR1.OpenVideoByFileName("待机循环动画.mp4");
         litVCR2.OpenVideoByFileName("地屏循环地球.mp4");
         satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
+        satletExelDataReader.Hide();
     }
 
     private void ShowCarMode()
