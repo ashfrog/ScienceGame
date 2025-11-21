@@ -44,6 +44,9 @@ public class VCRControl : MonoBehaviour, IVCRControl
     [SerializeField]
     Text playingFilename;
 
+    [SerializeField]
+    Text volumnText; //音量显示文字
+
     /// <summary>
     /// 视频总时长
     /// </summary>
@@ -358,6 +361,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
                 case OrderTypeEnum.GetVolumn:
                     float volumn = JsonConvert.DeserializeObject<float>(Encoding.UTF8.GetString(dTOInfo.Body));
                     volumnSlider.value = volumn;
+                    volumnText.text = Math.Floor(volumn * 100).ToString("F2");
                     break;
 
             }
@@ -527,6 +531,7 @@ public class VCRControl : MonoBehaviour, IVCRControl
     public void VolumnSeek()
     {
         FHClientController.ins.Send(dataTypeEnum, OrderTypeEnum.SetVolumn, volumnSlider.value);
+        volumnText.text = Math.Floor(volumnSlider.value * 100).ToString();
         Debug.Log("VolumnSliderSeek");
     }
 
