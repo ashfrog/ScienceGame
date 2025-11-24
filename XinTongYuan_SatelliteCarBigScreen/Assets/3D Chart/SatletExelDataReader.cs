@@ -34,7 +34,9 @@ public class SatletExelDataReader : MonoBehaviour
             {
                 var json = File.ReadAllText(p);
                 colorMap = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new();
-                foreach (var k in colorMap.Keys.ToList()) if (!string.IsNullOrEmpty(colorMap[k]) && !colorMap[k].StartsWith("#")) colorMap[k] = "#" + colorMap[k];
+                foreach (var k in colorMap.Keys.ToList())
+                    if (!string.IsNullOrEmpty(colorMap[k]) && !colorMap[k].StartsWith("#"))
+                        colorMap[k] = "#" + colorMap[k];
             }
         }
         catch { }
@@ -51,16 +53,33 @@ public class SatletExelDataReader : MonoBehaviour
         float spacing = year > 2020 ? 14f : 6f;
         if (pieChartGroup) pieChartGroup.SpacingAngle = spacing;
         if (pieChartCountry) pieChartCountry.SpacingAngle = spacing;
-        RenderPie(pieChartGroup, groupTable, year, groupStripChineseBrackets);
-        RenderPie(pieChartCountry, countryTable, year, countryStripChineseBrackets);
+
+        // 星座（百分比显示）
+        RenderPie(pieChartGroup, groupTable, year, groupStripChineseBrackets, usePercentage: true);
+        // 国家（实际数量显示）
+        RenderPie(pieChartCountry, countryTable, year, countryStripChineseBrackets, usePercentage: false);
     }
 
-    void RenderPie(PieChart chart, DataTable table, int year, bool strip)
+    void RenderPie(PieChart chart, DataTable table, int year, bool strip, bool usePercentage)
     {
-        if (!chart || table == null || table.Columns.Count == 0 || table.Rows.Count == 0) { SafeClear(chart); return; }
+        if (!chart || table == null || table.Columns.Count == 0 || table.Rows.Count == 0)
+        {
+            SafeClear(chart);
+            return;
+        }
         chart.DataSource.StartBatch();
-        DataRow row = null; foreach (DataRow r in table.Rows) { var s = r[0]?.ToString(); if (int.TryParse(s, out int y) && y == year) { row = r; break; } }
-        if (row == null) { SafeClear(chart); chart.DataSource.EndBatch(); return; }
+        DataRow row = null;
+        foreach (DataRow r in table.Rows)
+        {
+            var s = r[0]?.ToString();
+            if (int.TryParse(s, out int y) && y == year) { row = r; break; }
+        }
+        if (row == null)
+        {
+            SafeClear(chart);
+            chart.DataSource.EndBatch();
+            return;
+        }
 
         var totals = new Dictionary<string, float>(); float sum = 0;
         for (int i = 1; i < table.Columns.Count; i++)
@@ -69,19 +88,33 @@ public class SatletExelDataReader : MonoBehaviour
             if (string.IsNullOrEmpty(name)) continue;
             if (float.TryParse(row[i]?.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out float v) && v > 0)
             {
-                sum += v; if (!totals.ContainsKey(name)) totals[name] = 0; totals[name] += v;
+                sum += v;
+                if (!totals.ContainsKey(name)) totals[name] = 0;
+                totals[name] += v;
             }
         }
-        if (sum <= 0 || totals.Count == 0) { SafeClear(chart); chart.DataSource.EndBatch(); return; }
+        if (sum <= 0 || totals.Count == 0)
+        {
+            SafeClear(chart);
+            chart.DataSource.EndBatch();
+            return;
+        }
 
         chart.DataSource.Clear();
         foreach (var kv in totals)
         {
             var mat = new Material(material ? material : new Material(Shader.Find("Standard")));
             mat.color = TryColor(kv.Key, out var c) ? c : StableColor(kv.Key);
-            if (!chart.DataSource.HasCategory(kv.Key)) chart.DataSource.AddCategory(kv.Key, mat);
+            if (!chart.DataSource.HasCategory(kv.Key))
+                chart.DataSource.AddCategory(kv.Key, mat);
         }
-        foreach (var kv in totals) chart.DataSource.SetValue(kv.Key, kv.Value / sum * 100f);
+
+        // 根据模式设置值：百分比或实际数量
+        foreach (var kv in totals)
+        {
+            float valueToSet = usePercentage ? (kv.Value / sum * 100f) : kv.Value;
+            chart.DataSource.SetValue(kv.Key, valueToSet);
+        }
 
         var anim = chart.GetComponent<PieAnimation>(); if (anim) anim.Animate();
         chart.DataSource.EndBatch();
@@ -92,7 +125,6 @@ public class SatletExelDataReader : MonoBehaviour
         if (pieChartGroup) pieChartGroup.gameObject.SetActive(true);
         if (yearText2) yearText2.gameObject.SetActive(true);
         if (text2) text2.gameObject.SetActive(true);
-
 
         if (pieChartCountry) pieChartCountry.gameObject.SetActive(true);
         if (text1) text1.gameObject.SetActive(true);

@@ -555,7 +555,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: textFormat.suffix
-      value: '%'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
