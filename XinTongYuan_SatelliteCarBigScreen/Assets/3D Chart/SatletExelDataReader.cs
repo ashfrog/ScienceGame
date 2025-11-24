@@ -11,7 +11,8 @@ using ChartAndGraph;
 
 public class SatletExelDataReader : MonoBehaviour
 {
-    [Header("Charts")] public PieChart pieChartGroup, pieChartCountry;
+    [Header("BarCharts")] public BarChart barChartCountry;
+    [Header("PieCharts")] public PieChart pieChartGroup, pieChartCountry;
     [Header("Shared Material")] public Material material;
     [Header("UI")] public Text yearText1, yearText2, text1, text2;
 
@@ -100,7 +101,9 @@ public class SatletExelDataReader : MonoBehaviour
     }
     public void Hide()
     {
-        if (pieChartGroup) pieChartGroup.gameObject.SetActive(false); if (pieChartCountry) pieChartCountry.gameObject.SetActive(false);
+        if (pieChartGroup) pieChartGroup.gameObject.SetActive(false);
+        if (pieChartCountry) pieChartCountry.gameObject.SetActive(false);
+        if (barChartCountry) barChartCountry.gameObject.SetActive(false);
         if (yearText1) yearText1.gameObject.SetActive(false); if (yearText2) yearText2.gameObject.SetActive(false);
         if (text1) text1.gameObject.SetActive(false); if (text2) text2.gameObject.SetActive(false);
     }
