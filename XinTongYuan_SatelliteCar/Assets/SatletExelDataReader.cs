@@ -55,9 +55,9 @@ public class SatletExelDataReader : MonoBehaviour
         if (pieChartCountry) pieChartCountry.SpacingAngle = spacing;
 
         // 星座（百分比显示）
-        RenderPie(pieChartGroup, groupTable, year, groupStripChineseBrackets, usePercentage: false);
+        RenderPie(pieChartGroup, groupTable, year, groupStripChineseBrackets, usePercentage: true);
         // 国家（实际数量显示）
-        RenderPie(pieChartCountry, countryTable, year, countryStripChineseBrackets, usePercentage: false);
+        RenderPie(pieChartCountry, countryTable, year, countryStripChineseBrackets, usePercentage: true);
     }
 
     void RenderPie(PieChart chart, DataTable table, int year, bool strip, bool usePercentage)

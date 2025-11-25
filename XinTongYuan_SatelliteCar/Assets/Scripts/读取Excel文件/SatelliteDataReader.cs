@@ -96,7 +96,24 @@ public class SatelliteDataReader : MonoBehaviour
         newRow.transform.Find("ChineseNameText").GetComponent<Text>().text = row[0].ToString();
         newRow.transform.Find("EnglishNameText").GetComponent<Text>().text = row[1].ToString();
         newRow.transform.Find("ResearchInstitutionText").GetComponent<Text>().text = row[2].ToString();
-        newRow.transform.Find("LaunchDateText").GetComponent<Text>().text = row[3].ToString();
+        if (i == 0)
+        {
+
+            newRow.transform.Find("LaunchDateText").GetComponent<Text>().text = row[3].ToString();
+        }
+        else
+        {
+            if (double.TryParse(row[3].ToString(), out double serial))
+            {
+                DateTime date = DateTime.FromOADate(serial);
+                newRow.transform.Find("LaunchDateText").GetComponent<Text>().text = date.ToString("yyyy/MM/dd");
+            }
+            else
+            {
+                Debug.Log(row[3].ToString() + "不是日期格式");
+            }
+        }
+
         newRow.transform.Find("CarrierRocketText").GetComponent<Text>().text = row[4].ToString();
         newRow.transform.Find("LaunchSiteText").GetComponent<Text>().text = row[5].ToString();
         newRow.transform.Find("OrbitHeightText").GetComponent<Text>().text = row[6].ToString();

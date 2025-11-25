@@ -9063,7 +9063,7 @@ MonoBehaviour:
     customFormat: 
   fontSize: 14
   fontSharpness: 3
-  seperation: 20
+  seperation: 40
   location:
     Breadth: 0
     Depth: 0
@@ -9105,7 +9105,7 @@ MonoBehaviour:
   spacingAngle: 0
   radius: 100
   torusRadius: 0
-  extrusion: 1
+  extrusion: 0
   Data:
     mCategories:
     - Name: Gold
