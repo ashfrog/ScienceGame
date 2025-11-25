@@ -1204,7 +1204,7 @@ PrefabInstance:
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
       propertyPath: textFormat.suffix
-      value: '%'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5836634179945454192, guid: 1f9d8ba90344768489a9c7b59372f87c,
         type: 3}
@@ -6408,6 +6408,35 @@ MonoBehaviour:
   minScale: 0.01
   maxScale: 2
   baseSatelliteScale: 1
+  nearDistance: 0.2
+  farDistance: 8
+  closePixelSize: 18
+  farPixelSize: 6
+  distanceSizeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0.85
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  sizeExponent: 1
   maxDisplayOrbits: 1000
   maxDisplaySatellites: 2000
   printSelectcatalogNumber: 0

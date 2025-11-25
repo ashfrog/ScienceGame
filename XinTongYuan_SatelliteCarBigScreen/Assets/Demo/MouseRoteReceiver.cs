@@ -365,12 +365,14 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //ReturnP1_1();
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比 改成了星座对比
+                                    Debug.Log("在空姿态");
                                     satletExelDataReader.Show();
                                     tabSwitcher_UI.SwitchTab(TabUILabel.Panel_内外星座对比);
                                     Debug.Log(cmdstr);
                                     leanPitchYaw.Pitch = 10f;
                                     leanPitchYaw.Camera.DOFieldOfView(35f, 1f);
-                                    wxTabSwitcher.SwitchTab(-1);
+                                    tabSwitcher_Obj.Hide();
+                                    wxTabSwitcher.Hide();
                                     if (Settings.ini.Game.ShowOrbitWhenPie)
                                     {
                                         satelliteOrbitRenderer.SetDisplayMode(DisplayMode.OrbitOnly);
@@ -380,11 +382,6 @@ public class MouseRoteReceiver : MonoBehaviour
                                         satelliteOrbitRenderer.SetDisplayMode(DisplayMode.None);
                                     }
                                     satelliteOrbitRenderer.SetBaseSatelliteScale(0.5f);
-                                    //Panel_level1_1_3.SetActive(false);
-                                    //Panel_卫星在空姿态.SetActive(true);
-                                    //WeiXingGuangDian.SetActive(false);
-                                    //obj = theEarth;
-                                    theEarth.SetActive(true);
                                     break;
                                 case "在空姿态返回":// 1-3返回 1
                                     leanPitchYaw.Pitch = 10f;
