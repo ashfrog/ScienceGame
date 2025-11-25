@@ -86,6 +86,21 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     public float maxScale = 10f;
     public float baseSatelliteScale = 1f;
 
+    // ===== 新增：距离驱动的卫星尺寸控制 =====
+    [Header("卫星大小距离控制(避免近小远大)")]
+    [Tooltip("被认为是近景的距离（世界单位，已经是缩放后的位置）。")]
+    public float nearDistance = 0.2f;
+    [Tooltip("被认为是远景的距离（世界单位）。")]
+    public float farDistance = 8f;
+    [Tooltip("近景希望的屏幕像素直径。")]
+    public float closePixelSize = 18f;
+    [Tooltip("远景希望的屏幕像素直径。")]
+    public float farPixelSize = 6f;
+    [Tooltip("针对归一化距离(0=near,1=far)的附加曲线调整；输出乘到插值后的像素大小上。")]
+    public AnimationCurve distanceSizeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0.85f);
+    [Tooltip("最终缩放指数(>1让远处更快变小，<1让远处保持大一些)。")]
+    public float sizeExponent = 1.0f;
+
     private List<SatelliteData> allSatellites = new List<SatelliteData>();
     private Dictionary<int, OrbitElements> allOrbitElements = new Dictionary<int, OrbitElements>();
     private Dictionary<int, SatelliteData> catalogToSatellite = new Dictionary<int, SatelliteData>();
@@ -150,14 +165,14 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     [Tooltip("初始调色板。超过长度自动生成 HSV 颜色。")]
     public Color[] planeGroupBaseColors = new Color[]
     {
-        new Color(0.9f,0.3f,0.3f), // red
-        new Color(0.3f,0.8f,0.3f), // green
-        new Color(0.3f,0.5f,0.9f), // blue
-        new Color(0.9f,0.7f,0.3f), // yellow
-        new Color(0.8f,0.3f,0.8f), // purple
-        new Color(0.3f,0.9f,0.9f), // cyan
-        new Color(0.9f,0.5f,0.2f), // orange
-        new Color(0.5f,0.9f,0.4f), // lime
+        new Color(0.9f,0.3f,0.3f),
+        new Color(0.3f,0.8f,0.3f),
+        new Color(0.3f,0.5f,0.9f),
+        new Color(0.9f,0.7f,0.3f),
+        new Color(0.8f,0.3f,0.8f),
+        new Color(0.3f,0.9f,0.9f),
+        new Color(0.9f,0.5f,0.2f),
+        new Color(0.5f,0.9f,0.4f),
     };
 
     private Dictionary<int, int> catalogToPlaneGroup = new Dictionary<int, int>();
@@ -165,7 +180,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
     private List<int> planeGroupCounts = new List<int>();
     private List<Color> planeGroupColors = new List<Color>();
 
-    [Header("近距离视觉缩放补偿")]
+    [Header("近距离视觉缩放补偿(旧算法留存但不再使用于新方案)")]
     public float satelliteNearAdjustBias = 1.5f;
     public float satelliteNearAdjustPower = 1.30f;
 
@@ -191,7 +206,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             Debug.Log(selectsatelite);
         }
 
-        PreprocessSatelliteData(); // 构建轨道面分组
+        PreprocessSatelliteData();
         BuildPropagators();
         AnchorTimeInitialization();
         LoadSelectionGroups();
@@ -487,7 +502,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
 
         RefreshFilteredData();
-        RebuildOrbitPlaneGroups(); // 构建轨道面分组
+        RebuildOrbitPlaneGroups();
 
         Debug.Log($"预处理完成: 有效 {validCount} 无效 {invalidCount} 分组数:{planeGroupNormals.Count}");
     }
@@ -723,7 +738,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         {
             int catalog = kv.Key;
             OrbitElements o = kv.Value;
-            Vector3 normal = ComputeOrbitNormal(o); // hemisphere normalized
+            Vector3 normal = ComputeOrbitNormal(o);
 
             int bestGroup = -1;
             float bestAngle = float.MaxValue;
@@ -731,7 +746,7 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             for (int g = 0; g < planeGroupNormals.Count; g++)
             {
                 float dot = Mathf.Clamp(Vector3.Dot(normal, planeGroupNormals[g]), -1f, 1f);
-                float angle = Mathf.Acos(Mathf.Abs(dot)); // unsigned angle
+                float angle = Mathf.Acos(Mathf.Abs(dot));
                 if (angle < thresholdRad && angle < bestAngle)
                 {
                     bestAngle = angle;
@@ -758,7 +773,6 @@ public class SatelliteOrbitRenderer : MonoBehaviour
             catalogToPlaneGroup[catalog] = bestGroup;
         }
 
-        // 稳定排序：按 phi->theta 排序
         var order = Enumerable.Range(0, planeGroupNormals.Count)
             .Select(idx =>
             {
@@ -925,24 +939,61 @@ public class SatelliteOrbitRenderer : MonoBehaviour
         }
     }
 
+    // ===== 新的卫星尺度计算算法 (屏幕空间像素可控 + 距离插值) =====
     private Vector3 CalculateScale(Vector3 camPos, Vector3 position, float currentFOV)
     {
-        float pixelDiameter = 12f;
         Camera cam = objCamera != null ? objCamera : Camera.main;
         float distance = Vector3.Distance(camPos, position);
         float screenHeight = Screen.height;
         float fovRad = cam.fieldOfView * Mathf.Deg2Rad;
 
-        float worldDiameter = 2f * distance * Mathf.Tan(0.5f * fovRad) * (pixelDiameter / screenHeight);
+        // 归一化距离 t: 0 = nearDistance, 1 = farDistance (可超出范围进行 clamp)
+        float t = 0f;
+        if (farDistance > nearDistance)
+            t = Mathf.InverseLerp(nearDistance, farDistance, distance);
+        else
+            t = 1f;
+
+        // 基础像素插值：近 -> 远（近大远小）
+        float pixelSizeLinear = Mathf.Lerp(closePixelSize, farPixelSize, t);
+
+        // 额外曲线调整 (可用于让中段更平滑或保留更多大小)
+        float curveFactor = distanceSizeCurve != null ? distanceSizeCurve.Evaluate(t) : 1f;
+        float pixelSize = Mathf.Max(1f, pixelSizeLinear * curveFactor);
+
+        // 将像素尺寸转换为世界尺寸：
+        // 屏幕高度对应的世界高度 = 2 * d * tan(FOV/2)
+        // 每像素世界高度 = worldHeight / screenHeight
+        // worldDiameter = pixelSize * (worldHeight/screenHeight)
+        float worldHeight = 2f * distance * Mathf.Tan(0.5f * fovRad);
+        float worldPerPixel = worldHeight / Mathf.Max(1f, screenHeight);
+        float worldDiameter = pixelSize * worldPerPixel;
+
+        // meshDiameter (原始球体直径)
         float meshDiameter = satelliteSize * 2f;
         float scale = worldDiameter / meshDiameter;
 
-        float nearComp = Mathf.Pow(distance / (distance + satelliteNearAdjustBias), satelliteNearAdjustPower);
-        scale *= nearComp;
-        scale = Mathf.Clamp(scale, minScale, maxScale);
-        if (displayMode == DisplayMode.Both) scale *= scaleSateliteWhenShowBoth;
+        // 非线性指数微调：对远处的缩放进行衰减或增强
+        if (sizeExponent != 1f)
+        {
+            // 使用归一化距离 t 影响：scale = scale * ( (1 - t) + t^(sizeExponent) )
+            // 或者更简单：scale = scale * Mathf.Pow( (distance / farDistanceClamped), 1/sizeExponent ) 等
+            // 这里采用对插值部分的指数处理，使远端更快缩小
+            float exponentAdjusted = Mathf.Lerp(1f, Mathf.Pow(1f - t, sizeExponent), t);
+            scale *= exponentAdjusted;
+        }
 
-        return Vector3.one * baseSatelliteScale * scale;
+        // 运行模式同时显示轨道时适当放大
+        if (displayMode == DisplayMode.Both)
+            scale *= scaleSateliteWhenShowBoth;
+
+        // 基础缩放倍数
+        scale *= baseSatelliteScale;
+
+        // Clamp 避免过大或过小
+        scale = Mathf.Clamp(scale, minScale, maxScale);
+
+        return Vector3.one * scale;
     }
 
     public void SetConstantVisualSize(bool enabled, float refFOV = 60f)
