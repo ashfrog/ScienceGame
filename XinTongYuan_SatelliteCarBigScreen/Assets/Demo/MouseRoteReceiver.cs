@@ -361,11 +361,12 @@ public class MouseRoteReceiver : MonoBehaviour
                                     //Panel_level1_1_3.SetActive(true);
                                     //Panel_卫星在空姿态.SetActive(false);
                                     tabSwitcher_UI.SwitchTab(TabUILabel.P1_1_3);
+                                    tabSwitcher_Obj.SwitchTab(TabObjLabel.卫星光点);
                                     //WeiXingGuangDian.SetActive(true);
                                     //ReturnP1_1();
                                     break;
                                 case "在空姿态"://1-3-1 内外星座对比 改成了星座对比
-                                    Debug.Log("在空姿态");
+                                    Debug.Log("在空姿态");//进入星座对比界面
                                     satletExelDataReader.Show();
                                     tabSwitcher_UI.SwitchTab(TabUILabel.Panel_内外星座对比);
                                     Debug.Log(cmdstr);
