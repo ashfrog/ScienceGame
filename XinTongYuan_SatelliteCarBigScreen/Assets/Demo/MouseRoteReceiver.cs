@@ -53,6 +53,15 @@ public class MouseRoteReceiver : MonoBehaviour
     [SerializeField]
     TMP_Text titleText;
 
+    [SerializeField]
+    List<AudioClip> audioClipBeep;
+
+    [SerializeField]
+    List<AudioClip> audioClipWhoosh;
+
+    [SerializeField]
+    AudioSource audioSource;
+
 
     public enum TabUILabel //需要Inspector中TabSwitcher的allTabTypes保持一致
     {
@@ -117,6 +126,7 @@ public class MouseRoteReceiver : MonoBehaviour
     [SerializeField]
     SatletExelDataReader satletExelDataReader;
 
+    private bool enableBeep;
     // Start is called before the first frame update
     void Start()
     {
@@ -128,6 +138,7 @@ public class MouseRoteReceiver : MonoBehaviour
         MainPageLoop();
         //Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
         autoResetTime = Settings.ini.Game.AutoResetTime;
+        enableBeep = Settings.ini.Game.EnableBeep;
     }
 
     public void OnVideoEvent(MediaPlayer mp, MediaPlayerEvent.EventType et, ErrorCode errorCode)
@@ -495,6 +506,11 @@ public class MouseRoteReceiver : MonoBehaviour
                             img_Introduce.sprite = sprites_Introduce[index];
                             img_Introduce2.sprite = sprites_Introduce2[index];
                             ResetZ(index);
+                            if (enableBeep)
+                            {
+                                int clipindex = index % 3;
+                                audioSource.PlayOneShot(audioClipBeep[clipindex]);
+                            }
                         }
 
                         break;
@@ -510,6 +526,11 @@ public class MouseRoteReceiver : MonoBehaviour
                             satelliteOrbitRenderer.SetBaseSatelliteScale(1f);
                             theEarth.SetActive(true);
                             litVCR2.OpenVideoByFileName("汽车百年进化论地屏.mp4");
+                            if (enableBeep)
+                            {
+                                int clipindex2 = exelsheetindex % 3;
+                                audioSource.PlayOneShot(audioClipBeep[clipindex2]);
+                            }
                         }
 
                         break;
@@ -779,6 +800,12 @@ public class MouseRoteReceiver : MonoBehaviour
                                     theEarth.SetActive(false);
                                 });
                             }
+                            if (enableBeep)
+                            {
+                                int randInt = UnityEngine.Random.Range(0, 3);// 随机整数 0, 1, 或 2
+                                audioSource.PlayOneShot(audioClipWhoosh[randInt]);
+                            }
+
                         }
 
 

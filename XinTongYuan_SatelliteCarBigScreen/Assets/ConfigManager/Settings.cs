@@ -76,6 +76,12 @@ public class GameSettings : BaseSettings
         set => WriteValue("AutoResetTime", value.ToString());
     }
 
+    public bool EnableBeep
+    {
+        get => ReadBool("EnableBeep", true);
+        set => WriteValue("EnableBeep", value.ToString());
+    }
+
     public float ZSpeed
     {
         get => ReadFloat("ZSpeed", 1f);
