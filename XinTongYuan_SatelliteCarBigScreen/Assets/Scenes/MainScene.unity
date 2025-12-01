@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ae5201cfc676a414cb2925c43430fcea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e6717dd1144d656478d559966c83f47c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7737,7 +7737,7 @@ MonoBehaviour:
   litVCR1: {fileID: 2938276423138481432}
   litVCR2: {fileID: 869775013}
   sprites_Introduce:
-  - {fileID: 21300000, guid: ae5201cfc676a414cb2925c43430fcea, type: 3}
+  - {fileID: 21300000, guid: e6717dd1144d656478d559966c83f47c, type: 3}
   - {fileID: 21300000, guid: d63baf64f22d1504c8e4431cd2c89ba1, type: 3}
   - {fileID: 21300000, guid: 2ddd73cd025fbd049b11ab24146d1250, type: 3}
   - {fileID: 21300000, guid: 29f86667b2fc70a4ebb3d9b76c38eb0c, type: 3}
