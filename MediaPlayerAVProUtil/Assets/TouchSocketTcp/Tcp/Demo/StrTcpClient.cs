@@ -41,7 +41,6 @@ public class StrTcpClient : MonoBehaviour
     private static SemaphoreSlim semaphore_2 = new SemaphoreSlim(1); // 限制异步线程同时进行的连接数 推荐1连接最稳定
     private void OnEnable()
     {
-        Settings.ini.IPHost.MediaTime = Settings.ini.IPHost.MediaTime;
         this.ipHost = Settings.ini.IPHost.DoorIPHost;
         if (string.IsNullOrEmpty(ipHost))
         {

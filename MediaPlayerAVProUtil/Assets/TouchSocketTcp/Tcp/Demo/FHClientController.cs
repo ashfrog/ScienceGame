@@ -46,10 +46,6 @@ public class FHClientController : MonoBehaviour
         //{
         //    ipHost = PlayerPrefs.GetString(IPHOST_Key);
         //}
-        if (String.IsNullOrEmpty(Settings.ini.IPHost.ServerIPHost))
-        {
-            Settings.ini.IPHost.ServerIPHost = "127.0.0.1:7790";
-        }
         ipHost = Settings.ini.IPHost.ServerIPHost;
         if (fhTcpClient == null)
         {

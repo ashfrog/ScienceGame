@@ -12,7 +12,6 @@ public class MainController : MonoBehaviour
     private void Start()
     {
         litVCR.ReloadFileList();
-        Settings.ini.Graphics.ScreenSaver = Settings.ini.Graphics.ScreenSaver;
 
         bool showScreenSaver = litVCR.PlayScreenSaver();
         if (!showScreenSaver)

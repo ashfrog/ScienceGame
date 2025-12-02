@@ -113,10 +113,6 @@ public class AdvertisementKiosk : MonoBehaviour
 
     private void Start()
     {
-
-        Settings.ini.Graphics.TopMost = Settings.ini.Graphics.TopMost;
-        Settings.ini.Graphics.FullScreen = Settings.ini.Graphics.FullScreen;
-        Settings.ini.Graphics.HideCursor = Settings.ini.Graphics.HideCursor;
         // 设置全屏
         Screen.fullScreen = Settings.ini.Graphics.FullScreen;
 

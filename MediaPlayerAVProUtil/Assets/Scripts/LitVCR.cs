@@ -547,7 +547,6 @@ public class LitVCR : MonoBehaviour
     {
         _loadingPlayer = _mediaPlayerB;
 
-        Settings.ini.Path.MediaPath = Settings.ini.Path.MediaPath;
         if (!Directory.Exists(Settings.ini.Path.MediaPath))
         {
             Settings.ini.Path.MediaPath = System.IO.Path.Combine(Application.streamingAssetsPath, "媒体文件");
@@ -577,9 +576,6 @@ public class LitVCR : MonoBehaviour
 
     private void Start()
     {
-        Settings.ini.Graphics.EnableMask = Settings.ini.Graphics.EnableMask;
-        Settings.ini.Game.AutoResetTime = Settings.ini.Game.AutoResetTime;
-        Settings.ini.Game.ReloadUrlAfterDelay = Settings.ini.Game.ReloadUrlAfterDelay;
         enablemask = Settings.ini.Graphics.EnableMask;
         autoResetTime = Settings.ini.Game.AutoResetTime;
         if (enablemask)
