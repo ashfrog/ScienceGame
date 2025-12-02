@@ -168,7 +168,7 @@ public class IPSettings : BaseSettings
 
     public string ServerIPHost
     {
-        get => ReadValue("ServerIPHost", "127.0.0.1:4848");
+        get => ReadValue("ServerIPHost", "127.0.0.1:7790");
         set => WriteValue("ServerIPHost", value.ToString());
     }
 

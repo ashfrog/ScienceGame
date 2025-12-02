@@ -761,6 +761,7 @@ public class LitVCR : MonoBehaviour
             {
                 tabSwitcher.SwitchTab(TabMode.网页);
                 LoadUrlWhenReady(videoPaths[videoindex]);
+                Stop();
             }
             else
             {

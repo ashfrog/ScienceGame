@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-
 using System.Text;
 using UnityEngine;
 
@@ -12,6 +11,11 @@ public class IniConfig
     private readonly string iniFilePath;
     private readonly Dictionary<string, Dictionary<string, string>> cachedConfig;
     private bool isDirty;
+
+    /// <summary>
+    /// 用于简单的线程安全（同进程内）
+    /// </summary>
+    private readonly object _lock = new object();
 
     public IniConfig(string fileName)
     {
@@ -35,109 +39,158 @@ public class IniConfig
 
     private void LoadConfig()
     {
-        try
+        lock (_lock)
         {
-            string[] lines = File.ReadAllLines(iniFilePath);
-            string currentSection = "";
+            cachedConfig.Clear();
 
-            foreach (string line in lines)
+            try
             {
-                string trimmedLine = line.Trim();
-                if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(";"))
-                    continue;
+                string[] lines = File.ReadAllLines(iniFilePath, Encoding.UTF8);
+                string currentSection = "";
 
-                if (trimmedLine.StartsWith("[") && trimmedLine.EndsWith("]"))
+                foreach (string line in lines)
                 {
-                    currentSection = trimmedLine.Substring(1, trimmedLine.Length - 2);
-                    if (!cachedConfig.ContainsKey(currentSection))
-                        cachedConfig[currentSection] = new Dictionary<string, string>();
-                }
-                else
-                {
-                    int equalPos = trimmedLine.IndexOf('=');
-                    if (equalPos > 0 && !string.IsNullOrEmpty(currentSection))
+                    string trimmedLine = line.Trim();
+                    if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(";"))
+                        continue;
+
+                    if (trimmedLine.StartsWith("[") && trimmedLine.EndsWith("]"))
                     {
-                        string key = trimmedLine.Substring(0, equalPos).Trim();
-                        string value = trimmedLine.Substring(equalPos + 1).Trim();
-                        cachedConfig[currentSection][key] = value;
+                        currentSection = trimmedLine.Substring(1, trimmedLine.Length - 2);
+                        if (!cachedConfig.ContainsKey(currentSection))
+                            cachedConfig[currentSection] = new Dictionary<string, string>();
+                    }
+                    else
+                    {
+                        int equalPos = trimmedLine.IndexOf('=');
+                        if (equalPos > 0 && !string.IsNullOrEmpty(currentSection))
+                        {
+                            string key = trimmedLine.Substring(0, equalPos).Trim();
+                            string value = trimmedLine.Substring(equalPos + 1).Trim();
+                            cachedConfig[currentSection][key] = value;
+                        }
                     }
                 }
             }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Failed to load INI file: {e.Message}");
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to load INI file: {e.Message}");
+            }
         }
     }
 
+    /// <summary>
+    /// 原子化保存：写到临时文件，再 Move 覆盖
+    /// </summary>
     private void SaveConfig()
     {
-        if (!isDirty) return;
+        lock (_lock)
+        {
+            if (!isDirty) return;
 
-        try
-        {
-            using (StreamWriter writer = new StreamWriter(iniFilePath, false, Encoding.UTF8))
+            string tempFilePath = iniFilePath + ".tmp";
+
+            try
             {
-                foreach (var section in cachedConfig)
+                // 写入到临时文件
+                using (StreamWriter writer = new StreamWriter(tempFilePath, false, Encoding.UTF8))
                 {
-                    writer.WriteLine($"[{section.Key}]");
-                    foreach (var kvp in section.Value)
-                        writer.WriteLine($"{kvp.Key}={kvp.Value}");
-                    writer.WriteLine();
+                    foreach (var section in cachedConfig)
+                    {
+                        writer.WriteLine($"[{section.Key}]");
+                        foreach (var kvp in section.Value)
+                            writer.WriteLine($"{kvp.Key}={kvp.Value}");
+                        writer.WriteLine();
+                    }
                 }
+
+                // 用临时文件替换正式文件（尽量保证原子性）
+                if (File.Exists(iniFilePath))
+                {
+                    File.Replace(tempFilePath, iniFilePath, null);
+                }
+                else
+                {
+                    File.Move(tempFilePath, iniFilePath);
+                }
+
+                isDirty = false;
             }
-            isDirty = false;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Failed to save INI file: {e.Message}");
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to save INI file: {e.Message}");
+                // 出错时尝试删除临时文件，避免留下垃圾文件
+                try
+                {
+                    if (File.Exists(tempFilePath))
+                        File.Delete(tempFilePath);
+                }
+                catch { }
+            }
         }
     }
 
+    /// <summary>
+    /// 直接从缓存读，不存在就返回 defaultValue，不触发写入
+    /// </summary>
     public string ReadValue(string section, string key, string defaultValue = "")
     {
-        return cachedConfig.ContainsKey(section) && cachedConfig[section].ContainsKey(key)
-            ? cachedConfig[section][key]
-            : defaultValue;
+        lock (_lock)
+        {
+            if (cachedConfig.ContainsKey(section) && cachedConfig[section].ContainsKey(key))
+                return cachedConfig[section][key];
+
+            return defaultValue;
+        }
     }
 
+    /// <summary>
+    /// 写入缓存并触发 Save（原子写入）
+    /// </summary>
     public bool WriteValue(string section, string key, string value)
     {
-        try
+        lock (_lock)
         {
-            if (!cachedConfig.ContainsKey(section))
-                cachedConfig[section] = new Dictionary<string, string>();
+            try
+            {
+                if (!cachedConfig.ContainsKey(section))
+                    cachedConfig[section] = new Dictionary<string, string>();
 
-            cachedConfig[section][key] = value;
-            isDirty = true;
-            SaveConfig();
-            return true;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"Failed to write value: {e.Message}");
-            return false;
+                cachedConfig[section][key] = value;
+                isDirty = true;
+                SaveConfig();
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to write value: {e.Message}");
+                return false;
+            }
         }
     }
 
     public int ReadInt(string section, string key, int defaultValue = 0)
     {
-        string value = ReadValue(section, key, defaultValue.ToString());
-        return int.TryParse(value, out int result) ? result : defaultValue;
+        string v = ReadValue(section, key, null);
+        if (v == null) return defaultValue;
+        return int.TryParse(v, out int result) ? result : defaultValue;
     }
 
     public float ReadFloat(string section, string key, float defaultValue = 0f)
     {
-        string value = ReadValue(section, key, defaultValue.ToString());
-        return float.TryParse(value, out float result) ? result : defaultValue;
+        string v = ReadValue(section, key, null);
+        if (v == null) return defaultValue;
+        return float.TryParse(v, out float result) ? result : defaultValue;
     }
 
     public bool ReadBool(string section, string key, bool defaultValue = false)
     {
-        string value = ReadValue(section, key, defaultValue.ToString());
-        if (bool.TryParse(value, out bool result)) return result;
-        if (value == "1") return true;
-        if (value == "0") return false;
+        string v = ReadValue(section, key, null);
+        if (v == null) return defaultValue;
+
+        if (bool.TryParse(v, out bool result)) return result;
+        if (v == "1") return true;
+        if (v == "0") return false;
         return defaultValue;
     }
 }
